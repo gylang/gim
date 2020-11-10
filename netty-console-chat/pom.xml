@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.gylang</groupId>
+    <artifactId>netty-console-chat</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <junit.version>4.12</junit.version>
+        <log4j.version>1.2.17</log4j.version>
+        <lombok.version>1.18.12</lombok.version>
+        <mybatis.version>2.1.0</mybatis.version>
+        <mapper-start.version>2.1.5</mapper-start.version>
+        <mysql-connect.version>8.0.13</mysql-connect.version>
+        <nkohtml.version>1.9.22</nkohtml.version>
+        <jsoup.version>1.11.3</jsoup.version>
+        <beetl.version>1.2.30.RELEASE</beetl.version>
+        <flexmark.version>0.61.6</flexmark.version>
+        <protobuf.java.version>3.11.1</protobuf.java.version>
+        <netty.version>4.1.44.Final</netty.version>
+        <slf4j.version>1.7.30</slf4j.version>
+        <mapstruct.version>1.3.1.Final</mapstruct.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.gylang</groupId>
+            <artifactId>netty-sdk</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+</project>
