@@ -7,16 +7,21 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleStateEvent;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Properties;
 
+import static io.netty.handler.timeout.IdleState.ALL_IDLE;
+
 /**
  * 心跳监控 发送消息 用户业务对心跳检测和业务处理
+ *
  * @author gylang
  * data 2020/11/3
  * @version v0.0.1
  */
 @ChannelHandler.Sharable
+@Slf4j
 public class HeartCheckHandler extends ChannelInboundHandlerAdapter {
 
     private final MessagePusher messagePusher;
@@ -29,6 +34,12 @@ public class HeartCheckHandler extends ChannelInboundHandlerAdapter {
     public HeartCheckHandler(MessagePusher messagePusher, Properties properties) {
         this.messagePusher = messagePusher;
         this.properties = properties;
+    }
+
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        System.out.println(msg);
+        super.channelRead(ctx, msg);
     }
 
     @Override
@@ -56,15 +67,18 @@ public class HeartCheckHandler extends ChannelInboundHandlerAdapter {
                 default:
                     eventType = "";
             }
-            System.out.println("eventType = " + eventType);
+            log.info("客户触发心跳事件: {}", eventType);
             int retry = NettyConfigEnum.LOST_CONNECT_RETRY_NUM.getValue(properties);
-            if (unRecPingTimes >= retry) {
-                // 连续超过N次未收到client的ping消息，那么关闭该通道，等待client重连
-                ctx.channel().close();
-            } else {
-                // 失败计数器加1
-                unRecPingTimes++;
+            if (ALL_IDLE.equals(event.state())) {
+                if (unRecPingTimes >= retry) {
+                    // 连续超过N次未收到client的ping消息，那么关闭该通道，等待client重连
+                    ctx.channel().close();
+                } else {
+                    // 失败计数器加1
+                    unRecPingTimes++;
+                }
             }
+
         }
     }
 

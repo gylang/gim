@@ -17,11 +17,15 @@ import lombok.Setter;
 public class JoinGroupHandler implements IMRequestHandler {
     @Setter
     private GroupRepository groupRepository;
+
     @Override
     public void process(IMSession me, MessageWrap message) {
-        System.out.println("注册监听" + message.getContent());
+        System.out.println("注册服务" + message.getContent());
         AbstractSessionGroup aDefault = groupRepository.findByKey("default");
         me.setAccount(message.getContent());
-        aDefault.join(me);
+        boolean join = aDefault.join(me);
+        if (join) {
+            me.getGroupList().add(aDefault);
+        }
     }
 }

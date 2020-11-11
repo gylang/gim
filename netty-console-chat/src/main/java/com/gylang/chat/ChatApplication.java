@@ -14,5 +14,6 @@ public class ChatApplication {
         // 启动服务
         TestStartConfig testStartConfig = new TestStartConfig();
         ImApplicationContext imApplicationContext = testStartConfig.imApplicationContext();
+
     }
 }

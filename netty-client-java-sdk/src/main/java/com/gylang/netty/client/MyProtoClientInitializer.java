@@ -9,6 +9,7 @@ import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
+import io.netty.handler.timeout.IdleStateHandler;
 
 
 public class MyProtoClientInitializer extends ChannelInitializer<SocketChannel> {
@@ -17,6 +18,7 @@ public class MyProtoClientInitializer extends ChannelInitializer<SocketChannel> 
         ChannelPipeline pipeline = ch.pipeline();
 
         //将二进制内容转化为文本内容
+        pipeline.addLast(new IdleStateHandler(5, 5, 5));
         pipeline.addLast(new ProtobufVarint32FrameDecoder());
         pipeline.addLast(new ProtobufDecoder(MessageWrapProto.Model.getDefaultInstance()));
         pipeline.addLast(new ProtobufVarint32LengthFieldPrepender());
