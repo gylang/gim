@@ -1,6 +1,6 @@
 package com.gylang.netty.sdk.handler.netty;
 
-import com.gylang.netty.sdk.call.MessagePusher;
+import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.domain.proto.MessageWrapProto;
@@ -15,9 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ProtobufDispatchHandler extends SimpleChannelInboundHandler<MessageWrapProto.Model> {
     private final IMRequestAdapter requestAdapter;
-    private final MessagePusher messagePusher;
+    private final NotifyProvider messagePusher;
 
-    public ProtobufDispatchHandler(IMRequestAdapter requestAdapter, MessagePusher messagePusher) {
+    public ProtobufDispatchHandler(IMRequestAdapter requestAdapter, NotifyProvider messagePusher) {
         this.requestAdapter = requestAdapter;
         this.messagePusher = messagePusher;
     }

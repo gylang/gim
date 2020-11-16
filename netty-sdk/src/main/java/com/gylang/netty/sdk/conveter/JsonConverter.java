@@ -18,7 +18,7 @@ public class JsonConverter implements DataConverter {
     }
 
     @Override
-    public <T> byte[] encode(T object) {
-        return JSON.toJSONBytes(object);
+    public <T, S> S encode(T object) {
+        return (S) JSON.toJSONString(object);
     }
 }

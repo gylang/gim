@@ -14,14 +14,14 @@ import static com.gylang.netty.sdk.constant.NettyNotifyConst.*;
  * data 2020/11/3
  * @version v0.0.1
  */
-public class SimpleHeartNotifyDispatch implements IdleNotify, MessageNotify<ChannelHandlerContext> {
+public class DefaultHeartNotifyDispatch implements IdleNotify, MessageNotify<ChannelHandlerContext> {
 
     /**
      * 心跳监听实例
      */
     private final List<IdleNotify> idleNotifyList;
 
-    public SimpleHeartNotifyDispatch(List<IdleNotify> idleNotifyList) {
+    public DefaultHeartNotifyDispatch(List<IdleNotify> idleNotifyList) {
         this.idleNotifyList = idleNotifyList;
     }
 

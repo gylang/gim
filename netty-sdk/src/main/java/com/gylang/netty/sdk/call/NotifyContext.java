@@ -10,19 +10,19 @@ import java.util.Map;
 
 /**
  * 消息通知上下文, 所有的消息通过 MessageContext进行中转或者发送
+ *
  * @author gylang
  * data 2020/11/7
  * @version v0.0.1
  */
-public  class MessageContext {
+public class NotifyContext {
 
     Map<String, List<MessageNotify<?>>> notifyMap;
 
     Map<Class<?>, Class<?>> messageType;
 
 
-
-    public MessageContext() {
+    public NotifyContext() {
         this.messageType = new HashMap<>();
         this.notifyMap = new HashMap<>();
     }
@@ -72,7 +72,6 @@ public  class MessageContext {
             }
         }
     }
-
 
 
 }

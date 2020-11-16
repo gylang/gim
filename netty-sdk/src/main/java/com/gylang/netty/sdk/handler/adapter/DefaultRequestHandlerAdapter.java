@@ -1,10 +1,13 @@
-package com.gylang.netty.sdk.handler;
+package com.gylang.netty.sdk.handler.adapter;
 
 import cn.hutool.core.collection.CollUtil;
+import com.gylang.netty.sdk.annotation.AdapterType;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.call.MessagePusher;
+import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.handler.IMRequestAdapter;
+import com.gylang.netty.sdk.handler.IMRequestHandler;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.List;
@@ -20,13 +23,14 @@ import java.util.Map;
  * @version v0.0.1
  * @see com.gylang.netty.sdk.handler.IMRequestHandler
  */
-public class SimpleRequestHandlerAdapter implements IMRequestAdapter {
+@AdapterType(order = 100)
+public class DefaultRequestHandlerAdapter implements IMRequestAdapter {
 
 
     private Map<String, IMRequestHandler> handlerMap;
 
     @Override
-    public void process(ChannelHandlerContext ctx, IMSession me, MessageWrap message, MessagePusher messagePusher) {
+    public void process(ChannelHandlerContext ctx, IMSession me, MessageWrap message, NotifyProvider messagePusher) {
 
         IMRequestHandler requestHandler = handlerMap.get(message.getKey());
         if (null == requestHandler) {

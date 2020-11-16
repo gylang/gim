@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * protobuf 数据类型转化工具
+ *
  * @author gylang
  * data 2020/11/3
  * @version v0.0.1
@@ -49,7 +50,7 @@ public class ProtobufConverter implements DataConverter {
     }
 
     @Override
-    public <T> byte[] encode(T object) {
+    public <T, S> S encode(T object) {
         Class<?> clazz = object.getClass();
         Method method = encodeMethod.get(clazz);
         if (null == method) {
@@ -59,7 +60,7 @@ public class ProtobufConverter implements DataConverter {
             method = declaredMethod;
         }
         try {
-            return (byte[]) method.invoke(object, object);
+            return (S) method.invoke(object, object);
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }

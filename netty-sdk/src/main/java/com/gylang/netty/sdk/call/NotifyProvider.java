@@ -6,7 +6,7 @@ package com.gylang.netty.sdk.call;
  * data 2020/11/8
  * @version v0.0.1
  */
-public interface MessagePusher {
+public interface NotifyProvider {
     /**
      * 通知
      *

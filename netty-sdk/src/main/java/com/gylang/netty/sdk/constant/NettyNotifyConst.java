@@ -20,5 +20,8 @@ public interface NettyNotifyConst {
      * 读写空闲
      */
     String ALL_IDLE = "ALL_IDLE";
-
+    /**
+     * 超时关闭
+     */
+    String OVER_TIME_CLOSE = "overTimeClose";
 }

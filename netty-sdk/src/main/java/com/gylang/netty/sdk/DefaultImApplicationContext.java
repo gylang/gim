@@ -6,7 +6,7 @@ package com.gylang.netty.sdk;
  * data 2020/11/8
  * @version v0.0.1
  */
-public class SimpleImApplicationContext extends SimpleImFactory implements ImApplicationContext {
+public class DefaultImApplicationContext extends SimpleImFactory implements ImApplicationContext {
 
 
     @Override
@@ -22,11 +22,9 @@ public class SimpleImApplicationContext extends SimpleImFactory implements ImApp
     public void doInit(ImFactoryBuilder builder) {
 
         // 初始化参数
-        setMessagePusher(builder.getMessagePusher());
-        setSessionRepository(builder.getSessionRepository());
-        setGroupRepository(builder.getGroupRepository());
+        setMessagePusher(builder.getNotifyProvider());
         setNettyConfig(builder.getNettyConfig());
-        setRequestAdapter(builder.getRequestAdapter());
+        setRequestAdapter(builder.getDispatchAdapter());
         // 初始化netty服务
         super.init();
 

@@ -1,6 +1,6 @@
 package com.gylang.netty.sdk;
 
-import com.gylang.netty.sdk.call.MessagePusher;
+import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import io.netty.channel.ChannelHandlerContext;
@@ -22,7 +22,7 @@ public class MethodMeta {
 
     private Object object;
 
-    public Object invoke(ChannelHandlerContext ctx, IMSession me, MessageWrap message, MessagePusher messagePusher) {
+    public Object invoke(ChannelHandlerContext ctx, IMSession me, MessageWrap message, NotifyProvider messagePusher) {
 
         return null;
     }

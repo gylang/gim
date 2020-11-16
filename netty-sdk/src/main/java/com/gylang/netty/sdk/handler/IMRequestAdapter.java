@@ -21,7 +21,7 @@
  */
 package com.gylang.netty.sdk.handler;
 
-import com.gylang.netty.sdk.call.MessagePusher;
+import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import io.netty.channel.ChannelHandlerContext;
@@ -36,5 +36,5 @@ public interface IMRequestAdapter {
     /**
      * 处理收到客户端从长链接发送的数据
      */
-    void process(ChannelHandlerContext ctx, IMSession me, MessageWrap message, MessagePusher messagePusher);
+    void process(ChannelHandlerContext ctx, IMSession me, MessageWrap message, NotifyProvider messagePusher);
 }

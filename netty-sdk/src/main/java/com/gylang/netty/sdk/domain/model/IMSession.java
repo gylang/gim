@@ -141,6 +141,10 @@ public class IMSession {
 
     }
 
+    public String getNid() {
+        return session.id().asLongText();
+    }
+
     public String getAccount() {
         this.account = (String) getAttribute(CommConst.KEY_ACCOUNT);
         return this.account;

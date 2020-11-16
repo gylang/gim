@@ -1,6 +1,6 @@
 package com.gylang.netty.sdk.initializer;
 
-import com.gylang.netty.sdk.call.MessagePusher;
+import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.constant.NettyConfigEnum;
 import com.gylang.netty.sdk.handler.IMRequestAdapter;
 import com.gylang.netty.sdk.handler.netty.JsonDispatchHandler;
@@ -30,11 +30,11 @@ public class JsonInitializer extends ChannelInitializer<SocketChannel> {
 
     private final Properties properties;
 
-    private final MessagePusher messagePusher;
+    private final NotifyProvider messagePusher;
 
     private final IMRequestAdapter requestAdapter;
 
-    public JsonInitializer(Properties properties, MessagePusher messagePusher, IMRequestAdapter requestAdapter) {
+    public JsonInitializer(Properties properties, NotifyProvider messagePusher, IMRequestAdapter requestAdapter) {
         this.properties = properties;
         this.messagePusher = messagePusher;
         this.requestAdapter = requestAdapter;

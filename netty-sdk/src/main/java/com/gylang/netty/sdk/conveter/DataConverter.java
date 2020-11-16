@@ -25,5 +25,5 @@ public interface DataConverter {
      * @param object 带序列化类型
      * @return 序列化后的byte[]
      */
-    <T> byte[] encode(T object);
+    <T, S> S encode(T object);
 }

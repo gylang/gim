@@ -1,6 +1,6 @@
 package com.gylang.netty.sdk.initializer;
 
-import com.gylang.netty.sdk.call.MessagePusher;
+import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.constant.NettyConfigEnum;
 import com.gylang.netty.sdk.domain.proto.MessageWrapProto;
 import com.gylang.netty.sdk.handler.IMRequestAdapter;
@@ -29,10 +29,10 @@ public class ProtobufInitializer extends ChannelInitializer<SocketChannel> {
 
     private final Properties properties;
 
-    private final MessagePusher pusher;
+    private final NotifyProvider pusher;
     private final IMRequestAdapter requestAdapter;
 
-    public ProtobufInitializer(Properties properties, MessagePusher pusher, IMRequestAdapter requestAdapter) {
+    public ProtobufInitializer(Properties properties, NotifyProvider pusher, IMRequestAdapter requestAdapter) {
         this.properties = properties;
         this.pusher = pusher;
         this.requestAdapter = requestAdapter;

@@ -1,16 +1,16 @@
-package com.gylang.netty.sdk.handler;
+package com.gylang.netty.sdk.handler.adapter;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.collection.IterUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gylang.netty.sdk.MethodMeta;
+import com.gylang.netty.sdk.annotation.AdapterType;
 import com.gylang.netty.sdk.annotation.NettyController;
 import com.gylang.netty.sdk.annotation.NettyMapping;
-import com.gylang.netty.sdk.call.MessagePusher;
+import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.conveter.DataConverter;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.handler.IMRequestAdapter;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.lang.reflect.Method;
@@ -25,14 +25,15 @@ import java.util.Map;
  * data 2020/11/9
  * @version v0.0.1
  */
-public class SimpleMethodHandlerAdapter implements IMRequestAdapter {
+@AdapterType(order = 100)
+public class DefaultMethodHandlerAdapter implements IMRequestAdapter {
 
     private Map<String, MethodMeta> methodMetaMap;
 
     private DataConverter dataConverter;
 
     @Override
-    public void process(ChannelHandlerContext ctx, IMSession me, MessageWrap message, MessagePusher messagePusher) {
+    public void process(ChannelHandlerContext ctx, IMSession me, MessageWrap message, NotifyProvider messagePusher) {
 
     }
 

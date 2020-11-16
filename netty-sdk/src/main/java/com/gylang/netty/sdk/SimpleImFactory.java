@@ -1,7 +1,7 @@
 package com.gylang.netty.sdk;
 
 import com.gylang.netty.sdk.call.message.MessageNotify;
-import com.gylang.netty.sdk.call.MessagePusher;
+import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.config.NettyConfig;
 import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
 import com.gylang.netty.sdk.domain.model.IMSession;
@@ -15,60 +15,24 @@ import com.gylang.netty.sdk.repo.IRepository;
  */
 public class SimpleImFactory implements AbstractImFactory {
 
-    private IRepository<Object, Object, IMSession> sessionRepository;
-    private IRepository<Object, Object, AbstractSessionGroup> groupRepository;
-    private MessagePusher messagePusher;
+    private NotifyProvider messagePusher;
     private NettyConfig nettyConfig;
     private IMRequestAdapter requestAdapter;
     private MessageNotify<Object> messageNotify;
     private IMServer imServer;
 
-    @Override
-    public IMSession getSession(String key) {
-        return sessionRepository.findByKey(key);
-    }
 
-    @Override
-    public void register(IMSession session) {
-        sessionRepository.add(session.getAccount(), session);
-    }
-
-    @Override
-    public void remove(String key) {
-        sessionRepository.popByKey(key);
-    }
-
-    @Override
-    public boolean join(String group, IMSession session) {
-        AbstractSessionGroup sessionGroup = groupRepository.findByKey(group);
-        return sessionGroup.join(session);
-    }
-
-    @Override
-    public boolean closeGroup(String key) {
-
-        return null != groupRepository.popByKey(key);
-    }
-
-    @Override
-    public boolean exitGroup(String key, IMSession session) {
-        AbstractSessionGroup sessionGroup = groupRepository.findByKey(key);
-        if (null == sessionGroup) {
-            return false;
-        }
-        return sessionGroup.remove(session);
-    }
-
-    @Override
-    public AbstractSessionGroup createGroup(AbstractSessionGroup group) {
-        return groupRepository.add(group.getKey(), group);
-    }
 
     @Override
     public void init() {
         // 启动netty服务
         imServer = new IMServer();
         imServer.setNettyConfig(nettyConfig);
+
+    }
+
+    @Override
+    public void start() {
         try {
             imServer.init();
         } catch (InterruptedException e) {
@@ -76,27 +40,12 @@ public class SimpleImFactory implements AbstractImFactory {
         }
     }
 
-    public IRepository<Object, Object, IMSession> getSessionRepository() {
-        return sessionRepository;
-    }
 
-    public void setSessionRepository(IRepository<?, ?, IMSession> sessionRepository) {
-        this.sessionRepository = (IRepository<Object, Object, IMSession>) sessionRepository;
-    }
-
-    public IRepository<Object, Object, AbstractSessionGroup> getGroupRepository() {
-        return groupRepository;
-    }
-
-    public void setGroupRepository(IRepository<?, ?, AbstractSessionGroup> groupRepository) {
-        this.groupRepository = (IRepository<Object, Object, AbstractSessionGroup>) groupRepository;
-    }
-
-    public MessagePusher getMessagePusher() {
+    public NotifyProvider getMessagePusher() {
         return messagePusher;
     }
 
-    public void setMessagePusher(MessagePusher messagePusher) {
+    public void setMessagePusher(NotifyProvider messagePusher) {
         this.messagePusher = messagePusher;
     }
 

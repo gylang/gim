@@ -23,10 +23,6 @@ public class SimpleChatGroupHandler implements IMRequestHandler {
     public void process(IMSession me, MessageWrap message) {
         System.out.println("收到消息 : " + message.getContent());
         AbstractSessionGroup aDefault = groupRepository.findByKey("default");
-        aDefault.groupChat(me.getAccount(), MessageWrap.builder()
-                .sender(me.getAccount())
-                .content(me.getAccount() + ":" + message.getContent())
-                .bytes(ByteString.copyFromUtf8(me.getAccount() + ":" + message.getContent()))
-                .build());
+
     }
 }

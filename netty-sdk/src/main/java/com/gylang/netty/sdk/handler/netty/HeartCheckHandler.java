@@ -1,14 +1,16 @@
 package com.gylang.netty.sdk.handler.netty;
 
-import com.gylang.netty.sdk.call.MessagePusher;
+import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.constant.NettyConfigEnum;
 import com.gylang.netty.sdk.constant.NettyNotifyConst;
+import com.gylang.netty.sdk.domain.model.IMSession;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.util.Properties;
 
 import static io.netty.handler.timeout.IdleState.ALL_IDLE;
@@ -24,14 +26,14 @@ import static io.netty.handler.timeout.IdleState.ALL_IDLE;
 @Slf4j
 public class HeartCheckHandler extends ChannelInboundHandlerAdapter {
 
-    private final MessagePusher messagePusher;
+    private final NotifyProvider messagePusher;
     private final Properties properties;
     /**
      * 重连次数
      */
     private int unRecPingTimes;
 
-    public HeartCheckHandler(MessagePusher messagePusher, Properties properties) {
+    public HeartCheckHandler(NotifyProvider messagePusher, Properties properties) {
         this.messagePusher = messagePusher;
         this.properties = properties;
     }
@@ -73,12 +75,36 @@ public class HeartCheckHandler extends ChannelInboundHandlerAdapter {
                 if (unRecPingTimes >= retry) {
                     // 连续超过N次未收到client的ping消息，那么关闭该通道，等待client重连
                     ctx.channel().close();
+                    // 一分钟为重连 断开连接
+                    messagePusher.sendAsyncMsg(NettyNotifyConst.OVER_TIME_CLOSE, new IMSession(ctx.channel()));
                 } else {
                     // 失败计数器加1
                     unRecPingTimes++;
                 }
             }
 
+        }
+    }
+
+//    /**
+//     * channelInactive 被触发一定是和服务器断开了。分两种情况。一种是服务端close，一种是客户端close。
+//     */
+//    @Override
+//    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+//        super.channelInactive(ctx);
+//        log.error("客户端与服务端断开连接,断开的时间为：" + (new Date()).toString());
+//        // 定时线程 断线重连
+//        final EventLoop eventLoop = ctx.channel().eventLoop();
+//
+//    }
+
+    /**
+     * 在服务器端不使用心跳检测的情况下，如果客户端突然拔掉网线断网（注意这里不是客户度程序关闭，而仅是异常断网）
+     */
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        if (cause instanceof IOException) {
+            System.out.println("server " + ctx.channel().remoteAddress() + "关闭连接");
         }
     }
 

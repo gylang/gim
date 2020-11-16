@@ -1,6 +1,7 @@
 package com.gylang.netty.sdk.config;
 
 import com.gylang.netty.sdk.constant.NettyConfigEnum;
+import com.gylang.netty.sdk.initializer.JsonInitializer;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -21,24 +22,44 @@ import java.util.Properties;
 @Data
 public class NettyConfig {
 
+    /**
+     * 负责接收连接，为每一个连接创建从线程，不仅接收也处理；
+     */
+    private NioEventLoopGroup bossGroup;
+    /**
+     * 负责接收许多客户端的读写操作，为每个请求创建处理线程，不仅接收也处理；
+     */
+    private NioEventLoopGroup workerGroup;
+
 
     /**
      * 根据名称装配，防止和客户端的ChannelInitializer冲突报错
      */
     private ChannelInitializer<?> serverChannelInitializer;
+    /**
+     * 配置信息
+     */
     @Getter
     private Properties properties;
 
-    /*用来监控tcp链接 指定线程数 默认是1 用默认即可*/
+    /**
+     * 用来监控tcp链接 指定线程数 默认是1 用默认即可
+     */
     public NioEventLoopGroup bossGroup() {
-        return new NioEventLoopGroup((Integer) NettyConfigEnum.BOSS_GROUP.getValue(properties));
+        if (null == this.bossGroup) {
+            this.bossGroup = new NioEventLoopGroup((Integer) NettyConfigEnum.BOSS_GROUP.getValue(properties));
+        }
+        return this.bossGroup;
     }
 
     /**
      * 处理io事件 一定要多线程效率高 源码中默认是cpu核数*2
      */
     public NioEventLoopGroup workerGroup() {
-        return new NioEventLoopGroup((Integer) NettyConfigEnum.WORKER_GROUP.getValue(properties));
+        if (null == this.workerGroup) {
+            this.workerGroup = new NioEventLoopGroup((Integer) NettyConfigEnum.WORKER_GROUP.getValue(properties));
+        }
+        return this.workerGroup;
     }
 
     /**

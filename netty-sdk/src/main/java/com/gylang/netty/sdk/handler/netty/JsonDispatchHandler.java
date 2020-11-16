@@ -1,7 +1,7 @@
 package com.gylang.netty.sdk.handler.netty;
 
 import com.alibaba.fastjson.JSON;
-import com.gylang.netty.sdk.call.MessagePusher;
+import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.IMRequestAdapter;
@@ -17,9 +17,9 @@ import io.netty.channel.SimpleChannelInboundHandler;
 public class JsonDispatchHandler extends SimpleChannelInboundHandler<String> {
 
     private final IMRequestAdapter requestAdapter;
-    private final MessagePusher messagePusher;
+    private final NotifyProvider messagePusher;
 
-    public JsonDispatchHandler(IMRequestAdapter bizDispatchHandler, MessagePusher messagePusher) {
+    public JsonDispatchHandler(IMRequestAdapter bizDispatchHandler, NotifyProvider messagePusher) {
         this.requestAdapter = bizDispatchHandler;
         this.messagePusher = messagePusher;
     }

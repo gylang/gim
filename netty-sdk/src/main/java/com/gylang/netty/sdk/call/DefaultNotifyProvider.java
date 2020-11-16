@@ -11,7 +11,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @version v0.0.1
  */
 @Data
-public class SimpleMessagePusher implements MessagePusher {
+public class DefaultNotifyProvider implements NotifyProvider {
     /**
      * 异步任务线程池
      */
@@ -19,7 +19,7 @@ public class SimpleMessagePusher implements MessagePusher {
     /**
      * 消息上下文
      */
-    private MessageContext messageContext;
+    private NotifyContext messageContext;
 
     @Override
     public void sendMsg(String key, Object message) {
