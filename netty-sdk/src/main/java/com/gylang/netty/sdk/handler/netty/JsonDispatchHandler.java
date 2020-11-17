@@ -10,11 +10,12 @@ import io.netty.channel.SimpleChannelInboundHandler;
 
 /**
  * netty json数据协议 服务分发
+ *
  * @author gylang
  * data 2020/11/3
  * @version v0.0.1
  */
-public class JsonDispatchHandler extends SimpleChannelInboundHandler<String> {
+public class JsonDispatchHandler extends SimpleChannelInboundHandler<MessageWrap> {
 
     private final IMRequestAdapter requestAdapter;
     private final NotifyProvider messagePusher;
@@ -26,11 +27,10 @@ public class JsonDispatchHandler extends SimpleChannelInboundHandler<String> {
 
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, MessageWrap msg) throws Exception {
 
-        MessageWrap messageWrap = JSON.parseObject(msg, MessageWrap.class);
         IMSession session = new IMSession(ctx.channel());
-        requestAdapter.process(ctx, session, messageWrap, messagePusher);
+        requestAdapter.process(ctx, session, msg, messagePusher);
 
 //        bizDispatchHandler.process(bizDispatchHandler);
     }

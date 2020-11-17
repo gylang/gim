@@ -1,7 +1,6 @@
 package com.gylang.netty.sdk.config;
 
 import com.gylang.netty.sdk.constant.NettyConfigEnum;
-import com.gylang.netty.sdk.initializer.JsonInitializer;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;

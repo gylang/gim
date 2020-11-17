@@ -1,6 +1,8 @@
 package com.gylang.netty.sdk.initializer;
 
 import com.gylang.netty.sdk.call.NotifyProvider;
+import com.gylang.netty.sdk.coder.WebJsonMessageEncoder;
+import com.gylang.netty.sdk.coder.WebJsonMessageDecoder;
 import com.gylang.netty.sdk.constant.NettyConfigEnum;
 import com.gylang.netty.sdk.handler.IMRequestAdapter;
 import com.gylang.netty.sdk.handler.netty.JsonDispatchHandler;
@@ -11,8 +13,11 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.Delimiters;
+import io.netty.handler.codec.http.HttpObjectAggregator;
+import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.CharsetUtil;
 
@@ -26,7 +31,7 @@ import java.util.concurrent.TimeUnit;
  * data 2020/11/6
  * @version v0.0.1
  */
-public class JsonInitializer extends ChannelInitializer<SocketChannel> {
+public class WebJsonInitializer extends ChannelInitializer<SocketChannel> {
 
     private final Properties properties;
 
@@ -34,7 +39,7 @@ public class JsonInitializer extends ChannelInitializer<SocketChannel> {
 
     private final IMRequestAdapter requestAdapter;
 
-    public JsonInitializer(Properties properties, NotifyProvider messagePusher, IMRequestAdapter requestAdapter) {
+    public WebJsonInitializer(Properties properties, NotifyProvider messagePusher, IMRequestAdapter requestAdapter) {
         this.properties = properties;
         this.messagePusher = messagePusher;
         this.requestAdapter = requestAdapter;
@@ -61,6 +66,11 @@ public class JsonInitializer extends ChannelInitializer<SocketChannel> {
                 TimeUnit.SECONDS));
         //netty链式处理
         // 字符串 解码
+        pipeline.addLast(new HttpServerCodec());
+        pipeline.addLast(new ChunkedWriteHandler());
+        pipeline.addLast(new HttpObjectAggregator(65536));
+        pipeline.addLast(new WebJsonMessageDecoder());
+        pipeline.addLast(new WebJsonMessageEncoder());
         pipeline.addLast("DelimiterBasedFrameDecoder", new DelimiterBasedFrameDecoder(4096, Delimiters.lineDelimiter()));
         pipeline.addLast("StringDecoder", new StringDecoder(CharsetUtil.UTF_8));
         pipeline.addLast("StringEncoder", new StringEncoder(CharsetUtil.UTF_8));

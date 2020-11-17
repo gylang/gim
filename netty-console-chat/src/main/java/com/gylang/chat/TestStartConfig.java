@@ -46,12 +46,10 @@ public class TestStartConfig {
     public ImApplicationContext imApplicationContext() {
 
         ImFactoryBuilder build = ImFactoryBuilder.builder()
-                .groupRepository(groupRepository)
-                .sessionRepository(sessionRepository)
                 .messageContext(messageContext())
-                .messagePusher(messagePusher())
+                .notifyProvider(messagePusher())
                 .nettyConfig(nettyConfig())
-                .requestAdapter(requestAdapter())
+                .dispatchAdapter(requestAdapter())
                 .build();
 
         DefaultImApplicationContext simpleImApplicationContext = new DefaultImApplicationContext();
@@ -85,7 +83,6 @@ public class TestStartConfig {
 
     /**
      * netty配置
-     *
      */
     public NettyConfig nettyConfig() {
         NettyConfig nettyConfig = new NettyConfig();

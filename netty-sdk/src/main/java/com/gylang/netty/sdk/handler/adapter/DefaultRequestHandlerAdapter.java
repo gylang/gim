@@ -1,5 +1,6 @@
 package com.gylang.netty.sdk.handler.adapter;
 
+import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.gylang.netty.sdk.annotation.AdapterType;
 import com.gylang.netty.sdk.annotation.NettyHandler;
@@ -46,8 +47,7 @@ public class DefaultRequestHandlerAdapter implements IMRequestAdapter {
         }
         handlerMap = CollUtil.newHashMap(requestHandlerList.size());
         for (IMRequestHandler imRequestHandler : requestHandlerList) {
-
-            NettyHandler annotation = imRequestHandler.getClass().getAnnotation(NettyHandler.class);
+            NettyHandler annotation = AnnotationUtil.getAnnotation(imRequestHandler.getClass(), NettyHandler.class);
             if (null != annotation) {
                 handlerMap.put(annotation.value(), imRequestHandler);
             }

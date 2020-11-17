@@ -3,27 +3,26 @@ package com.gylang.spring.netty;
 import cn.hutool.core.lang.Singleton;
 import com.gylang.netty.sdk.*;
 import com.gylang.netty.sdk.annotation.AdapterType;
-import com.gylang.netty.sdk.call.NotifyContext;
-import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.call.DefaultMessageContext;
 import com.gylang.netty.sdk.call.DefaultNotifyProvider;
+import com.gylang.netty.sdk.call.NotifyContext;
+import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.call.message.MessageNotify;
 import com.gylang.netty.sdk.config.NettyConfig;
 import com.gylang.netty.sdk.conveter.DataConverter;
 import com.gylang.netty.sdk.conveter.JsonConverter;
 import com.gylang.netty.sdk.conveter.ProtobufConverter;
+import com.gylang.netty.sdk.handler.DefaultAdapterDispatch;
 import com.gylang.netty.sdk.handler.IMRequestAdapter;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import com.gylang.netty.sdk.handler.NettyController;
-import com.gylang.netty.sdk.handler.DefaultAdapterDispatch;
 import com.gylang.netty.sdk.handler.adapter.DefaultNettyControllerAdapter;
 import com.gylang.netty.sdk.handler.adapter.DefaultRequestHandlerAdapter;
-import com.gylang.netty.sdk.initializer.JsonInitializer;
+import com.gylang.netty.sdk.initializer.WebJsonInitializer;
 import com.gylang.netty.sdk.initializer.ProtobufInitializer;
 import com.gylang.netty.sdk.repo.FillUserInfoContext;
 import com.gylang.netty.sdk.repo.GroupRepository;
 import com.gylang.netty.sdk.repo.IMSessionRepository;
-import io.netty.channel.ChannelInitializer;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +35,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -130,7 +131,7 @@ public class IMAutoConfigration implements InitializingBean {
                 .collect(Collectors.toList());
         Assert.isTrue(1 >= collect.size(), "double dispatchAdapter");
         if (0 == collect.size()) {
-            resolveAdapter(adapter, bizRequestAdapter);
+            bizRequestAdapter = resolveAdapter(adapter, bizRequestAdapter);
             dispatch = createDefaultDispatch(bizRequestAdapter);
         } else {
             dispatch = (IMRequestAdapter) collect.get(0);
@@ -152,7 +153,7 @@ public class IMAutoConfigration implements InitializingBean {
         if (null == this.nettyConfig.getServerChannelInitializer()) {
 
             if ("json".equals(initializer)) {
-                JsonInitializer jsonInitializer = new JsonInitializer(nettyConfig.getProperties(), notifyProvider, dispatch);
+                WebJsonInitializer jsonInitializer = new WebJsonInitializer(nettyConfig.getProperties(), notifyProvider, dispatch);
                 nettyConfig.setServerChannelInitializer(jsonInitializer);
             } else if ("protobuf".equals(initializer)) {
                 ProtobufInitializer protobufInitializer = new ProtobufInitializer(nettyConfig.getProperties(), notifyProvider, dispatch);

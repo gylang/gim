@@ -7,24 +7,17 @@ netty-sdk 将业务代码抽离分发, 简化业务开发过程
 软件架构说明
 
 
-#### 安装教程
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  客户端简单使用 websocket 协议(默认)
+2.  服务端使用 java版 netty-console-chat spring版 netty-im-server
 
-#### 参与贡献
+#### 整合spring
+1. 在启动类中使用 @EnableIM 
+2. 新建一个继承 IMRequestHandler接口 并声明 @NettyHandler 和 @Component 即完成最简单的hello world
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
 
 
 #### 特技
