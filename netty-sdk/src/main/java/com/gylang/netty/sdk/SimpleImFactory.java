@@ -7,6 +7,7 @@ import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.IMRequestAdapter;
 import com.gylang.netty.sdk.repo.IRepository;
+import com.sun.istack.internal.NotNull;
 
 /**
  * @author gylang
@@ -15,12 +16,16 @@ import com.gylang.netty.sdk.repo.IRepository;
  */
 public class SimpleImFactory implements AbstractImFactory {
 
-    private NotifyProvider messagePusher;
+    @NotNull
+    private NotifyProvider notifyProvider;
+    @NotNull
     private NettyConfig nettyConfig;
+    @NotNull
     private IMRequestAdapter requestAdapter;
-    private MessageNotify<Object> messageNotify;
+    @NotNull
     private IMServer imServer;
-
+    @NotNull
+    private IMContext imContext;
 
 
     @Override
@@ -40,14 +45,11 @@ public class SimpleImFactory implements AbstractImFactory {
         }
     }
 
-
-    public NotifyProvider getMessagePusher() {
-        return messagePusher;
+    @Override
+    public IMContext imContext() {
+        return this.imContext;
     }
 
-    public void setMessagePusher(NotifyProvider messagePusher) {
-        this.messagePusher = messagePusher;
-    }
 
     public NettyConfig getNettyConfig() {
         return nettyConfig;
@@ -65,12 +67,24 @@ public class SimpleImFactory implements AbstractImFactory {
         this.requestAdapter = requestAdapter;
     }
 
-    public MessageNotify<Object> getMessageNotify() {
-        return messageNotify;
+    public NotifyProvider getNotifyProvider() {
+        return notifyProvider;
     }
 
-    public void setMessageNotify(MessageNotify<Object> messageNotify) {
-        this.messageNotify = messageNotify;
+    public void setNotifyProvider(NotifyProvider notifyProvider) {
+        this.notifyProvider = notifyProvider;
     }
 
+
+    public IMServer getImServer() {
+        return imServer;
+    }
+
+    public void setImServer(IMServer imServer) {
+        this.imServer = imServer;
+    }
+
+    public void setImContext(IMContext imContext) {
+        this.imContext = imContext;
+    }
 }

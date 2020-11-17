@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * data 2020/8/28
  * @version v0.0.1
  */
-public class IMSessionRepository implements IRepository<String, String, IMSession> {
+public class DefaultIMRepository implements IRepository<String, String, IMSession> {
 
     private Map<String, IMSession> repository = new ConcurrentHashMap<>();
 

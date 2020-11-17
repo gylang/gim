@@ -27,7 +27,7 @@ public class AbstractSessionGroup {
     /**
      * 创建者
      */
-    private Long creator;
+    private String creator;
     /**
      * 组关键字
      */
@@ -46,14 +46,14 @@ public class AbstractSessionGroup {
      */
     private EventExecutor executor;
 
-    public AbstractSessionGroup(String name, Long creator, String password, Integer capacity) {
+    public AbstractSessionGroup(String name, String creator, String password, Integer capacity) {
         this.name = name;
         this.creator = creator;
         this.key = IdUtil.fastUUID();
         memberList = new ArrayBlockingQueue<>(capacity);
     }
 
-    public AbstractSessionGroup(String name, Long creator, Integer capacity) {
+    public AbstractSessionGroup(String name, String creator, Integer capacity) {
         this(name, creator, null, capacity);
     }
 

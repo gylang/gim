@@ -14,8 +14,8 @@ import com.gylang.netty.sdk.handler.*;
 import com.gylang.netty.sdk.handler.adapter.DefaultNettyControllerAdapter;
 import com.gylang.netty.sdk.handler.adapter.DefaultRequestHandlerAdapter;
 import com.gylang.netty.sdk.initializer.ProtobufInitializer;
-import com.gylang.netty.sdk.repo.GroupRepository;
-import com.gylang.netty.sdk.repo.IMSessionRepository;
+import com.gylang.netty.sdk.repo.DefaultGroupRepository;
+import com.gylang.netty.sdk.repo.DefaultIMRepository;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -30,12 +30,12 @@ import java.util.Properties;
 @Slf4j
 public class TestStartConfig {
 
-    private GroupRepository groupRepository;
-    private IMSessionRepository sessionRepository = new IMSessionRepository();
+    private DefaultGroupRepository defaultGroupRepository;
+    private DefaultIMRepository sessionRepository = new DefaultIMRepository();
 
     public TestStartConfig() {
-        groupRepository = new GroupRepository();
-        groupRepository.add("default", new AbstractSessionGroup("默认群聊", 1111L, 50));
+        defaultGroupRepository = new DefaultGroupRepository();
+        defaultGroupRepository.add("default", new AbstractSessionGroup("默认群聊", 1111L, 50));
     }
 
     /**
@@ -119,9 +119,9 @@ public class TestStartConfig {
     public List<IMRequestHandler> requestHandlerList() {
 
         JoinGroupHandler joinGroupHandler = new JoinGroupHandler();
-        joinGroupHandler.setGroupRepository(groupRepository);
+        joinGroupHandler.setDefaultGroupRepository(defaultGroupRepository);
         SimpleChatGroupHandler chatGroupHandler = new SimpleChatGroupHandler();
-        chatGroupHandler.setGroupRepository(groupRepository);
+        chatGroupHandler.setDefaultGroupRepository(defaultGroupRepository);
         List<IMRequestHandler> requestHandlerList = new ArrayList<>();
         requestHandlerList.add(joinGroupHandler);
         requestHandlerList.add(chatGroupHandler);

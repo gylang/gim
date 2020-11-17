@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * data 2020/10/29
  * @version v0.0.1
  */
-public class GroupRepository implements IRepository<String, AbstractSessionGroup, AbstractSessionGroup> {
+public class DefaultGroupRepository implements IRepository<String, AbstractSessionGroup, AbstractSessionGroup> {
 
     Map<String, AbstractSessionGroup> groupMap = new ConcurrentHashMap<>();
 

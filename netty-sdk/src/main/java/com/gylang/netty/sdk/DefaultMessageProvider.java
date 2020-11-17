@@ -4,8 +4,8 @@ import com.gylang.netty.sdk.conveter.DataConverter;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
 import com.gylang.netty.sdk.domain.model.IMSession;
-import com.gylang.netty.sdk.repo.GroupRepository;
-import com.gylang.netty.sdk.repo.IMSessionRepository;
+import com.gylang.netty.sdk.repo.DefaultGroupRepository;
+import com.gylang.netty.sdk.repo.DefaultIMRepository;
 import lombok.AllArgsConstructor;
 
 import java.util.concurrent.ThreadPoolExecutor;
@@ -18,8 +18,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 @AllArgsConstructor
 public class DefaultMessageProvider implements MessageProvider {
 
-    private IMSessionRepository sessionRepository;
-    private GroupRepository groupRepository;
+    private DefaultIMRepository sessionRepository;
+    private DefaultGroupRepository defaultGroupRepository;
     private ThreadPoolExecutor executor;
     private DataConverter converter;
 
@@ -43,7 +43,7 @@ public class DefaultMessageProvider implements MessageProvider {
     @Override
     public void sendGroup(IMSession me, String target, MessageWrap message) {
 
-        AbstractSessionGroup sessionGroup = groupRepository.findByKey(target);
+        AbstractSessionGroup sessionGroup = defaultGroupRepository.findByKey(target);
         if (null == sessionGroup) {
             return;
         }

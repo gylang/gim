@@ -9,4 +9,6 @@ import com.gylang.netty.sdk.call.NotifyProvider;
  * @version v0.0.1
  */
 public interface ImApplicationContext extends AbstractImFactory, NotifyProvider {
+
+
 }

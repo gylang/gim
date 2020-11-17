@@ -21,4 +21,6 @@ public interface AbstractImFactory {
      * 启动netty服务
      */
     void start();
+
+    IMContext imContext();
 }

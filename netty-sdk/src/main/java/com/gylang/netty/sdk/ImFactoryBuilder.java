@@ -3,9 +3,8 @@ package com.gylang.netty.sdk;
 import com.gylang.netty.sdk.call.NotifyContext;
 import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.config.NettyConfig;
+import com.gylang.netty.sdk.conveter.DataConverter;
 import com.gylang.netty.sdk.handler.IMRequestAdapter;
-import com.gylang.netty.sdk.repo.GroupRepository;
-import com.gylang.netty.sdk.repo.IMSessionRepository;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,5 +30,13 @@ public class ImFactoryBuilder {
     private NettyConfig nettyConfig;
 
     private IMRequestAdapter dispatchAdapter;
+
+    private MessageProvider messageProvider;
+
+    private Object sessionRepository;
+
+    private Object groupRepository;
+
+    private DataConverter dataConverter;
 
 }

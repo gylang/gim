@@ -23,6 +23,9 @@ public class JsonClient {
 
         MyWebSocketClient webSocketClient = new MyWebSocketClient(new URI("ws://localhost:46000"));
         webSocketClient.connect();
+        MessageWrap messageWrap = new MessageWrap();
+        messageWrap.setKey("login");
+        messageWrap.setContent(name);
 
 
         new Thread(() -> {
@@ -38,8 +41,7 @@ public class JsonClient {
         }, "心跳").start();
 
         while (true) {
-            MessageWrap messageWrap = new MessageWrap();
-            messageWrap.setKey("chat");
+
             messageWrap.setContent(UUID.fastUUID().toString());
             webSocketClient.send(JSON.toJSONBytes(messageWrap));
             TimeUnit.SECONDS.sleep(20);
