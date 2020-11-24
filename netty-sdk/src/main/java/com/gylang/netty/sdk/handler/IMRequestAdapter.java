@@ -21,10 +21,16 @@
  */
 package com.gylang.netty.sdk.handler;
 
+import cn.hutool.core.collection.CollUtil;
 import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import io.netty.channel.ChannelHandlerContext;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * netty请求适配器, 规约用于系统内部适配实现, 非业务功能
@@ -37,4 +43,15 @@ public interface IMRequestAdapter {
      * 处理收到客户端从长链接发送的数据
      */
     void process(ChannelHandlerContext ctx, IMSession me, MessageWrap message, NotifyProvider messagePusher);
+
+    void register(List<?> processList);
+
+    List<?> mappingList();
+
+    default <T> List<T> getTargetList(List<?> processList) {
+        if (CollUtil.isEmpty(processList)) {
+            return new ArrayList<>();
+        }
+        return processList.stream().map(o -> (T) o).collect(Collectors.toList());
+    }
 }

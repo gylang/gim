@@ -21,30 +21,34 @@ public class JsonClient {
         System.out.println("输入连接用户名");
         String name = new Scanner(System.in).next();
 
-        MyWebSocketClient webSocketClient = new MyWebSocketClient(new URI("ws://localhost:46000"));
-        webSocketClient.connect();
+        MyWebSocketClient webSocketClient = new MyWebSocketClient(new URI("ws://localhost:46000/ws"));
+        webSocketClient.connectBlocking();
         MessageWrap messageWrap = new MessageWrap();
         messageWrap.setKey("login");
         messageWrap.setContent(name);
-
-
+        webSocketClient.send(JSON.toJSONString(messageWrap));
         new Thread(() -> {
             while (true) {
-                try {
-                    TimeUnit.SECONDS.sleep(3);
-                    webSocketClient.send(new byte[]{1});
-                    System.out.println("发送heart");
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if (true) {
+                    try {
+                        TimeUnit.SECONDS.sleep(3);
+                        webSocketClient.sendPing();
+                        System.out.println("发送heart");
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }, "心跳").start();
 
         while (true) {
+            if (true) {
 
-            messageWrap.setContent(UUID.fastUUID().toString());
-            webSocketClient.send(JSON.toJSONBytes(messageWrap));
-            TimeUnit.SECONDS.sleep(20);
+                messageWrap.setContent(UUID.fastUUID().toString());
+                messageWrap.setKey("chat");
+                webSocketClient.send(JSON.toJSONString(messageWrap));
+                TimeUnit.SECONDS.sleep(5L);
+            }
         }
 
     }

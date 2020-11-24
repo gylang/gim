@@ -11,6 +11,7 @@ import com.gylang.netty.sdk.handler.IMRequestAdapter;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import io.netty.channel.ChannelHandlerContext;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -40,17 +41,24 @@ public class DefaultRequestHandlerAdapter implements IMRequestAdapter {
         requestHandler.process(me, message);
     }
 
-    public void register(List<IMRequestHandler> requestHandlerList) {
+    @Override
+    public void register(List<?> requestHandlerList) {
         if (null == requestHandlerList) {
-        handlerMap = CollUtil.newHashMap();
+            handlerMap = CollUtil.newHashMap();
             return;
         }
         handlerMap = CollUtil.newHashMap(requestHandlerList.size());
-        for (IMRequestHandler imRequestHandler : requestHandlerList) {
+        List<IMRequestHandler> requestHandlers = getTargetList(requestHandlerList);
+        for (IMRequestHandler imRequestHandler : requestHandlers) {
             NettyHandler annotation = AnnotationUtil.getAnnotation(imRequestHandler.getClass(), NettyHandler.class);
             if (null != annotation) {
                 handlerMap.put(annotation.value(), imRequestHandler);
             }
         }
+    }
+
+    @Override
+    public List<?> mappingList() {
+        return new ArrayList<>(handlerMap.values());
     }
 }

@@ -11,12 +11,14 @@ import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.NettyController;
 import com.gylang.netty.sdk.repo.DefaultGroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author gylang
  * data 2020/11/17
  */
 @NettyHandler("login")
+@Component
 public class TouristLoginHandler implements NettyController<String> {
 
     @Autowired
@@ -29,7 +31,7 @@ public class TouristLoginHandler implements NettyController<String> {
 
         MessageProvider messageProvider = context.messageProvider();
         DefaultGroupRepository groupRepository = context.groupRepository();
-
+        me.setAccount(requestBody);
         AbstractSessionGroup defaultGroup = getAndCreateGroup(me, groupRepository);
         boolean join = defaultGroup.join(me);
         if (join) {
@@ -55,7 +57,7 @@ public class TouristLoginHandler implements NettyController<String> {
             // 前面的线程可以能已经创建完聊天组, 所以需要再次判断
             defaultGroup = groupRepository.findByKey("default");
             if (null == defaultGroup) {
-                defaultGroup = new AbstractSessionGroup("default", me.getAccount(), 10);
+                defaultGroup = new AbstractSessionGroup("default", me.getAccount(), 1000);
                 groupRepository.add("default", defaultGroup);
             }
         } finally {

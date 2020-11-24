@@ -1,5 +1,6 @@
-package com.gylang.netty.sdk;
+package com.gylang.netty.sdk.factory;
 
+import com.gylang.netty.sdk.IMContext;
 import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
 import com.gylang.netty.sdk.domain.model.IMSession;
 

@@ -13,6 +13,7 @@ import io.netty.channel.ChannelHandlerContext;
 import lombok.Setter;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +47,8 @@ public class DefaultNettyControllerAdapter implements IMRequestAdapter {
         ((NettyController<Object>) nettyController).process(me, dataConverter.converterTo(paramType, message));
     }
 
-    public void register(List<NettyController<?>> nettyControllerList) {
+    @Override
+    public void register(List<?> nettyControllerList) {
 
         if (null == nettyControllerList) {
             nettyControllerMap = CollUtil.newHashMap();
@@ -55,7 +57,8 @@ public class DefaultNettyControllerAdapter implements IMRequestAdapter {
         }
         nettyControllerMap = CollUtil.newHashMap(nettyControllerList.size());
         paramTypeMap = CollUtil.newHashMap(nettyControllerList.size());
-        for (NettyController<?> nettyController : nettyControllerList) {
+        List<NettyController<?>> nettyControllers = getTargetList(nettyControllerList);
+        for (NettyController<?> nettyController : nettyControllers) {
 
             Class<?> clazz = nettyController.getClass();
             NettyHandler nettyHandler = clazz.getAnnotation(NettyHandler.class);
@@ -70,5 +73,10 @@ public class DefaultNettyControllerAdapter implements IMRequestAdapter {
 
             }
         }
+    }
+
+    @Override
+    public List<?> mappingList() {
+        return new ArrayList<>(nettyControllerMap.values());
     }
 }

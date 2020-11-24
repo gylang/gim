@@ -1,13 +1,14 @@
 package com.gylang.im.process;
 
-import com.gylang.netty.sdk.IMContext;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.repo.DefaultIMRepository;
 import com.gylang.netty.sdk.repo.FillUserInfoContext;
 import io.netty.channel.Channel;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 /**
  * @author gylang
@@ -16,14 +17,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class FillUserInfo implements FillUserInfoContext {
 
-    @Autowired
-    private IMContext context;
+    @Resource(name = "imRepository")
+    private DefaultIMRepository repository;
+    @Resource
+    private ApplicationContext applicationContext;
 
 
     @Override
     public void fill(IMSession session) {
 
-        DefaultIMRepository repository = context.sessionRepository();
         IMSession imSession = repository.find(session.getNid());
         if (null != imSession) {
         Channel channel = session.getSession();

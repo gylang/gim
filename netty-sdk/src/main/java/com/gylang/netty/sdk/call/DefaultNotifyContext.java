@@ -11,7 +11,7 @@ import java.util.List;
  * data 2020/11/9
  * @version v0.0.1
  */
-public class DefaultMessageContext extends NotifyContext {
+public class DefaultNotifyContext extends NotifyContext {
 
     public void init(List<MessageNotify<?>> messageNotifyList) {
         if (null == messageNotifyList) {

@@ -15,12 +15,14 @@ import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.Delimiters;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.CharsetUtil;
 
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -33,13 +35,13 @@ import java.util.concurrent.TimeUnit;
  */
 public class WebJsonInitializer extends ChannelInitializer<SocketChannel> {
 
-    private final Properties properties;
+    private final Map<String, Object> properties;
 
     private final NotifyProvider messagePusher;
 
     private final IMRequestAdapter requestAdapter;
 
-    public WebJsonInitializer(Properties properties, NotifyProvider messagePusher, IMRequestAdapter requestAdapter) {
+    public WebJsonInitializer(Map<String, Object> properties, NotifyProvider messagePusher, IMRequestAdapter requestAdapter) {
         this.properties = properties;
         this.messagePusher = messagePusher;
         this.requestAdapter = requestAdapter;
@@ -71,9 +73,10 @@ public class WebJsonInitializer extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(new HttpObjectAggregator(65536));
         pipeline.addLast(new WebJsonMessageDecoder());
         pipeline.addLast(new WebJsonMessageEncoder());
-        pipeline.addLast("DelimiterBasedFrameDecoder", new DelimiterBasedFrameDecoder(4096, Delimiters.lineDelimiter()));
-        pipeline.addLast("StringDecoder", new StringDecoder(CharsetUtil.UTF_8));
-        pipeline.addLast("StringEncoder", new StringEncoder(CharsetUtil.UTF_8));
+//        pipeline.addLast("DelimiterBasedFrameDecoder", new DelimiterBasedFrameDecoder(4096, Delimiters.lineDelimiter()));
+//        pipeline.addLast("StringDecoder", new StringDecoder(CharsetUtil.UTF_8));
+//        pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
+//        pipeline.addLast("StringEncoder", new StringEncoder(CharsetUtil.UTF_8));
         pipeline.addLast("heart", new HeartCheckHandler(messagePusher, properties));
         pipeline.addLast("dispatch", new JsonDispatchHandler(requestAdapter, messagePusher));
     }

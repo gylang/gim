@@ -61,9 +61,17 @@ public class WebJsonMessageDecoder extends SimpleChannelInboundHandler<Object> {
         if (frame instanceof PingWebSocketFrame) {
             handlerPingWebSocketFrame(ctx, (PingWebSocketFrame) frame);
             return;
+        } else if (frame instanceof TextWebSocketFrame) {
+            handlerTextWebSocketFrame(ctx, (TextWebSocketFrame) frame);
         }
 
         handlerBinaryWebSocketFrame(ctx, (BinaryWebSocketFrame) frame);
+    }
+
+    private void handlerTextWebSocketFrame(ChannelHandlerContext ctx, TextWebSocketFrame frame) {
+
+        MessageWrap object = JSON.parseObject(frame.text(), MessageWrap.class);
+        ctx.fireChannelRead(object);
     }
 
     private void handlerCloseWebSocketFrame(ChannelHandlerContext ctx, CloseWebSocketFrame frame) {

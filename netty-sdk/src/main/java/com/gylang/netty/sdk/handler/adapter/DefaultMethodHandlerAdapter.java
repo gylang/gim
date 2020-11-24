@@ -14,6 +14,7 @@ import com.gylang.netty.sdk.handler.IMRequestAdapter;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +38,8 @@ public class DefaultMethodHandlerAdapter implements IMRequestAdapter {
 
     }
 
-    public void register(List<Object> controllerList) {
+    @Override
+    public void register(List<?> controllerList) {
 
         if (null == controllerList) {
             return;
@@ -63,6 +65,11 @@ public class DefaultMethodHandlerAdapter implements IMRequestAdapter {
                 }
             }
         }
+    }
+
+    @Override
+    public List< ?> mappingList() {
+        return new ArrayList<>(methodMetaMap.values());
     }
 
 

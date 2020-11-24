@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jq.js">
+
+
+    </script>
+    <style type="text/css">
+        .chat-container {
+
+            height: 700px;
+            width: 600px;
+            margin: 0 auto;
+            background-color: antiquewhite;
+            border-style: solid;
+            border-width: 2px;
+            border-radius: 5px;
+            overflow: scroll;
+            display: inline-block;
+        }
+
+        .contaioner {
+            text-align: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .chat-textarea {
+
+            height: 100%;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .send-content {
+            width: 400px;
+            height: 30px;
+        }
+
+        .inputUser {
+            top: 5px;
+        }
+
+        .send-btn {
+            text-align: center;
+            left: 20px;
+            height: 36px;
+            width: 50px;
+            padding: 1px 2px;
+            top: 5px;
+        }
+
+        .sendMsg {
+            max-width: 600px;
+            float: right;
+            padding-left: 200px;
+            border-width: 0;
+            border-style: solid;
+            display: inline-block;
+            border-color: transparent;
+            display: inline-block;
+            border-top-color: currentColor;
+            border-radius: 0 32px 0 0;
+
+        }
+
+        .receiveMsg {
+            max-width: 600px;
+            padding-right: 200px;
+            float: left;
+            border-width: 0;
+            border-style: solid;
+            border-color: transparent;
+            display: inline-block;
+            border-top-color: currentColor;
+            border-radius: 0 32px 0 0;
+            text-align: left;
+        }
+
+
+    </style>
+    <script src="jq.js"></script>
+    <script src="MessageWrap.js"></script>
+    <script>
+        var ws = new WebSocket("ws://localhost:46000/ws");
+
+        //申请一个WebSocket对象，参数是服务端地址，同http协议使用http://开头一样，WebSocket协议的url使用ws://开头，另外安全的WebSocket协议使用wss://开头
+
+        function login() {
+            console.log('ws.state() : ' + ws.readyState);
+            console.log('ws.OPEN : ' + ws.OPEN);
+            if (ws.readyState === ws.OPEN) {
+                console.log("登录");
+                // 登录
+                let user = $("#inputUser").val();
+                console.log('user : ' + user);
+                sendMsg("login", user, receiveType.GROUP, ws);
+                $(".inputUser").css("display", "none");
+                $(".c-container").css("display", "block");
+            }
+        }
+
+        ws.onopen = function () {
+            //当WebSocket创建成功时，触发onopen事件
+            console.log("open");
+
+
+            setTimeout(function () {
+                send({}, ws)
+            }, 3000)
+
+        };
+        ws.onmessage = function (e) {
+            //当客户端收到服务端发来的消息时，触发onmessage事件，参数e.data包含server传递过来的数据
+            console.log(e.data);
+
+            var parse = JSON.parse(e.data);
+            $(".chat-container").append('<div class="receiveMsg"><span style="color: chocolate">【 ' + parse.sender + '】</span>: ' + parse.content + '</div><br>')
+
+        };
+        ws.onclose = function (e) {
+            //当客户端收到服务端发送的关闭连接请求时，触发onclose事件
+            console.log("close");
+        };
+        ws.onerror = function (e) {
+            //如果出现连接、处理、接收、发送数据失败的时候触发onerror事件
+            console.log(error);
+        };
+
+        function sendMsg1() {
+
+            var send = $("#send-content");
+            let msg = send.val();
+            send.value = "";
+            console.log('msg : ' + msg);
+            chatMsg(msg, ws);
+            $(".chat-container").append('<div class="sendMsg">' + msg + '</div><br>')
+        }
+    </script>
+</head>
+
+<body>
+
+<div class="contaioner">
+
+    <label class="inputUser">
+        输入聊天用户名
+        <input type="text" id="inputUser">
+        <button id="login" onclick="login()">确认</button>
+    </label><br>
+
+    <div class="c-container">
+        <div class="chat-container">
+
+        </div>
+        <div class="send-container">
+            <input type="text" id="send-content" class="send-content">
+            <button class="send-btn" onclick="sendMsg1()">发送</button>
+        </div>
+    </div>
+    <br>
+
+</div>
+
+
+</body>
+</html>

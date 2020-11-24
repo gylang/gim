@@ -1,5 +1,6 @@
 package com.gylang.netty.sdk.repo;
 
+import com.gylang.netty.sdk.annotation.IMGroupRepository;
 import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
 
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * data 2020/10/29
  * @version v0.0.1
  */
+@IMGroupRepository
 public class DefaultGroupRepository implements IRepository<String, AbstractSessionGroup, AbstractSessionGroup> {
 
     Map<String, AbstractSessionGroup> groupMap = new ConcurrentHashMap<>();

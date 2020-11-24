@@ -4,6 +4,7 @@ import io.netty.handler.logging.LogLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -65,7 +66,7 @@ public enum NettyConfigEnum {
      * @param name key
      * @return 配置值
      */
-    public static <T> T getValue(String name, Properties properties) {
+    public static <T> T getValue(String name, Map<String, Object> properties) {
 
         Object o = properties.get(name);
         if (null == o) {
@@ -80,7 +81,7 @@ public enum NettyConfigEnum {
      * @param properties 自定义配置
      * @return 配置值
      */
-    public <T> T getValue(Properties properties) {
+    public <T> T getValue(Map<String, Object> properties) {
         if (null == properties) {
             return (T) this.value;
         }

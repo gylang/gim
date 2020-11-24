@@ -5,7 +5,7 @@ import com.gylang.netty.sdk.ImFactoryBuilder;
 import com.gylang.netty.sdk.DefaultImApplicationContext;
 import com.gylang.netty.sdk.call.NotifyContext;
 import com.gylang.netty.sdk.call.NotifyProvider;
-import com.gylang.netty.sdk.call.DefaultMessageContext;
+import com.gylang.netty.sdk.call.DefaultNotifyContext;
 import com.gylang.netty.sdk.call.DefaultNotifyProvider;
 import com.gylang.netty.sdk.config.NettyConfig;
 import com.gylang.netty.sdk.conveter.ProtobufConverter;
@@ -35,7 +35,7 @@ public class TestStartConfig {
 
     public TestStartConfig() {
         defaultGroupRepository = new DefaultGroupRepository();
-        defaultGroupRepository.add("default", new AbstractSessionGroup("默认群聊", 1111L, 50));
+        defaultGroupRepository.add("default", new AbstractSessionGroup("默认群聊", "1111", 50));
     }
 
     /**
@@ -110,7 +110,7 @@ public class TestStartConfig {
      */
     public NotifyContext messageContext() {
 
-        DefaultMessageContext simpleMessageContext = new DefaultMessageContext();
+        DefaultNotifyContext simpleMessageContext = new DefaultNotifyContext();
         simpleMessageContext.init(null);
         return simpleMessageContext;
     }

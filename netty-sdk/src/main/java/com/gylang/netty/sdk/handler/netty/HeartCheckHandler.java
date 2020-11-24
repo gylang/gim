@@ -11,6 +11,7 @@ import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Properties;
 
 import static io.netty.handler.timeout.IdleState.ALL_IDLE;
@@ -27,13 +28,13 @@ import static io.netty.handler.timeout.IdleState.ALL_IDLE;
 public class HeartCheckHandler extends ChannelInboundHandlerAdapter {
 
     private final NotifyProvider messagePusher;
-    private final Properties properties;
+    private final Map<String, Object> properties;
     /**
      * 重连次数
      */
     private int unRecPingTimes;
 
-    public HeartCheckHandler(NotifyProvider messagePusher, Properties properties) {
+    public HeartCheckHandler(NotifyProvider messagePusher, Map<String, Object> properties) {
         this.messagePusher = messagePusher;
         this.properties = properties;
     }

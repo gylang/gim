@@ -1,6 +1,7 @@
 package com.gylang.netty.sdk.config;
 
 import com.gylang.netty.sdk.constant.NettyConfigEnum;
+import com.gylang.netty.sdk.initializer.WebJsonInitializer;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -31,6 +32,8 @@ public class NettyConfig {
     private NioEventLoopGroup workerGroup;
 
 
+
+
     /**
      * 根据名称装配，防止和客户端的ChannelInitializer冲突报错
      */
@@ -39,7 +42,7 @@ public class NettyConfig {
      * 配置信息
      */
     @Getter
-    private Properties properties;
+    private Map<String, Object> properties;
 
     /**
      * 用来监控tcp链接 指定线程数 默认是1 用默认即可

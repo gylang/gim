@@ -8,6 +8,7 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.concurrent.EventExecutorGroup;
 
 import java.util.List;
@@ -23,10 +24,6 @@ public class WebJsonMessageEncoder extends MessageToMessageEncoder<MessageWrap> 
 
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, MessageWrap messageWrap, List<Object> list) throws Exception {
-
-        byte[] bytes = JSON.toJSONBytes(messageWrap);
-        ByteBuf buffer = BYTE_BUF_ALLOCATOR.buffer(bytes.length + 1);
-        buffer.writeBytes(bytes);
-        list.add(new BinaryWebSocketFrame(buffer));
+        list.add(new TextWebSocketFrame(JSON.toJSONString(messageWrap)));
     }
 }

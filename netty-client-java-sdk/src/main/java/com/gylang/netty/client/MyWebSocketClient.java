@@ -33,24 +33,14 @@ public class MyWebSocketClient extends WebSocketClient {
 
     @Override
     public void onClose(int i, String s, boolean b) {
-        this.reconnect();
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e1) {
-            e1.printStackTrace();
-        }
+
         log.info("websocket onClose : {}", s);
     }
 
     @Override
     public void onError(Exception e) {
 
-        this.reconnect();
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e1) {
-            e1.printStackTrace();
-        }
+
         log.info("websocket onError : {}", e.getMessage());
 
     }

@@ -1,5 +1,6 @@
 package com.gylang.netty.sdk.repo;
 
+import com.gylang.netty.sdk.annotation.IMRepository;
 import com.gylang.netty.sdk.domain.model.IMSession;
 
 import java.util.Map;
@@ -12,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * data 2020/8/28
  * @version v0.0.1
  */
+@IMRepository
 public class DefaultIMRepository implements IRepository<String, String, IMSession> {
 
     private Map<String, IMSession> repository = new ConcurrentHashMap<>();

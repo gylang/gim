@@ -16,6 +16,7 @@ import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import io.netty.handler.timeout.IdleStateHandler;
 
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -27,12 +28,12 @@ import java.util.concurrent.TimeUnit;
 
 public class ProtobufInitializer extends ChannelInitializer<SocketChannel> {
 
-    private final Properties properties;
+    private final Map<String, Object> properties;
 
     private final NotifyProvider pusher;
     private final IMRequestAdapter requestAdapter;
 
-    public ProtobufInitializer(Properties properties, NotifyProvider pusher, IMRequestAdapter requestAdapter) {
+    public ProtobufInitializer(Map<String, Object> properties, NotifyProvider pusher, IMRequestAdapter requestAdapter) {
         this.properties = properties;
         this.pusher = pusher;
         this.requestAdapter = requestAdapter;

@@ -1,5 +1,6 @@
 package com.gylang.netty.sdk.handler;
 
+import cn.hutool.core.collection.CollUtil;
 import com.gylang.netty.sdk.annotation.AdapterType;
 import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.domain.MessageWrap;
@@ -9,6 +10,8 @@ import io.netty.channel.ChannelHandlerContext;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * netty分发处理适配器 责任链是处理 IMRequestAdapter
@@ -35,4 +38,17 @@ public class DefaultAdapterDispatch implements IMRequestAdapter {
             adapter.process(ctx, me, message, messagePusher);
         }
     }
+
+    @Override
+    public void register(List<?> processList) {
+
+        requestAdapterList = getTargetList(processList);
+    }
+
+    @Override
+    public List<?> mappingList() {
+        return requestAdapterList;
+    }
+
+
 }

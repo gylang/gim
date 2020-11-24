@@ -7,6 +7,7 @@ import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.IMRequestAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
 /**
  * netty json数据协议 服务分发
@@ -27,8 +28,7 @@ public class JsonDispatchHandler extends SimpleChannelInboundHandler<MessageWrap
 
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, MessageWrap msg) throws Exception {
-
+    protected void channelRead0(ChannelHandlerContext ctx, MessageWrap  msg) throws Exception {
         IMSession session = new IMSession(ctx.channel());
         requestAdapter.process(ctx, session, msg, messagePusher);
 

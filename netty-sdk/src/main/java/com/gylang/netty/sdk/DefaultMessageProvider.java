@@ -31,8 +31,7 @@ public class DefaultMessageProvider implements MessageProvider {
             return;
         }
         message.setSender(imSession.getAccount());
-        Object msg = converter.encode(message);
-        imSession.getSession().writeAndFlush(msg);
+        imSession.getSession().writeAndFlush(message);
     }
 
     @Override
@@ -49,10 +48,9 @@ public class DefaultMessageProvider implements MessageProvider {
         }
         message.setSender(me.getAccount());
         for (IMSession session : sessionGroup.getMemberList()) {
-            if (null != session.getSession() && !me.getNid().equals(session.getId())) {
+            if (null != session.getSession() && !me.getNid().equals(session.getNid())) {
                 if (session.getSession().isActive()) {
-                    Object msg = converter.encode(message);
-                    session.getSession().writeAndFlush(msg);
+                    session.getSession().writeAndFlush(message);
                 }
             }
         }
