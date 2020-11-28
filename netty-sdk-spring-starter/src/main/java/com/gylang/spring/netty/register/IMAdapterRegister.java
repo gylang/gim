@@ -43,23 +43,24 @@ public class IMAdapterRegister implements BeanDefinitionRegistryPostProcessor {
     public void postProcessBeanFactory(ConfigurableListableBeanFactory configurableListableBeanFactory) throws BeansException {
 
         // 分发器
-        String[] adapterName = configurableListableBeanFactory.getBeanNamesForType(IMRequestAdapter.class);
-        List<IMRequestAdapter> requestAdapterList = Arrays.stream(adapterName)
-                .map(a -> configurableListableBeanFactory.getBean(a, IMRequestAdapter.class))
-                .collect(Collectors.toList());
-
-        List<IMRequestAdapter> dispatchList = requestAdapterList.stream()
-                .filter(this::isDispatch)
-                .collect(Collectors.toList());
-
-        Assert.isTrue(1 >= dispatchList.size(), "double dispatchAdapter");
+//        String[] adapterName = configurableListableBeanFactory.getBeanNamesForType(IMRequestAdapter.class);
+//        List<IMRequestAdapter> requestAdapterList = Arrays.stream(adapterName)
+//                .map(a -> configurableListableBeanFactory.getBean(a, IMRequestAdapter.class))
+//                .collect(Collectors.toList());
+//
+//        List<IMRequestAdapter> dispatchList = requestAdapterList.stream()
+//                .filter(this::isDispatch)
+//                .collect(Collectors.toList());
+//
+//        Assert.isTrue(1 >= dispatchList.size(), "double dispatchAdapter");
+        List<IMRequestAdapter> requestAdapterList = new ArrayList<>();
         IMRequestAdapter dispatch = null;
-        if (0 == dispatchList.size()) {
-            dispatch = createDefaultDispatch(requestAdapterList, configurableListableBeanFactory);
-        } else {
-            dispatch = (IMRequestAdapter) dispatchList.get(0);
-            requestAdapterList.remove(dispatch);
-        }
+//        if (0 == dispatchList.size()) {
+        dispatch = createDefaultDispatch(requestAdapterList, configurableListableBeanFactory);
+//        } else {
+//            dispatch = (IMRequestAdapter) dispatchList.get(0);
+//            requestAdapterList.remove(dispatch);
+//        }
         requestAdapterList.add(createDefaultControllerAdapter(configurableListableBeanFactory));
         requestAdapterList.add(createDefaultHandlerAdapter(configurableListableBeanFactory));
         dispatch.register(requestAdapterList);
@@ -93,7 +94,10 @@ public class IMAdapterRegister implements BeanDefinitionRegistryPostProcessor {
     private IMRequestAdapter createDefaultDispatch(List<IMRequestAdapter> bizRequestAdapter, ConfigurableListableBeanFactory beanFactory) {
 
         DefaultAdapterDispatch defaultAdapterDispatch = new DefaultAdapterDispatch();
-        defaultAdapterDispatch.setFillUserInfoContext(beanFactory.getBean(FillUserInfoContext.class));
+        try {
+            defaultAdapterDispatch.setFillUserInfoContext(beanFactory.getBean(FillUserInfoContext.class));
+        } catch (BeansException ignored) {
+        }
         defaultAdapterDispatch.setRequestAdapterList(bizRequestAdapter);
 
         // 默认规则的适配器

@@ -9,6 +9,7 @@ import com.gylang.netty.sdk.repo.FillUserInfoContext;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
 public class DefaultAdapterDispatch implements IMRequestAdapter {
 
     @Setter
-    private List<IMRequestAdapter> requestAdapterList;
+    private List<IMRequestAdapter> requestAdapterList = new ArrayList<>();
     @Setter
     private FillUserInfoContext fillUserInfoContext;
 
@@ -42,7 +43,12 @@ public class DefaultAdapterDispatch implements IMRequestAdapter {
     @Override
     public void register(List<?> processList) {
 
-        requestAdapterList = getTargetList(processList);
+        List<IMRequestAdapter> targetList = getTargetList(processList);
+        for (IMRequestAdapter o : targetList) {
+            if (!requestAdapterList.contains(o)) {
+                requestAdapterList.add(o);
+            }
+        }
     }
 
     @Override

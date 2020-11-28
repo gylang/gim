@@ -27,7 +27,7 @@ public class MessageWrap {
 
     private String content;
 
-    private ByteString bytes;
+    private String code;
 
     private String receive;
 

@@ -40,6 +40,7 @@ import java.util.stream.Stream;
 @Configuration
 @Import({IMContextConfig.class, DataConverterRegister.class, MessageProviderRegister.class,
         IMNotifyRegister.class, IMAdapterRegister.class, ChannelInitializerRegister.class})
+@ComponentScan("com.gylang.spring.netty.custom")
 public class IMAutoConfigration implements InitializingBean {
 
 
@@ -85,6 +86,8 @@ public class IMAutoConfigration implements InitializingBean {
 
     @Autowired(required = false)
     private FillUserInfoContext fillUserInfoContext;
+    @Autowired(required = false)
+    private List<IMRequestAdapter> requestAdapterList;
 
 
     /**
@@ -105,6 +108,11 @@ public class IMAutoConfigration implements InitializingBean {
         // 构建bean
         BeanUtils.copyProperties(imApplicationContext.imContext(), this.imContext);
 
+        // 新加的adapter
+        if (null != requestAdapterList) {
+            requestAdapterList.remove(adapter);
+            adapter.register(requestAdapterList);
+        }
         // 解决循环依赖
         List<Object> autowired = new ArrayList<>();
 
@@ -138,6 +146,7 @@ public class IMAutoConfigration implements InitializingBean {
             autowired.addAll(objects);
         }
     }
+
     private void addCircular(List<Object> autowired, Object obj) {
 
         if (null != obj) {

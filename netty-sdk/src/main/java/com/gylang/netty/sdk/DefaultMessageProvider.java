@@ -27,11 +27,7 @@ public class DefaultMessageProvider implements MessageProvider {
     public void sendMsg(IMSession me, String target, MessageWrap message) {
 
         IMSession imSession = sessionRepository.find(target);
-        if (null == imSession || null == imSession.getSession()) {
-            return;
-        }
-        message.setSender(imSession.getAccount());
-        imSession.getSession().writeAndFlush(message);
+        sendMsg(me, imSession, message);
     }
 
     @Override
@@ -43,11 +39,35 @@ public class DefaultMessageProvider implements MessageProvider {
     public void sendGroup(IMSession me, String target, MessageWrap message) {
 
         AbstractSessionGroup sessionGroup = defaultGroupRepository.findByKey(target);
-        if (null == sessionGroup) {
+        sendGroup(me, sessionGroup, message);
+    }
+
+    @Override
+    public void sendAsyncGroup(IMSession me, String target, MessageWrap message) {
+        executor.execute(() -> sendGroup(me, target, message));
+    }
+
+    @Override
+    public void sendMsg(IMSession me, IMSession target, MessageWrap message) {
+        if (null == target || null == target.getSession()) {
+            return;
+        }
+        message.setSender(target.getAccount());
+        target.getSession().writeAndFlush(message);
+    }
+
+    @Override
+    public void sendAsyncMsg(IMSession me, IMSession target, MessageWrap message) {
+        executor.execute(() -> sendMsg(me, target, message));
+    }
+
+    @Override
+    public void sendGroup(IMSession me, AbstractSessionGroup target, MessageWrap message) {
+        if (null == target) {
             return;
         }
         message.setSender(me.getAccount());
-        for (IMSession session : sessionGroup.getMemberList()) {
+        for (IMSession session : target.getMemberList()) {
             if (null != session.getSession() && !me.getNid().equals(session.getNid())) {
                 if (session.getSession().isActive()) {
                     session.getSession().writeAndFlush(message);
@@ -57,7 +77,8 @@ public class DefaultMessageProvider implements MessageProvider {
     }
 
     @Override
-    public void sendAsyncGroup(IMSession me, String target, MessageWrap message) {
+    public void sendAsyncGroup(IMSession me, AbstractSessionGroup target, MessageWrap message) {
         executor.execute(() -> sendGroup(me, target, message));
+
     }
 }

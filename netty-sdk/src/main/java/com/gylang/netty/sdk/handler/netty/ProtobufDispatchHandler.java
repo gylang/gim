@@ -34,7 +34,6 @@ public class ProtobufDispatchHandler extends SimpleChannelInboundHandler<Message
         messageWrap.setContent(msg.getContent());
         messageWrap.setType(msg.getType());
         messageWrap.setReceiverType(msg.getReceiverType());
-        messageWrap.setBytes(msg.getBytes());
         requestAdapter.process(ctx, session, messageWrap, messagePusher);
 
     }

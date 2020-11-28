@@ -19,7 +19,7 @@ function send(msg, ws) {
 
 function chatMsg(content, ws) {
 
-    sendMsg("chat", content, receiveType.GROUP, ws)
+    sendMsg("test:test", content, receiveType.GROUP, ws)
 }
 
 const receiveType = {

@@ -8,4 +8,5 @@ package com.gylang.netty.sdk.constant;
 public interface CommConst {
     String YES = "1";
     String KEY_ACCOUNT = "2";
+
 }
