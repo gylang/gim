@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version v0.0.1
  */
 @IMRepository
-public class DefaultIMRepository implements IMSessionReopistry<String, String, IMSession> {
+public class DefaultIMRepository implements IMSessionReopistry {
 
     private Map<String, IMSession> repository = new ConcurrentHashMap<>();
 

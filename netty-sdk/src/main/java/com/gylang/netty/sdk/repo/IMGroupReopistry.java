@@ -1,9 +1,11 @@
 package com.gylang.netty.sdk.repo;
 
 
+import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
+
 /**
  * @author gylang
  * data 2020/11/30
  */
-public interface IMGroupReopistry<KEY, QUERY, ENTITY> extends IRepository<KEY, QUERY, ENTITY> {
+public interface IMGroupReopistry extends IRepository<String, AbstractSessionGroup, AbstractSessionGroup> {
 }
