@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version v0.0.1
  */
 @IMGroupRepository
-public class DefaultGroupRepository implements IRepository<String, AbstractSessionGroup, AbstractSessionGroup> {
+public class DefaultGroupRepository implements IMGroupReopistry<String, AbstractSessionGroup, AbstractSessionGroup> {
 
     Map<String, AbstractSessionGroup> groupMap = new ConcurrentHashMap<>();
 
