@@ -1,12 +1,9 @@
 package com.gylang.netty.sdk.conveter;
 
 import cn.hutool.core.convert.Convert;
-import cn.hutool.core.convert.Converter;
-import cn.hutool.core.convert.ConverterRegistry;
 import cn.hutool.core.util.ClassUtil;
 import com.alibaba.fastjson.JSON;
 import com.gylang.netty.sdk.domain.MessageWrap;
-import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
 /**
  * json 数据转换

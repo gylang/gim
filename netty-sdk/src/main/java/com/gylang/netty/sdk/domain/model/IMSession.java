@@ -26,7 +26,6 @@ import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.gylang.netty.sdk.call;
 
-import com.gylang.netty.sdk.call.message.MessageNotify;
+import com.gylang.netty.sdk.call.message.MessageNotifyListener;
 
 import java.util.List;
 
@@ -13,12 +13,12 @@ import java.util.List;
  */
 public class DefaultNotifyContext extends NotifyContext {
 
-    public void init(List<MessageNotify<?>> messageNotifyList) {
-        if (null == messageNotifyList) {
+    public void init(List<MessageNotifyListener<?>> messageNotifyListenerList) {
+        if (null == messageNotifyListenerList) {
             return;
         }
-        for (MessageNotify<?> messageNotify : messageNotifyList) {
-            register(messageNotify);
+        for (MessageNotifyListener<?> messageNotifyListener : messageNotifyListenerList) {
+            register(messageNotifyListener);
         }
     }
 

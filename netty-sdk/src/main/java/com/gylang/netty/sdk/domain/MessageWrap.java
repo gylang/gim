@@ -1,6 +1,5 @@
 package com.gylang.netty.sdk.domain;
 
-import com.google.protobuf.ByteString;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

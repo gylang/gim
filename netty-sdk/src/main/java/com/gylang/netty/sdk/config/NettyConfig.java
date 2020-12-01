@@ -1,7 +1,6 @@
 package com.gylang.netty.sdk.config;
 
 import com.gylang.netty.sdk.constant.NettyConfigEnum;
-import com.gylang.netty.sdk.initializer.WebJsonInitializer;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -10,7 +9,6 @@ import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * netty服务配置 方便定制化服务

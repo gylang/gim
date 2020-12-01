@@ -10,7 +10,7 @@ import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.conveter.DataConverter;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
-import com.gylang.netty.sdk.handler.IMRequestAdapter;
+import com.gylang.netty.sdk.handler.BizRequestAdapter;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.lang.reflect.Method;
@@ -27,7 +27,7 @@ import java.util.Map;
  * @version v0.0.1
  */
 @AdapterType(order = 100)
-public class DefaultMethodHandlerAdapter implements IMRequestAdapter {
+public class DefaultMethodHandlerAdapter implements BizRequestAdapter {
 
     private Map<String, MethodMeta> methodMetaMap;
 

@@ -1,18 +1,14 @@
 package com.gylang.netty.sdk.handler;
 
-import cn.hutool.core.collection.CollUtil;
-import com.gylang.netty.sdk.annotation.AdapterType;
 import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
-import com.gylang.netty.sdk.repo.FillUserInfoContext;
+import com.gylang.netty.sdk.repo.NettyUserInfoFillHandler;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * netty分发处理适配器 责任链是处理 IMRequestAdapter
@@ -22,18 +18,17 @@ import java.util.stream.Collectors;
  * @version v0.0.1
  * @see com.gylang.netty.sdk.handler.IMRequestAdapter
  */
-@AdapterType(isDispatch = true)
-public class DefaultAdapterDispatch implements IMRequestAdapter {
+public class DefaultAdapterDispatch implements DispatchAdapterHandler {
 
     @Setter
     private List<IMRequestAdapter> requestAdapterList = new ArrayList<>();
     @Setter
-    private FillUserInfoContext fillUserInfoContext;
+    private NettyUserInfoFillHandler nettyUserInfoFillHandler;
 
     @Override
     public void process(ChannelHandlerContext ctx, IMSession me, MessageWrap message, NotifyProvider messagePusher) {
-        if (null != fillUserInfoContext) {
-            fillUserInfoContext.fill(me);
+        if (null != nettyUserInfoFillHandler) {
+            nettyUserInfoFillHandler.fill(me);
         }
         for (IMRequestAdapter adapter : requestAdapterList) {
             adapter.process(ctx, me, message, messagePusher);

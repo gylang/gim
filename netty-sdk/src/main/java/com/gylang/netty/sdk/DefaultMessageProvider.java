@@ -6,6 +6,8 @@ import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.repo.DefaultGroupRepository;
 import com.gylang.netty.sdk.repo.DefaultIMRepository;
+import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
+import com.gylang.netty.sdk.repo.IMSessionRepository;
 import lombok.AllArgsConstructor;
 
 import java.util.concurrent.ThreadPoolExecutor;
@@ -18,8 +20,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 @AllArgsConstructor
 public class DefaultMessageProvider implements MessageProvider {
 
-    private DefaultIMRepository sessionRepository;
-    private DefaultGroupRepository defaultGroupRepository;
+    private IMSessionRepository sessionRepository;
+    private IMGroupSessionRepository defaultGroupRepository;
     private ThreadPoolExecutor executor;
     private DataConverter converter;
 

@@ -12,6 +12,6 @@ import java.lang.annotation.*;
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Import(IMAutoConfigration.class)
+@Import(NettyAutoConfiguration.class)
 public @interface EnableIM {
 }

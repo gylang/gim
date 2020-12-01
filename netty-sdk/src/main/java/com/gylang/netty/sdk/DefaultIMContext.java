@@ -3,7 +3,6 @@ package com.gylang.netty.sdk;
 import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.conveter.DataConverter;
 import com.sun.istack.internal.NotNull;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

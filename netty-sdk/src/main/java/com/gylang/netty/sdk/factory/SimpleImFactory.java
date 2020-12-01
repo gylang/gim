@@ -4,7 +4,6 @@ import com.gylang.netty.sdk.IMContext;
 import com.gylang.netty.sdk.IMServer;
 import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.config.NettyConfig;
-import com.gylang.netty.sdk.factory.AbstractImFactory;
 import com.gylang.netty.sdk.handler.IMRequestAdapter;
 import com.sun.istack.internal.NotNull;
 

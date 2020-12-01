@@ -9,7 +9,7 @@ import com.gylang.netty.sdk.domain.model.IMSession;
  * data 2020/11/15
  * @version v0.0.1
  */
-public interface FillUserInfoContext {
+public interface NettyUserInfoFillHandler {
 
     /**
      * 填充用户上下文信息

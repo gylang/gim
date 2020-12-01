@@ -1,6 +1,6 @@
 package com.gylang.netty.sdk.call;
 
-import com.gylang.netty.sdk.call.message.MessageNotify;
+import com.gylang.netty.sdk.call.message.MessageNotifyListener;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class NotifyContext {
 
-    Map<String, List<MessageNotify<?>>> notifyMap;
+    Map<String, List<MessageNotifyListener<?>>> notifyMap;
 
     Map<Class<?>, Class<?>> messageType;
 
@@ -32,7 +32,7 @@ public class NotifyContext {
      *
      * @param receive 监听器
      */
-    public void register(MessageNotify<?> receive) {
+    public void register(MessageNotifyListener<?> receive) {
 
         // 解析类型
         for (Method method : receive.getClass().getDeclaredMethods()) {
@@ -41,8 +41,8 @@ public class NotifyContext {
                 if (null != annotation) {
                     String[] value = annotation.value();
                     for (String msgType : value) {
-                        List<MessageNotify<?>> messageNotifyList = notifyMap.computeIfAbsent(msgType, k -> new ArrayList<>());
-                        messageNotifyList.add(receive);
+                        List<MessageNotifyListener<?>> messageNotifyListenerList = notifyMap.computeIfAbsent(msgType, k -> new ArrayList<>());
+                        messageNotifyListenerList.add(receive);
                     }
                     // 判断入消息入参
                     messageType.put(receive.getClass(), method.getParameterTypes()[1]);
@@ -61,13 +61,13 @@ public class NotifyContext {
      */
     public void sendMsg(String key, Object msg) {
 
-        List<MessageNotify<?>> messageNotifies = notifyMap.get(key);
+        List<MessageNotifyListener<?>> messageNotifies = notifyMap.get(key);
         if (null != messageNotifies) {
-            for (MessageNotify<?> messageNotify : messageNotifies) {
+            for (MessageNotifyListener<?> messageNotifyListener : messageNotifies) {
 
-                Class<?> msgType = messageType.get(messageNotify.getClass());
+                Class<?> msgType = messageType.get(messageNotifyListener.getClass());
                 if (msgType.isInstance(msg)) {
-                    ((MessageNotify<Object>) messageNotify).msgNotify(key, msg);
+                    ((MessageNotifyListener<Object>) messageNotifyListener).msgNotify(key, msg);
                 }
             }
         }

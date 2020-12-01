@@ -2,14 +2,11 @@ package com.gylang.netty.sdk.coder;
 
 import com.alibaba.fastjson.JSON;
 import com.google.protobuf.InvalidProtocolBufferException;
-import com.gylang.netty.sdk.conveter.DataConverter;
 import com.gylang.netty.sdk.domain.MessageWrap;
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.websocketx.*;
-import io.netty.util.concurrent.EventExecutorGroup;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.ConcurrentHashMap;

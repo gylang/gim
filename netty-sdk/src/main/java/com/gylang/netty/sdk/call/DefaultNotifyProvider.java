@@ -19,17 +19,17 @@ public class DefaultNotifyProvider implements NotifyProvider {
     /**
      * 消息上下文
      */
-    private NotifyContext messageContext;
+    private NotifyContext notifyContext;
 
     @Override
     public void sendMsg(String key, Object message) {
-        messageContext.sendMsg(key, message);
+        notifyContext.sendMsg(key, message);
     }
 
     @Override
     public void sendAsyncMsg(String key, Object message) {
         executor.execute(() -> {
-            messageContext.sendMsg(key, message);
+            notifyContext.sendMsg(key, message);
         });
     }
 }

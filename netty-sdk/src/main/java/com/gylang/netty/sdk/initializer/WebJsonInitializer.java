@@ -1,29 +1,21 @@
 package com.gylang.netty.sdk.initializer;
 
 import com.gylang.netty.sdk.call.NotifyProvider;
-import com.gylang.netty.sdk.coder.WebJsonMessageEncoder;
 import com.gylang.netty.sdk.coder.WebJsonMessageDecoder;
+import com.gylang.netty.sdk.coder.WebJsonMessageEncoder;
 import com.gylang.netty.sdk.constant.NettyConfigEnum;
 import com.gylang.netty.sdk.handler.IMRequestAdapter;
-import com.gylang.netty.sdk.handler.netty.JsonDispatchHandler;
 import com.gylang.netty.sdk.handler.netty.HeartCheckHandler;
+import com.gylang.netty.sdk.handler.netty.JsonDispatchHandler;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.handler.codec.DelimiterBasedFrameDecoder;
-import io.netty.handler.codec.Delimiters;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
-import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.handler.timeout.IdleStateHandler;
-import io.netty.util.CharsetUtil;
 
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -33,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  * data 2020/11/6
  * @version v0.0.1
  */
-public class WebJsonInitializer extends ChannelInitializer<SocketChannel> {
+public class WebJsonInitializer extends CustomInitializer<SocketChannel> {
 
     private final Map<String, Object> properties;
 

@@ -3,7 +3,7 @@ package com.gylang.netty.sdk.repo;
 import com.gylang.netty.sdk.annotation.IMGroupRepository;
 import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
 
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version v0.0.1
  */
 @IMGroupRepository
-public class DefaultGroupRepository implements IMGroupReopistry {
+public class DefaultGroupRepository implements IMGroupSessionRepository {
 
     Map<String, AbstractSessionGroup> groupMap = new ConcurrentHashMap<>();
 
@@ -25,6 +25,31 @@ public class DefaultGroupRepository implements IMGroupReopistry {
             return null;
         }
         return groupMap.get(sessionGroup.getKey());
+    }
+
+    @Override
+    public List<AbstractSessionGroup> findByIds(Collection<String> strings) {
+        if (null == strings) {
+            throw new IllegalArgumentException("keys is not empty");
+        }
+        List<AbstractSessionGroup> list = new ArrayList<>();
+        for (String string : strings) {
+            AbstractSessionGroup abstractSessionGroup = groupMap.get(string);
+            if (null != abstractSessionGroup) {
+                list.add(abstractSessionGroup);
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public Collection<AbstractSessionGroup> findAll() {
+        return groupMap.values();
+    }
+
+    @Override
+    public Set<String> findAllKey() {
+        return groupMap.keySet();
     }
 
     @Override

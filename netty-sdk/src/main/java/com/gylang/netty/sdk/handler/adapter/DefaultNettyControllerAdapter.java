@@ -7,7 +7,7 @@ import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.conveter.DataConverter;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
-import com.gylang.netty.sdk.handler.IMRequestAdapter;
+import com.gylang.netty.sdk.handler.BizRequestAdapter;
 import com.gylang.netty.sdk.handler.NettyController;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Setter;
@@ -28,7 +28,7 @@ import java.util.Map;
  * @see com.gylang.netty.sdk.handler.NettyController
  */
 @AdapterType(order = 100)
-public class DefaultNettyControllerAdapter implements IMRequestAdapter {
+public class DefaultNettyControllerAdapter implements BizRequestAdapter {
     private static String METHOD_NAME = "process";
     private Map<String, NettyController<?>> nettyControllerMap;
     private Map<String, Class<?>> paramTypeMap;

@@ -3,7 +3,7 @@ package com.gylang.netty.sdk.repo;
 import com.gylang.netty.sdk.annotation.IMRepository;
 import com.gylang.netty.sdk.domain.model.IMSession;
 
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -14,13 +14,38 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version v0.0.1
  */
 @IMRepository
-public class DefaultIMRepository implements IMSessionReopistry {
+public class DefaultIMRepository implements IMSessionRepository {
 
     private Map<String, IMSession> repository = new ConcurrentHashMap<>();
 
     @Override
     public IMSession find(String s) {
         return repository.get(s);
+    }
+
+    @Override
+    public List<IMSession> findByIds(Collection<String> strings) {
+        if (null == strings) {
+            throw new IllegalArgumentException("keys is not empty");
+        }
+        List<IMSession> list = new ArrayList<>();
+        for (String string : strings) {
+            IMSession session = repository.get(string);
+            if (null != session) {
+                list.add(session);
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public Collection<IMSession> findAll() {
+        return repository.values();
+    }
+
+    @Override
+    public Set<String> findAllKey() {
+        return repository.keySet();
     }
 
     @Override

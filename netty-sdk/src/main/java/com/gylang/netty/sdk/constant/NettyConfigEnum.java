@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * 定义netty服务配置的默认值, 当自定义的默认值为空是, 取默认值

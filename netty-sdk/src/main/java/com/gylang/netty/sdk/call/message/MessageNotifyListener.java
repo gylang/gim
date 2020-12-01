@@ -6,7 +6,7 @@ package com.gylang.netty.sdk.call.message;
  * data 2020/11/7
  * @version v0.0.1
  */
-public interface MessageNotify<T> {
+public interface MessageNotifyListener<T> {
 
     /**
      * 消息通知

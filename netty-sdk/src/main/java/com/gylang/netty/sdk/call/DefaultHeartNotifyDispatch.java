@@ -1,7 +1,7 @@
 package com.gylang.netty.sdk.call;
 
 import com.gylang.netty.sdk.call.message.IdleNotify;
-import com.gylang.netty.sdk.call.message.MessageNotify;
+import com.gylang.netty.sdk.call.message.MessageNotifyListener;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import static com.gylang.netty.sdk.constant.NettyNotifyConst.*;
  * data 2020/11/3
  * @version v0.0.1
  */
-public class DefaultHeartNotifyDispatch implements IdleNotify, MessageNotify<ChannelHandlerContext> {
+public class DefaultHeartNotifyDispatch implements IdleNotify, MessageNotifyListener<ChannelHandlerContext> {
 
     /**
      * 心跳监听实例

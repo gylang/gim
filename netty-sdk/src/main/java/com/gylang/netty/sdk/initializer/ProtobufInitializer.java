@@ -7,7 +7,6 @@ import com.gylang.netty.sdk.handler.IMRequestAdapter;
 import com.gylang.netty.sdk.handler.netty.HeartCheckHandler;
 import com.gylang.netty.sdk.handler.netty.ProtobufDispatchHandler;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.protobuf.ProtobufDecoder;
@@ -17,7 +16,6 @@ import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import io.netty.handler.timeout.IdleStateHandler;
 
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -26,7 +24,7 @@ import java.util.concurrent.TimeUnit;
  * @version v0.0.1
  */
 
-public class ProtobufInitializer extends ChannelInitializer<SocketChannel> {
+public class ProtobufInitializer extends CustomInitializer<SocketChannel> {
 
     private final Map<String, Object> properties;
 
