@@ -33,7 +33,15 @@ public class MethodArgumentValue {
         return ReflectUtil.invoke(methodMeta.getInstance(), methodMeta.getMethod(), parameter);
     }
 
+    public void pushIfNullParameter(int index, Object argument) {
+        if (null == argument) {
+            return;
+        }
+        pushParameter(index, argument);
+    }
+
     public void pushParameter(int index, Object argument) {
+
         parameter[index] = argument;
     }
 }

@@ -8,7 +8,6 @@ import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.BizRequestAdapter;
-import com.gylang.netty.sdk.handler.IMRequestAdapter;
 import com.gylang.spring.netty.annotation.SpringNettyController;
 import com.gylang.spring.netty.custom.handler.MethodMeta;
 import com.gylang.spring.netty.custom.method.MethodArgumentValue;

@@ -4,15 +4,12 @@ import cn.hutool.core.util.ReflectUtil;
 import com.gylang.netty.sdk.MessageProvider;
 import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.config.NettyConfig;
-import com.gylang.netty.sdk.handler.BizRequestAdapter;
 import com.gylang.netty.sdk.handler.DispatchAdapterHandler;
 import com.gylang.netty.sdk.handler.IMRequestAdapter;
 import com.gylang.netty.sdk.initializer.CustomInitializer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -21,8 +18,6 @@ import org.springframework.context.annotation.Import;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import java.util.Properties;
 
 /**

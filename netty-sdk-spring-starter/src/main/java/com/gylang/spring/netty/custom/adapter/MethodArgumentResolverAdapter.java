@@ -27,8 +27,8 @@ public class MethodArgumentResolverAdapter{
         for (MethodArgumentResolverHandler methodArgumentResolverHandler : methodArgumentResolverHandlerList) {
             boolean support = methodArgumentResolverHandler.support(methodArgumentValue.getMethodMeta());
             if (support) {
-                boolean continueResolve = methodArgumentResolverHandler.handler(ctx, me, message, methodArgumentValue);
-                if (!continueResolve) {
+                boolean endResolve = methodArgumentResolverHandler.handler(ctx, me, message, methodArgumentValue);
+                if (endResolve) {
                     break;
                 }
             }

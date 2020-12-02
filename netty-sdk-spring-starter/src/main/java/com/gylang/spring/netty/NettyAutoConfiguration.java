@@ -7,9 +7,9 @@ import com.gylang.netty.sdk.call.NotifyContext;
 import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.call.message.MessageNotifyListener;
 import com.gylang.netty.sdk.conveter.DataConverter;
-import com.gylang.netty.sdk.handler.*;
-import com.gylang.netty.sdk.handler.adapter.DefaultNettyControllerAdapter;
-import com.gylang.netty.sdk.handler.adapter.DefaultRequestHandlerAdapter;
+import com.gylang.netty.sdk.handler.BizRequestAdapter;
+import com.gylang.netty.sdk.handler.DefaultAdapterDispatch;
+import com.gylang.netty.sdk.handler.DispatchAdapterHandler;
 import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
 import com.gylang.netty.sdk.repo.IMSessionRepository;
 import com.gylang.netty.sdk.repo.NettyUserInfoFillHandler;
@@ -88,10 +88,7 @@ public class NettyAutoConfiguration implements InitializingBean {
     @ConditionalOnMissingBean(DispatchAdapterHandler.class)
     public DispatchAdapterHandler dispatchAdapterHandler() {
 
-        DefaultAdapterDispatch defaultAdapterDispatch = new DefaultAdapterDispatch();
-        defaultAdapterDispatch.setNettyUserInfoFillHandler(nettyUserInfoFillHandler);
-        defaultAdapterDispatch.setRequestAdapterList(bizRequestAdapterList);
-        return defaultAdapterDispatch;
+        return new DefaultAdapterDispatch();
     }
 
 

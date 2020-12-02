@@ -1,8 +1,6 @@
 package com.gylang.spring.netty.custom.adapter;
 
 import cn.hutool.core.convert.Convert;
-import cn.hutool.core.convert.Converter;
-import cn.hutool.core.convert.ConverterRegistry;
 import cn.hutool.core.util.ClassUtil;
 import com.alibaba.fastjson.JSON;
 import com.gylang.netty.sdk.domain.MessageWrap;
@@ -14,10 +12,6 @@ import com.gylang.spring.netty.custom.method.MethodArgumentValue;
 import com.gylang.spring.netty.util.MethodArgumentUtils;
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.stereotype.Component;
-
-import java.lang.annotation.Annotation;
-import java.util.Collection;
-import java.util.Set;
 
 /**
  * @author gylang
@@ -56,7 +50,7 @@ public class NettyRequestBodyMethodArgumentResolverHandler implements MethodArgu
         } else {
             body = JSON.parseObject(message.getContent(), argument.getArgumentType());
         }
-        methodArgumentValue.pushParameter(argument.getArgumentIndex(), body);
+        methodArgumentValue.pushIfNullParameter(argument.getArgumentIndex(), body);
         return true;
     }
 }

@@ -4,8 +4,6 @@ import com.gylang.netty.sdk.conveter.DataConverter;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
 import com.gylang.netty.sdk.domain.model.IMSession;
-import com.gylang.netty.sdk.repo.DefaultGroupRepository;
-import com.gylang.netty.sdk.repo.DefaultIMRepository;
 import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
 import com.gylang.netty.sdk.repo.IMSessionRepository;
 import lombok.AllArgsConstructor;

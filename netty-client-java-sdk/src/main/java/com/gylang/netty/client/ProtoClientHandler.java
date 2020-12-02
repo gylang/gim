@@ -4,8 +4,6 @@ import com.gylang.netty.client.domain.MessageWrapProto;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
-import java.util.Random;
-
 public class ProtoClientHandler extends SimpleChannelInboundHandler<MessageWrapProto.Model> {
 
 

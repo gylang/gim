@@ -6,7 +6,6 @@ import com.gylang.netty.client.domain.MessageWrap;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 

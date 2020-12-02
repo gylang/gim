@@ -1,6 +1,5 @@
 package com.gylang.spring.netty.register;
 
-import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.config.NettyConfig;

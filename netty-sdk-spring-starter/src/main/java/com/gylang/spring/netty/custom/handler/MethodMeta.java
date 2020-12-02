@@ -1,6 +1,5 @@
 package com.gylang.spring.netty.custom.handler;
 
-import cn.hutool.core.collection.CollUtil;
 import com.gylang.netty.sdk.annotation.NettyMapping;
 import com.gylang.spring.netty.annotation.SpringNettyController;
 import com.gylang.spring.netty.custom.method.MethodArgument;

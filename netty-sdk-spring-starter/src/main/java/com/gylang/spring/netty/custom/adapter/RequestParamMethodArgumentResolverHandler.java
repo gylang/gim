@@ -57,7 +57,9 @@ public class RequestParamMethodArgumentResolverHandler implements MethodArgument
                     if (null == argumentValue && isRequire(nettyParam)) {
                         throw new IllegalArgumentException(key + ": 参数为空");
                     }
-                    methodArgumentValue.pushParameter(methodArgument.getArgumentIndex(), argumentValue);
+                    if (null != argumentValue) {
+                        methodArgumentValue.pushIfNullParameter(methodArgument.getArgumentIndex(), argumentValue);
+                    };
                 }
             }
         }

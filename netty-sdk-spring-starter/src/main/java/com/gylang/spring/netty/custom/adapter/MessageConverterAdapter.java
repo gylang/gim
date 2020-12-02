@@ -1,7 +1,5 @@
 package com.gylang.spring.netty.custom.adapter;
 
-import com.gylang.netty.sdk.domain.MessageWrap;
-
 /**
  * @author gylang
  * data 2020/11/27

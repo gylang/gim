@@ -1,16 +1,13 @@
 package com.gylang.spring.netty;
 
 import com.gylang.netty.sdk.DefaultImApplicationContext;
-import com.gylang.netty.sdk.ImApplicationContext;
 import com.gylang.netty.sdk.ImFactoryBuilder;
 import com.gylang.netty.sdk.MessageProvider;
 import com.gylang.netty.sdk.call.NotifyContext;
 import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.config.NettyConfig;
 import com.gylang.netty.sdk.conveter.DataConverter;
-import com.gylang.netty.sdk.handler.DispatchAdapterHandler;
-import com.gylang.netty.sdk.handler.IMRequestHandler;
-import com.gylang.netty.sdk.handler.NettyController;
+import com.gylang.netty.sdk.handler.*;
 import com.gylang.netty.sdk.handler.adapter.DefaultNettyControllerAdapter;
 import com.gylang.netty.sdk.handler.adapter.DefaultRequestHandlerAdapter;
 import com.gylang.netty.sdk.initializer.CustomInitializer;
@@ -20,8 +17,6 @@ import com.gylang.netty.sdk.repo.NettyUserInfoFillHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
@@ -63,12 +58,20 @@ public class StartNettyServer implements InitializingBean {
     private List<IMRequestHandler> imRequestHandlerList;
     @Autowired
     private List<NettyController<?>> nettyControllerList;
+    @Autowired
+    private List<BizRequestAdapter> bizRequestAdapterList;
     @Override
     public void afterPropertiesSet() throws Exception {
 
         defaultRequestHandlerAdapter.register(imRequestHandlerList);
         defaultNettyControllerAdapter.register(nettyControllerList);
         defaultNettyControllerAdapter.setDataConverter(dataConverter);
+
+        if (dispatchAdapterHandler instanceof DefaultAdapterDispatch) {
+            DefaultAdapterDispatch defaultAdapterDispatch = (DefaultAdapterDispatch) dispatchAdapterHandler;
+            defaultAdapterDispatch.setNettyUserInfoFillHandler(nettyUserInfoFillHandler);
+            defaultAdapterDispatch.setRequestAdapterList(bizRequestAdapterList);
+        }
         DefaultImApplicationContext defaultImApplicationContext = new DefaultImApplicationContext();
         ImFactoryBuilder factoryBuilder = ImFactoryBuilder.builder()
                 .notifyProvider(notifyProvider)

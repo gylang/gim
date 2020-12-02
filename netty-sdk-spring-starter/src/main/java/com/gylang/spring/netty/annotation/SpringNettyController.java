@@ -1,7 +1,6 @@
 package com.gylang.spring.netty.annotation;
 
 import com.gylang.netty.sdk.annotation.NettyController;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;
 
