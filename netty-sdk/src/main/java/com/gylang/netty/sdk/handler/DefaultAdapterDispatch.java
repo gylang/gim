@@ -21,7 +21,7 @@ import java.util.List;
 public class DefaultAdapterDispatch implements DispatchAdapterHandler {
 
     @Setter
-    private List<IMRequestAdapter> requestAdapterList = new ArrayList<>();
+    private List<BizRequestAdapter> requestAdapterList = new ArrayList<>();
     @Setter
     private NettyUserInfoFillHandler nettyUserInfoFillHandler;
 
@@ -38,8 +38,8 @@ public class DefaultAdapterDispatch implements DispatchAdapterHandler {
     @Override
     public void register(List<?> processList) {
 
-        List<IMRequestAdapter> targetList = getTargetList(processList);
-        for (IMRequestAdapter o : targetList) {
+        List<BizRequestAdapter> targetList = getTargetList(processList);
+        for (BizRequestAdapter o : targetList) {
             if (!requestAdapterList.contains(o)) {
                 requestAdapterList.add(o);
             }

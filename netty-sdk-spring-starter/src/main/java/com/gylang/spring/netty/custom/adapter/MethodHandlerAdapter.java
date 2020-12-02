@@ -7,6 +7,7 @@ import com.gylang.netty.sdk.annotation.NettyMapping;
 import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.handler.BizRequestAdapter;
 import com.gylang.netty.sdk.handler.IMRequestAdapter;
 import com.gylang.spring.netty.annotation.SpringNettyController;
 import com.gylang.spring.netty.custom.handler.MethodMeta;
@@ -33,7 +34,7 @@ import java.util.stream.Collectors;
 @Component
 @AdapterType
 @Slf4j
-public class MethodHandlerAdapter implements IMRequestAdapter, InitializingBean {
+public class MethodHandlerAdapter implements BizRequestAdapter, InitializingBean {
     @Autowired
     private MethodArgumentResolver methodArgumentResolver;
     @Autowired

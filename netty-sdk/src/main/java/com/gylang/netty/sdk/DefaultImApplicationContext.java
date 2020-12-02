@@ -38,7 +38,7 @@ public class DefaultImApplicationContext extends SimpleImFactory implements ImAp
         // 初始化参数
         setNotifyProvider(builder.getNotifyProvider());
         setNettyConfig(builder.getNettyConfig());
-        setRequestAdapter(builder.getDispatchAdapter());
+        setRequestAdapter(builder.getDispatchAdapterHandler());
         setSessionRepository(builder.getSessionRepository());
         setGroupRepository(builder.getGroupRepository());
         setMessageProvider(builder.getMessageProvider());

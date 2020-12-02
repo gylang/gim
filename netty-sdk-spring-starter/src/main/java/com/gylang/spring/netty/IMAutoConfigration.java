@@ -153,7 +153,7 @@
 //                .groupRepository(groupRepository)
 //                .sessionRepository(sessionRepository)
 //                .messageProvider(messageProvider)
-//                .dispatchAdapter(adapter)
+//                .dispatchAdapterHandler(adapter)
 //                .notifyContext(notifyContext)
 //                .nettyConfig(null == nettyConfig ? new NettyConfig() : nettyConfig)
 //                .notifyProvider(notifyProvider)

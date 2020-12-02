@@ -23,13 +23,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ImFactoryBuilder {
 
-    private NotifyContext messageContext;
+    private NotifyContext notifyContext;
 
     private NotifyProvider notifyProvider;
 
     private NettyConfig nettyConfig;
 
-    private IMRequestAdapter dispatchAdapter;
+    private IMRequestAdapter dispatchAdapterHandler;
 
     private MessageProvider messageProvider;
 
