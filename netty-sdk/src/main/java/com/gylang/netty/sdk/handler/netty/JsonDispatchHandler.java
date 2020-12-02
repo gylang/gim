@@ -28,6 +28,9 @@ public class JsonDispatchHandler extends SimpleChannelInboundHandler<MessageWrap
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, MessageWrap  msg) throws Exception {
         IMSession session = new IMSession(ctx.channel());
+        if (null == msg || null == msg.getKey()) {
+            return;
+        }
         requestAdapter.process(ctx, session, msg, messagePusher);
 
 //        bizDispatchHandler.process(bizDispatchHandler);
