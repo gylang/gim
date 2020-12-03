@@ -17,7 +17,20 @@ netty-sdk 将业务代码抽离分发, 简化业务开发过程
 #### 整合spring
 1. 在启动类中使用 @EnableIM 
 2. 新建一个继承 IMRequestHandler接口 并声明 @NettyHandler 和 @Component 即完成最简单的hello world
+3. 实现NettyController 接口 并声明 @NettyHandler 和 @Component, 通过泛型来实现对json数据转成泛型类型
+4. 基于方法的方式实现对业务处理(改方式是在netty-sdk-spring-starter中实现) 通过@SpringNettyController 和 @NettyMapping来实现业务分发
 
+### demo 可查看
+https://gitee.com/gylang/gylang-im-parent
+### 交互结构
+当前仅实现了了json格式 参考 com/gylang/netty/sdk/domain/MessageWrap.java
+当前demo只用到两个属性
+```json
+{
+  "key" : "业务分发key",
+  "content" : "字符串或者对象数组, 交互的实际类容"
+}
+```
 
 
 #### 特技
