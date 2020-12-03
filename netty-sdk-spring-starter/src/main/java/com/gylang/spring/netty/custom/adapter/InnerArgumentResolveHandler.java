@@ -22,12 +22,16 @@ import java.util.Map;
 public class InnerArgumentResolveHandler implements MethodArgumentResolverHandler {
 
     private static final String prefix = "InnerArgumentResolveHandler:";
+    private static volatile boolean isInit = false;
 
     @Override
     public boolean support(MethodMeta methodMeta) {
         Map<String, MethodArgument> argument = methodMeta.getArgument();
         if (CollUtil.isEmpty(argument)) {
             return false;
+        }
+        if (isInit) {
+            return true;
         }
         boolean support = false;
         for (Map.Entry<String, MethodArgument> argumentEntry : argument.entrySet()) {
@@ -42,6 +46,9 @@ public class InnerArgumentResolveHandler implements MethodArgumentResolverHandle
                 methodMeta.pushCache(prefix + MessageWrap.class.getName(), methodArgument.getName());
                 support = true;
             }
+        }
+        if (support) {
+            isInit = true;
         }
         return support;
     }

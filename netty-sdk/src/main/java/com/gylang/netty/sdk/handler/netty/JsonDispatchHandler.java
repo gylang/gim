@@ -35,4 +35,6 @@ public class JsonDispatchHandler extends SimpleChannelInboundHandler<MessageWrap
 
 //        bizDispatchHandler.process(bizDispatchHandler);
     }
+
+
 }
