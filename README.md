@@ -31,7 +31,7 @@ https://gitee.com/gylang/gylang-im-parent
   "content" : "字符串或者对象数组, 交互的实际类容"
 }
 ```
-
+ 
 
 #### 特技
 
