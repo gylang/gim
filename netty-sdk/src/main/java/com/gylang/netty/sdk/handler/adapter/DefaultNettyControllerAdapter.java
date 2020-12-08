@@ -36,6 +36,7 @@ public class DefaultNettyControllerAdapter implements BizRequestAdapter {
     private DataConverter dataConverter;
 
     @Override
+    @SuppressWarnings("unchecked")
     public void process(ChannelHandlerContext ctx, IMSession me, MessageWrap message, NotifyProvider messagePusher) {
 
         NettyController<?> nettyController = nettyControllerMap.get(message.getKey());

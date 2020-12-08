@@ -2,6 +2,8 @@ package com.gylang.netty.sdk;
 
 import com.gylang.netty.sdk.conveter.DataConverter;
 import com.gylang.netty.sdk.factory.SimpleImFactory;
+import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
+import com.gylang.netty.sdk.repo.IMSessionRepository;
 import com.sun.istack.internal.NotNull;
 
 /**
@@ -14,9 +16,9 @@ import com.sun.istack.internal.NotNull;
 public class DefaultImApplicationContext extends SimpleImFactory implements ImApplicationContext {
 
     @NotNull
-    private Object sessionRepository;
+    private IMSessionRepository sessionRepository;
     @NotNull
-    private Object groupRepository;
+    private IMGroupSessionRepository groupRepository;
     @NotNull
     private DataConverter converter;
     @NotNull
@@ -54,11 +56,11 @@ public class DefaultImApplicationContext extends SimpleImFactory implements ImAp
         this.converter = converter;
     }
 
-    private void setSessionRepository(Object sessionRepository) {
+    private void setSessionRepository(IMSessionRepository sessionRepository) {
         this.sessionRepository = sessionRepository;
     }
 
-    private void setGroupRepository(Object groupRepository) {
+    private void setGroupRepository(IMGroupSessionRepository groupRepository) {
         this.groupRepository = groupRepository;
     }
 

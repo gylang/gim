@@ -1,7 +1,7 @@
 package com.gylang.spring.netty.util;
 
 import cn.hutool.core.collection.CollUtil;
-import com.gylang.spring.netty.custom.handler.MethodMeta;
+import com.gylang.spring.netty.custom.method.MethodMeta;
 import com.gylang.spring.netty.custom.method.MethodArgument;
 
 import java.lang.annotation.Annotation;

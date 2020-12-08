@@ -9,7 +9,7 @@ import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.BizRequestAdapter;
 import com.gylang.spring.netty.annotation.SpringNettyController;
-import com.gylang.spring.netty.custom.handler.MethodMeta;
+import com.gylang.spring.netty.custom.method.MethodMeta;
 import com.gylang.spring.netty.custom.method.MethodArgumentValue;
 import com.gylang.spring.netty.custom.reslove.MethodArgumentResolver;
 import io.netty.channel.ChannelHandlerContext;

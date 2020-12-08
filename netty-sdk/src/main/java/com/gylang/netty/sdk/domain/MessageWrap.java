@@ -33,4 +33,6 @@ public class MessageWrap {
     private String receiverType;
 
     private String msgId;
+
+    private GylHeader header;
 }

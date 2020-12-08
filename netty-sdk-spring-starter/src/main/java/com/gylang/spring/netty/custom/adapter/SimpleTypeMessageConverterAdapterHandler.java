@@ -2,6 +2,7 @@ package com.gylang.spring.netty.custom.adapter;
 
 import cn.hutool.core.convert.ConverterRegistry;
 import cn.hutool.core.util.ClassUtil;
+import com.gylang.netty.sdk.conveter.MessageConverterAdapter;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import org.springframework.stereotype.Component;
 

@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ClassUtil;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
-import com.gylang.spring.netty.custom.handler.MethodMeta;
+import com.gylang.spring.netty.custom.method.MethodMeta;
 import com.gylang.spring.netty.custom.method.MethodArgument;
 import com.gylang.spring.netty.custom.method.MethodArgumentValue;
 import io.netty.channel.ChannelHandlerContext;

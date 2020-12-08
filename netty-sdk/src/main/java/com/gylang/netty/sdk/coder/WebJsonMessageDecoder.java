@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * websocket 解码器
+ *
  * @author gylang
  * data 2020/11/17
  */
@@ -21,6 +22,8 @@ public class WebJsonMessageDecoder extends SimpleChannelInboundHandler<Object> {
     private final static String URI = "ws://localhost:%d";
 
     private static final ConcurrentHashMap<String, WebSocketServerHandshaker> handShakerMap = new ConcurrentHashMap<>();
+
+    private SimpleGylProtocolDecoder simpleGylProtocolDecoder = new SimpleGylProtocolDecoder();
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -31,7 +34,6 @@ public class WebJsonMessageDecoder extends SimpleChannelInboundHandler<Object> {
         if (msg instanceof WebSocketFrame) {
             handlerWebSocketFrame(ctx, (WebSocketFrame) msg);
         }
-
 
 
     }
@@ -60,9 +62,13 @@ public class WebJsonMessageDecoder extends SimpleChannelInboundHandler<Object> {
             return;
         } else if (frame instanceof TextWebSocketFrame) {
             handlerTextWebSocketFrame(ctx, (TextWebSocketFrame) frame);
+        } else if (frame instanceof BinaryWebSocketFrame) {
+            handlerBinaryWebSocketFrame(ctx, (BinaryWebSocketFrame) frame);
+
+        } else if (frame instanceof PongWebSocketFrame) {
+            // TODO: 2020/12/8  pong 需要做处理?
         }
 
-        handlerBinaryWebSocketFrame(ctx, (BinaryWebSocketFrame) frame);
     }
 
     private void handlerTextWebSocketFrame(ChannelHandlerContext ctx, TextWebSocketFrame frame) {
@@ -81,10 +87,12 @@ public class WebJsonMessageDecoder extends SimpleChannelInboundHandler<Object> {
     }
 
     private void handlerBinaryWebSocketFrame(ChannelHandlerContext ctx, BinaryWebSocketFrame frame) throws InvalidProtocolBufferException {
+
         byte[] data = new byte[frame.content().readableBytes()];
         frame.content().readBytes(data);
-
-        MessageWrap object = JSON.parseObject(data, MessageWrap.class);
+//        MessageWrap object = JSON.parseObject(data, MessageWrap.class);
+        // 新逻辑
+        MessageWrap object = simpleGylProtocolDecoder.decode(frame.content());
         ctx.fireChannelRead(object);
     }
 }

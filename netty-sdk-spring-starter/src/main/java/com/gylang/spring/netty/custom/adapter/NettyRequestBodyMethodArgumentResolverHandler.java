@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.spring.netty.annotation.NettyBody;
-import com.gylang.spring.netty.custom.handler.MethodMeta;
+import com.gylang.spring.netty.custom.method.MethodMeta;
 import com.gylang.spring.netty.custom.method.MethodArgument;
 import com.gylang.spring.netty.custom.method.MethodArgumentValue;
 import com.gylang.spring.netty.util.MethodArgumentUtils;
