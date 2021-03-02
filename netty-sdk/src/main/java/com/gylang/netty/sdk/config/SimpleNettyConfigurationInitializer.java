@@ -7,6 +7,7 @@ import com.gylang.netty.sdk.handler.BizRequestAdapter;
 import com.gylang.netty.sdk.initializer.CustomInitializer;
 
 /**
+ * 初始化配置
  * @author gylang
  * data 2021/3/2
  */

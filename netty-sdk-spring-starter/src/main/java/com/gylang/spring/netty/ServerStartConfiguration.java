@@ -30,9 +30,8 @@ import java.util.concurrent.ThreadPoolExecutor;
  * data 2020/12/1
  */
 @Configuration
-@AutoConfigureBefore(StartNettyServer.class)
 @Slf4j
-public class InitNettyServerConfiguration implements InitializingBean {
+public class ServerStartConfiguration implements InitializingBean {
 
     /**
      * 根据名称装配，防止和客户端的ChannelInitializer冲突报错

@@ -20,6 +20,24 @@ public interface DataConverter {
     Object converterTo(Class<?> clazz, MessageWrap messageWrap);
 
     /**
+     * 转成具体实体类型
+     *
+     * @param clazz       类型
+     * @param content 消息体
+     * @return 实体类型
+     */
+    Object converterTo(Class<?> clazz, String content);
+
+    /**
+     * 转成具体实体类型
+     *
+     * @param clazz       类型
+     * @param content 消息体
+     * @return 实体类型
+     */
+    Object converterTo(Class<?> clazz, byte[] content);
+
+    /**
      * 统一序列化方法
      *
      * @param object 带序列化类型

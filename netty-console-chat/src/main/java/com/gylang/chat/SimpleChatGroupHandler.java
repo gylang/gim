@@ -19,9 +19,9 @@ public class SimpleChatGroupHandler implements IMRequestHandler {
     private DefaultGroupRepository defaultGroupRepository;
 
     @Override
-    public void process(IMSession me, MessageWrap message) {
+    public Object process(IMSession me, MessageWrap message) {
         System.out.println("收到消息 : " + message.getContent());
         AbstractSessionGroup aDefault = defaultGroupRepository.findByKey("default");
-
+        return null;
     }
 }

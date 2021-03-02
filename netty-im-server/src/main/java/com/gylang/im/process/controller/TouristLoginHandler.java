@@ -21,7 +21,7 @@ import javax.annotation.Resource;
  */
 @NettyHandler("login")
 @Component
-public class TouristLoginHandler implements NettyController<String> {
+public class TouristLoginHandler implements NettyController<Long> {
 
     @Resource
     private MessageProvider messageProvider;
@@ -30,7 +30,7 @@ public class TouristLoginHandler implements NettyController<String> {
     private static final KeyLock<String> keyLock = new KeyLock<>();
 
     @Override
-    public Object process(IMSession me, String requestBody) {
+    public Object process(IMSession me, Long requestBody) {
 
         me.setAccount(requestBody);
         AbstractSessionGroup defaultGroup = getAndCreateGroup(me, groupSessionRepository);

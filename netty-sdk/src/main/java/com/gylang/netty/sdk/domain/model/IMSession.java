@@ -55,7 +55,7 @@ public class IMSession implements Serializable {
     /**
      * session绑定的用户账号
      */
-    private String account;
+    private long account;
 
     /**
      * session在本台服务器上的ID
@@ -140,12 +140,18 @@ public class IMSession implements Serializable {
         return session.id().asLongText();
     }
 
-    public String getAccount() {
-        this.account = (String) getAttribute(CommConst.KEY_ACCOUNT);
-        return this.account;
+    public long getAccount() {
+        Object attribute = getAttribute(CommConst.KEY_ACCOUNT);
+
+        if (null != attribute) {
+            this.account = (long) attribute;
+            return this.account;
+
+        }
+        return account;
     }
 
-    public void setAccount(String account) {
+    public void setAccount(long account) {
         this.account = account;
 
         setAttribute(CommConst.KEY_ACCOUNT, account);

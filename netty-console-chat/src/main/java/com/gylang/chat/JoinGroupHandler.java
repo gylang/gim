@@ -19,13 +19,15 @@ public class JoinGroupHandler implements IMRequestHandler {
     private DefaultGroupRepository defaultGroupRepository;
 
     @Override
-    public void process(IMSession me, MessageWrap message) {
+    public Object process(IMSession me, MessageWrap message) {
         System.out.println("注册服务" + message.getContent());
         AbstractSessionGroup aDefault = defaultGroupRepository.findByKey("default");
-        me.setAccount(message.getContent());
+        me.setAccount(Long.parseLong(message.getContent()));
         boolean join = aDefault.join(me);
         if (join) {
             me.getGroupList().add(aDefault);
         }
+
+        return null;
     }
 }

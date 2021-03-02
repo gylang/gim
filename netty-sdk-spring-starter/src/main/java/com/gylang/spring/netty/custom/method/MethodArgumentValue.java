@@ -14,34 +14,48 @@ import java.util.Map;
 @Getter
 public class MethodArgumentValue {
 
+    /** 业务控制层元数据 */
     private ControllerMethodMeta controllerMethodMeta;
-
-    private Object[] parameter;
+    /** 参数值 */
+    private Object[] parameterValue;
 
     public void init(ControllerMethodMeta controllerMethodMeta) {
         this.controllerMethodMeta = controllerMethodMeta;
         Map<String, MethodArgument> argument = controllerMethodMeta.getArgument();
         if (null == argument) {
-            parameter = null;
+            parameterValue = null;
         } else {
-            parameter = new Object[argument.size()];
+            parameterValue = new Object[argument.size()];
         }
     }
 
+    /**
+     * 反射调用
+     * @return 业务方法返回值
+     */
     public Object invoke() {
 
-        return ReflectUtil.invoke(controllerMethodMeta.getInstance(), controllerMethodMeta.getMethod(), parameter);
+        return ReflectUtil.invoke(controllerMethodMeta.getInstance(), controllerMethodMeta.getMethod(), parameterValue);
     }
 
+    /**
+     * 设置参数值
+     * @param index 下标
+     * @param argument 参数值
+     */
     public void pushIfNullParameter(int index, Object argument) {
         if (null == argument) {
             return;
         }
         pushParameter(index, argument);
     }
-
+    /**
+     * 设置参数值
+     * @param index 下标
+     * @param argument 参数值
+     */
     public void pushParameter(int index, Object argument) {
 
-        parameter[index] = argument;
+        parameterValue[index] = argument;
     }
 }

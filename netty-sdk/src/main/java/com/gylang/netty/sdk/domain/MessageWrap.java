@@ -23,15 +23,15 @@ public class MessageWrap implements Serializable {
     /** 命令 */
     private String cmd;
     /** 发送者 */
-    private String sender;
+    private long sender;
     /** 消息类型 */
-    private String type;
+    private byte type;
     /** 消息主体 */
     private String content;
     /** 消息code */
     private String code;
     /** 接收者 */
-    private String receive;
+    private long receive;
     /** 接收者类型 */
     private String receiverType;
     /** 消息id */

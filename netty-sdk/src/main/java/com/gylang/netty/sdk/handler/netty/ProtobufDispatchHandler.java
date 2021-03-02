@@ -30,7 +30,7 @@ public class ProtobufDispatchHandler extends SimpleChannelInboundHandler<Message
         MessageWrap messageWrap = new MessageWrap();
         messageWrap.setCmd(msg.getKey());
         messageWrap.setContent(msg.getContent());
-        messageWrap.setType(msg.getType());
+        messageWrap.setType(Byte.parseByte(msg.getType()));
         messageWrap.setReceiverType(msg.getReceiverType());
         requestAdapter.process(ctx, session, messageWrap);
 

@@ -14,6 +14,8 @@ import io.netty.channel.ChannelHandlerContext;
 import org.springframework.stereotype.Component;
 
 /**
+ * 参数体解析器
+ *
  * @author gylang
  * data 2020/11/26
  * @version v0.0.1
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Component;
 public class NettyRequestBodyMethodArgumentResolverHandler implements MethodArgumentResolverHandler {
 
     String cacheName = "NettyRequestBody";
+
 
     @Override
     public boolean support(ControllerMethodMeta controllerMethodMeta) {

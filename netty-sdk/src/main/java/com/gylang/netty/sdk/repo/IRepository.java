@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * 抽象会话管理
  * @author gylang
  * data 2020/10/29
  * @version v0.0.1

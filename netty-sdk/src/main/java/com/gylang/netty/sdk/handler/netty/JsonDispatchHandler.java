@@ -17,11 +17,9 @@ import io.netty.channel.SimpleChannelInboundHandler;
 public class JsonDispatchHandler extends SimpleChannelInboundHandler<MessageWrap> {
 
     private final DispatchAdapterHandler dispatchAdapterHandler;
-    private final EventProvider messagePusher;
 
     public JsonDispatchHandler(DispatchAdapterHandler bizDispatchHandler, EventProvider messagePusher) {
         this.dispatchAdapterHandler = bizDispatchHandler;
-        this.messagePusher = messagePusher;
     }
 
 
@@ -29,11 +27,11 @@ public class JsonDispatchHandler extends SimpleChannelInboundHandler<MessageWrap
     protected void channelRead0(ChannelHandlerContext ctx, MessageWrap msg) {
         IMSession session = new IMSession(ctx.channel());
         if (null == msg || null == msg.getCmd()) {
+
             return;
         }
         dispatchAdapterHandler.process(ctx, session, msg);
 
-//        bizDispatchHandler.process(bizDispatchHandler);
     }
 
 

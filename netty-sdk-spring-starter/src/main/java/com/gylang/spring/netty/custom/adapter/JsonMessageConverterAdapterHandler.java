@@ -6,6 +6,8 @@ import com.gylang.netty.sdk.domain.MessageWrap;
 import org.springframework.stereotype.Component;
 
 /**
+ * json消息类型适配处理器
+ *
  * @author gylang
  * data 2020/11/27
  * @version v0.0.1

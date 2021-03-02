@@ -16,8 +16,10 @@ import java.util.List;
  */
 @Component
 public class MethodArgumentResolverAdapter{
+    /** 方法参数解析器 */
     @Autowired(required = false)
     private List<MethodArgumentResolverHandler> methodArgumentResolverHandlerList;
+    /** 方法执行通知 */
     @Autowired(required = false)
     private List<MethodHandlerPostProcess> methodHandlerPostProcessList;
 

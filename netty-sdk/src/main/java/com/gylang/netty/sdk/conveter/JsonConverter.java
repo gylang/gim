@@ -14,7 +14,18 @@ import com.gylang.netty.sdk.domain.MessageWrap;
  */
 public class JsonConverter implements DataConverter {
     @Override
+    public Object converterTo(Class<?> clazz, String content) {
+        return null;
+    }
+
+    @Override
+    public Object converterTo(Class<?> clazz, byte[] content) {
+        return null;
+    }
+
+    @Override
     public Object converterTo(Class<?> clazz, MessageWrap messageWrap) {
+        // 获取类型参数
         String content = messageWrap.getContent();
         if (ClassUtil.isSimpleValueType(clazz)) {
             return Convert.convert(clazz, content);

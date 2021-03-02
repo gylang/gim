@@ -14,23 +14,17 @@ import com.gylang.netty.sdk.util.ObjectWrapUtil;
 import com.gylang.spring.netty.annotation.SpringNettyController;
 import com.gylang.spring.netty.custom.handler.ControllerMethodMeta;
 import com.gylang.spring.netty.custom.method.MethodArgumentValue;
-import com.gylang.spring.netty.custom.reslove.MethodArgumentResolver;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 /**
+ * 模仿类似spring的控制层, 实现参数解析调用,性能方面可能存在影响. 使用方便
  * @author gylang
  * data 2020/11/26
  * @version v0.0.1
@@ -42,9 +36,6 @@ public class MethodHandlerAdapter implements BizRequestAdapter<ControllerMethodM
 
     @Autowired
     private MethodArgumentResolverAdapter methodArgumentResolverAdapter;
-
-    @Autowired
-    private NettyConfiguration nettyConfiguration;
 
     private Map<String, ControllerMethodMeta> methodHandlerMap;
 
@@ -73,6 +64,7 @@ public class MethodHandlerAdapter implements BizRequestAdapter<ControllerMethodM
                     for (MethodWrap methodWrap : methodWrapList) {
                         NettyMapping nettyMapping = ObjectWrapUtil.findAnnotation(NettyMapping.class, methodWrap);
                         if (null != nettyMapping) {
+                            String bizKey = getBizKey(nettyController, nettyMapping);
                             ControllerMethodMeta controllerMethodMeta = new ControllerMethodMeta();
                             controllerMethodMeta.setMethod(methodWrap.getMethod());
                             controllerMethodMeta.setNettyController(nettyController);
@@ -80,7 +72,7 @@ public class MethodHandlerAdapter implements BizRequestAdapter<ControllerMethodM
                             controllerMethodMeta.setClazz(objectWrap.getClass());
                             controllerMethodMeta.setInstance(objectWrap.getInstance());
                             controllerMethodMeta.setAnnotationList(new HashSet<>(objectWrap.getAnnotationList()));
-                            methodHandlerMap.put(nettyMapping.value(), controllerMethodMeta);
+                            methodHandlerMap.put(bizKey, controllerMethodMeta);
                         }
                     }
                 }
@@ -90,11 +82,8 @@ public class MethodHandlerAdapter implements BizRequestAdapter<ControllerMethodM
         }
     }
 
-    private String getBizKey(ControllerMethodMeta controllerMethodMeta) {
+    private String getBizKey(SpringNettyController nettyController, NettyMapping nettyMapping) {
 
-        SpringNettyController nettyController = controllerMethodMeta.getNettyController();
-
-        NettyMapping nettyMapping = controllerMethodMeta.getNettyMapping();
         return StrUtil.isBlank(nettyController.value()) ? nettyMapping.value() : nettyController.value() + ":" + nettyMapping.value();
     }
 

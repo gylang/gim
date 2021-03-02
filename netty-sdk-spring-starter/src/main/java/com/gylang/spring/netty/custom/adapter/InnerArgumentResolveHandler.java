@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 /**
+ * 内置参数解析器
+ *
  * @author gylang
  * data 2020/12/2
  */
@@ -21,8 +23,9 @@ import java.util.Map;
 @Order(1)
 public class InnerArgumentResolveHandler implements MethodArgumentResolverHandler {
 
-    private static final String prefix = "InnerArgumentResolveHandler:";
-    private static volatile boolean isInit = false;
+    private static final String PREFIX = "InnerArgumentResolveHandler:";
+    private volatile boolean hasInit = false;
+    private volatile boolean cacheSupport = false;
 
     @Override
     public boolean support(ControllerMethodMeta controllerMethodMeta) {
@@ -30,25 +33,27 @@ public class InnerArgumentResolveHandler implements MethodArgumentResolverHandle
         if (CollUtil.isEmpty(argument)) {
             return false;
         }
-        if (isInit) {
-            return true;
+        if (hasInit) {
+            return cacheSupport;
         }
         boolean support = false;
+        // 判断参数是否包包含内置参数
         for (Map.Entry<String, MethodArgument> argumentEntry : argument.entrySet()) {
             MethodArgument methodArgument = argumentEntry.getValue();
             if (ClassUtil.isAssignable(methodArgument.getArgumentType(), ChannelHandlerContext.class)) {
-                controllerMethodMeta.pushCache(prefix + ChannelHandlerContext.class.getName(), methodArgument.getName());
+                controllerMethodMeta.pushCache(PREFIX + ChannelHandlerContext.class.getName(), methodArgument.getName());
                 support = true;
             } else if (ClassUtil.isAssignable(methodArgument.getArgumentType(), IMSession.class)) {
-                controllerMethodMeta.pushCache(prefix + IMSession.class.getName(), methodArgument.getName());
+                controllerMethodMeta.pushCache(PREFIX + IMSession.class.getName(), methodArgument.getName());
                 support = true;
             } else if (ClassUtil.isAssignable(methodArgument.getArgumentType(), MessageWrap.class)) {
-                controllerMethodMeta.pushCache(prefix + MessageWrap.class.getName(), methodArgument.getName());
+                controllerMethodMeta.pushCache(PREFIX + MessageWrap.class.getName(), methodArgument.getName());
                 support = true;
             }
         }
         if (support) {
-            isInit = true;
+            hasInit = true;
+            support = cacheSupport;
         }
         return support;
     }
@@ -73,12 +78,9 @@ public class InnerArgumentResolveHandler implements MethodArgumentResolverHandle
     }
 
     private MethodArgument getMethodArgumentIndex(ControllerMethodMeta controllerMethodMeta, Class<?> clazz) {
-        String cacheIndex = controllerMethodMeta.getCache(prefix + clazz.getName());
+        String cacheIndex = controllerMethodMeta.getCache(PREFIX + clazz.getName());
         return controllerMethodMeta.getArgument(cacheIndex);
     }
 
-    public static void main(String[] args) {
-        System.out.println(ClassUtil.isAssignable(MethodArgumentResolverHandler.class, InnerArgumentResolveHandler.class));
-        System.out.println(ClassUtil.isAssignable(InnerArgumentResolveHandler.class, MethodArgumentResolverHandler.class));
-    }
+
 }

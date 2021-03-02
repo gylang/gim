@@ -40,8 +40,8 @@ import java.util.concurrent.TimeUnit;
  * data 2020/11/30
  */
 @Configuration
-@AutoConfigureBefore(InitNettyServerConfiguration.class)
-@Import(InitNettyServerConfiguration.class)
+@AutoConfigureBefore(ServerStartConfiguration.class)
+@Import(ServerStartConfiguration.class)
 @ComponentScan("com.gylang.spring.netty.custom")
 @Slf4j
 public class NettyAutoConfiguration implements InitializingBean {
