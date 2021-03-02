@@ -1,17 +1,18 @@
 package com.gylang.netty.sdk.handler.adapter;
 
-import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.gylang.netty.sdk.annotation.AdapterType;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.call.NotifyProvider;
+import com.gylang.netty.sdk.common.NullObject;
+import com.gylang.netty.sdk.common.ObjectWrap;
+import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.BizRequestAdapter;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
+import com.gylang.netty.sdk.util.ObjectWrapUtil;
 import io.netty.channel.ChannelHandlerContext;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,39 +27,43 @@ import java.util.Map;
  * @see com.gylang.netty.sdk.handler.IMRequestHandler
  */
 @AdapterType(order = 100)
-public class DefaultRequestHandlerAdapter implements BizRequestAdapter {
+public class DefaultRequestHandlerAdapter implements BizRequestAdapter<IMRequestHandler> {
 
 
     private Map<String, IMRequestHandler> handlerMap;
 
     @Override
-    public void process(ChannelHandlerContext ctx, IMSession me, MessageWrap message, NotifyProvider messagePusher) {
+    public Object process(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
 
-        IMRequestHandler requestHandler = handlerMap.get(message.getKey());
+        IMRequestHandler requestHandler = handlerMap.get(message.getCmd());
         if (null == requestHandler) {
-            return;
+            return null;
         }
-        requestHandler.process(me, message);
+        Object result = requestHandler.process(me, message);
+        return null == result ? NullObject.getInstance() : result;
     }
 
     @Override
-    public void register(List<?> requestHandlerList) {
+    public void register(List<ObjectWrap> requestHandlerList) {
         if (null == requestHandlerList) {
             handlerMap = CollUtil.newHashMap();
             return;
         }
         handlerMap = CollUtil.newHashMap(requestHandlerList.size());
-        List<IMRequestHandler> requestHandlers = getTargetList(requestHandlerList);
-        for (IMRequestHandler imRequestHandler : requestHandlers) {
-            NettyHandler annotation = AnnotationUtil.getAnnotation(imRequestHandler.getClass(), NettyHandler.class);
-            if (null != annotation) {
-                handlerMap.put(annotation.value(), imRequestHandler);
+        for (ObjectWrap objectWrap : requestHandlerList) {
+            if (objectWrap.getInstance() instanceof IMRequestHandler) {
+                NettyHandler annotation = ObjectWrapUtil.findAnnotation(NettyHandler.class, objectWrap);
+                if (null != annotation) {
+                    handlerMap.put(annotation.value(), (IMRequestHandler) objectWrap.getInstance());
+                }
             }
         }
     }
 
     @Override
-    public List<?> mappingList() {
-        return new ArrayList<>(handlerMap.values());
+    public void init(NettyConfiguration nettyConfiguration) {
+        register(nettyConfiguration.getObjectWrapList());
     }
+
+
 }

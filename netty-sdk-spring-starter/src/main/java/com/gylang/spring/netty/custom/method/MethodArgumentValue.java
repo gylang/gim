@@ -1,7 +1,7 @@
 package com.gylang.spring.netty.custom.method;
 
 import cn.hutool.core.util.ReflectUtil;
-import com.gylang.spring.netty.custom.handler.MethodMeta;
+import com.gylang.spring.netty.custom.handler.ControllerMethodMeta;
 import lombok.Getter;
 
 import java.util.Map;
@@ -14,13 +14,13 @@ import java.util.Map;
 @Getter
 public class MethodArgumentValue {
 
-    private MethodMeta methodMeta;
+    private ControllerMethodMeta controllerMethodMeta;
 
     private Object[] parameter;
 
-    public void init(MethodMeta methodMeta) {
-        this.methodMeta = methodMeta;
-        Map<String, MethodArgument> argument = methodMeta.getArgument();
+    public void init(ControllerMethodMeta controllerMethodMeta) {
+        this.controllerMethodMeta = controllerMethodMeta;
+        Map<String, MethodArgument> argument = controllerMethodMeta.getArgument();
         if (null == argument) {
             parameter = null;
         } else {
@@ -30,7 +30,7 @@ public class MethodArgumentValue {
 
     public Object invoke() {
 
-        return ReflectUtil.invoke(methodMeta.getInstance(), methodMeta.getMethod(), parameter);
+        return ReflectUtil.invoke(controllerMethodMeta.getInstance(), controllerMethodMeta.getMethod(), parameter);
     }
 
     public void pushIfNullParameter(int index, Object argument) {

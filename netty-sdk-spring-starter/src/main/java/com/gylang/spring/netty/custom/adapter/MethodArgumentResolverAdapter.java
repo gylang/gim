@@ -21,11 +21,11 @@ public class MethodArgumentResolverAdapter{
     @Autowired(required = false)
     private List<MethodHandlerPostProcess> methodHandlerPostProcessList;
 
-    public void handler(ChannelHandlerContext ctx, IMSession me, MessageWrap message, MethodArgumentValue methodArgumentValue) {
+    public Object handler(ChannelHandlerContext ctx, IMSession me, MessageWrap message, MethodArgumentValue methodArgumentValue) {
 
         // 解析通信信息
         for (MethodArgumentResolverHandler methodArgumentResolverHandler : methodArgumentResolverHandlerList) {
-            boolean support = methodArgumentResolverHandler.support(methodArgumentValue.getMethodMeta());
+            boolean support = methodArgumentResolverHandler.support(methodArgumentValue.getControllerMethodMeta());
             if (support) {
                 boolean endResolve = methodArgumentResolverHandler.handler(ctx, me, message, methodArgumentValue);
                 if (endResolve) {
@@ -38,10 +38,10 @@ public class MethodArgumentResolverAdapter{
 
         // 执行后置处理器
         if (null == methodHandlerPostProcessList) {
-            return;
+            return processResult;
         }
         for (MethodHandlerPostProcess methodHandlerPostProcess : methodHandlerPostProcessList) {
-            boolean support = methodHandlerPostProcess.support(methodArgumentValue.getMethodMeta());
+            boolean support = methodHandlerPostProcess.support(methodArgumentValue.getControllerMethodMeta());
             if (support) {
                 boolean continueResolve = methodHandlerPostProcess.handler(ctx, me, message, methodArgumentValue, processResult);
                 if (!continueResolve) {
@@ -49,6 +49,7 @@ public class MethodArgumentResolverAdapter{
                 }
             }
         }
+        return processResult;
     }
 
 }

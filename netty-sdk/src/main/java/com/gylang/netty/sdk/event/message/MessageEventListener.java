@@ -1,4 +1,5 @@
-package com.gylang.netty.sdk.call.message;
+package com.gylang.netty.sdk.event.message;
+
 
 
 /**
@@ -6,16 +7,16 @@ package com.gylang.netty.sdk.call.message;
  * data 2020/11/7
  * @version v0.0.1
  */
-public interface MessageNotifyListener<T> {
+public interface MessageEventListener<T> {
 
     /**
      * 消息通知
      *
      * @param key     消息类型
      * @param message 消息类容
-     * @see com.gylang.netty.sdk.call.CallMessage
+     * @see MessageEvent
      */
-    void msgNotify(String key, T message);
+    void onEvent(String key, T message);
 
 
 }

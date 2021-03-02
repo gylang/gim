@@ -1,7 +1,8 @@
-package com.gylang.netty.sdk.call;
+package com.gylang.netty.sdk.event;
 
-import com.gylang.netty.sdk.call.message.IdleNotify;
-import com.gylang.netty.sdk.call.message.MessageNotifyListener;
+import com.gylang.netty.sdk.event.message.IdleEvent;
+import com.gylang.netty.sdk.event.message.MessageEvent;
+import com.gylang.netty.sdk.event.message.MessageEventListener;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.List;
@@ -14,15 +15,15 @@ import static com.gylang.netty.sdk.constant.NettyNotifyConst.*;
  * data 2020/11/3
  * @version v0.0.1
  */
-public class DefaultHeartNotifyDispatch implements IdleNotify, MessageNotifyListener<ChannelHandlerContext> {
+public class DefaultHeartHandler implements IdleEvent, MessageEventListener<ChannelHandlerContext> {
 
     /**
      * 心跳监听实例
      */
-    private final List<IdleNotify> idleNotifyList;
+    private final List<IdleEvent> idleEventList;
 
-    public DefaultHeartNotifyDispatch(List<IdleNotify> idleNotifyList) {
-        this.idleNotifyList = idleNotifyList;
+    public DefaultHeartHandler(List<IdleEvent> idleEventList) {
+        this.idleEventList = idleEventList;
     }
 
 
@@ -33,8 +34,8 @@ public class DefaultHeartNotifyDispatch implements IdleNotify, MessageNotifyList
      */
     @Override
     public void readerIdle(ChannelHandlerContext ctx) {
-        for (IdleNotify idleNotify : idleNotifyList) {
-            idleNotify.readerIdle(ctx);
+        for (IdleEvent idleEvent : idleEventList) {
+            idleEvent.readerIdle(ctx);
         }
     }
 
@@ -45,8 +46,8 @@ public class DefaultHeartNotifyDispatch implements IdleNotify, MessageNotifyList
      */
     @Override
     public void writerIdle(ChannelHandlerContext ctx) {
-        for (IdleNotify idleNotify : idleNotifyList) {
-            idleNotify.writerIdle(ctx);
+        for (IdleEvent idleEvent : idleEventList) {
+            idleEvent.writerIdle(ctx);
         }
     }
 
@@ -58,15 +59,15 @@ public class DefaultHeartNotifyDispatch implements IdleNotify, MessageNotifyList
     @Override
     public void allIdle(ChannelHandlerContext ctx) {
 
-        for (IdleNotify idleNotify : idleNotifyList) {
-            idleNotify.allIdle(ctx);
+        for (IdleEvent idleEvent : idleEventList) {
+            idleEvent.allIdle(ctx);
         }
     }
 
 
     @Override
-    @CallMessage({ALL_IDLE, READER_IDLE, WRITER_IDLE})
-    public void msgNotify(String key, ChannelHandlerContext message) {
+    @MessageEvent({ALL_IDLE, READER_IDLE, WRITER_IDLE})
+    public void onEvent(String key, ChannelHandlerContext message) {
         if (ALL_IDLE.equals(key)) {
             allIdle(message);
         } else if (READER_IDLE.equals(key)) {

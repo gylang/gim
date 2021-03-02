@@ -2,16 +2,18 @@ package com.gylang.im.process.controller;
 
 
 import com.gylang.im.util.KeyLock;
-import com.gylang.netty.sdk.IMContext;
-import com.gylang.netty.sdk.MessageProvider;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.NettyController;
+import com.gylang.netty.sdk.provider.MessageProvider;
 import com.gylang.netty.sdk.repo.DefaultGroupRepository;
+import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 /**
  * @author gylang
@@ -21,18 +23,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class TouristLoginHandler implements NettyController<String> {
 
-    @Autowired
-    private IMContext context;
-
+    @Resource
+    private MessageProvider messageProvider;
+    @Resource
+    private IMGroupSessionRepository groupSessionRepository;
     private static final KeyLock<String> keyLock = new KeyLock<>();
 
     @Override
-    public void process(IMSession me, String requestBody) {
+    public Object process(IMSession me, String requestBody) {
 
-        MessageProvider messageProvider = context.messageProvider();
-        DefaultGroupRepository groupRepository = context.groupRepository();
         me.setAccount(requestBody);
-        AbstractSessionGroup defaultGroup = getAndCreateGroup(me, groupRepository);
+        AbstractSessionGroup defaultGroup = getAndCreateGroup(me, groupSessionRepository);
         boolean join = defaultGroup.join(me);
         if (join) {
             MessageWrap messageWrap = new MessageWrap();
@@ -40,10 +41,12 @@ public class TouristLoginHandler implements NettyController<String> {
             messageWrap.setContent(requestBody + "加入群聊组");
             messageProvider.sendGroup(me, "default", messageWrap);
 
+        return messageWrap;
         }
+        return null;
     }
 
-    private AbstractSessionGroup getAndCreateGroup(IMSession me, DefaultGroupRepository groupRepository) {
+    private AbstractSessionGroup getAndCreateGroup(IMSession me, IMGroupSessionRepository groupRepository) {
 
 
         AbstractSessionGroup defaultGroup;

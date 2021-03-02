@@ -17,7 +17,7 @@ public interface DataConverter {
      * @param messageWrap 统一消息封装类型
      * @return 实体类型
      */
-    <T> T converterTo(Class<T> clazz, MessageWrap messageWrap);
+    Object converterTo(Class<?> clazz, MessageWrap messageWrap);
 
     /**
      * 统一序列化方法

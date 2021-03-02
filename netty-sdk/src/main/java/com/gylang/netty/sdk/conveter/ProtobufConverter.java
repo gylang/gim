@@ -30,8 +30,9 @@ public class ProtobufConverter implements DataConverter {
     }
 
     @Override
-    public <T> T converterTo(Class<T> clazz, MessageWrap messageWrap) {
+    public Object converterTo(Class<?> clazz, MessageWrap messageWrap) {
         if (clazz.equals(String.class)) {
+            return  messageWrap.getContent();
         }
         Method method = parseMethod.get(clazz);
         if (null == method) {
@@ -41,7 +42,7 @@ public class ProtobufConverter implements DataConverter {
             method = declaredMethod;
         }
         try {
-            return (T) method.invoke(null, messageWrap.getCode());
+            return  method.invoke(null, messageWrap.getCode());
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }

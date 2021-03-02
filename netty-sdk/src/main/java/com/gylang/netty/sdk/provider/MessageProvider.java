@@ -1,5 +1,6 @@
-package com.gylang.netty.sdk;
+package com.gylang.netty.sdk.provider;
 
+import com.gylang.netty.sdk.common.Initializer;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
 import com.gylang.netty.sdk.domain.model.IMSession;
@@ -9,7 +10,7 @@ import com.gylang.netty.sdk.domain.model.IMSession;
  * data 2020/11/12
  * @version v0.0.1
  */
-public interface MessageProvider {
+public interface MessageProvider extends Initializer {
 
     /**
      * 发送消息

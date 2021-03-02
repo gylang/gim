@@ -20,7 +20,7 @@ public enum NettyConfigEnum {
      * 用来监控tcp链接 指定线程数 默认是1 用默认即可
      */
     BOSS_GROUP("bossGroup", 1),
-    WORKER_GROUP("workerGroup", 2),
+    WORKER_GROUP("workerGroup", 0),
     /**
      * 空闲检查时间
      */

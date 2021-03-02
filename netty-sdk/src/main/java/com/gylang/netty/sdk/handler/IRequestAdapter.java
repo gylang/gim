@@ -22,7 +22,9 @@
 package com.gylang.netty.sdk.handler;
 
 import cn.hutool.core.collection.CollUtil;
-import com.gylang.netty.sdk.call.NotifyProvider;
+import com.gylang.netty.sdk.common.Initializer;
+import com.gylang.netty.sdk.common.ObjectWrap;
+import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import io.netty.channel.ChannelHandlerContext;
@@ -36,21 +38,32 @@ import java.util.stream.Collectors;
  */
 
 
-public interface IMRequestAdapter {
+public interface IRequestAdapter<T> extends Initializer {
 
     /**
      * 处理收到客户端从长链接发送的数据
+     *
+     * @param ctx 上下文
+     * @param me 当前会话
+     * @param message 消息体
      */
-    void process(ChannelHandlerContext ctx, IMSession me, MessageWrap message, NotifyProvider messagePusher);
+    Object process(ChannelHandlerContext ctx, IMSession me, MessageWrap message);
 
-    void register(List<?> processList);
+    /**
+     * 注册
+     *
+     * @param processList 注册参数列表
+     */
+    void register(List<ObjectWrap> processList);
 
-    List<?> mappingList();
 
-    default <T> List<T> getTargetList(List<?> processList) {
+
+
+    default List<T> getTargetList(List<ObjectWrap> processList) {
         if (CollUtil.isEmpty(processList)) {
             return new ArrayList<>();
         }
-        return processList.stream().map(o -> (T) o).collect(Collectors.toList());
+
+        return processList.stream().map(o -> (T)o.getInstance()).collect(Collectors.toList());
     }
 }

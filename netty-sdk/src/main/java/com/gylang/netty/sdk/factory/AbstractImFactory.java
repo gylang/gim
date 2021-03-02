@@ -1,7 +1,5 @@
 package com.gylang.netty.sdk.factory;
 
-import com.gylang.netty.sdk.IMContext;
-
 /**
  * 抽象im工厂
  *
@@ -21,5 +19,5 @@ public interface AbstractImFactory {
      */
     void start();
 
-    IMContext imContext();
+
 }

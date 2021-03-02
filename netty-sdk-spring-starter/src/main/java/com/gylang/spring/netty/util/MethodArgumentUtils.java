@@ -1,7 +1,7 @@
 package com.gylang.spring.netty.util;
 
 import cn.hutool.core.collection.CollUtil;
-import com.gylang.spring.netty.custom.handler.MethodMeta;
+import com.gylang.spring.netty.custom.handler.ControllerMethodMeta;
 import com.gylang.spring.netty.custom.method.MethodArgument;
 
 import java.lang.annotation.Annotation;
@@ -15,8 +15,8 @@ import java.util.Set;
  */
 public class MethodArgumentUtils {
 
-    public static <T extends Annotation> MethodArgument getArgumentByAnnotation(MethodMeta methodMeta, Class<T> annotation) {
-        Map<String, MethodArgument> argument = methodMeta.getArgument();
+    public static <T extends Annotation> MethodArgument getArgumentByAnnotation(ControllerMethodMeta controllerMethodMeta, Class<T> annotation) {
+        Map<String, MethodArgument> argument = controllerMethodMeta.getArgument();
         if (CollUtil.isEmpty(argument)) {
             return null;
         }

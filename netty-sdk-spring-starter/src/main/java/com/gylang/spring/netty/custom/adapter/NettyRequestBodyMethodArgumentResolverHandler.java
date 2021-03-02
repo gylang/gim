@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.spring.netty.annotation.NettyBody;
-import com.gylang.spring.netty.custom.handler.MethodMeta;
+import com.gylang.spring.netty.custom.handler.ControllerMethodMeta;
 import com.gylang.spring.netty.custom.method.MethodArgument;
 import com.gylang.spring.netty.custom.method.MethodArgumentValue;
 import com.gylang.spring.netty.util.MethodArgumentUtils;
@@ -24,14 +24,14 @@ public class NettyRequestBodyMethodArgumentResolverHandler implements MethodArgu
     String cacheName = "NettyRequestBody";
 
     @Override
-    public boolean support(MethodMeta methodMeta) {
-        String cache = methodMeta.getCache(cacheName);
+    public boolean support(ControllerMethodMeta controllerMethodMeta) {
+        String cache = controllerMethodMeta.getCache(cacheName);
         if (null != cache) {
             return true;
         }
-        MethodArgument methodArgument = MethodArgumentUtils.getArgumentByAnnotation(methodMeta, NettyBody.class);
+        MethodArgument methodArgument = MethodArgumentUtils.getArgumentByAnnotation(controllerMethodMeta, NettyBody.class);
         if (null != methodArgument) {
-            methodMeta.pushCache(cacheName, methodArgument.getName());
+            controllerMethodMeta.pushCache(cacheName, methodArgument.getName());
             return true;
         }
         return false;
@@ -40,9 +40,9 @@ public class NettyRequestBodyMethodArgumentResolverHandler implements MethodArgu
     @Override
     public boolean handler(ChannelHandlerContext ctx, IMSession me, MessageWrap message, MethodArgumentValue methodArgumentValue) {
 
-        MethodMeta methodMeta = methodArgumentValue.getMethodMeta();
-        String cache = methodMeta.getCache(cacheName);
-        MethodArgument argument = methodMeta.getArgument(cache);
+        ControllerMethodMeta controllerMethodMeta = methodArgumentValue.getControllerMethodMeta();
+        String cache = controllerMethodMeta.getCache(cacheName);
+        MethodArgument argument = controllerMethodMeta.getArgument(cache);
         boolean simpleValueType = ClassUtil.isSimpleValueType(argument.getArgumentType());
         Object body;
         if (simpleValueType) {

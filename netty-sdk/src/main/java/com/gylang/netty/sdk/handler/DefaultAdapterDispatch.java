@@ -1,6 +1,8 @@
 package com.gylang.netty.sdk.handler;
 
-import com.gylang.netty.sdk.call.NotifyProvider;
+import com.gylang.netty.sdk.intercept.NettyIntercept;
+import com.gylang.netty.sdk.common.ObjectWrap;
+import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.repo.NettyUserInfoFillHandler;
@@ -16,40 +18,42 @@ import java.util.List;
  * @author gylang
  * data 2020/11/9
  * @version v0.0.1
- * @see com.gylang.netty.sdk.handler.IMRequestAdapter
+ * @see IRequestAdapter
  */
 public class DefaultAdapterDispatch implements DispatchAdapterHandler {
 
     @Setter
-    private List<BizRequestAdapter> requestAdapterList = new ArrayList<>();
-    @Setter
+    private List<BizRequestAdapter<?>> requestAdapterList = new ArrayList<>();
     private NettyUserInfoFillHandler nettyUserInfoFillHandler;
+    private List<NettyIntercept> nettyInterceptList;
 
     @Override
-    public void process(ChannelHandlerContext ctx, IMSession me, MessageWrap message, NotifyProvider messagePusher) {
+    public Object process(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
+
         if (null != nettyUserInfoFillHandler) {
             nettyUserInfoFillHandler.fill(me);
         }
-        for (IMRequestAdapter adapter : requestAdapterList) {
-            adapter.process(ctx, me, message, messagePusher);
-        }
-    }
-
-    @Override
-    public void register(List<?> processList) {
-
-        List<BizRequestAdapter> targetList = getTargetList(processList);
-        for (BizRequestAdapter o : targetList) {
-            if (!requestAdapterList.contains(o)) {
-                requestAdapterList.add(o);
+        Object object = null;
+        NettyIntercept.before(nettyInterceptList, ctx, me, message);
+        for (IRequestAdapter<?> adapter : requestAdapterList) {
+            object = adapter.process(ctx, me, message);
+            if (null != object) {
+                break;
             }
         }
+        return NettyIntercept.after(nettyInterceptList, ctx, me, message, object);
     }
 
     @Override
-    public List<?> mappingList() {
-        return requestAdapterList;
+    public void register(List<ObjectWrap> processList) {
+
+        throw new RuntimeException("不支持当前方式注册");
     }
 
-
+    @Override
+    public void init(NettyConfiguration nettyConfiguration) {
+        this.nettyUserInfoFillHandler = nettyConfiguration.getNettyUserInfoFillHandler();
+        this.nettyInterceptList = nettyConfiguration.getNettyInterceptList();
+        this.requestAdapterList = nettyConfiguration.getBizRequestAdapterList();
+    }
 }

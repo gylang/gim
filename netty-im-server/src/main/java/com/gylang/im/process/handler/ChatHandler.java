@@ -1,11 +1,11 @@
 package com.gylang.im.process.handler;
 
 import com.gylang.im.process.FillUserInfo;
-import com.gylang.netty.sdk.MessageProvider;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
+import com.gylang.netty.sdk.provider.MessageProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -27,12 +27,13 @@ public class ChatHandler implements IMRequestHandler {
     private FillUserInfo fillUserInfo;
 
     @Override
-    public void process(IMSession me, MessageWrap message) {
+    public Object process(IMSession me, MessageWrap message) {
 
 
         MessageWrap messageWrap = new MessageWrap();
         messageWrap.setSender(me.getAccount());
         messageWrap.setContent(message.getContent());
-        messageProvider.sendGroup(me, "default", messageWrap);
+         messageProvider.sendGroup(me, "default", messageWrap);
+        return message;
     }
 }

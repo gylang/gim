@@ -4,6 +4,7 @@ import cn.hutool.core.util.IdUtil;
 import io.netty.util.concurrent.EventExecutor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -18,6 +19,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Setter
 @Getter
+@Slf4j
 public class AbstractSessionGroup {
 
     /**
@@ -49,6 +51,7 @@ public class AbstractSessionGroup {
     public AbstractSessionGroup(String name, String creator, String password, Integer capacity) {
         this.name = name;
         this.creator = creator;
+        this.password = password;
         this.key = IdUtil.fastUUID();
         memberList = new ArrayBlockingQueue<>(capacity);
     }
@@ -65,12 +68,7 @@ public class AbstractSessionGroup {
      */
     public boolean join(IMSession session) {
 
-        boolean offer = memberList.offer(session);
-        if (!offer) {
-            return offer;
-        }
-
-        return offer;
+        return memberList.offer(session);
     }
 
     /**
@@ -86,7 +84,10 @@ public class AbstractSessionGroup {
         try {
             offer = memberList.offer(session, timeout, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            if (log.isDebugEnabled()) {
+                log.debug("等待进入组失败 : 中途被打断{}", e.getMessage());
+            }
+            Thread.currentThread().interrupt();
         }
         return offer;
     }

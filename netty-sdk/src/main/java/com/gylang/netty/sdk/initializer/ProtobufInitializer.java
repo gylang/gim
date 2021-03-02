@@ -1,9 +1,10 @@
 package com.gylang.netty.sdk.initializer;
 
-import com.gylang.netty.sdk.call.NotifyProvider;
+import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.constant.NettyConfigEnum;
 import com.gylang.netty.sdk.domain.proto.MessageWrapProto;
-import com.gylang.netty.sdk.handler.IMRequestAdapter;
+import com.gylang.netty.sdk.event.EventProvider;
+import com.gylang.netty.sdk.handler.DispatchAdapterHandler;
 import com.gylang.netty.sdk.handler.netty.HeartCheckHandler;
 import com.gylang.netty.sdk.handler.netty.ProtobufDispatchHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -26,16 +27,11 @@ import java.util.concurrent.TimeUnit;
 
 public class ProtobufInitializer extends CustomInitializer<SocketChannel> {
 
-    private final Map<String, Object> properties;
+    private Map<String, Object> properties;
+    private EventProvider pusher;
+    private DispatchAdapterHandler requestAdapter;
+    private NettyConfiguration nettyConfiguration;
 
-    private final NotifyProvider pusher;
-    private final IMRequestAdapter requestAdapter;
-
-    public ProtobufInitializer(Map<String, Object> properties, NotifyProvider pusher, IMRequestAdapter requestAdapter) {
-        this.properties = properties;
-        this.pusher = pusher;
-        this.requestAdapter = requestAdapter;
-    }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -56,7 +52,7 @@ public class ProtobufInitializer extends CustomInitializer<SocketChannel> {
                 NettyConfigEnum.WRITE_IDLE.getValue(properties),
                 NettyConfigEnum.ALL_IDLE.getValue(properties),
                 TimeUnit.SECONDS));
-        pipeline.addLast("heart", new HeartCheckHandler(pusher, properties));
+        pipeline.addLast("heart", new HeartCheckHandler(nettyConfiguration));
         //netty链式处理
         // protobuf 解码
         pipeline.addLast(new ProtobufVarint32FrameDecoder());
@@ -64,6 +60,14 @@ public class ProtobufInitializer extends CustomInitializer<SocketChannel> {
         pipeline.addLast(new ProtobufVarint32LengthFieldPrepender());
         pipeline.addLast(new ProtobufEncoder());
         // 业务分发
-        pipeline.addLast("dispatch", new ProtobufDispatchHandler(requestAdapter, pusher));
+        pipeline.addLast("dispatch", new ProtobufDispatchHandler(nettyConfiguration));
+    }
+
+    @Override
+    public void init(NettyConfiguration configuration) {
+        this.nettyConfiguration = nettyConfiguration;
+        this.properties = nettyConfiguration.getProperties();
+        this.pusher = nettyConfiguration.getEventProvider();
+        this.requestAdapter = nettyConfiguration.getDispatchAdapterHandler();
     }
 }

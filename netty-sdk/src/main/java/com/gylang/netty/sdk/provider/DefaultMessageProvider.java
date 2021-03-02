@@ -1,12 +1,11 @@
-package com.gylang.netty.sdk;
+package com.gylang.netty.sdk.provider;
 
-import com.gylang.netty.sdk.conveter.DataConverter;
+import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
 import com.gylang.netty.sdk.repo.IMSessionRepository;
-import lombok.AllArgsConstructor;
 
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -15,13 +14,12 @@ import java.util.concurrent.ThreadPoolExecutor;
  * data 2020/11/12
  * @version v0.0.1
  */
-@AllArgsConstructor
 public class DefaultMessageProvider implements MessageProvider {
 
     private IMSessionRepository sessionRepository;
-    private IMGroupSessionRepository defaultGroupRepository;
+    private IMGroupSessionRepository groupSessionRepository;
     private ThreadPoolExecutor executor;
-    private DataConverter converter;
+
 
     @Override
     public void sendMsg(IMSession me, String target, MessageWrap message) {
@@ -38,7 +36,7 @@ public class DefaultMessageProvider implements MessageProvider {
     @Override
     public void sendGroup(IMSession me, String target, MessageWrap message) {
 
-        AbstractSessionGroup sessionGroup = defaultGroupRepository.findByKey(target);
+        AbstractSessionGroup sessionGroup = groupSessionRepository.findByKey(target);
         sendGroup(me, sessionGroup, message);
     }
 
@@ -68,10 +66,10 @@ public class DefaultMessageProvider implements MessageProvider {
         }
         message.setSender(me.getAccount());
         for (IMSession session : target.getMemberList()) {
-            if (null != session.getSession() && !me.getNid().equals(session.getNid())) {
-                if (session.getSession().isActive()) {
-                    session.getSession().writeAndFlush(message);
-                }
+            if (null != session.getSession()
+                    && !me.getNid().equals(session.getNid())
+                    && session.getSession().isActive()) {
+                session.getSession().writeAndFlush(message);
             }
         }
     }
@@ -80,5 +78,12 @@ public class DefaultMessageProvider implements MessageProvider {
     public void sendAsyncGroup(IMSession me, AbstractSessionGroup target, MessageWrap message) {
         executor.execute(() -> sendGroup(me, target, message));
 
+    }
+
+    @Override
+    public void init(NettyConfiguration configuration) {
+        this.sessionRepository = configuration.getSessionRepository();
+        this.groupSessionRepository = configuration.getGroupSessionRepository();
+        this.executor = configuration.getPoolExecutor();
     }
 }

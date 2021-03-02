@@ -1,64 +1,107 @@
 package com.gylang.spring.netty;
 
-import cn.hutool.core.util.ReflectUtil;
-import com.gylang.netty.sdk.MessageProvider;
-import com.gylang.netty.sdk.call.NotifyProvider;
-import com.gylang.netty.sdk.config.NettyConfig;
+import com.gylang.netty.sdk.IMServer;
+import com.gylang.netty.sdk.config.NettyConfiguration;
+import com.gylang.netty.sdk.config.SimpleNettyConfigurationInitializer;
+import com.gylang.netty.sdk.conveter.DataConverter;
+import com.gylang.netty.sdk.event.EventContext;
+import com.gylang.netty.sdk.event.EventProvider;
+import com.gylang.netty.sdk.event.message.MessageEventListener;
+import com.gylang.netty.sdk.handler.BizRequestAdapter;
 import com.gylang.netty.sdk.handler.DispatchAdapterHandler;
-import com.gylang.netty.sdk.handler.IMRequestAdapter;
 import com.gylang.netty.sdk.initializer.CustomInitializer;
+import com.gylang.netty.sdk.intercept.NettyIntercept;
+import com.gylang.netty.sdk.provider.MessageProvider;
+import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
+import com.gylang.netty.sdk.repo.IMSessionRepository;
+import com.gylang.netty.sdk.repo.NettyUserInfoFillHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 import javax.annotation.Resource;
-import java.lang.reflect.Constructor;
-import java.util.Properties;
+import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @author gylang
  * data 2020/12/1
  */
 @Configuration
-@Import(StartNettyServer.class)
 @AutoConfigureBefore(StartNettyServer.class)
 @Slf4j
 public class InitNettyServerConfiguration implements InitializingBean {
 
+    /**
+     * 根据名称装配，防止和客户端的ChannelInitializer冲突报错
+     */
+    @Resource
+    private CustomInitializer<?> serverChannelInitializer;
+    /** 事件监听 */
+    @Resource
+    private EventProvider eventProvider;
+    /** 时间上下文 */
+    /** 时间上下文 */
+    @Resource
+    private EventContext eventContext;
+    /** 数据类型转化 */
+    @Resource
+    private DataConverter dataConverter;
+    /** 单用户会话工厂 */
+    @Resource
+    private IMSessionRepository sessionRepository;
+    /** 用户组会话工厂 */
+    @Resource
+    private IMGroupSessionRepository groupSessionRepository;
+    /** 消息发送provider */
     @Resource
     private MessageProvider messageProvider;
-    @Value("${im.initializerType:com.gylang.netty.sdk.initializer.WebJsonInitializer}")
-    private String initializerType;
+    /** 事件监听列表 */
+    @Autowired(required = false)
+    private List<MessageEventListener<?>> messageEventListener;
+    /** 业务请求适配器 */
     @Resource
-    private NotifyProvider notifyProvider;
-    @Resource
-    private NettyConfig nettyConfig;
+    private List<BizRequestAdapter<?>> bizRequestAdapterList;
+    /** 适配分发器 */
     @Resource
     private DispatchAdapterHandler dispatchAdapterHandler;
-
-    @Bean
-    @ConditionalOnMissingBean(CustomInitializer.class)
-    public CustomInitializer<?> customInitializer() {
-        CustomInitializer<?> initializer = null;
-        try {
-            Constructor constructor = ReflectUtil.getConstructor(Class.forName(initializerType), Properties.class, NotifyProvider.class, IMRequestAdapter.class);
-            initializer = (CustomInitializer<?>) constructor.newInstance(nettyConfig.getProperties(), notifyProvider, dispatchAdapterHandler);
-            nettyConfig.setServerChannelInitializer(initializer);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return initializer;
-    }
+    /** 线程池 */
+    @Resource
+    private ThreadPoolExecutor poolExecutor;
+    /** 填充客户信息 */
+    @Autowired(required = false)
+    private NettyUserInfoFillHandler nettyUserInfoFillHandler;
+    /** 消息处理拦截器 */
+    @Autowired(required = false)
+    private List<NettyIntercept> nettyInterceptList;
+    @Resource
+    private NettyConfiguration nettyConfiguration;
 
 
     @Override
     public void afterPropertiesSet() throws Exception {
 
+        nettyConfiguration.setServerChannelInitializer(serverChannelInitializer);
+        nettyConfiguration.setEventProvider(eventProvider);
+        nettyConfiguration.setEventContext(eventContext);
+        nettyConfiguration.setDataConverter(dataConverter);
+        nettyConfiguration.setSessionRepository(sessionRepository);
+        nettyConfiguration.setGroupSessionRepository(groupSessionRepository);
+        nettyConfiguration.setMessageProvider(messageProvider);
+        nettyConfiguration.setMessageEventListener(messageEventListener);
+        nettyConfiguration.setBizRequestAdapterList(bizRequestAdapterList);
+        nettyConfiguration.setDispatchAdapterHandler(dispatchAdapterHandler);
+        nettyConfiguration.setPoolExecutor(poolExecutor);
+        nettyConfiguration.setNettyUserInfoFillHandler(nettyUserInfoFillHandler);
+        nettyConfiguration.setNettyInterceptList(nettyInterceptList);
+        new SimpleNettyConfigurationInitializer().initConfig(nettyConfiguration);
+
+        // 启动服务
+        IMServer imServer = new IMServer();
+        imServer.setNettyConfig(nettyConfiguration);
+        imServer.start();
         log.info("初始化基础配置完成 : InitNettyServerConfiguration");
 
     }

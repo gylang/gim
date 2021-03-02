@@ -6,7 +6,7 @@ import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.spring.netty.annotation.NettyBody;
 import com.gylang.spring.netty.annotation.NettyParam;
-import com.gylang.spring.netty.custom.handler.MethodMeta;
+import com.gylang.spring.netty.custom.handler.ControllerMethodMeta;
 import com.gylang.spring.netty.custom.method.MethodArgument;
 import com.gylang.spring.netty.custom.method.MethodArgumentValue;
 import com.gylang.spring.netty.util.MethodArgumentUtils;
@@ -29,9 +29,9 @@ public class RequestParamMethodArgumentResolverHandler implements MethodArgument
     private List<MessageConverterAdapter> messageConverterAdapterList;
 
     @Override
-    public boolean support(MethodMeta methodMeta) {
+    public boolean support(ControllerMethodMeta controllerMethodMeta) {
 
-        MethodArgument argumentByAnnotation = MethodArgumentUtils.getArgumentByAnnotation(methodMeta, NettyBody.class);
+        MethodArgument argumentByAnnotation = MethodArgumentUtils.getArgumentByAnnotation(controllerMethodMeta, NettyBody.class);
         return null == argumentByAnnotation;
     }
 
@@ -39,8 +39,8 @@ public class RequestParamMethodArgumentResolverHandler implements MethodArgument
     public boolean handler(ChannelHandlerContext ctx, IMSession me, MessageWrap message, MethodArgumentValue methodArgumentValue) {
 
         // 获取key index
-        MethodMeta methodMeta = methodArgumentValue.getMethodMeta();
-        Map<String, MethodArgument> argument = methodMeta.getArgument();
+        ControllerMethodMeta controllerMethodMeta = methodArgumentValue.getControllerMethodMeta();
+        Map<String, MethodArgument> argument = controllerMethodMeta.getArgument();
         if (null == argument) {
             return false;
         }

@@ -26,6 +26,7 @@ import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,25 +36,20 @@ import java.util.Objects;
  * IoSession包装类,集群时 将此对象存入表中
  */
 @Data
-public class IMSession {
+public class IMSession implements Serializable {
 
-    private transient static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    public transient static String HOST = "HOST";
-    public transient static final int STATE_ENABLED = 0;
-    public transient static final int STATE_DISABLED = 1;
-    public transient static final int APNS_ON = 1;
-    public transient static final int APNS_OFF = 0;
+    public static final String HOST = "HOST";
+    public static final int STATE_ENABLED = 0;
+    public static final int STATE_DISABLED = 1;
+    public static final int APNS_ON = 1;
+    public static final int APNS_OFF = 0;
 
-    public transient static String CHANNEL_IOS = "ios";
-    public transient static String CHANNEL_ANDROID = "android";
-    public transient static String CHANNEL_WINDOWS = "windows";
+    public static final String CHANNEL_IOS = "ios";
+    public static final String CHANNEL_ANDROID = "android";
+    public static final String CHANNEL_WINDOWS = "windows";
     private transient Channel session;
-
-    /**
-     * 数据库主键ID
-     */
-    private String id;
 
 
     /**
@@ -74,7 +70,7 @@ public class IMSession {
     /**
      * session绑定的服务器IP
      */
-    private String host;
+    private String serverIp;
 
     /**
      * 终端设备类型
@@ -232,7 +228,7 @@ public class IMSession {
         if (o instanceof IMSession) {
             IMSession target = (IMSession) o;
             return Objects.equals(target.deviceId, deviceId) && Objects.equals(target.nid, nid)
-                    && Objects.equals(target.host, host);
+                    && Objects.equals(target.serverIp, serverIp);
         }
         return false;
     }

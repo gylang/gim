@@ -4,12 +4,15 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gylang.netty.sdk.annotation.AdapterType;
 import com.gylang.netty.sdk.annotation.NettyMapping;
-import com.gylang.netty.sdk.call.NotifyProvider;
+import com.gylang.netty.sdk.common.MethodWrap;
+import com.gylang.netty.sdk.common.ObjectWrap;
+import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.BizRequestAdapter;
+import com.gylang.netty.sdk.util.ObjectWrapUtil;
 import com.gylang.spring.netty.annotation.SpringNettyController;
-import com.gylang.spring.netty.custom.handler.MethodMeta;
+import com.gylang.spring.netty.custom.handler.ControllerMethodMeta;
 import com.gylang.spring.netty.custom.method.MethodArgumentValue;
 import com.gylang.spring.netty.custom.reslove.MethodArgumentResolver;
 import io.netty.channel.ChannelHandlerContext;
@@ -17,13 +20,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author gylang
@@ -33,70 +38,71 @@ import java.util.stream.Collectors;
 @Component
 @AdapterType
 @Slf4j
-public class MethodHandlerAdapter implements BizRequestAdapter, InitializingBean {
-    @Autowired
-    private MethodArgumentResolver methodArgumentResolver;
-    @Autowired
-    private ApplicationContext applicationContext;
+public class MethodHandlerAdapter implements BizRequestAdapter<ControllerMethodMeta> {
+
     @Autowired
     private MethodArgumentResolverAdapter methodArgumentResolverAdapter;
 
-    private Map<String, MethodMeta> methodHandlerMap;
+    @Autowired
+    private NettyConfiguration nettyConfiguration;
+
+    private Map<String, ControllerMethodMeta> methodHandlerMap;
 
     @Override
-    public void process(ChannelHandlerContext ctx, IMSession me, MessageWrap message, NotifyProvider messagePusher) {
-        MethodMeta methodMeta = methodHandlerMap.get(message.getKey());
-        if (null == methodMeta) {
-            return;
+    public Object process(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
+        ControllerMethodMeta controllerMethodMeta = methodHandlerMap.get(message.getCmd());
+        if (null == controllerMethodMeta) {
+            return null;
         }
         MethodArgumentValue methodArgumentValue = new MethodArgumentValue();
-        methodArgumentValue.init(methodMeta);
-        methodArgumentResolverAdapter.handler(ctx, me, message, methodArgumentValue);
+        methodArgumentValue.init(controllerMethodMeta);
+        return methodArgumentResolverAdapter.handler(ctx, me, message, methodArgumentValue);
     }
+
 
     @Override
-    public void register(List<?> processList) {
+    public void register(List<ObjectWrap> processList) {
 
-        List<MethodMeta> methodMetaList = getTargetList(processList);
-        if (CollUtil.isEmpty(methodMetaList)) {
-            methodHandlerMap = CollUtil.newHashMap();
-        } else {
-            methodHandlerMap = methodMetaList.stream()
-                    .collect(Collectors.toMap(this::getBizKey, methodHandler -> methodHandler));
+        this.methodHandlerMap = CollUtil.newHashMap();
+        if (!CollUtil.isEmpty(processList)) {
+            for (ObjectWrap objectWrap : processList) {
+                SpringNettyController nettyController = ObjectWrapUtil.findAnnotation(SpringNettyController.class, objectWrap);
+
+                List<MethodWrap> methodWrapList = objectWrap.getMethodWrapList();
+                if (CollUtil.isNotEmpty(methodWrapList)) {
+                    for (MethodWrap methodWrap : methodWrapList) {
+                        NettyMapping nettyMapping = ObjectWrapUtil.findAnnotation(NettyMapping.class, methodWrap);
+                        if (null != nettyMapping) {
+                            ControllerMethodMeta controllerMethodMeta = new ControllerMethodMeta();
+                            controllerMethodMeta.setMethod(methodWrap.getMethod());
+                            controllerMethodMeta.setNettyController(nettyController);
+                            controllerMethodMeta.setNettyMapping(nettyMapping);
+                            controllerMethodMeta.setClazz(objectWrap.getClass());
+                            controllerMethodMeta.setInstance(objectWrap.getInstance());
+                            controllerMethodMeta.setAnnotationList(new HashSet<>(objectWrap.getAnnotationList()));
+                            methodHandlerMap.put(nettyMapping.value(), controllerMethodMeta);
+                        }
+                    }
+                }
+            }
+
+
         }
-
     }
 
-    private String getBizKey(MethodMeta methodMeta) {
+    private String getBizKey(ControllerMethodMeta controllerMethodMeta) {
 
-        SpringNettyController nettyController = methodMeta.getNettyController();
+        SpringNettyController nettyController = controllerMethodMeta.getNettyController();
 
-        NettyMapping nettyMapping = methodMeta.getNettyMapping();
+        NettyMapping nettyMapping = controllerMethodMeta.getNettyMapping();
         return StrUtil.isBlank(nettyController.value()) ? nettyMapping.value() : nettyController.value() + ":" + nettyMapping.value();
     }
 
-    @Override
-    public List<?> mappingList() {
-        return CollUtil.newArrayList(methodHandlerMap.values());
-    }
+
+
 
     @Override
-    public void afterPropertiesSet() throws Exception {
-        log.info("初始化方法处理器");
-        Map<String, Object> controllerMap = applicationContext.getBeansWithAnnotation(SpringNettyController.class);
-        List<MethodMeta> methodMetaList = new ArrayList<>();
-        for (Object controller : controllerMap.values()) {
-            Class<?> clazz = controller.getClass();
-            for (Method method : clazz.getDeclaredMethods()) {
-                if (methodArgumentResolver.support(method)) {
-                    MethodMeta methodMeta = methodArgumentResolver.resolve(method);
-                    methodMeta.fillInstance(controller);
-                    methodMeta.fillClass(clazz);
-                    methodMeta.setNettyController(clazz.getAnnotation(SpringNettyController.class));
-                    methodMetaList.add(methodMeta);
-                }
-            }
-        }
-        register(methodMetaList);
+    public void init(NettyConfiguration configuration) {
+        register(configuration.getObjectWrapList());
     }
 }

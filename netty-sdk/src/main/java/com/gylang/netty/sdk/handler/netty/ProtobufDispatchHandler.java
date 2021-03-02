@@ -1,10 +1,10 @@
 package com.gylang.netty.sdk.handler.netty;
 
-import com.gylang.netty.sdk.call.NotifyProvider;
+import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.domain.proto.MessageWrapProto;
-import com.gylang.netty.sdk.handler.IMRequestAdapter;
+import com.gylang.netty.sdk.handler.DispatchAdapterHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -14,12 +14,10 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class ProtobufDispatchHandler extends SimpleChannelInboundHandler<MessageWrapProto.Model> {
-    private final IMRequestAdapter requestAdapter;
-    private final NotifyProvider messagePusher;
+    private final DispatchAdapterHandler requestAdapter;
 
-    public ProtobufDispatchHandler(IMRequestAdapter requestAdapter, NotifyProvider messagePusher) {
-        this.requestAdapter = requestAdapter;
-        this.messagePusher = messagePusher;
+    public ProtobufDispatchHandler(NettyConfiguration nettyConfiguration) {
+        this.requestAdapter = nettyConfiguration.getDispatchAdapterHandler();
     }
 
     @Override
@@ -30,11 +28,11 @@ public class ProtobufDispatchHandler extends SimpleChannelInboundHandler<Message
         }
         IMSession session = new IMSession(ctx.channel());
         MessageWrap messageWrap = new MessageWrap();
-        messageWrap.setKey(msg.getKey());
+        messageWrap.setCmd(msg.getKey());
         messageWrap.setContent(msg.getContent());
         messageWrap.setType(msg.getType());
         messageWrap.setReceiverType(msg.getReceiverType());
-        requestAdapter.process(ctx, session, messageWrap, messagePusher);
+        requestAdapter.process(ctx, session, messageWrap);
 
     }
 }

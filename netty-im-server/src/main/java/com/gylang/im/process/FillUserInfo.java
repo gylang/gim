@@ -1,8 +1,8 @@
 package com.gylang.im.process;
 
 import com.gylang.netty.sdk.domain.model.IMSession;
-import com.gylang.netty.sdk.repo.DefaultIMRepository;
-import com.gylang.netty.sdk.repo.FillUserInfoContext;
+import com.gylang.netty.sdk.repo.IMSessionRepository;
+import com.gylang.netty.sdk.repo.NettyUserInfoFillHandler;
 import io.netty.channel.Channel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.ApplicationContext;
@@ -15,10 +15,9 @@ import javax.annotation.Resource;
  * data 2020/11/17
  */
 @Component
-public class FillUserInfo implements FillUserInfoContext {
-
-    @Resource(name = "imRepository")
-    private DefaultIMRepository repository;
+public class FillUserInfo implements NettyUserInfoFillHandler {
+    @Resource
+    private IMSessionRepository repository;
     @Resource
     private ApplicationContext applicationContext;
 

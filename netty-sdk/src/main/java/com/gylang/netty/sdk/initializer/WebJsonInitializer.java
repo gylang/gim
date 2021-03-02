@@ -1,13 +1,13 @@
 package com.gylang.netty.sdk.initializer;
 
-import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.coder.WebJsonMessageDecoder;
 import com.gylang.netty.sdk.coder.WebJsonMessageEncoder;
+import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.constant.NettyConfigEnum;
-import com.gylang.netty.sdk.handler.IMRequestAdapter;
+import com.gylang.netty.sdk.event.EventProvider;
+import com.gylang.netty.sdk.handler.DispatchAdapterHandler;
 import com.gylang.netty.sdk.handler.netty.HeartCheckHandler;
 import com.gylang.netty.sdk.handler.netty.JsonDispatchHandler;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
@@ -27,22 +27,16 @@ import java.util.concurrent.TimeUnit;
  */
 public class WebJsonInitializer extends CustomInitializer<SocketChannel> {
 
-    private final Map<String, Object> properties;
+    private  Map<String, Object> properties;
 
-    private final NotifyProvider messagePusher;
+    private  NettyConfiguration nettyConfiguration;
 
-    private final IMRequestAdapter requestAdapter;
+    private  EventProvider eventProvider;
 
-    public WebJsonInitializer(Map<String, Object> properties, NotifyProvider messagePusher, IMRequestAdapter requestAdapter) {
-        this.properties = properties;
-        this.messagePusher = messagePusher;
-        this.requestAdapter = requestAdapter;
-    }
+    private  DispatchAdapterHandler dispatchAdapterHandler;
 
-    @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        super.channelRead(ctx, msg);
-    }
+
+
 
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
@@ -69,8 +63,16 @@ public class WebJsonInitializer extends CustomInitializer<SocketChannel> {
 //        pipeline.addLast("StringDecoder", new StringDecoder(CharsetUtil.UTF_8));
 //        pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
 //        pipeline.addLast("StringEncoder", new StringEncoder(CharsetUtil.UTF_8));
-        pipeline.addLast("heart", new HeartCheckHandler(messagePusher, properties));
-        pipeline.addLast("dispatch", new JsonDispatchHandler(requestAdapter, messagePusher));
+        pipeline.addLast("heart", new HeartCheckHandler(nettyConfiguration));
+        pipeline.addLast("dispatch", new JsonDispatchHandler(dispatchAdapterHandler, eventProvider));
+    }
+
+    @Override
+    public void init(NettyConfiguration configuration) {
+        this.nettyConfiguration = configuration;
+        this.properties = configuration.getProperties();
+        this.eventProvider = configuration.getEventProvider();
+        this.dispatchAdapterHandler = configuration.getDispatchAdapterHandler();
     }
 }
 

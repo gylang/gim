@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MethodMeta {
+public class ControllerMethodMeta {
 
     /**
      * 方法对象

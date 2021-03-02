@@ -1,16 +1,14 @@
 package com.gylang.spring.netty;
 
-import com.gylang.netty.sdk.DefaultImApplicationContext;
-import com.gylang.netty.sdk.ImFactoryBuilder;
-import com.gylang.netty.sdk.MessageProvider;
-import com.gylang.netty.sdk.call.NotifyContext;
-import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.config.NettyConfig;
 import com.gylang.netty.sdk.conveter.DataConverter;
+import com.gylang.netty.sdk.event.EventContext;
+import com.gylang.netty.sdk.event.EventProvider;
 import com.gylang.netty.sdk.handler.*;
 import com.gylang.netty.sdk.handler.adapter.DefaultNettyControllerAdapter;
 import com.gylang.netty.sdk.handler.adapter.DefaultRequestHandlerAdapter;
 import com.gylang.netty.sdk.initializer.CustomInitializer;
+import com.gylang.netty.sdk.provider.MessageProvider;
 import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
 import com.gylang.netty.sdk.repo.IMSessionRepository;
 import com.gylang.netty.sdk.repo.NettyUserInfoFillHandler;
@@ -32,9 +30,9 @@ public class StartNettyServer implements InitializingBean {
     @Autowired
     private MessageProvider messageProvider;
     @Autowired
-    private NotifyProvider notifyProvider;
+    private EventProvider eventProvider;
     @Autowired
-    private NotifyContext notifyContext;
+    private EventContext eventContext;
     @Autowired
     private IMSessionRepository imSessionRepository;
     @Autowired
@@ -63,28 +61,9 @@ public class StartNettyServer implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
 
-        defaultRequestHandlerAdapter.register(imRequestHandlerList);
-        defaultNettyControllerAdapter.register(nettyControllerList);
-        defaultNettyControllerAdapter.setDataConverter(dataConverter);
 
-        if (dispatchAdapterHandler instanceof DefaultAdapterDispatch) {
-            DefaultAdapterDispatch defaultAdapterDispatch = (DefaultAdapterDispatch) dispatchAdapterHandler;
-            defaultAdapterDispatch.setNettyUserInfoFillHandler(nettyUserInfoFillHandler);
-            defaultAdapterDispatch.setRequestAdapterList(bizRequestAdapterList);
-        }
-        DefaultImApplicationContext defaultImApplicationContext = new DefaultImApplicationContext();
-        ImFactoryBuilder factoryBuilder = ImFactoryBuilder.builder()
-                .notifyProvider(notifyProvider)
-                .nettyConfig(nettyConfig)
-                .notifyContext(notifyContext)
-                .dispatchAdapterHandler(dispatchAdapterHandler)
-                .messageProvider(messageProvider)
-                .sessionRepository(imSessionRepository)
-                .groupRepository(imGroupSessionRepository)
-                .dataConverter(dataConverter)
-                .build();
-        defaultImApplicationContext.doInit(factoryBuilder);
-        defaultImApplicationContext.start();
+
+
         log.info("初始化基础配置完成 : StartNettyServer");
     }
 }

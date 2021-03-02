@@ -8,7 +8,7 @@
 //import com.gylang.netty.sdk.conveter.DataConverter;
 //import com.gylang.netty.sdk.handler.IMRequestAdapter;
 //import com.gylang.netty.sdk.repo.NettyUserInfoFillHandler;
-//import com.gylang.spring.netty.register.*;
+//import com.gylang.spring.netty.custom.register.*;
 //import org.springframework.beans.BeanUtils;
 //import org.springframework.beans.factory.InitializingBean;
 //import org.springframework.beans.factory.annotation.Autowired;

@@ -17,5 +17,5 @@ public interface IMRequestHandler {
     /**
      * 处理收到客户端从长链接发送的数据
      */
-    void process(IMSession me, MessageWrap message);
+    Object process(IMSession me, MessageWrap message);
 }

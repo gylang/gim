@@ -2,7 +2,7 @@ package com.gylang.spring.netty.custom.adapter;
 
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
-import com.gylang.spring.netty.custom.handler.MethodMeta;
+import com.gylang.spring.netty.custom.handler.ControllerMethodMeta;
 import com.gylang.spring.netty.custom.method.MethodArgumentValue;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -16,10 +16,10 @@ public interface MethodHandlerPostProcess {
     /**
      * 判断是否支持处理类型
      *
-     * @param methodMeta 方法
+     * @param controllerMethodMeta 方法
      * @return 支持true 不支持 false
      */
-    boolean support(MethodMeta methodMeta);
+    boolean support(ControllerMethodMeta controllerMethodMeta);
 
     /**
      * 后置处理器, 当调用业务处理器之后, 调用后置处理器进行处理

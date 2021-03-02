@@ -1,9 +1,9 @@
 package com.gylang.netty.sdk.handler.netty;
 
-import com.gylang.netty.sdk.call.NotifyProvider;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
-import com.gylang.netty.sdk.handler.IMRequestAdapter;
+import com.gylang.netty.sdk.event.EventProvider;
+import com.gylang.netty.sdk.handler.DispatchAdapterHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -16,22 +16,22 @@ import io.netty.channel.SimpleChannelInboundHandler;
  */
 public class JsonDispatchHandler extends SimpleChannelInboundHandler<MessageWrap> {
 
-    private final IMRequestAdapter requestAdapter;
-    private final NotifyProvider messagePusher;
+    private final DispatchAdapterHandler dispatchAdapterHandler;
+    private final EventProvider messagePusher;
 
-    public JsonDispatchHandler(IMRequestAdapter bizDispatchHandler, NotifyProvider messagePusher) {
-        this.requestAdapter = bizDispatchHandler;
+    public JsonDispatchHandler(DispatchAdapterHandler bizDispatchHandler, EventProvider messagePusher) {
+        this.dispatchAdapterHandler = bizDispatchHandler;
         this.messagePusher = messagePusher;
     }
 
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, MessageWrap  msg) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, MessageWrap msg) {
         IMSession session = new IMSession(ctx.channel());
-        if (null == msg || null == msg.getKey()) {
+        if (null == msg || null == msg.getCmd()) {
             return;
         }
-        requestAdapter.process(ctx, session, msg, messagePusher);
+        dispatchAdapterHandler.process(ctx, session, msg);
 
 //        bizDispatchHandler.process(bizDispatchHandler);
     }

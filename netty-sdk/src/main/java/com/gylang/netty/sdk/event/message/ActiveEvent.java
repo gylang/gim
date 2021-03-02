@@ -1,4 +1,4 @@
-package com.gylang.netty.sdk.call.message;
+package com.gylang.netty.sdk.event.message;
 
 import io.netty.channel.ChannelHandlerContext;
 
@@ -9,27 +9,27 @@ import io.netty.channel.ChannelHandlerContext;
  * data 2020/11/3
  * @version v0.0.1
  */
-public interface ActiveNotify {
+public interface ActiveEvent {
 
     /**
      * 上线通知
      *
      * @param ctx 上下文
      */
-    void register(ChannelHandlerContext ctx);
+    void onLineEvent(ChannelHandlerContext ctx);
 
     /**
      * 下线通知
      *
      * @param ctx 上下文
      */
-    void close(ChannelHandlerContext ctx);
+    void onClose(ChannelHandlerContext ctx);
 
     /**
      * 退出通知
      *
      * @param ctx 上下文
      */
-    void lost(ChannelHandlerContext ctx);
+    void onLost(ChannelHandlerContext ctx);
 
 }

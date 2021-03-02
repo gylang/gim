@@ -1,4 +1,4 @@
-package com.gylang.netty.sdk.call.message;
+package com.gylang.netty.sdk.event.message;
 
 import io.netty.channel.ChannelHandlerContext;
 
@@ -8,7 +8,7 @@ import io.netty.channel.ChannelHandlerContext;
  * data 2020/11/3
  * @version v0.0.1
  */
-public interface IdleNotify {
+public interface IdleEvent {
 
     /**
      * 读空闲通知

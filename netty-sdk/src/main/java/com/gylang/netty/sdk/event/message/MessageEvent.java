@@ -1,4 +1,4 @@
-package com.gylang.netty.sdk.call;
+package com.gylang.netty.sdk.event.message;
 
 import java.lang.annotation.*;
 
@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface CallMessage {
+public @interface MessageEvent {
 
     String[] value();
 }

@@ -1,6 +1,7 @@
-package com.gylang.netty.sdk.call;
+package com.gylang.netty.sdk.event;
 
-import com.gylang.netty.sdk.call.message.MessageNotifyListener;
+import com.gylang.netty.sdk.event.message.MessageEvent;
+import com.gylang.netty.sdk.event.message.MessageEventListener;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -15,14 +16,14 @@ import java.util.Map;
  * data 2020/11/7
  * @version v0.0.1
  */
-public class NotifyContext {
-
-    Map<String, List<MessageNotifyListener<?>>> notifyMap;
-
+public class EventContext {
+    /** 事件监听列表 */
+    private Map<String, List<MessageEventListener<?>>> notifyMap;
+    /** 消息类型 */
     Map<Class<?>, Class<?>> messageType;
 
 
-    public NotifyContext() {
+    public EventContext() {
         this.messageType = new HashMap<>();
         this.notifyMap = new HashMap<>();
     }
@@ -32,17 +33,17 @@ public class NotifyContext {
      *
      * @param receive 监听器
      */
-    public void register(MessageNotifyListener<?> receive) {
+    public void register(MessageEventListener<?> receive) {
 
         // 解析类型
         for (Method method : receive.getClass().getDeclaredMethods()) {
-            if ("msgNotify".equals(method.getName()) && !method.isBridge()) {
-                CallMessage annotation = method.getAnnotation(CallMessage.class);
+            if ("onEvent".equals(method.getName()) && !method.isBridge()) {
+                MessageEvent annotation = method.getAnnotation(MessageEvent.class);
                 if (null != annotation) {
                     String[] value = annotation.value();
                     for (String msgType : value) {
-                        List<MessageNotifyListener<?>> messageNotifyListenerList = notifyMap.computeIfAbsent(msgType, k -> new ArrayList<>());
-                        messageNotifyListenerList.add(receive);
+                        List<MessageEventListener<?>> messageEventListenerList = notifyMap.computeIfAbsent(msgType, k -> new ArrayList<>());
+                        messageEventListenerList.add(receive);
                     }
                     // 判断入消息入参
                     messageType.put(receive.getClass(), method.getParameterTypes()[1]);
@@ -61,13 +62,13 @@ public class NotifyContext {
      */
     public void sendMsg(String key, Object msg) {
 
-        List<MessageNotifyListener<?>> messageNotifies = notifyMap.get(key);
+        List<MessageEventListener<?>> messageNotifies = notifyMap.get(key);
         if (null != messageNotifies) {
-            for (MessageNotifyListener<?> messageNotifyListener : messageNotifies) {
+            for (MessageEventListener<?> messageEventListener : messageNotifies) {
 
-                Class<?> msgType = messageType.get(messageNotifyListener.getClass());
+                Class<?> msgType = messageType.get(messageEventListener.getClass());
                 if (msgType.isInstance(msg)) {
-                    ((MessageNotifyListener<Object>) messageNotifyListener).msgNotify(key, msg);
+                    ((MessageEventListener<Object>) messageEventListener).onEvent(key, msg);
                 }
             }
         }

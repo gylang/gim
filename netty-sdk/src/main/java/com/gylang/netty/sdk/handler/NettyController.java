@@ -16,5 +16,5 @@ public interface NettyController<T> {
     /**
      * 处理收到客户端从长链接发送的数据
      */
-    void process(IMSession me, T requestBody);
+    Object process(IMSession me, T requestBody);
 }
