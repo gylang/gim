@@ -21,13 +21,14 @@ netty-sdk 将业务代码抽离分发, 简化业务开发过程
 4. 基于方法的方式实现对业务处理(改方式是在netty-sdk-spring-starter中实现) 通过@SpringNettyController 和 @NettyMapping来实现业务分发
 
 ### demo 可查看
-https://gitee.com/gylang/gylang-im-parent
+netty-console-chat
+netty-im-server
 ### 交互结构
 当前仅实现了了json格式 参考 com/gylang/netty/sdk/domain/MessageWrap.java
 当前demo只用到两个属性
 ```json
 {
-  "key" : "业务分发key",
+  "cmd" : "业务分发key",
   "content" : "字符串或者对象数组, 交互的实际类容"
 }
 ```
