@@ -22,7 +22,6 @@ import java.util.List;
  */
 public class DefaultAdapterDispatch implements DispatchAdapterHandler {
 
-    @Setter
     private List<BizRequestAdapter<?>> requestAdapterList = new ArrayList<>();
     private NettyUserInfoFillHandler nettyUserInfoFillHandler;
     private List<NettyIntercept> nettyInterceptList;

@@ -14,8 +14,6 @@ import java.util.List;
 public class ParameterWrap {
     /** 实例 */
     private Object instance;
-    /** 参数值 */
-    private Object value;
     /** 参数名 */
     private String name;
     /** 参数类型 */

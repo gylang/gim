@@ -98,4 +98,11 @@ public class NettyConfiguration {
         }
         this.objectWrapList.addAll(objectWrapList);
     }
+
+    public void addObjectWrap(ObjectWrap objectWrap) {
+        if (null != objectWrap) {
+            this.objectWrapList = new ArrayList<>();
+        }
+        this.objectWrapList.add(objectWrap);
+    }
 }
