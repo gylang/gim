@@ -7,7 +7,7 @@
 
 ##### 调用逻辑图
 
-![image-20210303172307540](README.assets/image-20210303172307540.png)
+![image-20210303172307540](README.assets/image-2021030317230754.png)
 
 
 
@@ -250,7 +250,7 @@ public class ChatHandler implements IMRequestHandler {
 
 **客户端发送消息**
 
-![image-20210303180009499](README.assets/image-20210303180009499.png)
+![image-20210303180009499](README.assets/image-2021030318000949.png)
 
 **vue的测试小demo**在 vue-admin.zip
 
