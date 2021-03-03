@@ -10,15 +10,38 @@
     <version>1.0-SNAPSHOT</version>
 
 
+    <modules>
+        <module>netty-sdk</module>
+        <module>netty-sdk-spring-starter</module>
+        <module>netty-client-java-sdk</module>
+        <module>netty-console-chat</module>
+        <module>netty-im-server</module>
 
-   <modules>
-       <module>netty-sdk</module>
-       <module>netty-sdk-spring-starter</module>
-       <module>netty-client-java-sdk</module>
-       <module>netty-console-chat</module>
-       <module>netty-im-server</module>
-
-   </modules>
-
+    </modules>
+    <distributionManagement>
+        <repository>
+            <id>youlin-releases</id>
+            <name>Releases Repository of youlin</name>
+            <url>http://47.102.211.48:8081/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>youlin-snapshots</id>
+            <name>Snapshots Repository of youlin</name>
+            <url>http://47.102.211.48:8081/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+    <repositories>
+        <repository>
+            <id>youlin-public</id>
+            <name>Public Repository of youlin</name>
+            <url>http://47.102.211.48:8081/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>
 

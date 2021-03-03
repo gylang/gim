@@ -21,7 +21,7 @@ import com.gylang.netty.sdk.repo.DefaultIMRepository;
 import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
 import com.gylang.netty.sdk.repo.IMSessionRepository;
 import com.gylang.spring.netty.custom.adapter.MethodHandlerAdapter;
-import com.gylang.spring.netty.custom.handler.ControllerMethodMeta;
+import com.gylang.spring.netty.custom.method.ControllerMethodMeta;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;

@@ -1,4 +1,4 @@
-package com.gylang.spring.netty.custom.handler;
+package com.gylang.spring.netty.custom.method;
 
 import com.gylang.netty.sdk.annotation.NettyMapping;
 import com.gylang.spring.netty.annotation.SpringNettyController;

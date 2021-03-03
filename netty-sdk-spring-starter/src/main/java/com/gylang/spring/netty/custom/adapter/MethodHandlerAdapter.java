@@ -11,7 +11,7 @@ import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.BizRequestAdapter;
 import com.gylang.netty.sdk.util.ObjectWrapUtil;
 import com.gylang.spring.netty.annotation.SpringNettyController;
-import com.gylang.spring.netty.custom.handler.ControllerMethodMeta;
+import com.gylang.spring.netty.custom.method.ControllerMethodMeta;
 import com.gylang.spring.netty.custom.method.MethodArgumentValue;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;

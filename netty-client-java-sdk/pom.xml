@@ -3,7 +3,11 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
+    <parent>
+        <groupId>org.gylang</groupId>
+        <artifactId>netty-sdk-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
     <groupId>org.gylang</groupId>
     <artifactId>netty-client-java-sdk</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -88,17 +92,17 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.69</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.java-websocket</groupId>
+            <artifactId>java-websocket</artifactId>
+            <version>1.3.8</version>
+        </dependency>
 
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>5.4.1</version>
         </dependency>
-        <dependency>
-            　　<groupId>org.java-websocket</groupId>
-            　　<artifactId>Java-WebSocket</artifactId>
-            　　<version>1.3.8</version>
-        </dependency>
+
     </dependencies>
 </project>

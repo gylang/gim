@@ -8,9 +8,7 @@ import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.NettyController;
 import com.gylang.netty.sdk.provider.MessageProvider;
-import com.gylang.netty.sdk.repo.DefaultGroupRepository;
 import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;

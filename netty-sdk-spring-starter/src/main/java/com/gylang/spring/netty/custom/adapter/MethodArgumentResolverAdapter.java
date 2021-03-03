@@ -3,6 +3,7 @@ package com.gylang.spring.netty.custom.adapter;
 import com.gylang.netty.sdk.common.NlllSuccess;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.spring.netty.custom.handler.MethodArgumentResolverHandler;
 import com.gylang.spring.netty.custom.method.MethodArgumentValue;
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.beans.factory.annotation.Autowired;
