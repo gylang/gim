@@ -3,7 +3,7 @@ package com.gylang.netty.sdk.handler.adapter;
 import cn.hutool.core.collection.CollUtil;
 import com.gylang.netty.sdk.annotation.AdapterType;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.common.NullObject;
+import com.gylang.netty.sdk.common.NlllSuccess;
 import com.gylang.netty.sdk.common.ObjectWrap;
 import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.domain.MessageWrap;
@@ -26,7 +26,6 @@ import java.util.Map;
  * @version v0.0.1
  * @see com.gylang.netty.sdk.handler.IMRequestHandler
  */
-@AdapterType(order = 100)
 public class DefaultRequestHandlerAdapter implements BizRequestAdapter<IMRequestHandler> {
 
 
@@ -40,7 +39,7 @@ public class DefaultRequestHandlerAdapter implements BizRequestAdapter<IMRequest
             return null;
         }
         Object result = requestHandler.process(me, message);
-        return null == result ? NullObject.getInstance() : result;
+        return null == result ? NlllSuccess.getInstance() : result;
     }
 
     @Override
@@ -58,6 +57,11 @@ public class DefaultRequestHandlerAdapter implements BizRequestAdapter<IMRequest
                 }
             }
         }
+    }
+
+    @Override
+    public Integer order() {
+        return null;
     }
 
     @Override

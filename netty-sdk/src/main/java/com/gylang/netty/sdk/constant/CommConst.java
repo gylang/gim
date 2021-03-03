@@ -6,6 +6,7 @@ package com.gylang.netty.sdk.constant;
  * @version v0.0.1
  */
 public interface CommConst {
+
     String YES = "1";
     String KEY_ACCOUNT = "2";
 

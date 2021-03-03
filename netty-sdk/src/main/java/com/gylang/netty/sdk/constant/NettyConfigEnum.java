@@ -27,6 +27,7 @@ public enum NettyConfigEnum {
     READER_IDLE("readerIdle", 10L),
     WRITE_IDLE("writeIdle", 10L),
     ALL_IDLE("allIdle", 10L),
+    SERVER_ID("server_id", "0.0.0.0"),
     /**
      * 连接丢失重连次数
      */
@@ -67,6 +68,9 @@ public enum NettyConfigEnum {
      */
     public static <T> T getValue(String name, Map<String, Object> properties) {
 
+        if (null == properties) {
+            return getValue(name);
+        }
         Object o = properties.get(name);
         if (null == o) {
             return getValue(name);

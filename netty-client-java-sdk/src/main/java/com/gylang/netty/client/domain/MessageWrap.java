@@ -1,10 +1,11 @@
 package com.gylang.netty.client.domain;
 
-import com.google.protobuf.ByteString;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 /**
  * 统一交互信息包装类
@@ -17,21 +18,26 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MessageWrap {
+public class MessageWrap implements Serializable {
 
-    private String key;
-
-    private String sender;
-
-    private String type;
-
+    /** 命令 */
+    private String cmd;
+    /** 发送者 */
+    private long sender;
+    /** 消息类型 */
+    private byte type;
+    /** 消息主体 */
     private String content;
-
-    private ByteString bytes;
-
-    private String receive;
-
+    /** 消息code */
+    private String code;
+    /** 接收者 */
+    private long receive;
+    /** 接收者类型 */
     private String receiverType;
-
+    /** 消息id */
     private String msgId;
+    /** 重试次数 */
+    private transient int retryNum;
+    /** 是否使用质量服务, ack */
+    private boolean qos;
 }

@@ -2,7 +2,6 @@ package com.gylang.spring.netty.custom.adapter;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import com.gylang.netty.sdk.annotation.AdapterType;
 import com.gylang.netty.sdk.annotation.NettyMapping;
 import com.gylang.netty.sdk.common.MethodWrap;
 import com.gylang.netty.sdk.common.ObjectWrap;
@@ -30,7 +29,6 @@ import java.util.Map;
  * @version v0.0.1
  */
 @Component
-@AdapterType
 @Slf4j
 public class MethodHandlerAdapter implements BizRequestAdapter<ControllerMethodMeta> {
 
@@ -80,6 +78,11 @@ public class MethodHandlerAdapter implements BizRequestAdapter<ControllerMethodM
 
 
         }
+    }
+
+    @Override
+    public Integer order() {
+        return null;
     }
 
     private String getBizKey(SpringNettyController nettyController, NettyMapping nettyMapping) {

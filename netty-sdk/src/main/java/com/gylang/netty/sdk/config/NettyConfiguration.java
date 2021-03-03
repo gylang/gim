@@ -9,6 +9,8 @@ import com.gylang.netty.sdk.event.EventProvider;
 import com.gylang.netty.sdk.event.message.MessageEventListener;
 import com.gylang.netty.sdk.handler.BizRequestAdapter;
 import com.gylang.netty.sdk.handler.DispatchAdapterHandler;
+import com.gylang.netty.sdk.handler.qos.IMessageReceiveQosHandler;
+import com.gylang.netty.sdk.handler.qos.IMessageSenderQosHandler;
 import com.gylang.netty.sdk.initializer.CustomInitializer;
 import com.gylang.netty.sdk.intercept.NettyIntercept;
 import com.gylang.netty.sdk.provider.MessageProvider;
@@ -62,14 +64,35 @@ public class NettyConfiguration {
     private NettyUserInfoFillHandler nettyUserInfoFillHandler;
     /** 消息处理拦截器 */
     private List<NettyIntercept> nettyInterceptList;
-    /** 上下文可能使用到的对象包装类集合 */
+    /** 上下文可能使用到的对象包装类集合 主要用于适配业务调用的bean注入 */
     private List<ObjectWrap> objectWrapList;
+    /** qos 发送 */
+    private IMessageReceiveQosHandler iMessageReceiveQosHandler;
+    /** qos 接收 */
+    private IMessageSenderQosHandler iMessageSenderQosHandler;
+
+    /** 配置属性 */
+    private NettyProperties nettyProperties;
     /**
      * 配置信息
      */
     @Getter
     private Map<String, Object> properties;
 
+    public void setBizRequestAdapterList(List<BizRequestAdapter<?>> requestAdapterList) {
+        if (CollUtil.isNotEmpty(requestAdapterList)) {
+
+            this.bizRequestAdapterList = CollUtil.sort(requestAdapterList, requestAdapterList.get(0));
+        } else {
+            this.bizRequestAdapterList = requestAdapterList;
+        }
+
+    }
+
+    public void setNettyProperties(NettyProperties nettyProperties) {
+        this.nettyProperties = nettyProperties;
+        setProperties(nettyProperties.getProperties());
+    }
 
     /**
      * 获取配置值
@@ -100,9 +123,19 @@ public class NettyConfiguration {
     }
 
     public void addObjectWrap(ObjectWrap objectWrap) {
-        if (null != objectWrap) {
+        if (null == objectWrapList) {
             this.objectWrapList = new ArrayList<>();
         }
         this.objectWrapList.add(objectWrap);
+    }
+
+    public void addAdapter(BizRequestAdapter<?> bizRequestAdapter) {
+
+        if (null == bizRequestAdapterList) {
+            bizRequestAdapterList = new ArrayList<>();
+        }
+        // 新增每次都会重新排序, 不会对影响性能
+        bizRequestAdapterList.add(bizRequestAdapter);
+        CollUtil.sort(bizRequestAdapterList, bizRequestAdapter);
     }
 }

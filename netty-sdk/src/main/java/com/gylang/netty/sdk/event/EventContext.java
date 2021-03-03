@@ -17,15 +17,14 @@ import java.util.Map;
  * @version v0.0.1
  */
 public class EventContext {
+
     /** 事件监听列表 */
-    private Map<String, List<MessageEventListener<?>>> notifyMap;
-    /** 消息类型 */
-    Map<Class<?>, Class<?>> messageType;
+    private final Map<String, List<MessageEventListener<?>>> eventListenerMap;
+
 
 
     public EventContext() {
-        this.messageType = new HashMap<>();
-        this.notifyMap = new HashMap<>();
+        this.eventListenerMap = new HashMap<>();
     }
 
     /**
@@ -42,11 +41,9 @@ public class EventContext {
                 if (null != annotation) {
                     String[] value = annotation.value();
                     for (String msgType : value) {
-                        List<MessageEventListener<?>> messageEventListenerList = notifyMap.computeIfAbsent(msgType, k -> new ArrayList<>());
+                        List<MessageEventListener<?>> messageEventListenerList = eventListenerMap.computeIfAbsent(msgType, k -> new ArrayList<>());
                         messageEventListenerList.add(receive);
                     }
-                    // 判断入消息入参
-                    messageType.put(receive.getClass(), method.getParameterTypes()[1]);
                 }
             }
         }
@@ -62,14 +59,11 @@ public class EventContext {
      */
     public void sendMsg(String key, Object msg) {
 
-        List<MessageEventListener<?>> messageNotifies = notifyMap.get(key);
+        List<MessageEventListener<?>> messageNotifies = eventListenerMap.get(key);
         if (null != messageNotifies) {
             for (MessageEventListener<?> messageEventListener : messageNotifies) {
 
-                Class<?> msgType = messageType.get(messageEventListener.getClass());
-                if (msgType.isInstance(msg)) {
-                    ((MessageEventListener<Object>) messageEventListener).onEvent(key, msg);
-                }
+                ((MessageEventListener<Object>) messageEventListener).onEvent(key, msg);
             }
         }
     }

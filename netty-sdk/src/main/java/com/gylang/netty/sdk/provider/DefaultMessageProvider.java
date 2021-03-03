@@ -1,15 +1,19 @@
 package com.gylang.netty.sdk.provider;
 
 import com.gylang.netty.sdk.config.NettyConfiguration;
+import com.gylang.netty.sdk.constant.EventTypeConst;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
 import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.event.EventProvider;
+import com.gylang.netty.sdk.handler.qos.IMessageSenderQosHandler;
 import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
 import com.gylang.netty.sdk.repo.IMSessionRepository;
 import com.gylang.netty.sdk.util.MsgIdUtil;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 
+import java.util.Objects;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
@@ -27,10 +31,14 @@ public class DefaultMessageProvider implements MessageProvider {
     /** 线程池 */
     private ThreadPoolExecutor executor;
 
+    private IMessageSenderQosHandler iMessageSenderQosHandler;
+
+    private EventProvider eventProvider;
+
+    private String host = null;
 
     @Override
-    public void sendMsg(IMSession me, String target, MessageWrap message) {
-
+    public void sendMsg(IMSession me, Long target, MessageWrap message) {
 
         sendMsgCallBack(me, target, message, null);
     }
@@ -42,7 +50,7 @@ public class DefaultMessageProvider implements MessageProvider {
     }
 
     @Override
-    public void sendMsgCallBack(IMSession me, String target, MessageWrap message, ChannelFutureListener listener) {
+    public void sendMsgCallBack(IMSession me, Long target, MessageWrap message, ChannelFutureListener listener) {
         IMSession imSession = sessionRepository.find(target);
         sendMsgCallBack(me, imSession, message, listener);
     }
@@ -53,14 +61,29 @@ public class DefaultMessageProvider implements MessageProvider {
             return;
         }
         message.setSender(me.getAccount());
-        if (message.getReceive() <= 0) {
-            message.setReceive(target.getAccount());
+        if (message.getTargetId() <= 0) {
+            message.setTargetId(target.getAccount());
         }
+        // 发送策略 如果本地发送失败（主要是跨服和用户离线）， 可以通过其他方式发送，桥接，mq
+
+        if (!Objects.equals(host, target.getServerIp())) {
+            // todo 跨服通信 1. 直连桥接 2. mq订阅发送
+            eventProvider.sendEvent(EventTypeConst.CROSS_SERVER_PUSH, message);
+            return;
+        }
+
+        // 本地发送
         message.setMsgId(MsgIdUtil.increase(message.getType(), message.getReceive()));
         ChannelFuture cf = target.getSession().writeAndFlush(message);
+        // 应用层确保消息可达
+        if (message.isQos()) {
+            iMessageSenderQosHandler.handle(message, target);
+        }
         if (null != listener) {
             cf.addListener(listener);
         }
+
+
     }
 
 
@@ -104,5 +127,8 @@ public class DefaultMessageProvider implements MessageProvider {
         this.sessionRepository = configuration.getSessionRepository();
         this.groupSessionRepository = configuration.getGroupSessionRepository();
         this.executor = configuration.getPoolExecutor();
+        this.iMessageSenderQosHandler = configuration.getIMessageSenderQosHandler();
+        this.eventProvider = configuration.getEventProvider();
+        this.host = configuration.getProperties("serverId");
     }
 }

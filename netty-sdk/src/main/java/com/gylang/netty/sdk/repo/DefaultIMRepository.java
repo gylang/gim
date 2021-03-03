@@ -16,20 +16,20 @@ import java.util.concurrent.ConcurrentHashMap;
 @IMRepository
 public class DefaultIMRepository implements IMSessionRepository {
 
-    private Map<String, IMSession> repository = new ConcurrentHashMap<>();
+    private Map<Long, IMSession> repository = new ConcurrentHashMap<>();
 
     @Override
-    public IMSession find(String s) {
+    public IMSession find(Long s) {
         return repository.get(s);
     }
 
     @Override
-    public List<IMSession> findByIds(Collection<String> strings) {
+    public List<IMSession> findByIds(Collection<Long> strings) {
         if (null == strings) {
             throw new IllegalArgumentException("keys is not empty");
         }
         List<IMSession> list = new ArrayList<>();
-        for (String string : strings) {
+        for (Long string : strings) {
             IMSession session = repository.get(string);
             if (null != session) {
                 list.add(session);
@@ -44,27 +44,27 @@ public class DefaultIMRepository implements IMSessionRepository {
     }
 
     @Override
-    public Set<String> findAllKey() {
+    public Set<Long> findAllKey() {
         return repository.keySet();
     }
 
     @Override
-    public IMSession findByKey(String s) {
+    public IMSession findByKey(Long s) {
         return repository.get(s);
     }
 
     @Override
-    public IMSession popByKey(String s) {
+    public IMSession popByKey(Long s) {
         return repository.remove(s);
     }
 
     @Override
-    public IMSession pop(String s) {
+    public IMSession pop(Long s) {
         return repository.remove(s);
     }
 
     @Override
-    public IMSession add(String s, IMSession session) {
+    public IMSession add(Long s, IMSession session) {
         return repository.put(s, session);
     }
 }

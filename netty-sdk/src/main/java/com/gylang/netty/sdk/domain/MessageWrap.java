@@ -34,10 +34,15 @@ public class MessageWrap implements Serializable {
     private long receive;
     /** 接收者类型 */
     private String receiverType;
+
+    /** 接收会话的用户id */
+    private long targetId;
     /** 消息id */
     private String msgId;
     /** 重试次数 */
     private transient int retryNum;
+
     /** 是否使用质量服务, ack */
     private boolean qos;
+
 }

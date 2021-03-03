@@ -20,7 +20,7 @@ public interface MessageProvider extends Initializer {
      * @param target  发送目标
      * @param message 发送消息
      */
-    void sendMsg(IMSession me, String target, MessageWrap message);
+    void sendMsg(IMSession me, Long target, MessageWrap message);
 
     /**
      * 发送消息 异步
@@ -29,7 +29,7 @@ public interface MessageProvider extends Initializer {
      * @param target  发送目标
      * @param message 发送消息
      */
-    void sendMsgCallBack(IMSession me, String target, MessageWrap message, ChannelFutureListener listener);
+    void sendMsgCallBack(IMSession me, Long target, MessageWrap message, ChannelFutureListener listener);
 
     /**
      * 发送消息

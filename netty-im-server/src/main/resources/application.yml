@@ -1,1 +1,8 @@
-im:
+logging:
+  level:
+    root: debug
+
+gylang:
+  netty:
+    properties:
+      serverId: 127.0.0.1

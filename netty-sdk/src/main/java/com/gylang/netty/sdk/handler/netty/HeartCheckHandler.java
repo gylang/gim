@@ -2,7 +2,7 @@ package com.gylang.netty.sdk.handler.netty;
 
 import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.constant.NettyConfigEnum;
-import com.gylang.netty.sdk.constant.NettyNotifyConst;
+import com.gylang.netty.sdk.constant.EventTypeConst;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.event.EventProvider;
 import io.netty.channel.ChannelHandler;
@@ -52,16 +52,16 @@ public class HeartCheckHandler extends ChannelInboundHandlerAdapter {
 
             switch (event.state()) {
                 case READER_IDLE:
-                    eventProvider.sendEvent(NettyNotifyConst.READER_IDLE, ctx);
+                    eventProvider.sendEvent(EventTypeConst.READER_IDLE, ctx);
                     eventType = "读空闲";
                     break;
                 case WRITER_IDLE:
-                    eventProvider.sendEvent(NettyNotifyConst.WRITER_IDLE, ctx);
+                    eventProvider.sendEvent(EventTypeConst.WRITER_IDLE, ctx);
                     eventType = "写空闲";
                     break;
                 case ALL_IDLE:
                     eventType = "读写空闲";
-                    eventProvider.sendEvent(NettyNotifyConst.ALL_IDLE, ctx);
+                    eventProvider.sendEvent(EventTypeConst.ALL_IDLE, ctx);
 
                     break;
                 default:
@@ -74,7 +74,7 @@ public class HeartCheckHandler extends ChannelInboundHandlerAdapter {
                     // 连续超过N次未收到client的ping消息，那么关闭该通道，等待client重连
                     ctx.channel().close();
                     // 一分钟为重连 断开连接
-                    eventProvider.sendAsyncEvent(NettyNotifyConst.OVER_TIME_CLOSE, new IMSession(ctx.channel()));
+                    eventProvider.sendAsyncEvent(EventTypeConst.OVER_TIME_CLOSE, new IMSession(ctx.channel()));
                 } else {
                     // 失败计数器加1
                     unRecPingTimes++;

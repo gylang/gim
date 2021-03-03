@@ -2,6 +2,7 @@ package com.gylang.spring.netty;
 
 import com.gylang.netty.sdk.IMServer;
 import com.gylang.netty.sdk.config.NettyConfiguration;
+import com.gylang.netty.sdk.config.NettyProperties;
 import com.gylang.netty.sdk.config.SimpleNettyConfigurationInitializer;
 import com.gylang.netty.sdk.conveter.DataConverter;
 import com.gylang.netty.sdk.event.EventContext;
@@ -9,6 +10,8 @@ import com.gylang.netty.sdk.event.EventProvider;
 import com.gylang.netty.sdk.event.message.MessageEventListener;
 import com.gylang.netty.sdk.handler.BizRequestAdapter;
 import com.gylang.netty.sdk.handler.DispatchAdapterHandler;
+import com.gylang.netty.sdk.handler.qos.IMessageReceiveQosHandler;
+import com.gylang.netty.sdk.handler.qos.IMessageSenderQosHandler;
 import com.gylang.netty.sdk.initializer.CustomInitializer;
 import com.gylang.netty.sdk.intercept.NettyIntercept;
 import com.gylang.netty.sdk.provider.MessageProvider;
@@ -18,7 +21,6 @@ import com.gylang.netty.sdk.repo.NettyUserInfoFillHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.Resource;
@@ -76,8 +78,13 @@ public class ServerStartConfiguration implements InitializingBean {
     @Autowired(required = false)
     private List<NettyIntercept> nettyInterceptList;
     @Resource
+    private IMessageSenderQosHandler iMessageSenderQosHandler;
+    @Resource
+    private IMessageReceiveQosHandler iMessageReceiveQosHandler;
+    @Resource
     private NettyConfiguration nettyConfiguration;
-
+    @Resource
+    private NettyProperties nettyProperties;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -95,6 +102,9 @@ public class ServerStartConfiguration implements InitializingBean {
         nettyConfiguration.setPoolExecutor(poolExecutor);
         nettyConfiguration.setNettyUserInfoFillHandler(nettyUserInfoFillHandler);
         nettyConfiguration.setNettyInterceptList(nettyInterceptList);
+        nettyConfiguration.setIMessageReceiveQosHandler(iMessageReceiveQosHandler);
+        nettyConfiguration.setIMessageSenderQosHandler(iMessageSenderQosHandler);
+        nettyConfiguration.setNettyProperties(nettyProperties);
         new SimpleNettyConfigurationInitializer().initConfig(nettyConfiguration);
 
         // 启动服务

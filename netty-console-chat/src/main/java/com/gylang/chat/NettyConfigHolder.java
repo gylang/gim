@@ -32,13 +32,16 @@ import java.util.List;
  * @version v0.0.1
  */
 @Slf4j
-public class TestStartConfig {
+public class NettyConfigHolder {
 
+    private static NettyConfiguration nettyConfiguration = new NettyConfiguration();
 
+    public static NettyConfiguration getInstance() {
+        return nettyConfiguration;
+    }
 
+    public static void init() {
 
-    public NettyConfiguration init() {
-        NettyConfiguration nettyConfiguration = new NettyConfiguration();
         nettyConfiguration.setServerChannelInitializer(new WebJsonInitializer());
         nettyConfiguration.setEventProvider(new DefaultEventProvider());
         nettyConfiguration.setEventContext(new EventContext());
@@ -55,6 +58,5 @@ public class TestStartConfig {
         nettyConfiguration.setNettyInterceptList(new ArrayList<>());
 
 
-        return nettyConfiguration;
     }
 }

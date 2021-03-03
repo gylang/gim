@@ -23,16 +23,27 @@ public class JsonClient {
         MyWebSocketClient webSocketClient = new MyWebSocketClient(new URI("ws://localhost:46000/ws"));
         webSocketClient.connectBlocking();
         MessageWrap messageWrap = new MessageWrap();
-        messageWrap.setKey("login");
+        messageWrap.setCmd("login");
         messageWrap.setContent(name);
         webSocketClient.send(JSON.toJSONString(messageWrap));
         new Thread(() -> {
             while (true) {
-                if (true) {
+                if (webSocketClient.isOpen()) {
                     try {
                         TimeUnit.SECONDS.sleep(3);
-                        webSocketClient.sendPing();
+                        try {
+                            webSocketClient.sendPing();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         System.out.println("发送heart");
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        System.out.println("尝试重连");
+                        webSocketClient.reconnectBlocking();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -41,11 +52,16 @@ public class JsonClient {
         }, "心跳").start();
 
         while (true) {
-            if (true) {
+            if (webSocketClient.isOpen()) {
 
                 messageWrap.setContent(UUID.fastUUID().toString());
-                messageWrap.setKey("chat");
-                webSocketClient.send(JSON.toJSONString(messageWrap));
+                messageWrap.setCmd("chat");
+                try {
+                    webSocketClient.send(JSON.toJSONString(messageWrap));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                System.out.println("模拟消息");
                 TimeUnit.SECONDS.sleep(5L);
             }
         }

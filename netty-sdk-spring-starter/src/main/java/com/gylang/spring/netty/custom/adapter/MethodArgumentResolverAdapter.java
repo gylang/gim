@@ -1,5 +1,6 @@
 package com.gylang.spring.netty.custom.adapter;
 
+import com.gylang.netty.sdk.common.NlllSuccess;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.spring.netty.custom.method.MethodArgumentValue;
@@ -15,7 +16,7 @@ import java.util.List;
  * @version v0.0.1
  */
 @Component
-public class MethodArgumentResolverAdapter{
+public class MethodArgumentResolverAdapter {
     /** 方法参数解析器 */
     @Autowired(required = false)
     private List<MethodArgumentResolverHandler> methodArgumentResolverHandlerList;
@@ -37,7 +38,7 @@ public class MethodArgumentResolverAdapter{
         }
         //调用业务方法
         Object processResult = methodArgumentValue.invoke();
-
+        processResult = null != processResult ? processResult : NlllSuccess.getInstance();
         // 执行后置处理器
         if (null == methodHandlerPostProcessList) {
             return processResult;

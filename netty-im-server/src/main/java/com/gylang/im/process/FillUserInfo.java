@@ -25,7 +25,7 @@ public class FillUserInfo implements NettyUserInfoFillHandler {
     @Override
     public void fill(IMSession session) {
 
-        IMSession imSession = repository.find(session.getNid());
+        IMSession imSession = repository.find(session.getAccount());
         if (null != imSession) {
         Channel channel = session.getSession();
         BeanUtils.copyProperties(imSession, session);

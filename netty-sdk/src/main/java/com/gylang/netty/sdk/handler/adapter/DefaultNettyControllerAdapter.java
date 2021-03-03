@@ -3,7 +3,7 @@ package com.gylang.netty.sdk.handler.adapter;
 import cn.hutool.core.collection.CollUtil;
 import com.gylang.netty.sdk.annotation.AdapterType;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.common.NullObject;
+import com.gylang.netty.sdk.common.NlllSuccess;
 import com.gylang.netty.sdk.common.ObjectWrap;
 import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.conveter.DataConverter;
@@ -28,7 +28,6 @@ import java.util.Map;
  * @version v0.0.1
  * @see com.gylang.netty.sdk.handler.NettyController
  */
-@AdapterType(order = 100)
 public class DefaultNettyControllerAdapter implements BizRequestAdapter<NettyController<?>> {
 
     private static final String METHOD_NAME = "process";
@@ -49,7 +48,7 @@ public class DefaultNettyControllerAdapter implements BizRequestAdapter<NettyCon
             }
 
             Object result = ((NettyController<Object>) nettyController).process(me, dataConverter.converterTo(paramType, message));
-            return null == result ? NullObject.getInstance() : result;
+            return null == result ? NlllSuccess.getInstance() : result;
         }
         return null;
     }
@@ -80,6 +79,11 @@ public class DefaultNettyControllerAdapter implements BizRequestAdapter<NettyCon
                 }
             }
         }
+    }
+
+    @Override
+    public Integer order() {
+        return null;
     }
 
     @Override

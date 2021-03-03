@@ -4,6 +4,8 @@ import cn.hutool.core.collection.CollUtil;
 import com.gylang.netty.sdk.event.EventContext;
 import com.gylang.netty.sdk.event.message.MessageEventListener;
 import com.gylang.netty.sdk.handler.BizRequestAdapter;
+import com.gylang.netty.sdk.handler.qos.IMessageReceiveQosHandler;
+import com.gylang.netty.sdk.handler.qos.IMessageSenderQosHandler;
 import com.gylang.netty.sdk.initializer.CustomInitializer;
 
 /**
@@ -37,5 +39,12 @@ public class SimpleNettyConfigurationInitializer {
         serverChannelInitializer.init(configuration);
         // 消息分发
         configuration.getDispatchAdapterHandler().init(configuration);
+        // qos
+        IMessageReceiveQosHandler iMessageReceiveQosHandler = configuration.getIMessageReceiveQosHandler();
+        iMessageReceiveQosHandler.init(configuration);
+        iMessageReceiveQosHandler.startup();
+        IMessageSenderQosHandler iMessageSenderQosHandler = configuration.getIMessageSenderQosHandler();
+        iMessageSenderQosHandler.init(configuration);
+        iMessageSenderQosHandler.startup();
     }
 }

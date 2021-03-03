@@ -21,24 +21,23 @@
  */
 package com.gylang.netty.sdk.handler;
 
-import cn.hutool.core.collection.CollUtil;
 import com.gylang.netty.sdk.common.Initializer;
 import com.gylang.netty.sdk.common.ObjectWrap;
-import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import io.netty.channel.ChannelHandlerContext;
 
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * netty请求适配器, 规约用于系统内部适配实现, 非业务功能
  */
 
 
-public interface IRequestAdapter<T> extends Initializer {
+public interface IRequestAdapter<T> extends Initializer , Comparator<IRequestAdapter<?>> {
+
+    int DEFAULT_ORDER = Integer.MAX_VALUE >> 1;
 
     /**
      * 处理收到客户端从长链接发送的数据
@@ -59,11 +58,19 @@ public interface IRequestAdapter<T> extends Initializer {
 
 
 
-    default List<T> getTargetList(List<ObjectWrap> processList) {
-        if (CollUtil.isEmpty(processList)) {
-            return new ArrayList<>();
-        }
 
-        return processList.stream().map(o -> (T)o.getInstance()).collect(Collectors.toList());
+    /**
+     * 排序权重 小在前 大在后
+     * @return 排序权重
+     */
+    Integer order();
+
+    @Override
+    default int compare(IRequestAdapter<?> o1, IRequestAdapter<?> o2) {
+        int order1 = null == o1.order() ? DEFAULT_ORDER : o1.order();
+        int order2 = null == o2.order() ? DEFAULT_ORDER : o2.order();
+        return Integer.compare(order1, order2);
+
     }
+
 }

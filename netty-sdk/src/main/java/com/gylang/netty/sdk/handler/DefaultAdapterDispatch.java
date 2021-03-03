@@ -1,5 +1,7 @@
 package com.gylang.netty.sdk.handler;
 
+import cn.hutool.core.collection.CollUtil;
+import com.gylang.netty.sdk.annotation.AdapterType;
 import com.gylang.netty.sdk.intercept.NettyIntercept;
 import com.gylang.netty.sdk.common.ObjectWrap;
 import com.gylang.netty.sdk.config.NettyConfiguration;
@@ -20,6 +22,7 @@ import java.util.List;
  * @version v0.0.1
  * @see IRequestAdapter
  */
+@AdapterType(order = 1)
 public class DefaultAdapterDispatch implements DispatchAdapterHandler {
 
     private List<BizRequestAdapter<?>> requestAdapterList = new ArrayList<>();
@@ -43,10 +46,16 @@ public class DefaultAdapterDispatch implements DispatchAdapterHandler {
         return NettyIntercept.after(nettyInterceptList, ctx, me, message, object);
     }
 
+
     @Override
     public void register(List<ObjectWrap> processList) {
 
         throw new RuntimeException("不支持当前方式注册");
+    }
+
+    @Override
+    public Integer order() {
+        return null;
     }
 
     @Override
