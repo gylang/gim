@@ -42,7 +42,7 @@ public class NettyConfiguration {
     private CustomInitializer<?> serverChannelInitializer;
     /** 事件监听 */
     private EventProvider eventProvider;
-    /** 时间上下文 */
+    /** 事件上下文 */
     private EventContext eventContext;
     /** 数据类型转化 */
     private DataConverter dataConverter;

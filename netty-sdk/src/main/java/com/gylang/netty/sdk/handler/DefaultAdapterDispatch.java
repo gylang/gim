@@ -36,7 +36,11 @@ public class DefaultAdapterDispatch implements DispatchAdapterHandler {
             nettyUserInfoFillHandler.fill(me);
         }
         Object object = null;
-        NettyIntercept.before(nettyInterceptList, ctx, me, message);
+        boolean interecpt = NettyIntercept.before(nettyInterceptList, ctx, me, message);
+        if (interecpt) {
+            // 消息被拦截
+            return null;
+        }
         for (IRequestAdapter<?> adapter : requestAdapterList) {
             object = adapter.process(ctx, me, message);
             if (null != object) {

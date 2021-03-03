@@ -1,11 +1,13 @@
 package com.gylang.spring.netty.custom.register;
 
+import cn.hutool.core.collection.CollUtil;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.common.ObjectWrap;
 import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.handler.NettyController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
@@ -25,13 +27,16 @@ public class NettyControllerRegister implements InitializingBean {
     @Resource
     private NettyConfiguration nettyConfiguration;
 
-    @Resource
+    @Autowired(required = false)
     private List<NettyController> nettyControllerList;
     @Override
     public void afterPropertiesSet() throws Exception {
-        log.info("初始化方法处理器");
+        log.info("加载 controller消息处理器");
 
         List<ObjectWrap> objectWrapList = new ArrayList<>();
+        if (CollUtil.isEmpty(nettyControllerList)) {
+            return;
+        }
         for (NettyController handler : nettyControllerList) {
 
             ObjectWrap objectWrap = new ObjectWrap();

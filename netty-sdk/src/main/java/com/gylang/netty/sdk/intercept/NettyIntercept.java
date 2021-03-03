@@ -28,8 +28,9 @@ public interface NettyIntercept {
      * @param ctx     上下文
      * @param me      当前会话
      * @param message 消息体
+     * @return true 拦截消息
      */
-    void doBefore(ChannelHandlerContext ctx, IMSession me, MessageWrap message);
+    boolean doBefore(ChannelHandlerContext ctx, IMSession me, MessageWrap message);
 
     /**
      * 请求后置拦截器
@@ -50,15 +51,17 @@ public interface NettyIntercept {
      * @param me            当前会话
      * @param message       消息体
      */
-    static void before(List<NettyIntercept> interceptList, ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
+    static boolean before(List<NettyIntercept> interceptList, ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
+        boolean intercept = false;
         if (CollUtil.isEmpty(interceptList)) {
-            return;
+            return intercept;
         }
         for (NettyIntercept nettyIntercept : interceptList) {
             if (nettyIntercept.support(ctx, me, message)) {
-                nettyIntercept.doBefore(ctx, me, message);
+                intercept = intercept || nettyIntercept.doBefore(ctx, me, message);
             }
         }
+        return intercept;
     }
 
     /**

@@ -47,7 +47,8 @@ public class DefaultNettyControllerAdapter implements BizRequestAdapter<NettyCon
                 return null;
             }
 
-            Object result = ((NettyController<Object>) nettyController).process(me, dataConverter.converterTo(paramType, message));
+            Object result = ((NettyController<Object>) nettyController)
+                    .process(me, dataConverter.converterTo(paramType, message));
             return null == result ? NlllSuccess.getInstance() : result;
         }
         return null;

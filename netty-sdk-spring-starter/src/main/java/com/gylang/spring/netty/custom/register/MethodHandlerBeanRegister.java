@@ -34,7 +34,7 @@ public class MethodHandlerBeanRegister implements InitializingBean {
     private MethodArgumentResolver methodArgumentResolver;
     @Override
     public void afterPropertiesSet() throws Exception {
-        log.info("初始化方法处理器");
+        log.info("加载 method 消息处理器");
         Map<String, Object> controllerMap = applicationContext.getBeansWithAnnotation(SpringNettyController.class);
         List<ObjectWrap> objectWrapList = new ArrayList<>();
         for (Object controller : controllerMap.values()) {
