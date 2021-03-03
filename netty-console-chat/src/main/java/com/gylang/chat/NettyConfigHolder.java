@@ -13,6 +13,8 @@ import com.gylang.netty.sdk.event.message.MessageEventListener;
 import com.gylang.netty.sdk.handler.*;
 import com.gylang.netty.sdk.handler.adapter.DefaultNettyControllerAdapter;
 import com.gylang.netty.sdk.handler.adapter.DefaultRequestHandlerAdapter;
+import com.gylang.netty.sdk.handler.qos.DefaultIMessageReceiveQosHandler;
+import com.gylang.netty.sdk.handler.qos.DefaultIMessageSendQosHandler;
 import com.gylang.netty.sdk.initializer.WebJsonInitializer;
 import com.gylang.netty.sdk.provider.DefaultMessageProvider;
 import com.gylang.netty.sdk.provider.MessageProvider;
@@ -56,7 +58,8 @@ public class NettyConfigHolder {
         nettyConfiguration.setBizRequestAdapterList(bizRequestAdapterList);
         nettyConfiguration.setDispatchAdapterHandler(new DefaultAdapterDispatch());
         nettyConfiguration.setNettyInterceptList(new ArrayList<>());
-
+        nettyConfiguration.setIMessageReceiveQosHandler(new DefaultIMessageReceiveQosHandler());
+        nettyConfiguration.setIMessageSenderQosHandler(new DefaultIMessageSendQosHandler());
 
     }
 }

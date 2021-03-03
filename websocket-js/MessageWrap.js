@@ -1,7 +1,7 @@
-function sendMsg(key, content, type, ws) {
+function sendMsg(cmd, content, type, ws) {
 
     let message = {
-        key,
+        cmd,
         type: "json",
         content,
         receive: "default",

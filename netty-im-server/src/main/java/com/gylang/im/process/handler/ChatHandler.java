@@ -1,6 +1,5 @@
 package com.gylang.im.process.handler;
 
-import com.gylang.im.process.FillUserInfo;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
@@ -23,8 +22,6 @@ public class ChatHandler implements IMRequestHandler {
 
     @Resource
     private MessageProvider messageProvider;
-    @Resource
-    private FillUserInfo fillUserInfo;
 
     @Override
     public Object process(IMSession me, MessageWrap message) {
