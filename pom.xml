@@ -16,6 +16,8 @@
         <module>netty-client-java-sdk</module>
         <module>netty-console-chat</module>
         <module>netty-im-server</module>
+        <module>im-server</module>
+        <module>gylang-cache-manager</module>
 
     </modules>
     <distributionManagement>

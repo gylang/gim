@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @IMGroupRepository
 public class DefaultGroupRepository implements IMGroupSessionRepository {
 
-    Map<String, AbstractSessionGroup> groupMap = new ConcurrentHashMap<>();
+    Map<Long, AbstractSessionGroup> groupMap = new ConcurrentHashMap<>();
 
     @Override
     public AbstractSessionGroup find(AbstractSessionGroup sessionGroup) {
@@ -28,12 +28,12 @@ public class DefaultGroupRepository implements IMGroupSessionRepository {
     }
 
     @Override
-    public List<AbstractSessionGroup> findByIds(Collection<String> strings) {
+    public List<AbstractSessionGroup> findByIds(Collection<Long> strings) {
         if (null == strings) {
             throw new IllegalArgumentException("keys is not empty");
         }
         List<AbstractSessionGroup> list = new ArrayList<>();
-        for (String string : strings) {
+        for (Long string : strings) {
             AbstractSessionGroup abstractSessionGroup = groupMap.get(string);
             if (null != abstractSessionGroup) {
                 list.add(abstractSessionGroup);
@@ -48,17 +48,17 @@ public class DefaultGroupRepository implements IMGroupSessionRepository {
     }
 
     @Override
-    public Set<String> findAllKey() {
+    public Set<Long> findAllKey() {
         return groupMap.keySet();
     }
 
     @Override
-    public AbstractSessionGroup findByKey(String s) {
+    public AbstractSessionGroup findByKey(Long s) {
         return groupMap.get(s);
     }
 
     @Override
-    public AbstractSessionGroup popByKey(String s) {
+    public AbstractSessionGroup popByKey(Long s) {
         return groupMap.remove(s);
     }
 
@@ -68,7 +68,7 @@ public class DefaultGroupRepository implements IMGroupSessionRepository {
     }
 
     @Override
-    public AbstractSessionGroup add(String s, AbstractSessionGroup group) {
+    public AbstractSessionGroup add(Long s, AbstractSessionGroup group) {
         return groupMap.put(s, group);
     }
 }

@@ -6,7 +6,7 @@ import com.gylang.netty.sdk.config.NettyConfiguration;
  * @author gylang
  * data 2021/3/2
  */
-public interface Initializer {
+public interface AfterConfigInitialize {
     /**
      * 初始化方法
      *

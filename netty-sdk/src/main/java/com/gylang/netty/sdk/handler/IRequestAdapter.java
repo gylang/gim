@@ -21,7 +21,7 @@
  */
 package com.gylang.netty.sdk.handler;
 
-import com.gylang.netty.sdk.common.Initializer;
+import com.gylang.netty.sdk.common.AfterConfigInitialize;
 import com.gylang.netty.sdk.common.ObjectWrap;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
@@ -35,7 +35,7 @@ import java.util.List;
  */
 
 
-public interface IRequestAdapter<T> extends Initializer , Comparator<IRequestAdapter<?>> {
+public interface IRequestAdapter<T> extends AfterConfigInitialize, Comparator<IRequestAdapter<?>> {
 
     int DEFAULT_ORDER = Integer.MAX_VALUE >> 1;
 

@@ -37,7 +37,7 @@ public class TouristLoginHandler implements NettyController<Long> {
             MessageWrap messageWrap = new MessageWrap();
             messageWrap.setSender(me.getAccount());
             messageWrap.setContent(requestBody + "加入群聊组");
-            messageProvider.sendGroup(me, "default", messageWrap);
+            messageProvider.sendGroup(me, 111L, messageWrap);
 
         return messageWrap;
         }
@@ -48,7 +48,7 @@ public class TouristLoginHandler implements NettyController<Long> {
 
 
         AbstractSessionGroup defaultGroup;
-        defaultGroup = groupRepository.findByKey("default");
+        defaultGroup = groupRepository.findByKey(111L);
         if (null != defaultGroup) {
             return defaultGroup;
         }
@@ -56,10 +56,10 @@ public class TouristLoginHandler implements NettyController<Long> {
         try {
             keyLock.lock(key);
             // 前面的线程可以能已经创建完聊天组, 所以需要再次判断
-            defaultGroup = groupRepository.findByKey("default");
+            defaultGroup = groupRepository.findByKey(111L);
             if (null == defaultGroup) {
                 defaultGroup = new AbstractSessionGroup("default", me.getAccount(), 1000);
-                groupRepository.add("default", defaultGroup);
+                groupRepository.add(111L, defaultGroup);
             }
         } finally {
             keyLock.unlock(key);

@@ -3,6 +3,7 @@ package com.gylang.spring.netty.custom.adapter;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gylang.netty.sdk.annotation.NettyMapping;
+import com.gylang.netty.sdk.common.InokeFinished;
 import com.gylang.netty.sdk.common.MethodWrap;
 import com.gylang.netty.sdk.common.ObjectWrap;
 import com.gylang.netty.sdk.config.NettyConfiguration;
@@ -45,7 +46,8 @@ public class MethodHandlerAdapter implements BizRequestAdapter<ControllerMethodM
         }
         MethodArgumentValue methodArgumentValue = new MethodArgumentValue();
         methodArgumentValue.init(controllerMethodMeta);
-        return methodArgumentResolverAdapter.handler(ctx, me, message, methodArgumentValue);
+        Object result = methodArgumentResolverAdapter.handler(ctx, me, message, methodArgumentValue);
+        return InokeFinished.finish(result);
     }
 
 

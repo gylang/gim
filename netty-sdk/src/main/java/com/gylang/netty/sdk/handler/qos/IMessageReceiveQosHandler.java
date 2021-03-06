@@ -1,6 +1,6 @@
 package com.gylang.netty.sdk.handler.qos;
 
-import com.gylang.netty.sdk.common.Initializer;
+import com.gylang.netty.sdk.common.AfterConfigInitialize;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 
@@ -12,7 +12,7 @@ import com.gylang.netty.sdk.domain.model.IMSession;
  * @author gylang
  * data 2021/2/11
  */
-public interface IMessageReceiveQosHandler extends Initializer {
+public interface IMessageReceiveQosHandler extends AfterConfigInitialize {
 
     String CHECK_INTER_VAL_KEY = "IMessageReceiveQosHandler.checkInterval";
 

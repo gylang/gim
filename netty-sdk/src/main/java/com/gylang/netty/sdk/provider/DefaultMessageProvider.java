@@ -57,10 +57,11 @@ public class DefaultMessageProvider implements MessageProvider {
 
     @Override
     public void sendMsgCallBack(IMSession me, IMSession target, MessageWrap message, ChannelFutureListener listener) {
+        // 接收者不存在
         if (null == target || null == target.getSession()) {
             return;
         }
-        message.setSender(me.getAccount());
+        message.setSender(null != me ? me.getAccount() : null);
         if (message.getTargetId() <= 0) {
             message.setTargetId(target.getAccount());
         }
@@ -74,11 +75,25 @@ public class DefaultMessageProvider implements MessageProvider {
 
         // 本地发送
         message.setMsgId(MsgIdUtil.increase(message.getType(), message.getReceive()));
-        ChannelFuture cf = target.getSession().writeAndFlush(message);
-        // 应用层确保消息可达
-        if (message.isQos()) {
-            iMessageSenderQosHandler.handle(message, target);
+        // 持久化消息
+        if (message.isPersistenceEvent()) {
+            eventProvider.sendEvent(EventTypeConst.PERSISTENCE_EVENT, message);
         }
+        ChannelFuture cf = target.getSession().writeAndFlush(message);
+
+        cf.addListener((ChannelFutureListener) channelFuture -> {
+            // 成功
+            if (channelFuture.isSuccess()) {
+                if (message.isQos()) {
+                    iMessageSenderQosHandler.handle(message, target);
+                }
+            } else {
+                // 应用层确保消息可达 发送离线消息事件
+                if (message.isOfflineMsgEvent()) {
+                    eventProvider.sendEvent(EventTypeConst.OFFLINE_MSG_EVENT, message);
+                }
+            }
+        });
         if (null != listener) {
             cf.addListener(listener);
         }
@@ -88,14 +103,14 @@ public class DefaultMessageProvider implements MessageProvider {
 
 
     @Override
-    public void sendGroup(IMSession me, String target, MessageWrap message) {
+    public void sendGroup(IMSession me, Long target, MessageWrap message) {
 
         AbstractSessionGroup sessionGroup = groupSessionRepository.findByKey(target);
         sendGroup(me, sessionGroup, message);
     }
 
     @Override
-    public void sendAsyncGroup(IMSession me, String target, MessageWrap message) {
+    public void sendAsyncGroup(IMSession me, Long target, MessageWrap message) {
         executor.execute(() -> sendGroup(me, target, message));
     }
 

@@ -141,7 +141,7 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
 
         if (log.isDebugEnabled()) {
 
-            log.debug("【QoS接收方】END 暂存处理线程正在运行中，当前长度" + receiveMessages.size() + ".");
+            log.debug("【QoS发送方】END 暂存处理线程正在运行中，当前长度" + receiveMessages.size() + ".");
         }
     }
 

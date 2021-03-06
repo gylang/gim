@@ -11,5 +11,26 @@ import java.util.Map;
 @Data
 public class NettyProperties {
 
+    /** 服务器ip */
+    private String serverIp;
+
+    /** 接收连接线程组 */
+    private Integer bossGroup;
+
+    /** 工作线程组 */
+    private Integer workerGroup;
+    /** 读空闲 */
+    private Long readerIdle;
+    /** 写空闲 */
+    private Long writeIdle;
+    /** 度写空闲 */
+    private Long allIdle;
+    /** 断开重连次数 */
+    private Integer lostConnectRetryNum;
+    /** 服务端口号 */
+    private Integer socketServerPort;
+
+
+
     private Map<String, Object> properties;
 }

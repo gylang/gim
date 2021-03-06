@@ -23,7 +23,7 @@ public class MessageWrap implements Serializable {
     /** 命令 */
     private String cmd;
     /** 发送者 */
-    private long sender;
+    private Long sender;
     /** 消息类型 */
     private byte type;
     /** 消息主体 */
@@ -44,5 +44,30 @@ public class MessageWrap implements Serializable {
 
     /** 是否使用质量服务, ack */
     private boolean qos;
+
+    /** 持久化消息事件 */
+    private transient boolean persistenceEvent;
+
+    /** 离线/失败消息事件发送 */
+    private transient boolean offlineMsgEvent = true;
+
+
+    public MessageWrap copyBasic() {
+
+        MessageWrap message = new MessageWrap();
+        message.setCmd(cmd);
+        message.setSender(sender);
+        message.setType(type);
+        message.setContent(content);
+        message.setCode(code);
+        message.setReceive(receive);
+        message.setReceiverType(receiverType);
+        message.setTargetId(targetId);
+        message.setQos(qos);
+        message.setPersistenceEvent(persistenceEvent);
+        message.setOfflineMsgEvent(offlineMsgEvent);
+        return message;
+
+    }
 
 }

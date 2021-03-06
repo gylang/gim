@@ -1,6 +1,6 @@
 package com.gylang.netty.sdk.event;
 
-import com.gylang.netty.sdk.common.Initializer;
+import com.gylang.netty.sdk.common.AfterConfigInitialize;
 
 /**
  * 事件发送器 对外只暴露发送方法
@@ -8,7 +8,7 @@ import com.gylang.netty.sdk.common.Initializer;
  * data 2020/11/8
  * @version v0.0.1
  */
-public interface EventProvider extends Initializer {
+public interface EventProvider extends AfterConfigInitialize {
     /**
      * 通知
      *

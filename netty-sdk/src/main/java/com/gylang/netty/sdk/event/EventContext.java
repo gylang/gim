@@ -1,5 +1,8 @@
 package com.gylang.netty.sdk.event;
 
+import cn.hutool.core.collection.CollUtil;
+import com.gylang.netty.sdk.common.AfterConfigInitialize;
+import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.event.message.MessageEvent;
 import com.gylang.netty.sdk.event.message.MessageEventListener;
 
@@ -16,11 +19,10 @@ import java.util.Map;
  * data 2020/11/7
  * @version v0.0.1
  */
-public class EventContext {
+public class EventContext implements AfterConfigInitialize {
 
     /** 事件监听列表 */
     private final Map<String, List<MessageEventListener<?>>> eventListenerMap;
-
 
 
     public EventContext() {
@@ -69,4 +71,14 @@ public class EventContext {
     }
 
 
+    @Override
+    public void init(NettyConfiguration configuration) {
+        if (CollUtil.isNotEmpty(configuration.getMessageEventListener())) {
+            for (MessageEventListener<?> messageEventListener : configuration.getMessageEventListener()) {
+                register(messageEventListener);
+            }
+
+
+        }
+    }
 }

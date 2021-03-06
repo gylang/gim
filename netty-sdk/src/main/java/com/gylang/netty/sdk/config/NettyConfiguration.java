@@ -1,5 +1,6 @@
 package com.gylang.netty.sdk.config;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.gylang.netty.sdk.common.ObjectWrap;
 import com.gylang.netty.sdk.constant.NettyConfigEnum;
@@ -21,6 +22,7 @@ import lombok.Data;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -91,7 +93,12 @@ public class NettyConfiguration {
 
     public void setNettyProperties(NettyProperties nettyProperties) {
         this.nettyProperties = nettyProperties;
-        setProperties(nettyProperties.getProperties());
+        Map<String, Object> property = new HashMap<>();
+        if (null != nettyProperties.getProperties()) {
+        property.putAll(nettyProperties.getProperties());
+        }
+        BeanUtil.beanToMap(nettyProperties, property, false, false);
+        setProperties(property);
     }
 
     /**

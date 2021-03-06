@@ -1,6 +1,6 @@
 package com.gylang.netty.sdk.provider;
 
-import com.gylang.netty.sdk.common.Initializer;
+import com.gylang.netty.sdk.common.AfterConfigInitialize;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
 import com.gylang.netty.sdk.domain.model.IMSession;
@@ -11,7 +11,7 @@ import io.netty.channel.ChannelFutureListener;
  * data 2020/11/12
  * @version v0.0.1
  */
-public interface MessageProvider extends Initializer {
+public interface MessageProvider extends AfterConfigInitialize {
 
     /**
      * 发送消息
@@ -56,7 +56,7 @@ public interface MessageProvider extends Initializer {
      * @param target  发送目标
      * @param message 发送消息
      */
-    void sendGroup(IMSession me, String target, MessageWrap message);
+    void sendGroup(IMSession me, Long target, MessageWrap message);
 
     /**
      * 群发消息 异步
@@ -65,7 +65,7 @@ public interface MessageProvider extends Initializer {
      * @param target  发送目标
      * @param message 发送消息
      */
-    void sendAsyncGroup(IMSession me, String target, MessageWrap message);
+    void sendAsyncGroup(IMSession me, Long target, MessageWrap message);
 
 
 

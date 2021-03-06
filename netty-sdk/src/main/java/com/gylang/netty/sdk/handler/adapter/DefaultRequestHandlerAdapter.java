@@ -1,9 +1,8 @@
 package com.gylang.netty.sdk.handler.adapter;
 
 import cn.hutool.core.collection.CollUtil;
-import com.gylang.netty.sdk.annotation.AdapterType;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.common.NlllSuccess;
+import com.gylang.netty.sdk.common.InokeFinished;
 import com.gylang.netty.sdk.common.ObjectWrap;
 import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.domain.MessageWrap;
@@ -39,7 +38,7 @@ public class DefaultRequestHandlerAdapter implements BizRequestAdapter<IMRequest
             return null;
         }
         Object result = requestHandler.process(me, message);
-        return null == result ? NlllSuccess.getInstance() : result;
+        return InokeFinished.finish(result);
     }
 
     @Override

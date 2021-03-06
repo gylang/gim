@@ -1,6 +1,6 @@
 package com.gylang.netty.sdk.handler.qos;
 
-import com.gylang.netty.sdk.common.NlllSuccess;
+import com.gylang.netty.sdk.common.InokeFinished;
 import com.gylang.netty.sdk.common.ObjectWrap;
 import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.constant.MessageType;
@@ -41,11 +41,11 @@ public class QosAdapterHandler implements BizRequestAdapter<MessageWrap> {
             } else if (MessageType.QOS_SEND_ACK == message.getType()) {
                 // 主发 保证可靠- 客户端ack
                 senderQosHandler.handle(message, me);
-                return NlllSuccess.getInstance();
+                return InokeFinished.getInstance();
             } else if (MessageType.QOS_RECEIVE_ACK == message.getType()) {
                 // 接收 保证可靠 - 服务端ack
                 receiveQosHandler.handle(message, me);
-                return NlllSuccess.getInstance();
+                return InokeFinished.getInstance();
             }
         }
         return null;

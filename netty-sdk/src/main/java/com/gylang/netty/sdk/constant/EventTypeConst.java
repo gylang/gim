@@ -33,4 +33,6 @@ public interface EventTypeConst {
 
     /** 跨服消息推送 */
     String CROSS_SERVER_PUSH = "CROSS_SERVER_PUSH";
+    /** 持久化事件 */
+    String PERSISTENCE_EVENT = "PERSISTENCE_EVENT";
 }

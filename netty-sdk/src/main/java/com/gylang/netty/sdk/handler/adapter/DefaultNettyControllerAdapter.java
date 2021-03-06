@@ -1,9 +1,8 @@
 package com.gylang.netty.sdk.handler.adapter;
 
 import cn.hutool.core.collection.CollUtil;
-import com.gylang.netty.sdk.annotation.AdapterType;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.common.NlllSuccess;
+import com.gylang.netty.sdk.common.InokeFinished;
 import com.gylang.netty.sdk.common.ObjectWrap;
 import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.conveter.DataConverter;
@@ -49,7 +48,7 @@ public class DefaultNettyControllerAdapter implements BizRequestAdapter<NettyCon
 
             Object result = ((NettyController<Object>) nettyController)
                     .process(me, dataConverter.converterTo(paramType, message));
-            return null == result ? NlllSuccess.getInstance() : result;
+            return InokeFinished.finish(result);
         }
         return null;
     }
