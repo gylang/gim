@@ -6,6 +6,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.websocketx.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author gylang
  * data 2020/11/17
  */
+@Slf4j
 public class WebJsonMessageDecoder extends SimpleChannelInboundHandler<Object> {
 
     private static final String URI = "ws://localhost:%d";
@@ -58,7 +60,9 @@ public class WebJsonMessageDecoder extends SimpleChannelInboundHandler<Object> {
         WebSocketServerHandshaker handShaker = wsFactory.newHandshaker(req);
 
         handShakerMap.put(ctx.channel().id().asLongText(), handShaker);
-
+        if (log.isDebugEnabled()) {
+            log.debug("[申请握手] : {}", ctx.channel().id());
+        }
         handShaker.handshake(ctx.channel(), req);
     }
 
@@ -123,6 +127,9 @@ public class WebJsonMessageDecoder extends SimpleChannelInboundHandler<Object> {
     private void handlerCloseWebSocketFrame(ChannelHandlerContext ctx, CloseWebSocketFrame frame) {
         WebSocketServerHandshaker handShaker = handShakerMap.get(ctx.channel().id().asLongText());
         handShaker.close(ctx.channel(), frame.retain());
+        if (log.isDebugEnabled()) {
+            log.debug("[申请关闭] : {}", ctx.channel().id());
+        }
         handShakerMap.remove(ctx.channel().id().asLongText());
     }
 

@@ -30,6 +30,9 @@ public class NettyProperties {
     /** 服务端口号 */
     private Integer socketServerPort;
 
+    /** 异常重发机制 */
+    private Integer reSendMsg;
+
 
 
     private Map<String, Object> properties;

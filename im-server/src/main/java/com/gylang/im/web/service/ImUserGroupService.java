@@ -1,0 +1,16 @@
+package com.gylang.im.web.service;
+
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.gylang.im.dao.entity.ImUserGroup;
+
+/**
+ * 群聊好友人员关系(ImUserGroup)表服务接口
+ *
+ * @author makejava
+ * @since 2021-03-03 21:58:55
+ */
+public interface ImUserGroupService extends IService<ImUserGroup> {
+
+
+    boolean checkIsYouGroup(Long account, Long targetId);
+}

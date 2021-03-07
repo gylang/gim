@@ -37,6 +37,7 @@ public class DefaultMessageProvider implements MessageProvider {
 
     private String host = null;
 
+
     @Override
     public void sendMsg(IMSession me, Long target, MessageWrap message) {
 
@@ -57,8 +58,14 @@ public class DefaultMessageProvider implements MessageProvider {
 
     @Override
     public void sendMsgCallBack(IMSession me, IMSession target, MessageWrap message, ChannelFutureListener listener) {
-        // 接收者不存在
+        // 接收者不存在/离线
         if (null == target || null == target.getSession()) {
+            if (message.isOfflineMsgEvent()) {
+                eventProvider.sendEvent(EventTypeConst.OFFLINE_MSG_EVENT, message);
+            }
+            if (message.isPersistenceEvent()) {
+                eventProvider.sendEvent(EventTypeConst.PERSISTENCE_EVENT, message);
+            }
             return;
         }
         message.setSender(null != me ? me.getAccount() : null);
@@ -74,7 +81,7 @@ public class DefaultMessageProvider implements MessageProvider {
         }
 
         // 本地发送
-        message.setMsgId(MsgIdUtil.increase(message.getType(), message.getReceive()));
+        message.setMsgId(MsgIdUtil.increase(message));
         // 持久化消息
         if (message.isPersistenceEvent()) {
             eventProvider.sendEvent(EventTypeConst.PERSISTENCE_EVENT, message);
@@ -82,17 +89,17 @@ public class DefaultMessageProvider implements MessageProvider {
         ChannelFuture cf = target.getSession().writeAndFlush(message);
 
         cf.addListener((ChannelFutureListener) channelFuture -> {
-            // 成功
-            if (channelFuture.isSuccess()) {
+
+            if (!channelFuture.isSuccess()) {
                 if (message.isQos()) {
+                    // 应用层确保消息可达
                     iMessageSenderQosHandler.handle(message, target);
-                }
-            } else {
-                // 应用层确保消息可达 发送离线消息事件
-                if (message.isOfflineMsgEvent()) {
+                } else if (message.isOfflineMsgEvent()) {
+                    // 发送离线消息事件
                     eventProvider.sendEvent(EventTypeConst.OFFLINE_MSG_EVENT, message);
                 }
             }
+
         });
         if (null != listener) {
             cf.addListener(listener);

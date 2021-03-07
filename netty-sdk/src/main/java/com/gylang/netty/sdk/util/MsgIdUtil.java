@@ -1,5 +1,7 @@
 package com.gylang.netty.sdk.util;
 
+import com.gylang.netty.sdk.domain.MessageWrap;
+
 /**
  * 消息id生成策略
  * | 时间戳 | 序列号 | 消息类型 | 会话id |
@@ -28,17 +30,17 @@ public class MsgIdUtil {
 
     /**
      * 获取自增id
-     *
-     * @param bizKey    业务类型
-     * @param sessionId 会话id 群聊id/用户id
-     * @return
+     * @param message 消息
+     * @return 消息id
      */
-    public static String increase(byte bizKey, long sessionId) {
+    public static String increase(MessageWrap message) {
+
         long timeStamp = getTimeStamp();
+        message.setTimeStamp(timeStamp);
         int offId = offId(timeStamp);
         // 时间戳 + 序列化
         return String.join("-", Long.toHexString(timeStamp), Integer.toHexString(offId),
-                Integer.toHexString(bizKey), Long.toHexString(sessionId));
+                Integer.toHexString(message.getType()), Long.toHexString(null != message.getReceive() ? message.getReceive() : message.getTargetId()));
     }
 
     /**

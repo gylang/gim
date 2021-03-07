@@ -1,0 +1,30 @@
+package com.gylang.im.web.service.impl;
+
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gylang.cache.CacheManager;
+import com.gylang.im.common.constant.CacheConstant;
+import com.gylang.im.dao.entity.ImUserGroup;
+import com.gylang.im.dao.mapper.ImUserGroupMapper;
+import com.gylang.im.web.service.ImUserGroupService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
+
+/**
+ * 群聊好友人员关系(ImUserGroup)表服务实现类
+ *
+ * @author makejava
+ * @since 2021-03-03 21:58:55
+ */
+@Service("imUserGroupService")
+public class ImUserGroupServiceImpl extends ServiceImpl<ImUserGroupMapper, ImUserGroup> implements ImUserGroupService {
+    @Resource
+    private CacheManager cacheManager;
+
+    @Override
+    public boolean checkIsYouGroup(Long account, Long targetId) {
+        return cacheManager.mapContainKey(CacheConstant.GROUP_LIST_PREFIX + account, String.valueOf(targetId));
+
+    }
+}

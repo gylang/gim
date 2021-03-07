@@ -31,9 +31,9 @@ public class MessageWrap implements Serializable {
     /** 消息code */
     private String code;
     /** 接收者 */
-    private long receive;
+    private Long receive;
     /** 接收者类型 */
-    private String receiverType;
+    private byte receiverType;
 
     /** 接收会话的用户id */
     private long targetId;
@@ -50,6 +50,7 @@ public class MessageWrap implements Serializable {
 
     /** 离线/失败消息事件发送 */
     private transient boolean offlineMsgEvent = true;
+    private long timeStamp;
 
 
     public MessageWrap copyBasic() {
@@ -66,8 +67,13 @@ public class MessageWrap implements Serializable {
         message.setQos(qos);
         message.setPersistenceEvent(persistenceEvent);
         message.setOfflineMsgEvent(offlineMsgEvent);
+        message.setTimeStamp(timeStamp);
         return message;
 
     }
+
+
+
+
 
 }
