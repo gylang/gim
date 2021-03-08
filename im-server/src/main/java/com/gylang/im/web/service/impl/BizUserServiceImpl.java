@@ -29,9 +29,9 @@ public class BizUserServiceImpl implements BizUserService {
         PtUser param = ObjectUtil.defaultIfNull(user.getParam(), new PtUser());
 
         PageDTO<PtUser> userPageDTO = ptUserService.page(user, new QueryWrapper<PtUser>()
-                .likeRight(StrUtil.isNotEmpty(param.getUsername()), "username", param.getUsername())
-                .likeRight(StrUtil.isNotEmpty(param.getNickname()), "nickname", param.getNickname())
-                .likeRight(ObjectUtil.isNotNull(param.getId()), "id", param.getId())
+                .or().likeRight(StrUtil.isNotEmpty(param.getUsername()), "username", param.getUsername())
+                .or().likeRight(StrUtil.isNotEmpty(param.getNickname()), "nickname", param.getNickname())
+                .or().likeRight(ObjectUtil.isNotNull(param.getId()), "id", param.getId())
 
         );
         return CommonResult.ok(userPageDTO);

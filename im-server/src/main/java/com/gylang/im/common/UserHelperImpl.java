@@ -1,16 +1,16 @@
 package com.gylang.im.common;
 
 import com.gylang.cache.CacheManager;
-import com.gylang.im.web.dto.cache.UserCache;
-import com.gylang.im.common.constant.CacheConstant;
 import com.gylang.im.common.constant.CommonConstant;
 import com.gylang.im.common.mybatis.UserHelper;
+import com.gylang.im.web.dto.cache.UserCache;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author gylang
@@ -51,8 +51,9 @@ public class UserHelperImpl implements UserHelper {
     private String getToken() {
         String token = null;
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        if (requestAttributes instanceof ServletWebRequest) {
-            token = ((ServletWebRequest) requestAttributes).getHeader(CommonConstant.TOKEN_HEADER);
+        if (requestAttributes instanceof ServletRequestAttributes) {
+            HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+            token = request.getHeader(CommonConstant.TOKEN_HEADER);
         }
         return token;
     }

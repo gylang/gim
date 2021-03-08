@@ -2,6 +2,7 @@ package com.gylang.im.common.dto;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import lombok.Data;
 
 import java.util.List;
 
@@ -9,25 +10,25 @@ import java.util.List;
  * @author gylang
  * data 2021/3/7
  */
-
+@Data
 public class PageDTO<T> implements IPage<T> {
 
-    private List<OrderItem> orders;
+    private List<OrderItem> orderList;
 
     private List<T> records;
 
     private Long total;
 
-    private Long size;
+    private Long size = 10L;
 
-    private Long current;
+    private Long current = 1L;
 
     private T param;
 
 
     @Override
     public List<OrderItem> orders() {
-        return this.orders;
+        return this.orderList;
     }
 
     @Override
