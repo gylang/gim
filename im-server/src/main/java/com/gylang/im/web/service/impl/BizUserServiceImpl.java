@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gylang.im.common.dto.CommonResult;
 import com.gylang.im.common.dto.PageDTO;
 import com.gylang.im.dao.entity.PtUser;
-import com.gylang.im.web.dto.PtUserDTO;
 import com.gylang.im.web.service.BizUserService;
 import com.gylang.im.web.service.PtUserService;
 import org.springframework.stereotype.Service;
