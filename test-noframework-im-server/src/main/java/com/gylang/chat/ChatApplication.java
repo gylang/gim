@@ -13,7 +13,7 @@ import com.gylang.netty.sdk.util.ObjectWrapUtil;
  */
 public class ChatApplication {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IllegalAccessException {
 
         // 启动服务
         NettyConfigHolder.init();
