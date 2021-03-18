@@ -13,11 +13,12 @@
     <modules>
         <module>netty-sdk</module>
         <module>netty-sdk-spring-starter</module>
-        <module>netty-client-java-sdk</module>
-        <module>netty-console-chat</module>
-        <module>netty-im-server</module>
+        <module>test-client-java</module>
+        <module>test-noframework-im-server</module>
+        <module>test-spring-im-server</module>
         <module>im-server</module>
         <module>gylang-cache-manager</module>
+        <module>gylang-cross-server-im-starter</module>
 
     </modules>
     <distributionManagement>

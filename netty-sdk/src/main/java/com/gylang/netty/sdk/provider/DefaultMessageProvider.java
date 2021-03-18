@@ -1,5 +1,6 @@
 package com.gylang.netty.sdk.provider;
 
+import cn.hutool.core.util.StrUtil;
 import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.constant.EventTypeConst;
 import com.gylang.netty.sdk.domain.MessageWrap;
@@ -75,13 +76,15 @@ public class DefaultMessageProvider implements MessageProvider {
         // 发送策略 如果本地发送失败（主要是跨服和用户离线）， 可以通过其他方式发送，桥接，mq
 
         if (!Objects.equals(host, target.getServerIp())) {
-            // todo 跨服通信 1. 直连桥接 2. mq订阅发送
+            // 跨服务消息
             eventProvider.sendEvent(EventTypeConst.CROSS_SERVER_PUSH, message);
             return;
         }
 
-        // 本地发送
-        message.setMsgId(MsgIdUtil.increase(message));
+        // 判断是否需要自动设置消息id
+        if (StrUtil.isNotEmpty(message.getMsgId())) {
+            message.setMsgId(MsgIdUtil.increase(message));
+        }
         // 持久化消息
         if (message.isPersistenceEvent()) {
             eventProvider.sendEvent(EventTypeConst.PERSISTENCE_EVENT, message);

@@ -28,6 +28,8 @@ public class MessageWrap implements Serializable {
     private byte type;
     /** 消息主体 */
     private String content;
+    /** 消息体类型 */
+    private String contentType;
     /** 消息code */
     private String code;
     /** 接收者 */
@@ -60,6 +62,7 @@ public class MessageWrap implements Serializable {
         message.setSender(sender);
         message.setType(type);
         message.setContent(content);
+        message.setContentType(contentType);
         message.setCode(code);
         message.setReceive(receive);
         message.setReceiverType(receiverType);

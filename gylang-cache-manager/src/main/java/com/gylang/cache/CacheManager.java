@@ -94,6 +94,16 @@ public interface CacheManager {
     <T> void setMap(String key, Map<String, T> data);
 
     /**
+     * 添加一个map
+     *
+     * @param key   key
+     * @param field map key
+     * @param data  数值
+     * @param <T>   数值
+     */
+    <T> void setMapField(String key, String field, T data);
+
+    /**
      * 判断map中是否包含当前 fieldKey
      *
      * @param key      map key

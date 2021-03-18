@@ -82,6 +82,11 @@ public class RedisCacheManager implements CacheManager {
     }
 
     @Override
+    public <T> void setMapField(String key, String field, T data) {
+        hashOperations.put(key, field, data);
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public <T> List<T> mapMultiGet(String key, String... fieldKey) {
         if (ArrayUtil.isEmpty(fieldKey)) {
