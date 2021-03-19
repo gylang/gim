@@ -16,7 +16,7 @@ export default {
      * @param callback 回调方法
      */
     bindListener(k, callback) {
-        var listenerList = listenerMap.get(k) || new Set();
+        let listenerList = listenerMap.get(k) || new Set();
         if (listenerList) {
             console.log("执行了吗")
             listenerList = new Set();
@@ -75,12 +75,12 @@ export default {
     /**
      * 定时任务发送心跳包
      */
-    sendHeartTask() {
-        setInterval(() => {
-            this.sendHeart();
-
-        }, 2000)
-    },
+    // sendHeartTask() {
+    //     setInterval(() => {
+    //         this.sendHeart();
+    //
+    //     }, 2000)
+    // },
     /**
      * 发送心跳包
      */
@@ -140,7 +140,7 @@ export default {
     send(message) {
         console.log(socket)
         socket.send(JSON.stringify(message));
-        Message({
+        console.log({
             message: "发送成功",
             type: 'success'
         });
@@ -150,7 +150,7 @@ export default {
      * @param token 用户登录返回的token
      */
     login(token) {
-        var message = {
+        let message = {
             cmd: api.LOGIN_SOCKET,
             content: token,
             msgId: token + "-" + Date.now()

@@ -1,10 +1,12 @@
 package com.gylang.im.dao.entity;
+
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import com.gylang.im.common.mybatis.InnerBaseDO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
 import java.util.Date;
 
 
@@ -20,38 +22,42 @@ import java.util.Date;
 public class ImGroupCard extends InnerBaseDO {
     private static final long serialVersionUID = -80970420113882219L;
 
-            
+
     /**
      * 群聊名
-     */    @TableField("name") 
+     */
+    @TableField("name")
     private String name;
-               
+
     /**
      * 群主
-     */    @TableField("group_master") 
+     */
+    @TableField("group_master")
     private Long groupMaster;
-               
+
     /**
      * 群类型
-     */    @TableField("type") 
+     */
+    @TableField("type")
     private String type;
-               
+
     /**
      * 群标签
-     */    @TableField("label") 
+     */
+    @TableField("label")
     private String label;
-               
+
     /**
      * 群公告
-     */    @TableField("notice") 
+     */
+    @TableField("notice")
     private String notice;
-                                       
+
     /**
      * 租户id
-     */    @TableField("tenant_id") 
+     */
+    @TableField("tenant_id")
     private Long tenantId;
-   
-
 
 
 }

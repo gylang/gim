@@ -10,6 +10,13 @@ export default {
     // 连接socket成功
     SOCKET_CONNECTED: "SOCKET_CONNECTED",
     // 登录
-    LOGIN_SOCKET: "LOGIN_SOCKET"
+    LOGIN_SOCKET: "LOGIN_SOCKET",
 
+    type : {
+        QOS_SEND_ACK : -1,
+        QOS_RECEIVE_ACK : -2,
+        NOTIFY : 1,
+        BIZ_MSG : 2,
+        ERROR_MSG : 3,
+    }
 }

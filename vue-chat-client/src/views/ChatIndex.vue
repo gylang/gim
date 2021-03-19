@@ -28,6 +28,7 @@
         <van-col class="h100p" span="15">
           <van-field
               v-model="content"
+              @input="showSendBtnHaveText"
               :autosize="{ maxHeight: 100, minHeight: 30}"
               style="padding: 0"
               type="textarea"
@@ -39,9 +40,14 @@
         <van-col class="h100p" span="3">
           <van-icon size="30" name="smile-o"/>
         </van-col>
-        <van-col class="h100p" span="3">
+        <van-col v-show="showSendBtn" class="h100p" span="3">
+          <van-button type="primary" @click="sendPrivateMsg">发送</van-button>
+        </van-col>
+        <van-col v-show="!showSendBtn" class="h100p" span="3">
           <van-icon size="30" name="add-o"/>
         </van-col>
+
+
       </van-row>
     </van-tabbar>
   </div>
@@ -52,6 +58,8 @@ import ChatItem from "@/components/chat/ChatItem";
 import socketApi from "@/api/socketApi";
 import ChatStyleSelect from "@/components/chat/ChatStyleSelect";
 import ChatStoreUtil from "@/util/ChatStoreUtil";
+import socket from "@/util/socket";
+
 export default {
   name: "ChatIndex",
   components: {ChatStyleSelect, ChatItem},
@@ -60,10 +68,11 @@ export default {
       loading: false,
       finished: true,
       active: true,
-      uid : '',
+      uid: '',
+      showSendBtn: false,
       list: [
         {
-          isMe : true,
+          isMe: true,
           cmd: socketApi.PRIVATE_CHAT,
           targetId: "11111111",
           content: "你好呀!你好呀!你好呀!你好呀!你好呀!你好呀!你好呀!你好呀!你好呀!!",
@@ -83,7 +92,7 @@ export default {
           content: "你好呀!你好呀!你好呀!你好呀!你好呀!你好呀!你好呀!你好呀!你好呀!!",
           nickname: "张大仙",
           style: "mess",
-          isMe : true,
+          isMe: true,
 
           timestamp: '2021-03-11 14:11:12'
         }, {
@@ -106,14 +115,14 @@ export default {
           content: "你好呀!",
           nickname: "张大仙",
           style: "mess",
-          isMe : true,
+          isMe: true,
 
           timestamp: '2021-03-11 14:11:12'
         }, {
           cmd: socketApi.PRIVATE_CHAT,
           targetId: "11111111",
           content: "你好呀!",
-          isMe : true,
+          isMe: true,
 
           nickname: "张大仙",
           style: "mess",
@@ -151,7 +160,7 @@ export default {
           targetId: "11111111",
           content: "你好呀!",
           nickname: "张大仙",
-          isMe : true,
+          isMe: true,
 
           style: "mess",
           timestamp: '2021-03-11 14:11:12'
@@ -181,7 +190,7 @@ export default {
           targetId: "11111111",
           content: "你好呀!",
           nickname: "张大仙",
-          isMe : true,
+          isMe: true,
 
           style: "mess",
           timestamp: '2021-03-11 14:11:12'
@@ -190,7 +199,7 @@ export default {
           targetId: "11111111",
           content: "你好呀!",
           nickname: "张大仙",
-          isMe : true,
+          isMe: true,
 
           style: "mess",
           timestamp: '2021-03-11 14:11:12'
@@ -199,7 +208,7 @@ export default {
           targetId: "11111111",
           content: "你好呀!",
           nickname: "张大仙",
-          isMe : true,
+          isMe: true,
 
           style: "mess",
           timestamp: '2021-03-11 14:11:12'
@@ -222,7 +231,7 @@ export default {
           targetId: "11111111",
           content: "你好呀!",
           nickname: "张大仙",
-          isMe : true,
+          isMe: true,
           style: "mess",
           timestamp: '2021-03-11 14:11:12'
         },
@@ -231,7 +240,8 @@ export default {
       userInfo: {
         nickname: "张大仙",
         style: "mess",
-        timestamp: '2021-03-11 14:11:12'
+        timestamp: '2021-03-11 14:11:12',
+        uid : '1111111'
       },
       content: ''
 
@@ -243,6 +253,18 @@ export default {
       // setTimeout 仅做示例，真实场景中一般为 ajax 请求
       ChatStoreUtil.getPrivateChat()
     },
+    showSendBtnHaveText() {
+      console.log(this.content)
+      if ('' !== this.content) {
+        if (!this.showSendBtn) {
+          this.showSendBtn = true;
+        }
+      } else {
+        if (this.showSendBtn) {
+          this.showSendBtn = false;
+        }
+      }
+    },
     onRefresh() {
       // 清空列表数据
       // this.finished = false;
@@ -252,6 +274,21 @@ export default {
       this.loading = true;
       this.onLoad();
     },
+    sendPrivateMsg() {
+
+      let msg = {
+        content : this.content,
+        receiveId : this.userInfo.uid,
+        targetId : this.userInfo.uid,
+        cmd : socketApi.PRIVATE_CHAT,
+        type : socketApi.type.BIZ_MSG,
+        qos : true
+      };
+      this.content = '';
+
+      // 发送socket
+      socket.send(msg)
+    }
   }
 }
 </script>
