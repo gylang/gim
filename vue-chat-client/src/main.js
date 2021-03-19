@@ -10,10 +10,10 @@ import '@/style/style.css';
 import IndexDB from "@/util/IndexedDBStrategy"
 import socket from "@/util/socket";
 
-// setInterval(() => {
-//   socket.check()
-//
-// }, 2000)
+  setInterval(() => {
+    socket.check()
+
+  }, 2000)
 IndexDB.openDB()
 Vue.config.productionTip = false
 Vue.use(Vant)

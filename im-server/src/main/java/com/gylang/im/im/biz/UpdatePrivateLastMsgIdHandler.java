@@ -24,7 +24,7 @@ public class UpdatePrivateLastMsgIdHandler implements IMRequestHandler {
     @Autowired
     private CacheManager cacheManager;
 
-    @Value("{gylang.netty.privateMsgSlot:3}")
+    @Value("${gylang.netty.privateMsgSlot:3}")
     private Integer slot;
 
     @Override

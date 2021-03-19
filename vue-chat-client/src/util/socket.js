@@ -1,5 +1,7 @@
 import config from "@/config";
 import api from "@/api";
+import socketApi from "@/api/socketApi";
+import ChatStoreUtil from "@/util/ChatStoreUtil";
 
 var listenerMap = new Map
 var socket = null;
@@ -17,12 +19,17 @@ export default {
      */
     bindListener(k, callback) {
         let listenerList = listenerMap.get(k) || new Set();
-        if (listenerList) {
+        if (!listenerList) {
             console.log("执行了吗")
-            listenerList = new Set();
             listenerMap.set(k, listenerList)
         }
         listenerList.add(callback)
+    },
+    unBindListener(k, callback) {
+        let listenerList = listenerMap.get(k);
+        if (listenerList) {
+            listenerList.delete(callback)
+        }
     },
     /**
      * 连接方法
@@ -144,6 +151,12 @@ export default {
             message: "发送成功",
             type: 'success'
         });
+        // 按照消息策略 进行消息保存
+        if (socketApi.PRIVATE_CHAT === message.cmd) {
+            ChatStoreUtil.setPrivateChat(message)
+        } else if (socketApi.GROUP_CHAT === message.cmd) {
+            ChatStoreUtil.setg
+        }
     },
     /**
      * tcp 连接登录

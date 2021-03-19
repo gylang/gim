@@ -11,7 +11,7 @@ export default {
         let lastId = localStorage.getItem(uid)
         // 打开迭代器
         objectStore.openCursor(IDBKeyRange.only({"uid": uid})
-            .upperBound({"timeStamp" : new Date().getTime()}, true), "prev")
+            .upperBound({"timeStamp": new Date().getTime()}, true), "prev")
             .onsuccess = ev => {
 
             consumer(ev)
@@ -27,10 +27,10 @@ export default {
         console.log(objectStore)
         let result = this.setData(objectStore, message);
         if (result.onerror) {
-            console.log("设置值成功")
+            console.log("设置值失败")
             console.log(result.onerror)
         } else {
-            console.log("设置值失败")
+            console.log("设置值成功")
             console.log(result.onsuccess)
         }
 

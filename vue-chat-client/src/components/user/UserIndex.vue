@@ -5,11 +5,32 @@
         <van-icon name="search" size="18"/>
       </template>
     </van-nav-bar>
+    <van-cell icon="friends" title="新好友"/>
+    <van-cell icon="friends" title="仅聊天的朋友"/>
+    <van-cell icon="friends" title="群聊"/>
+    <van-cell icon="bookmark" title="标签"/>
+    <van-cell icon="bookmark" title="公众号"/>
 
     <van-index-bar :sticky="false" @change="selectIndex" @select="selectIndex" :index-list="Object.keys(userList)">
+
       <div v-for="(item,key) in userList">
         <van-index-anchor class="gray_bg" :index="key">{{ key }}</van-index-anchor>
-        <van-cell v-for="entity in item" :title="entity.nickname"/>
+
+        <van-row style="height: 50px" ustify="space-around b1-divider" v-for="entity in item" align="center">
+          <van-col >
+            <van-image
+                fit="fill"
+                width="40"
+                height="40"
+                src="https://img01.yzcdn.cn/vant/cat.jpeg"
+            />
+          </van-col>
+          <van-col >
+            {{ entity.nickname }}
+          </van-col>
+
+        </van-row>
+
       </div>
     </van-index-bar>
   </div>

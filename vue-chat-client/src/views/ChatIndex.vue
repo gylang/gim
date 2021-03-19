@@ -141,107 +141,14 @@ export default {
           nickname: "张大仙",
           style: "mess",
           timestamp: '2021-03-11 14:11:12'
-        }, {
-          cmd: socketApi.PRIVATE_CHAT,
-          targetId: "11111111",
-          content: "你好呀!",
-          nickname: "张大仙",
-          style: "mess",
-          timestamp: '2021-03-11 14:11:12'
-        }, {
-          cmd: socketApi.PRIVATE_CHAT,
-          targetId: "11111111",
-          content: "你好呀!你好呀!你好呀!你好呀!你好呀!你好呀!你好呀!你好呀!你好呀!",
-          nickname: "张大仙",
-          style: "mess",
-          timestamp: '2021-03-11 14:11:12'
-        }, {
-          cmd: socketApi.PRIVATE_CHAT,
-          targetId: "11111111",
-          content: "你好呀!",
-          nickname: "张大仙",
-          isMe: true,
-
-          style: "mess",
-          timestamp: '2021-03-11 14:11:12'
-        }, {
-          cmd: socketApi.PRIVATE_CHAT,
-          targetId: "11111111",
-          content: "你好呀!",
-          nickname: "张大仙",
-          style: "mess",
-          timestamp: '2021-03-11 14:11:12'
-        }, {
-          cmd: socketApi.PRIVATE_CHAT,
-          targetId: "11111111",
-          content: "你好呀!",
-          nickname: "张大仙",
-          style: "mess",
-          timestamp: '2021-03-11 14:11:12'
-        }, {
-          cmd: socketApi.PRIVATE_CHAT,
-          targetId: "11111111",
-          content: "你好呀!",
-          nickname: "张大仙",
-          style: "mess",
-          timestamp: '2021-03-11 14:11:12'
-        }, {
-          cmd: socketApi.PRIVATE_CHAT,
-          targetId: "11111111",
-          content: "你好呀!",
-          nickname: "张大仙",
-          isMe: true,
-
-          style: "mess",
-          timestamp: '2021-03-11 14:11:12'
-        }, {
-          cmd: socketApi.PRIVATE_CHAT,
-          targetId: "11111111",
-          content: "你好呀!",
-          nickname: "张大仙",
-          isMe: true,
-
-          style: "mess",
-          timestamp: '2021-03-11 14:11:12'
-        }, {
-          cmd: socketApi.PRIVATE_CHAT,
-          targetId: "11111111",
-          content: "你好呀!",
-          nickname: "张大仙",
-          isMe: true,
-
-          style: "mess",
-          timestamp: '2021-03-11 14:11:12'
-        }, {
-          cmd: socketApi.PRIVATE_CHAT,
-          targetId: "11111111",
-          content: "你好呀!",
-          nickname: "张大仙",
-          style: "mess",
-          timestamp: '2021-03-11 14:11:12'
-        }, {
-          cmd: socketApi.PRIVATE_CHAT,
-          targetId: "11111111",
-          content: "你好呀!",
-          nickname: "张大仙",
-          style: "mess",
-          timestamp: '2021-03-11 14:11:12'
-        }, {
-          cmd: socketApi.PRIVATE_CHAT,
-          targetId: "11111111",
-          content: "你好呀!",
-          nickname: "张大仙",
-          isMe: true,
-          style: "mess",
-          timestamp: '2021-03-11 14:11:12'
-        },
+        }
       ],
       refreshing: false,
       userInfo: {
         nickname: "张大仙",
         style: "mess",
         timestamp: '2021-03-11 14:11:12',
-        uid : '1111111'
+        uid: '1111111'
       },
       content: ''
 
@@ -277,18 +184,28 @@ export default {
     sendPrivateMsg() {
 
       let msg = {
-        content : this.content,
-        receiveId : this.userInfo.uid,
-        targetId : this.userInfo.uid,
-        cmd : socketApi.PRIVATE_CHAT,
-        type : socketApi.type.BIZ_MSG,
-        qos : true
+        content: this.content,
+        receiveId: this.userInfo.uid,
+        targetId: this.userInfo.uid,
+        cmd: socketApi.PRIVATE_CHAT,
+        type: socketApi.type.BIZ_MSG,
+        qos: true
       };
       this.content = '';
 
       // 发送socket
       socket.send(msg)
+    },
+    msgListener(msg) {
+      this.list.concat(msg)
     }
+  },
+  mounted() {
+    socket.bindListener(socketApi.PRIVATE_CHAT, this.msgListener)
+  },
+  destroyed() {
+    socket.bindListener(socketApi.PRIVATE_CHAT, this.msgListener)
+
   }
 }
 </script>
