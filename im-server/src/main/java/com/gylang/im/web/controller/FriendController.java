@@ -1,12 +1,13 @@
 package com.gylang.im.web.controller;
 
-import com.gylang.im.common.util.Asserts;
-import com.gylang.im.web.dto.ImUserFriendDTO;
-import com.gylang.im.web.service.biz.BizFriendService;
 import com.gylang.im.common.dto.CommonResult;
 import com.gylang.im.common.mybatis.UserHelper;
 import com.gylang.im.dao.entity.UserApply;
-import org.springframework.web.bind.annotation.*;
+import com.gylang.im.web.dto.ImUserFriendDTO;
+import com.gylang.im.web.service.biz.BizFriendService;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
