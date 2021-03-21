@@ -96,6 +96,11 @@ public class RedisCacheManager implements CacheManager {
     }
 
     @Override
+    public <T> T mapGet(String key, String fieldKey) {
+        return (T) hashOperations.get(key, fieldKey);
+    }
+
+    @Override
     public boolean mapContainKey(String key, String... fieldKey) {
         List<Object> list = mapMultiGet(key, fieldKey);
         if (CollUtil.isEmpty(list)) {

@@ -121,5 +121,14 @@ public interface CacheManager {
      */
     <T> List<T> mapMultiGet(String key, String... fieldKey);
 
+    /**
+     * 获取map中的entry
+     *
+     * @param key      map key
+     * @param fieldKey fieldkey
+     * @return true 全包含
+     */
+    <T> T mapGet(String key, String fieldKey);
+
     void delete(String key);
 }

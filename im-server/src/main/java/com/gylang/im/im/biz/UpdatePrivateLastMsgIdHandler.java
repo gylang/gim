@@ -3,6 +3,7 @@ package com.gylang.im.im.biz;
 import com.gylang.cache.CacheManager;
 import com.gylang.im.common.constant.CacheConstant;
 import com.gylang.im.im.constant.BizChatCmd;
+import com.gylang.im.service.HistoryMessageService;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
@@ -22,18 +23,13 @@ import org.springframework.stereotype.Component;
 public class UpdatePrivateLastMsgIdHandler implements IMRequestHandler {
 
     @Autowired
-    private CacheManager cacheManager;
+    private HistoryMessageService historyMessageService;
 
-    @Value("${gylang.netty.privateMsgSlot:3}")
-    private Integer slot;
 
     @Override
     public Object process(IMSession me, MessageWrap message) {
 
-        // 用户量大 可以使用hash 先分组 再记录
-        Long receive = message.getReceive();
-        long targetSlot = receive & (slot - 1);
-        cacheManager.setMapField(CacheConstant.PRIVATE_LAST_MSG_ID + targetSlot, String.valueOf(me.getAccount()), message.getContent());
+        historyMessageService.updatePrivateLastMsgId(me.getAccount(), message.getMsgId());
         return null;
     }
 }

@@ -5,6 +5,7 @@ import com.gylang.im.dao.entity.HistoryGroupChat;
 import com.gylang.im.dao.entity.HistoryNotifyChat;
 import com.gylang.im.dao.entity.HistoryPrivateChat;
 import com.gylang.im.im.constant.ReceiveType;
+import com.gylang.im.service.HistoryMessageService;
 import com.gylang.im.web.service.HistoryGroupChatService;
 import com.gylang.im.web.service.HistoryNotifyChatService;
 import com.gylang.im.web.service.HistoryPrivateChatService;
@@ -30,6 +31,8 @@ public class OfflineEventListener implements MessageEventListener<MessageWrap> {
     private HistoryGroupChatService historyGroupChatService;
     @Resource
     private HistoryNotifyChatService historyNotifyChatService;
+    @Resource
+    private HistoryMessageService historyMessageService;
 
     @Override
     @MessageEvent(EventTypeConst.OFFLINE_MSG_EVENT)
@@ -50,6 +53,7 @@ public class OfflineEventListener implements MessageEventListener<MessageWrap> {
             } else if (ReceiveType.RECEIVE_IS_PRIVATE == message.getReceiverType()) {
 
                 HistoryPrivateChat chat = new HistoryPrivateChat();
+                historyMessageService.privateHistoryId(message.getMsgId());
                 chat.setMsgId(message.getMsgId());
                 chat.setSendId(message.getSender());
                 chat.setTargetId(message.getTargetId());
@@ -58,6 +62,7 @@ public class OfflineEventListener implements MessageEventListener<MessageWrap> {
                 historyPrivateChatService.save(chat);
             } else if (ReceiveType.RECEIVE_IS_GROUP == message.getReceiverType()) {
                 HistoryGroupChat chat = new HistoryGroupChat();
+                historyMessageService.groupHistoryId(message.getMsgId());
                 chat.setMsgId(message.getMsgId());
                 chat.setSendId(message.getSender());
                 chat.setTargetId(message.getTargetId());

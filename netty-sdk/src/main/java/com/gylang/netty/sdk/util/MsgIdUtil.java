@@ -19,6 +19,7 @@ public class MsgIdUtil {
 
     /** 16^3 -1 = 4905 */
     private static final int MAX_MESSAGE_SEQ = 0xFFF;
+    private static final int SEQ_BIT = Integer.bitCount(MAX_MESSAGE_SEQ);
     /** 当前自增序列号 */
     private static int seq = 0;
     /** 当前时间戳 */
@@ -30,6 +31,7 @@ public class MsgIdUtil {
 
     /**
      * 获取自增id
+     *
      * @param message 消息
      * @return 消息id
      */
@@ -39,7 +41,7 @@ public class MsgIdUtil {
         message.setTimeStamp(timeStamp);
         int offId = offId(timeStamp);
         // 时间戳 + 序列化
-        return String.join("-", Long.toHexString(timeStamp), Integer.toHexString(offId),
+        return String.join("-", Long.toHexString(timeStamp), String.valueOf(offId),
                 Integer.toHexString(message.getType()), Long.toHexString(null != message.getReceive() ? message.getReceive() : message.getTargetId()));
     }
 
@@ -81,6 +83,16 @@ public class MsgIdUtil {
         }
         return timestamp;
     }
+
+
+    public static Long resolveUUID(String msgId) {
+
+        String[] split = msgId.split("-");
+        long timestamp = Long.parseLong(split[0], 16);
+        int seq = Integer.parseInt(split[1]);
+        return timestamp << SEQ_BIT | seq;
+    }
+
 
 
 }
