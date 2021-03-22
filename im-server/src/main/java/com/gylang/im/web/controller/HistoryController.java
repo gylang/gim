@@ -6,6 +6,7 @@ import com.gylang.im.common.mybatis.UserHelper;
 import com.gylang.im.common.util.Asserts;
 import com.gylang.im.dao.entity.HistoryGroupChat;
 import com.gylang.im.dao.entity.HistoryPrivateChat;
+import com.gylang.im.service.HistoryMessageService;
 import com.gylang.im.web.service.HistoryGroupChatService;
 import com.gylang.im.web.service.HistoryPrivateChatService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class HistoryController {
     @Autowired
     private UserHelper userHelper;
     @Autowired
-    private HistoryPrivateChatService historyPrivateChatService;
+    private HistoryMessageService historyMessageService;
     @Autowired
     private HistoryGroupChatService historyGroupChatService;
 
@@ -34,26 +35,14 @@ public class HistoryController {
     public CommonResult<PageDTO<HistoryPrivateChat>> privateHistory(@RequestBody PageDTO<HistoryPrivateChat> privateChatPage) {
 
         Long uid = userHelper.getUid();
-        HistoryPrivateChat param = privateChatPage.getParam();
-        Asserts.notNull(param, "最新消息id不能为空");
-        Asserts.notNull(param.getMsgId(), "最新消息id不能为空");
-        param.setTargetId(uid);
-        param.setTimeStamp(param.getTimeStamp() - 1);
-        PageDTO<HistoryPrivateChat> page = historyPrivateChatService.page(privateChatPage);
-
-        return CommonResult.ok(page);
+        return CommonResult.ok(historyMessageService.privateHistory(privateChatPage, uid));
     }
 
     @RequestMapping("/group")
     public CommonResult<PageDTO<HistoryGroupChat>> groupHistory(@RequestBody PageDTO<HistoryGroupChat> groupChatPage) {
 
         Long uid = userHelper.getUid();
-        HistoryGroupChat param = groupChatPage.getParam();
-        Asserts.notNull(param, "最新消息id不能为空");
-        Asserts.notNull(param.getMsgId(), "最新消息id不能为空");
-        groupChatPage.getParam().setTargetId(uid);
-        param.setTimeStamp(param.getTimeStamp() - 1);
-        PageDTO<HistoryGroupChat> page = historyGroupChatService.page(groupChatPage);
+        PageDTO<HistoryGroupChat> page = historyMessageService.groupHistory(groupChatPage, uid);
         return CommonResult.ok(page);
     }
 }

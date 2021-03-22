@@ -68,7 +68,10 @@ public class HistoryMessageServiceImpl implements HistoryMessageService {
     @Override
     public PageDTO<HistoryGroupChat> groupHistory(PageDTO<HistoryGroupChat> page, Long uid) {
 
-        return null;
+        long lastId = cacheManager.mapGet(CacheConstant.GROUP_LAST_MSG_ID + page.getParam().getTargetId(), String.valueOf(uid));
+        historyGroupChatService.page(page, Wrappers.<HistoryGroupChat>lambdaQuery()
+                .ge(true, HistoryGroupChat::getId, lastId * 100));
+        return page;
     }
 
     @Override
