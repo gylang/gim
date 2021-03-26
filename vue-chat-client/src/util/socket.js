@@ -126,6 +126,7 @@ export default {
         let message = JSON.parse(msg.data)
         console.log(message)
         console.log(message.cmd)
+        this.handleMessageStore(message);
         if ('' !== message.cmd) {
             console.log("查询回调方法")
             console.log(listenerMap)
@@ -155,7 +156,14 @@ export default {
         if (socketApi.PRIVATE_CHAT === message.cmd) {
             ChatStoreUtil.setPrivateChat(message)
         } else if (socketApi.GROUP_CHAT === message.cmd) {
-            ChatStoreUtil.setg
+            this.handleMessageStore(message);
+        }
+    }, handleMessageStore(message) {
+
+        if (socketApi.PRIVATE_CHAT === message.cmd) {
+            ChatStoreUtil.setPrivateChat(message);
+        } else if (socketApi.GROUP_CHAT === message.cmd) {
+            ChatStoreUtil.setGroupChat(message);
         }
     },
     /**
@@ -179,5 +187,6 @@ export default {
     destroyed() {
         // 销毁监听
         socket.onclose = this.close
-    }
+    },
+
 }

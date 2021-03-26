@@ -15,7 +15,7 @@
           finished-text="没有更多了"
           @load="onLoad"
       >
-        <ChatStyleSelect v-for="item in list" :data="item"/>
+        <ChatStyleSelect v-for="item in chatList" :data="item"/>
       </van-list>
     </van-pull-refresh>
 
@@ -70,10 +70,11 @@ export default {
       active: true,
       uid: '',
       showSendBtn: false,
-      list: [
+      chatList: [
         {
           isMe: true,
           cmd: socketApi.PRIVATE_CHAT,
+          chatType : 1,
           targetId: "11111111",
           content: "你好呀!你好呀!你好呀!你好呀!你好呀!你好呀!你好呀!你好呀!你好呀!!",
           nickname: "张大仙",
@@ -82,6 +83,7 @@ export default {
         }, {
           cmd: socketApi.PRIVATE_CHAT,
           targetId: "11111111",
+          chatType : 1,
           content: "你好呀!你好呀!你好呀!你好呀!你好呀!你好呀!你好呀!你好呀!你好呀!!",
           nickname: "张大仙",
           style: "mess",
@@ -89,6 +91,7 @@ export default {
         }, {
           cmd: socketApi.PRIVATE_CHAT,
           targetId: "11111111",
+          chatType : 1,
           content: "你好呀!你好呀!你好呀!你好呀!你好呀!你好呀!你好呀!你好呀!你好呀!!",
           nickname: "张大仙",
           style: "mess",
@@ -98,6 +101,7 @@ export default {
         }, {
           cmd: socketApi.PRIVATE_CHAT,
           targetId: "11111111",
+          chatType : 1,
           content: "你好呀!",
           nickname: "张大仙",
           style: "mess",
@@ -105,6 +109,7 @@ export default {
         }, {
           cmd: socketApi.PRIVATE_CHAT,
           targetId: "11111111",
+          chatType : 1,
           content: "你好呀!",
           nickname: "张大仙",
           style: "mess",
@@ -112,6 +117,7 @@ export default {
         }, {
           cmd: socketApi.PRIVATE_CHAT,
           targetId: "11111111",
+          chatType : 1,
           content: "你好呀!",
           nickname: "张大仙",
           style: "mess",
@@ -121,23 +127,9 @@ export default {
         }, {
           cmd: socketApi.PRIVATE_CHAT,
           targetId: "11111111",
+          chatType : 1,
           content: "你好呀!",
           isMe: true,
-
-          nickname: "张大仙",
-          style: "mess",
-          timestamp: '2021-03-11 14:11:12'
-        }, {
-          cmd: socketApi.PRIVATE_CHAT,
-          targetId: "11111111",
-          content: "你好呀!",
-          nickname: "张大仙",
-          style: "mess",
-          timestamp: '2021-03-11 14:11:12'
-        }, {
-          cmd: socketApi.PRIVATE_CHAT,
-          targetId: "11111111",
-          content: "你好呀!",
           nickname: "张大仙",
           style: "mess",
           timestamp: '2021-03-11 14:11:12'
@@ -158,7 +150,7 @@ export default {
     onLoad() {
       // 异步更新数据
       // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-      ChatStoreUtil.getPrivateChat()
+
     },
     showSendBtnHaveText() {
       console.log(this.content)
@@ -196,17 +188,45 @@ export default {
       // 发送socket
       socket.send(msg)
     },
-    msgListener(msg) {
-      this.list.concat(msg)
+    listener(msg) {
+      // 接受到异步socket消息
+      // 判断是否为当前用户
+      if (this.data.sender === msg.sender) {
+
+        // 加入到当前消息当中
+
+        this.chatList.concat(msg);
+      }
+    },
+
+    loadMsg() {
+      if (this.cursor) {
+        let cursor = this.cursor;
+        // 加载数据 每次加载20条
+        let num = 0;
+        let chatList = this.chatList;
+        for (let i; i < num; i++) {
+
+          // 先实现插入 后面再改顺序问题
+
+          chatList.concat(cursor.value);
+          // 下一条
+          cursor.continue();
+        }
+
+      }
     }
   },
-  mounted() {
-    socket.bindListener(socketApi.PRIVATE_CHAT, this.msgListener)
+  created() {
+
+    // 监听消息 并加载indexedDB消息
+    this.cursor = ChatStoreUtil.getPrivateChat(this.data.targetId);
+    // 监听实时socket
+    socket.bindListener(socketApi.PRIVATE_CHAT, this.listener)
   },
   destroyed() {
-    socket.bindListener(socketApi.PRIVATE_CHAT, this.msgListener)
-
-  }
+    socket.unBindListener(socketApi.PRIVATE_CHAT, this.listener)
+  },
 }
 </script>
 

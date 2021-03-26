@@ -11,6 +11,7 @@ import ChatIndex from "@/views/ChatIndex";
 import Test from "@/views/Test";
 export default {
   name: 'App',
+
   components: {Test, ChatIndex, Home},
   data() {
     return {

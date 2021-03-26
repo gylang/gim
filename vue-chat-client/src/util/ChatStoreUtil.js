@@ -3,28 +3,23 @@ import IndexDB from "@/util/IndexedDBStrategy";
 export default {
 
     // 获取最新消息
-    getPrivateChat(uid, consumer) {
+    getPrivateChat(uid) {
         // 获取数据源
         let objectStore = IndexDB.getObjectStore(IndexDB.SOURCE_NAME.PRIVATE_CHAT_STORE);
 
         // 获取最后记录的id
-        let lastId = localStorage.getItem(uid)
         // 打开迭代器
         objectStore.openCursor(IDBKeyRange.only({"uid": uid})
             .upperBound({"timeStamp": new Date().getTime()}, true), "prev")
             .onsuccess = ev => {
+            return ev.target.result;
 
-            consumer(ev)
-            cursor.continue(); // 移到下一个位置
         }
     },
 
     setPrivateChat(message) {
 
-        let uid = message.targetId;
         let objectStore = IndexDB.getObjectStore(IndexDB.SOURCE_NAME.PRIVATE_CHAT_STORE);
-        console.log(message)
-        console.log(objectStore)
         let result = this.setData(objectStore, message);
         if (result.onerror) {
             console.log("设置值失败")
@@ -33,6 +28,34 @@ export default {
             console.log("设置值成功")
             console.log(result.onsuccess)
         }
+
+    },
+    setGroupChat(message) {
+
+        let objectStore = IndexDB.getObjectStore(IndexDB.SOURCE_NAME.GROUP_CHAT_STORE);
+        let result = this.setData(objectStore, message);
+        if (result.onerror) {
+            console.log("设置值失败")
+            console.log(result.onerror)
+        } else {
+            console.log("设置值成功")
+            console.log(result.onsuccess)
+        }
+
+    },
+    /**
+     * 存储当前正在聊天的会话
+     * @param message
+     */
+    setCurrentChat(message) {
+
+    },
+
+    /**
+     * 存储当前正在聊天的会话
+     * @param message
+     */
+    getCurrentChat() {
 
     },
 

@@ -35,11 +35,20 @@
 </template>
 
 <script>
+
+
 export default {
   name: "ChatStyleSelect",
   props: ["data"],
   data() {
-    return {}
+    return {
+
+    }
+  },
+
+  methods: {
+
+
   }
 }
 </script>

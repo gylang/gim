@@ -19,6 +19,7 @@
         <module>im-server</module>
         <module>gylang-cache-manager</module>
         <module>gylang-cross-server-im-starter</module>
+        <module>im-server/gim-chat-server</module>
 
     </modules>
     <distributionManagement>
