@@ -3,8 +3,8 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import ChatIndex from "@/views/ChatIndex";
 
-Vue.use(VueRouter)
 
+Vue.use(VueRouter)
 const routes = [
   {
     path: '/',

@@ -24,8 +24,9 @@ public class PrivateChatHandler implements IMRequestHandler {
     @Override
     public Object process(IMSession me, MessageWrap message) {
 
-        // 1. 好友关系校验
-
+        // 1. 离线消息
+        // 2. 单聊黑名单 校验
+        // 3. 单聊白名单 校验
         // 2. 是否开启非常勿扰
         // 发送消息
         messageProvider.sendMsg(me, message.getTargetId(), message.copyBasic());
