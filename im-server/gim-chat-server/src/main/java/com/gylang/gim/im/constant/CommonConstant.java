@@ -35,4 +35,6 @@ public enum CommonConstant {
 
     /** 黑名单校验 */
     public static final String BLACK_LIST_CHECK = "BLC";
+
+    public static final String PRIVATE_CHAT_ACCESS_CHECK = "PRIVATE_CHAT_ACCESS_CHECK";
 }

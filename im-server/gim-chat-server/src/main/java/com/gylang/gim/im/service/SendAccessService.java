@@ -10,9 +10,9 @@ public interface SendAccessService {
 
     /**
      * 单聊可访问性检测
-     * @param account
-     * @param receive
-     * @return
+     * @param senderId 发送者id
+     * @param receiveId 接收者id
+     * @return true 可以发送
      */
-    boolean privateAccessCheck(String account, String receive);
+    Boolean privateAccessCheck(String senderId, String receiveId);
 }
