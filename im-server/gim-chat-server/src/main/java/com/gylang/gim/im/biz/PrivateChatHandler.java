@@ -1,6 +1,9 @@
 package com.gylang.gim.im.biz;
 
+import com.gylang.cache.CacheManager;
 import com.gylang.gim.im.constant.BizChatCmd;
+import com.gylang.gim.im.constant.CommonConstant;
+import com.gylang.gim.im.service.SendAccessService;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
@@ -19,17 +22,18 @@ import javax.annotation.Resource;
 public class PrivateChatHandler implements IMRequestHandler {
     @Resource
     private MessageProvider messageProvider;
-
-
+    @Resource
+    private CacheManager cacheManager;
+    @Resource
+    private SendAccessService sendAccessService;
     @Override
     public Object process(IMSession me, MessageWrap message) {
 
-        // 1. 离线消息
-        // 2. 单聊黑名单 校验
-        // 3. 单聊白名单 校验
-        // 2. 是否开启非常勿扰
+
+        boolean access = sendAccessService.privateAccessCheck(me.getAccount(), message.getReceive());
+
         // 发送消息
-        messageProvider.sendMsg(me, message.getTargetId(), message.copyBasic());
+        messageProvider.sendMsg(me, message.getReceive(), message.copyBasic());
 
         return null;
     }

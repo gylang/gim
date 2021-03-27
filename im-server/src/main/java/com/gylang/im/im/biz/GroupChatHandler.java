@@ -40,13 +40,13 @@ public class GroupChatHandler implements IMRequestHandler {
     public Object process(IMSession me, MessageWrap message) {
 
         // 1. 好友关系校验
-        if (imUserGroupService.checkIsYouGroup(me.getAccount(), message.getTargetId())) {
+        if (imUserGroupService.checkIsYouGroup(me.getAccount(), message.getReceive())) {
             // 发送消息
             // 直接备份消息
             HistoryGroupChat groupChat = new HistoryGroupChat();
             MsgIdUtil.increase(message);
             groupChat.setMsgId(message.getMsgId());
-            groupChat.setTargetId(message.getTargetId());
+            groupChat.setTargetId(message.getReceive());
             groupChat.setMessage(JSON.toJSONString(message));
             groupChat.setSendId(me.getAccount());
             groupChat.setTimeStamp(message.getTimeStamp());

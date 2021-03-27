@@ -19,7 +19,7 @@ import javax.annotation.Resource;
  */
 @NettyHandler("login")
 @Component
-public class TouristLoginHandler implements NettyController<Long> {
+public class TouristLoginHandler implements NettyController<String> {
 
     @Resource
     private MessageProvider messageProvider;
@@ -28,7 +28,7 @@ public class TouristLoginHandler implements NettyController<Long> {
     private static final KeyLock<String> keyLock = new KeyLock<>();
 
     @Override
-    public Object process(IMSession me, Long requestBody) {
+    public Object process(IMSession me, String requestBody) {
 
         me.setAccount(requestBody);
         AbstractSessionGroup defaultGroup = getAndCreateGroup(me, groupSessionRepository);
@@ -37,7 +37,7 @@ public class TouristLoginHandler implements NettyController<Long> {
             MessageWrap messageWrap = new MessageWrap();
             messageWrap.setSender(me.getAccount());
             messageWrap.setContent(requestBody + "加入群聊组");
-            messageProvider.sendGroup(me, 111L, messageWrap);
+            messageProvider.sendGroup(me, "1111", messageWrap);
 
         return messageWrap;
         }
@@ -48,7 +48,7 @@ public class TouristLoginHandler implements NettyController<Long> {
 
 
         AbstractSessionGroup defaultGroup;
-        defaultGroup = groupRepository.findByKey(111L);
+        defaultGroup = groupRepository.findByKey("111");
         if (null != defaultGroup) {
             return defaultGroup;
         }
@@ -56,10 +56,10 @@ public class TouristLoginHandler implements NettyController<Long> {
         try {
             keyLock.lock(key);
             // 前面的线程可以能已经创建完聊天组, 所以需要再次判断
-            defaultGroup = groupRepository.findByKey(111L);
+            defaultGroup = groupRepository.findByKey("111");
             if (null == defaultGroup) {
                 defaultGroup = new AbstractSessionGroup("default", me.getAccount(), 1000);
-                groupRepository.add(111L, defaultGroup);
+                groupRepository.add("1111", defaultGroup);
             }
         } finally {
             keyLock.unlock(key);

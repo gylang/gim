@@ -11,7 +11,7 @@ import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.event.EventProvider;
-import com.gylang.netty.sdk.handler.NettyController;
+import com.gylang.netty.sdk.handler.IMRequestHandler;
 import com.gylang.netty.sdk.repo.IMSessionRepository;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +23,7 @@ import javax.annotation.Resource;
  */
 @NettyHandler(BizChatCmd.LOGIN_SOCKET)
 @Component
-public class LoginHandler implements NettyController<String> {
+public class LoginHandler implements IMRequestHandler {
 
     @Resource
     private EventProvider eventProvider;
@@ -32,12 +32,12 @@ public class LoginHandler implements NettyController<String> {
     @Resource
     private CacheManager cacheManager;
 
-    @Override
-    public Object process(IMSession me, String token) {
 
+    @Override
+    public Object process(IMSession me, MessageWrap message) {
         // 获取用户信息
-        JSONObject userCache = cacheManager.get(token);
-        Long uid = null != userCache ? userCache.getLong("id") : null;
+        JSONObject userCache = cacheManager.get(message.getContent());
+        String uid = null != userCache ? userCache.getString("id") : null;
         MessageWrap messageWrap = new ResponseMessageWrap();
         messageWrap.setSender(me.getAccount());
         messageWrap.setCmd(BizChatCmd.SOCKET_CONNECTED);
@@ -57,6 +57,4 @@ public class LoginHandler implements NettyController<String> {
         // 响应客户端
         return messageWrap;
     }
-
-
 }

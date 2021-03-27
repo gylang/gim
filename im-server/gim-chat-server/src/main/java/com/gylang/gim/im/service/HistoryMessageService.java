@@ -13,7 +13,7 @@ public interface HistoryMessageService {
      * @param uid   用户ID
      * @param msgId 消息id
      */
-    void updatePrivateLastMsgId(Long uid, String msgId);
+    void updatePrivateLastMsgId(String uid, String msgId);
 
     /**
      * 更新最新接收到的群消息id
@@ -22,8 +22,7 @@ public interface HistoryMessageService {
      * @param uid     用户ID
      * @param msgId   消息id
      */
-    void updateGroupLastMsgIdHandler(Long groupId, Long uid, String msgId);
-
+    void updateGroupLastMsgIdHandler(String groupId, String uid, String msgId);
 
 
     /**

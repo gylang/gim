@@ -12,5 +12,5 @@ import com.gylang.im.dao.entity.ImUserGroup;
 public interface ImUserGroupService extends IService<ImUserGroup> {
 
 
-    boolean checkIsYouGroup(Long account, Long targetId);
+    boolean checkIsYouGroup(String account, String targetId);
 }

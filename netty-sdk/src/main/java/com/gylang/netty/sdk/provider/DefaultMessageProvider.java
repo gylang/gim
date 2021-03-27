@@ -40,7 +40,7 @@ public class DefaultMessageProvider implements MessageProvider {
 
 
     @Override
-    public void sendMsg(IMSession me, Long target, MessageWrap message) {
+    public void sendMsg(IMSession me, String target, MessageWrap message) {
 
         sendMsgCallBack(me, target, message, null);
     }
@@ -52,7 +52,7 @@ public class DefaultMessageProvider implements MessageProvider {
     }
 
     @Override
-    public void sendMsgCallBack(IMSession me, Long target, MessageWrap message, ChannelFutureListener listener) {
+    public void sendMsgCallBack(IMSession me, String target, MessageWrap message, ChannelFutureListener listener) {
         IMSession imSession = sessionRepository.find(target);
         sendMsgCallBack(me, imSession, message, listener);
     }
@@ -70,8 +70,8 @@ public class DefaultMessageProvider implements MessageProvider {
             return;
         }
         message.setSender(null != me ? me.getAccount() : null);
-        if (message.getTargetId() <= 0) {
-            message.setTargetId(target.getAccount());
+        if (StrUtil.isEmpty(message.getReceive())) {
+            message.setReceive(target.getAccount());
         }
         // 发送策略 如果本地发送失败（主要是跨服和用户离线）， 可以通过其他方式发送，桥接，mq
 
@@ -113,14 +113,14 @@ public class DefaultMessageProvider implements MessageProvider {
 
 
     @Override
-    public void sendGroup(IMSession me, Long target, MessageWrap message) {
+    public void sendGroup(IMSession me, String target, MessageWrap message) {
 
         AbstractSessionGroup sessionGroup = groupSessionRepository.findByKey(target);
         sendGroup(me, sessionGroup, message);
     }
 
     @Override
-    public void sendAsyncGroup(IMSession me, Long target, MessageWrap message) {
+    public void sendAsyncGroup(IMSession me, String target, MessageWrap message) {
         executor.execute(() -> sendGroup(me, target, message));
     }
 

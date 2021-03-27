@@ -29,4 +29,10 @@ public enum CommonConstant {
     public static final int NORMAL_INT = 1;
 
     public static final String TOKEN_HEADER = "token";
+
+    /** 白名单校验 */
+    public static final String WHITE_LIST_CHECK = "WLC";
+
+    /** 黑名单校验 */
+    public static final String BLACK_LIST_CHECK = "BLC";
 }

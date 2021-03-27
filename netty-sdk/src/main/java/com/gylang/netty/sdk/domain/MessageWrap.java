@@ -23,7 +23,7 @@ public class MessageWrap implements Serializable {
     /** 命令 */
     private String cmd;
     /** 发送者 */
-    private Long sender;
+    private String sender;
     /** 消息类型 */
     private byte type;
     /** 消息主体 */
@@ -33,12 +33,12 @@ public class MessageWrap implements Serializable {
     /** 消息code */
     private String code;
     /** 接收者 */
-    private Long receive;
+    private String receive;
     /** 接收者类型 */
     private byte receiverType;
 
     /** 接收会话的用户id */
-    private long targetId;
+    private String targetId;
     /** 消息id */
     private String msgId;
     /** 重试次数 */
@@ -52,6 +52,7 @@ public class MessageWrap implements Serializable {
 
     /** 离线/失败消息事件发送 */
     private transient boolean offlineMsgEvent = true;
+
     private long timeStamp;
 
 

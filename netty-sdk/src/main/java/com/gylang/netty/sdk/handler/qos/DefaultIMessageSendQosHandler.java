@@ -26,11 +26,17 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
     private ConcurrentSkipListMap<String, MessageWrap> sentMessages = new ConcurrentSkipListMap<>();
 
 
-    /** 定时任务扫码间隔 */
+    /**
+     * 定时任务扫码间隔
+     */
     private int checkInterval = 5 * 1000;
-    /** 扫码最低时间间隔 */
+    /**
+     * 扫码最低时间间隔
+     */
     private int messagesValidTime = 2 * 1000;
-    /** 定时扫码器 */
+    /**
+     * 定时扫码器
+     */
     private ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(1, new ThreadPoolExecutor.AbortPolicy());
 
 
@@ -133,7 +139,7 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
                 if (now < timestamp) {
                     continue;
                 }
-                IMSession imSession = imSessionRepository.find(msg.getTargetId());
+                IMSession imSession = imSessionRepository.find(msg.getReceive());
                 if (null != imSession && imSession.isConnected()) {
 
                     imSession.getSession().writeAndFlush(timestamp);

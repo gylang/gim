@@ -23,7 +23,7 @@ public class ImUserGroupServiceImpl extends ServiceImpl<ImUserGroupMapper, ImUse
     private CacheManager cacheManager;
 
     @Override
-    public boolean checkIsYouGroup(Long account, Long targetId) {
+    public boolean checkIsYouGroup(String account, String targetId) {
         return cacheManager.mapContainKey(CacheConstant.GROUP_LIST_PREFIX + account, String.valueOf(targetId));
 
     }

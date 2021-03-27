@@ -29,13 +29,13 @@ public class AbstractSessionGroup {
     /**
      * 创建者
      */
-    private long creator;
+    private String creator;
     /**
      * 组关键字
      */
     private String key;
 
-    private long groupId;
+    private String groupId;
     /**
      * 房间密码
      */
@@ -50,7 +50,7 @@ public class AbstractSessionGroup {
      */
     private EventExecutor executor;
 
-    public AbstractSessionGroup(String name, long creator, String password, Integer capacity) {
+    public AbstractSessionGroup(String name, String creator, String password, Integer capacity) {
         this.name = name;
         this.creator = creator;
         this.password = password;
@@ -58,7 +58,7 @@ public class AbstractSessionGroup {
         memberList = new ArrayBlockingQueue<>(capacity);
     }
 
-    public AbstractSessionGroup(String name, long creator, Integer capacity) {
+    public AbstractSessionGroup(String name, String creator, Integer capacity) {
         this(name, creator, null, capacity);
     }
 

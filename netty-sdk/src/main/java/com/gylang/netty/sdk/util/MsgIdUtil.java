@@ -17,12 +17,18 @@ public class MsgIdUtil {
     private MsgIdUtil() {
     }
 
-    /** 16^3 -1 = 4905 */
+    /**
+     * 16^3 -1 = 4905
+     */
     private static final int MAX_MESSAGE_SEQ = 0xFFF;
     private static final int SEQ_BIT = Integer.bitCount(MAX_MESSAGE_SEQ);
-    /** 当前自增序列号 */
+    /**
+     * 当前自增序列号
+     */
     private static int seq = 0;
-    /** 当前时间戳 */
+    /**
+     * 当前时间戳
+     */
     private static long currentTimeStamp = 0L;
 
     public static long getTimeStamp() {
@@ -42,7 +48,7 @@ public class MsgIdUtil {
         int offId = offId(timeStamp);
         // 时间戳 + 序列化
         return String.join("-", Long.toHexString(timeStamp), String.valueOf(offId),
-                Integer.toHexString(message.getType()), Long.toHexString(null != message.getReceive() ? message.getReceive() : message.getTargetId()));
+                Integer.toHexString(message.getType()), Long.toHexString(Long.parseLong(message.getReceive())));
     }
 
     /**
@@ -92,7 +98,6 @@ public class MsgIdUtil {
         int seq = Integer.parseInt(split[1]);
         return timestamp << SEQ_BIT | seq;
     }
-
 
 
 }

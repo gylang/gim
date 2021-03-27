@@ -36,13 +36,13 @@ public class HistoryGroupChat extends InnerBaseDO {
      * 发送者id
      */
     @TableField("send_id")
-    private Long sendId;
+    private String sendId;
 
     /**
      * 接收者id
      */
-    @TableField("target_id")
-    private Long targetId;
+    @TableField("receive")
+    private String receive;
 
     /**
      * 消息体

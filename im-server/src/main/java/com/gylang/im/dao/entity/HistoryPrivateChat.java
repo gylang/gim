@@ -1,4 +1,5 @@
 package com.gylang.im.dao.entity;
+
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.gylang.im.common.mybatis.InnerBaseDO;
@@ -18,38 +19,42 @@ import lombok.EqualsAndHashCode;
 public class HistoryPrivateChat extends InnerBaseDO {
     private static final long serialVersionUID = -94021602747304846L;
 
-            
+
     /**
      * 消息id
-     */    @TableField("msg_id") 
+     */
+    @TableField("msg_id")
     private String msgId;
-               
+
     /**
      * 回应着id
-     */    @TableField("time_stamp") 
+     */
+    @TableField("time_stamp")
     private Long timeStamp;
-               
+
     /**
      * 发送者id
-     */    @TableField("send_id") 
-    private Long sendId;
-               
+     */
+    @TableField("send_id")
+    private String sendId;
+
     /**
      * 接收者id
-     */    @TableField("target_id") 
-    private Long targetId;
-               
+     */
+    @TableField("receive")
+    private String receive;
+
     /**
      * 消息体
-     */    @TableField("message") 
+     */
+    @TableField("message")
     private String message;
-                                       
+
     /**
      * 租户id
-     */    @TableField("tenant_id") 
+     */
+    @TableField("tenant_id")
     private Long tenantId;
-   
-
 
 
 }

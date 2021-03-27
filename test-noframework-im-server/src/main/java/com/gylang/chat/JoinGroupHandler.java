@@ -22,7 +22,7 @@ public class JoinGroupHandler implements IMRequestHandler {
     public Object process(IMSession me, MessageWrap message) {
         System.out.println("注册服务" + message.getContent());
         AbstractSessionGroup aDefault = defaultGroupRepository.findByKey("default");
-        me.setAccount(Long.parseLong(message.getContent()));
+        me.setAccount(message.getContent());
         boolean join = aDefault.join(me);
         if (join) {
             me.getGroupList().add(aDefault);
