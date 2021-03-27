@@ -1,8 +1,9 @@
 package com.gylang.netty.sdk.handler.qos;
 
 import com.gylang.netty.sdk.config.NettyConfiguration;
+import com.gylang.netty.sdk.constant.ChatTypeEnum;
 import com.gylang.netty.sdk.constant.EventTypeConst;
-import com.gylang.netty.sdk.constant.MessageType;
+import com.gylang.netty.sdk.constant.SystemMessageType;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.event.EventProvider;
@@ -49,21 +50,21 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
     private EventProvider eventProvider;
 
     @Override
-    public void handle(MessageWrap messageWrap, IMSession target) {
+    public void handle(MessageWrap message, IMSession target) {
 
         // 1. 非qos
-        if (!messageWrap.isQos()) {
+        if (ChatTypeEnum.SYSTEM_MESSAGE.getType() != message.getType() || !message.isQos()) {
             return;
         }
         // 2. 如果收到的是客户端的ack包将将消息删除
-        if (MessageType.QOS_SEND_ACK == messageWrap.getType()) {
-            messageTimeStamp.remove(messageWrap.getMsgId());
+        if (SystemMessageType.QOS_SEND_ACK.equals(message.getCmd())) {
+            messageTimeStamp.remove(message.getMsgId());
             return;
         }
         // 3. 接收到客户端的消息 msgId,将消息进行保存，
         // 3.1 如果已经存在，ack1给客户端，
-        if (!messageTimeStamp.containsKey(messageWrap.getMsgId())) {
-            addReceived(messageWrap);
+        if (!messageTimeStamp.containsKey(message.getMsgId())) {
+            addReceived(message);
         }
 
     }

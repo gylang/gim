@@ -4,28 +4,24 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
+ * 指令类型操作类
+ *
  * @author gylang
  * data 2021/3/26
  */
 @Getter
 @AllArgsConstructor
 public enum ChatTypeEnum {
-    /**
-     * 各类消息类型
-     */
-    TEXT(1, "内容消息类型"),
-    VOICE(2, "语言消息"),
-    IMAGINE(3, "图片消息"),
-    GIF(4, "GIF动态图片"),
-    IMG_TEXT(5, "图文"),
-    FILE(6, "文件"),
-    LOCAL(7, "位置"),
-    VIDEO(8, "视频"),
-    REFERENCE(9, "引用"),
-    COMBINE(10, "合并转发"),
 
+    /** 聊天类型 */
+    SYSTEM_MESSAGE(-1, "系统类消息"),
+    PRIVATE_CHAT(1, "单聊"),
+    GROUP_CHAT(2, "组聊"),
+    NOTIFY(3, "通知类"),
+    CHAT_ROOM(4, "聊天室"),
     ;
-    private final int chatType;
+
+    private final int type;
 
     private final String mark;
 }

@@ -1,7 +1,8 @@
 package com.gylang.netty.sdk.handler.qos;
 
 import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.constant.MessageType;
+import com.gylang.netty.sdk.constant.ChatTypeEnum;
+import com.gylang.netty.sdk.constant.SystemMessageType;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import lombok.extern.slf4j.Slf4j;
@@ -32,26 +33,26 @@ public class DefaultIMessageReceiveQosHandler implements IMessageReceiveQosHandl
 
 
     @Override
-    public void handle(MessageWrap messageWrap, IMSession target) {
+    public void handle(MessageWrap message, IMSession target) {
 
         // 1. 非qos
-        if (!messageWrap.isQos()) {
+        if (ChatTypeEnum.SYSTEM_MESSAGE.getType() != message.getType() || !message.isQos()) {
             return;
         }
         // 2. 如果收到的是客户端的ack2包将将消息删除
-        if (MessageType.QOS_RECEIVE_ACK == messageWrap.getType()) {
-            receiveMessages.remove(messageWrap.getMsgId());
+        if (SystemMessageType.QOS_RECEIVE_ACK.equals(message.getCmd())) {
+            receiveMessages.remove(message.getMsgId());
             return;
         }
         // 3. 接收到客户端的消息 msgId,将消息进行保存，
         // 3.1 如果已经存在，ack1给客户端，
-        if (!receiveMessages.containsKey(messageWrap.getMsgId())) {
-            addReceived(messageWrap);
+        if (!receiveMessages.containsKey(message.getMsgId())) {
+            addReceived(message);
         }
         // 修改message ack
         // 3.2 发送消息给客户端，ack
-        messageWrap.setType(MessageType.QOS_RECEIVE_ACK);
-        target.getSession().writeAndFlush(messageWrap);
+        message.setCmd(SystemMessageType.QOS_RECEIVE_ACK);
+        target.getSession().writeAndFlush(message);
 
     }
 

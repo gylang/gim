@@ -16,7 +16,8 @@ import com.gylang.im.web.dto.ImUserFriendDTO;
 import com.gylang.im.web.service.ImUserFriendService;
 import com.gylang.im.web.service.UserApplyService;
 import com.gylang.im.web.service.biz.BizFriendService;
-import com.gylang.netty.sdk.constant.MessageType;
+import com.gylang.netty.sdk.constant.ChatTypeEnum;
+import com.gylang.netty.sdk.constant.SystemMessageType;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.provider.MessageProvider;
@@ -111,7 +112,6 @@ public class BizFriendServiceImpl implements BizFriendService {
                     .cmd(BizChatCmd.APPLY_FRIEND_NOTIFY)
                     .sender(userApply.getApplyId())
                     .content(JSON.toJSONString(userApply))
-                    .targetId(userApply.getAnswerId())
                     .offlineMsgEvent(false)
                     .qos(true)
                     .build();
@@ -141,17 +141,17 @@ public class BizFriendServiceImpl implements BizFriendService {
                     .qos(true)
                     .cmd(BizChatCmd.PRIVATE_CHAT)
                     .sender(apply.getAnswerId())
-                    .targetId(apply.getApplyId())
+                    .receive(apply.getApplyId())
                     .offlineMsgEvent(true)
                     .content("你好，我们已经是好友拉~")
-                    .type(MessageType.BIZ_MSG)
+                    .type(ChatTypeEnum.PRIVATE_CHAT.getType())
                     .build();
             messageProvider.sendMsg(applySession, apply.getApplyId(), applyMsg);
 
             // 给被申请方发送消息
             MessageWrap answerMsg = applyMsg.copyBasic();
             answerMsg.setSender(apply.getApplyId());
-            answerMsg.setTargetId(apply.getAnswerId());
+            answerMsg.setReceive(apply.getAnswerId());
             IMSession answerSession = new IMSession();
             answerSession.setAccount(apply.getApplyId());
             messageProvider.sendMsg(answerSession, apply.getAnswerId(), answerMsg);
@@ -160,9 +160,10 @@ public class BizFriendServiceImpl implements BizFriendService {
             MessageWrap rejectMsg = MessageWrap.builder()
                     .qos(true)
                     .sender(apply.getAnswerId())
-                    .targetId(apply.getApplyId())
+                    .receive(apply.getApplyId())
                     .content(apply.getAnswerId() + ": 拒绝添加好友!")
-                    .type(MessageType.NOTIFY)
+                    .type(ChatTypeEnum.NOTIFY.getType())
+                    .cmd(SystemMessageType.NOTIFY)
                     .build();
             messageProvider.sendMsg(applySession, apply.getAnswerId(), rejectMsg);
         }

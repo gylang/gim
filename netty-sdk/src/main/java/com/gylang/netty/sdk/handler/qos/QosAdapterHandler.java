@@ -3,7 +3,8 @@ package com.gylang.netty.sdk.handler.qos;
 import com.gylang.netty.sdk.common.InokeFinished;
 import com.gylang.netty.sdk.common.ObjectWrap;
 import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.constant.MessageType;
+import com.gylang.netty.sdk.constant.ChatTypeEnum;
+import com.gylang.netty.sdk.constant.SystemMessageType;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.BizRequestAdapter;
@@ -29,23 +30,23 @@ public class QosAdapterHandler implements BizRequestAdapter<MessageWrap> {
     @Override
     public Object process(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
 
-        if (message.isQos()) {
+        if (ChatTypeEnum.SYSTEM_MESSAGE.getType() != message.getType() || message.isQos()) {
 
             // 判断是否已经接收到消息
-            if (MessageType.BIZ_MSG == message.getType()) {
-                if (receiveQosHandler.hasReceived(message.getMsgId())) {
-                    receiveQosHandler.handle(message, me);
-                    return null;
 
-                }
-            } else if (MessageType.QOS_SEND_ACK == message.getType()) {
+            if (SystemMessageType.QOS_SEND_ACK.equals(message.getCmd())) {
                 // 主发 保证可靠- 客户端ack
                 senderQosHandler.handle(message, me);
                 return InokeFinished.getInstance();
-            } else if (MessageType.QOS_RECEIVE_ACK == message.getType()) {
+            } else if (SystemMessageType.QOS_RECEIVE_ACK.equals(message.getCmd())) {
                 // 接收 保证可靠 - 服务端ack
                 receiveQosHandler.handle(message, me);
                 return InokeFinished.getInstance();
+            } else if (receiveQosHandler.hasReceived(message.getMsgId())) {
+                // 业务消息重发 响应客户端
+                receiveQosHandler.handle(message, me);
+                return null;
+
             }
         }
         return null;

@@ -25,7 +25,7 @@ public class MessageWrap implements Serializable {
     /** 发送者 */
     private String sender;
     /** 消息类型 */
-    private byte type;
+    private int type;
     /** 消息主体 */
     private String content;
     /** 消息体类型 */
@@ -37,8 +37,7 @@ public class MessageWrap implements Serializable {
     /** 接收者类型 */
     private byte receiverType;
 
-    /** 接收会话的用户id */
-    private String targetId;
+
     /** 消息id */
     private String msgId;
     /** 重试次数 */
@@ -67,7 +66,6 @@ public class MessageWrap implements Serializable {
         message.setCode(code);
         message.setReceive(receive);
         message.setReceiverType(receiverType);
-        message.setTargetId(targetId);
         message.setQos(qos);
         message.setPersistenceEvent(persistenceEvent);
         message.setOfflineMsgEvent(offlineMsgEvent);

@@ -2,7 +2,7 @@ package com.gylang.gim.im.biz;
 
 import com.gylang.cache.CacheManager;
 import com.gylang.gim.im.constant.BizChatCmd;
-import com.gylang.gim.im.constant.CommonConstant;
+import com.gylang.gim.im.domain.AckMessageWrap;
 import com.gylang.gim.im.service.SendAccessService;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.MessageWrap;
@@ -26,6 +26,7 @@ public class PrivateChatHandler implements IMRequestHandler {
     private CacheManager cacheManager;
     @Resource
     private SendAccessService sendAccessService;
+
     @Override
     public Object process(IMSession me, MessageWrap message) {
 
@@ -33,8 +34,10 @@ public class PrivateChatHandler implements IMRequestHandler {
         boolean access = sendAccessService.privateAccessCheck(me.getAccount(), message.getReceive());
 
         // 发送消息
-        messageProvider.sendMsg(me, message.getReceive(), message.copyBasic());
+        if (access) {
+            messageProvider.sendMsg(me, message.getReceive(), message.copyBasic());
+        }
 
-        return null;
+        return new AckMessageWrap(message);
     }
 }

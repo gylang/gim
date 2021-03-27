@@ -1,10 +1,7 @@
 package com.gylang.gim.im.event;
 
-import com.alibaba.fastjson.JSON;
-import com.gylang.gim.im.constant.ReceiveType;
 import com.gylang.gim.im.service.HistoryMessageService;
 import com.gylang.netty.sdk.constant.EventTypeConst;
-import com.gylang.netty.sdk.constant.MessageType;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.event.message.MessageEvent;
 import com.gylang.netty.sdk.event.message.MessageEventListener;

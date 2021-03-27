@@ -10,7 +10,7 @@ import com.gylang.im.web.service.HistoryGroupChatService;
 import com.gylang.im.web.service.HistoryNotifyChatService;
 import com.gylang.im.web.service.HistoryPrivateChatService;
 import com.gylang.netty.sdk.constant.EventTypeConst;
-import com.gylang.netty.sdk.constant.MessageType;
+import com.gylang.netty.sdk.constant.SystemMessageType;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.event.message.MessageEvent;
 import com.gylang.netty.sdk.event.message.MessageEventListener;
@@ -42,11 +42,10 @@ public class OfflineEventListener implements MessageEventListener<MessageWrap> {
         if (null != message) {
 
             // 拼装入库消息
-            if (MessageType.NOTIFY == message.getType()) {
+            if (SystemMessageType.NOTIFY.equals(message.getCmd())) {
                 HistoryNotifyChat chat = new HistoryNotifyChat();
                 chat.setMsgId(message.getMsgId());
                 chat.setSendId(message.getSender());
-                chat.setTargetId(message.getTargetId());
                 chat.setTimeStamp(message.getTimeStamp());
                 chat.setMessage(JSON.toJSONString(message));
                 historyNotifyChatService.save(chat);
@@ -56,7 +55,6 @@ public class OfflineEventListener implements MessageEventListener<MessageWrap> {
                 historyMessageService.privateHistoryId(message.getMsgId());
                 chat.setMsgId(message.getMsgId());
                 chat.setSendId(message.getSender());
-                chat.setTargetId(message.getTargetId());
                 chat.setTimeStamp(message.getTimeStamp());
                 chat.setMessage(JSON.toJSONString(message));
                 historyPrivateChatService.save(chat);
@@ -65,7 +63,6 @@ public class OfflineEventListener implements MessageEventListener<MessageWrap> {
                 historyMessageService.groupHistoryId(message.getMsgId());
                 chat.setMsgId(message.getMsgId());
                 chat.setSendId(message.getSender());
-                chat.setTargetId(message.getTargetId());
                 chat.setTimeStamp(message.getTimeStamp());
                 chat.setMessage(JSON.toJSONString(message));
                 historyGroupChatService.save(chat);

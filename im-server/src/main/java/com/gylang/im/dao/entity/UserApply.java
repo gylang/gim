@@ -25,13 +25,13 @@ public class UserApply extends InnerBaseDO {
      * 申请id
      */
     @TableField("apply_id")
-    private Long applyId;
+    private String applyId;
 
     /**
      * 回应着id
      */
     @TableField("answer_id")
-    private Long answerId;
+    private String answerId;
 
     /**
      * 留言
