@@ -24,4 +24,5 @@ public enum CacheConstant {
     public static final String BLACK_LIST_CHECK = "IM:USER:CONFIG:BLC:";
 
     public static final String IM_USER_CONFIG = "IM:USER:CONFIG:";
+    public static final String PRIVATE_CHAT_HISTORY = "IM:USER:PRIVATE:CHAT:";
 }
