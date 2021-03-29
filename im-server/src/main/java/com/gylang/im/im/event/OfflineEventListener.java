@@ -10,7 +10,7 @@ import com.gylang.im.web.service.HistoryGroupChatService;
 import com.gylang.im.web.service.HistoryNotifyChatService;
 import com.gylang.im.web.service.HistoryPrivateChatService;
 import com.gylang.netty.sdk.constant.EventTypeConst;
-import com.gylang.netty.sdk.constant.SystemMessageType;
+import com.gylang.netty.sdk.constant.system.SystemMessageType;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.event.message.MessageEvent;
 import com.gylang.netty.sdk.event.message.MessageEventListener;

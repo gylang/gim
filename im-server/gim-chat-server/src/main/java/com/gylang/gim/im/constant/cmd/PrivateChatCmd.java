@@ -1,10 +1,10 @@
-package com.gylang.gim.im.constant;
+package com.gylang.gim.im.constant.cmd;
 
 /**
  * @author gylang
  * data 2021/3/6
  */
-public enum BizChatCmd {
+public enum PrivateChatCmd {
     ;
     /** 消息私发 */
     public static final String PRIVATE_CHAT = "PRIVATE_CHAT";
@@ -27,5 +27,7 @@ public enum BizChatCmd {
     public static final String PRIVATE_CHAT_LAST_MSG_ID = "PRIVATE_CHAT_LAST_MSG_ID";
     /** 更新群聊最新 msgId */
     public static final String GROUP_CHAT_LAST_MSG_ID = "GROUP_CHAT_LAST_MSG_ID";
+
+    public static final String SIMPLE_PRIVATE_CHAT = "SPC";
 
 }

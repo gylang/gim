@@ -3,7 +3,7 @@ package com.gylang.gim.im.intercept;
 import com.gylang.gim.im.domain.ResponseMessageWrap;
 import com.gylang.netty.sdk.common.AfterConfigInitialize;
 import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.constant.SystemMessageType;
+import com.gylang.netty.sdk.constant.system.SystemMessageType;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.intercept.NettyIntercept;

@@ -17,7 +17,7 @@ import com.gylang.im.web.service.ImUserFriendService;
 import com.gylang.im.web.service.UserApplyService;
 import com.gylang.im.web.service.biz.BizFriendService;
 import com.gylang.netty.sdk.constant.ChatTypeEnum;
-import com.gylang.netty.sdk.constant.SystemMessageType;
+import com.gylang.netty.sdk.constant.system.SystemMessageType;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.provider.MessageProvider;

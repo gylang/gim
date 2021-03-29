@@ -4,7 +4,7 @@ import com.gylang.netty.sdk.common.InokeFinished;
 import com.gylang.netty.sdk.common.ObjectWrap;
 import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.constant.ChatTypeEnum;
-import com.gylang.netty.sdk.constant.SystemMessageType;
+import com.gylang.netty.sdk.constant.system.SystemMessageType;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.BizRequestAdapter;

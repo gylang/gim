@@ -1,6 +1,6 @@
 package com.gylang.gim.im.biz;
 
-import com.gylang.gim.im.constant.BizChatCmd;
+import com.gylang.gim.im.constant.cmd.PrivateChatCmd;
 import com.gylang.gim.im.service.HistoryMessageService;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.MessageWrap;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
  * data 2021/3/18
  */
 @Component
-@NettyHandler(BizChatCmd.PRIVATE_CHAT_LAST_MSG_ID)
+@NettyHandler(PrivateChatCmd.PRIVATE_CHAT_LAST_MSG_ID)
 public class UpdatePrivateLastMsgIdHandler implements IMRequestHandler {
 
     @Autowired

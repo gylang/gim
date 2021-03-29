@@ -1,7 +1,7 @@
 package com.gylang.gim.im.domain;
 
 import com.gylang.im.common.enums.BaseCode;
-import com.gylang.netty.sdk.constant.SystemMessageType;
+import com.gylang.netty.sdk.constant.system.SystemMessageType;
 
 /**
  * @author gylang

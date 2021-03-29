@@ -11,6 +11,7 @@ import com.gylang.netty.sdk.event.EventProvider;
 import com.gylang.netty.sdk.handler.qos.IMessageSenderQosHandler;
 import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
 import com.gylang.netty.sdk.repo.IMSessionRepository;
+import com.gylang.netty.sdk.util.LocalSessionHolderUtil;
 import com.gylang.netty.sdk.util.MsgIdUtil;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -73,6 +74,9 @@ public class DefaultMessageProvider implements MessageProvider {
 //            }
 //            return;
 //        }
+        if (null != target.getSession()) {
+            target.setSession(LocalSessionHolderUtil.getSession(target.getAccount()));
+        }
         message.setSender(null != me ? me.getAccount() : null);
         if (StrUtil.isEmpty(message.getReceive())) {
             message.setReceive(target.getAccount());
@@ -88,10 +92,10 @@ public class DefaultMessageProvider implements MessageProvider {
         if (StrUtil.isNotEmpty(message.getMsgId())) {
             message.setMsgId(MsgIdUtil.increase(message));
         }
-        // 持久化消息
-        if (message.isPersistenceEvent()) {
-            eventProvider.sendEvent(EventTypeConst.PERSISTENCE_EVENT, message);
-        }
+//        // 持久化消息
+//        if (message.isPersistenceEvent()) {
+//            eventProvider.sendEvent(EventTypeConst.PERSISTENCE_EVENT, message);
+//        }
         ChannelFuture cf = target.getSession().writeAndFlush(message);
 
         cf.addListener((ChannelFutureListener) channelFuture -> {
@@ -101,6 +105,7 @@ public class DefaultMessageProvider implements MessageProvider {
                     // 应用层确保消息可达
                     iMessageSenderQosHandler.handle(message, target);
                 } else if (message.getRetryNum() > retryNum) {
+                    // iMessageSenderQosHandler
                     if (message.isOfflineMsgEvent()) {
                         // 消息发送失败 发送消息发送失败事件
                         eventProvider.sendEvent(EventTypeConst.OFFLINE_MSG_EVENT, message);
@@ -108,7 +113,7 @@ public class DefaultMessageProvider implements MessageProvider {
                 } else {
                     // 重发 可以设置定时器 重发
                     message.setRetryNum(retryNum + 1);
-                    channelFuture.channel().writeAndFlush(message);
+                    sendMsgCallBack(me, target, message, (ChannelFutureListener) channelFuture);
                 }
             }
 

@@ -47,7 +47,7 @@ public class MessageWrap implements Serializable {
     private boolean qos;
 
     /** 持久化消息事件 */
-    private transient boolean persistenceEvent;
+    private boolean store;
 
     /** 离线/失败消息事件发送 */
     private transient boolean offlineMsgEvent = true;
@@ -67,15 +67,12 @@ public class MessageWrap implements Serializable {
         message.setReceive(receive);
         message.setReceiverType(receiverType);
         message.setQos(qos);
-        message.setPersistenceEvent(persistenceEvent);
+        message.setStore(store);
         message.setOfflineMsgEvent(offlineMsgEvent);
         message.setTimeStamp(timeStamp);
         return message;
 
     }
-
-
-
 
 
 }

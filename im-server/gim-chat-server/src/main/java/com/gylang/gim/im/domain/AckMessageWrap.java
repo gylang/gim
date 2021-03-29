@@ -1,7 +1,7 @@
 package com.gylang.gim.im.domain;
 
 import com.gylang.netty.sdk.constant.ChatTypeEnum;
-import com.gylang.netty.sdk.constant.SystemMessageType;
+import com.gylang.netty.sdk.constant.system.SystemMessageType;
 import com.gylang.netty.sdk.domain.MessageWrap;
 
 /**
