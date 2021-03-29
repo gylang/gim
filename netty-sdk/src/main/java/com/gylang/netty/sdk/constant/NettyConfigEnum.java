@@ -31,7 +31,7 @@ public enum NettyConfigEnum {
     /**
      * 连接丢失重连次数
      */
-    LOST_CONNECT_RETRY_NUM("lostConnectRetryNum", 5),
+    LOST_CONNECT_RETRY_NUM("lostConnectRetryNum", 3),
     /**
      * 日志级别
      */

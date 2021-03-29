@@ -25,8 +25,9 @@ public class GroupChatHandler implements IMRequestHandler {
     public Object process(IMSession me, MessageWrap message) {
 
         // 1. 好友关系校验
+
         // 发送群消息
-        messageProvider.sendGroup(me, message.getReceive(), message.copyBasic());
+        messageProvider.sendMsg(me, message.getReceive(), message.copyBasic());
         return null;
     }
 }
