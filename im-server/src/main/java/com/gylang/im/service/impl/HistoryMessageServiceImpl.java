@@ -39,26 +39,26 @@ public class HistoryMessageServiceImpl implements HistoryMessageService {
     private Integer serverIndex;
 
     @Override
-    public void updatePrivateLastMsgId(Long uid, String msgId) {
+    public void updatePrivateLastMsgId(String uid, String msgId) {
 
         // 用户量大 可以使用hash 先分组 再记录
-        long targetSlot = uid & (slot - 1);
+        long targetSlot = Long.parseLong(uid) & (slot - 1);
         cacheManager.setMapField(CacheConstant.PRIVATE_LAST_MSG_ID + targetSlot, String.valueOf(uid), msgId);
 
 
     }
 
     @Override
-    public void updateGroupLastMsgIdHandler(Long groupId, Long uid, String msgId) {
+    public void updateGroupLastMsgIdHandler(String groupId, String uid, String msgId) {
 
         cacheManager.setMapField(CacheConstant.GROUP_LAST_MSG_ID + groupId, String.valueOf(uid), msgId);
 
     }
 
     @Override
-    public PageDTO<HistoryPrivateChat> privateHistory(PageDTO<HistoryPrivateChat> page, Long uid) {
+    public PageDTO<HistoryPrivateChat> privateHistory(PageDTO<HistoryPrivateChat> page, String uid) {
 
-        long targetSlot = uid & (slot - 1);
+        long targetSlot = Long.parseLong(uid) & (slot - 1);
         long lastId = cacheManager.mapGet(CacheConstant.PRIVATE_LAST_MSG_ID + targetSlot, String.valueOf(uid));
         historyPrivateChatService.page(page, Wrappers.<HistoryPrivateChat>lambdaQuery()
                 .ge(true, HistoryPrivateChat::getId, lastId * 100));
@@ -66,9 +66,9 @@ public class HistoryMessageServiceImpl implements HistoryMessageService {
     }
 
     @Override
-    public PageDTO<HistoryGroupChat> groupHistory(PageDTO<HistoryGroupChat> page, Long uid) {
+    public PageDTO<HistoryGroupChat> groupHistory(PageDTO<HistoryGroupChat> page, String uid) {
 
-        long lastId = cacheManager.mapGet(CacheConstant.GROUP_LAST_MSG_ID + page.getParam().getTargetId(), String.valueOf(uid));
+        long lastId = cacheManager.mapGet(CacheConstant.GROUP_LAST_MSG_ID + page.getParam().getReceive(), String.valueOf(uid));
         historyGroupChatService.page(page, Wrappers.<HistoryGroupChat>lambdaQuery()
                 .ge(true, HistoryGroupChat::getId, lastId * 100));
         return page;

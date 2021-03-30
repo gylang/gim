@@ -15,6 +15,8 @@ public interface SystemMessageType {
     String NOTIFY = "1";
     /** 错误消息、异常消息 */
     String ERROR_MSG = "3";
+    /** 心跳 */
+    String HEART = "0";
 
 
 }

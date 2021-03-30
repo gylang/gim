@@ -1,10 +1,15 @@
 package com.gylang.netty.client;
 
+import com.gylang.netty.client.call.ICall;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author gylang
@@ -13,8 +18,43 @@ import java.net.URI;
 @Slf4j
 public class MyWebSocketClient extends WebSocketClient {
 
+
+    private static Map<String, List<ICall<?>>> callListener = new HashMap<>();
+
     public MyWebSocketClient(URI serverUri) {
         super(serverUri);
+    }
+
+    @Override
+    public boolean connectBlocking() throws InterruptedException {
+        return super.connectBlocking();
+    }
+
+    public static synchronized void bind(int type, String key, ICall<?> call) {
+
+        String lk = getListenKey(type, key);
+        List<ICall<?>> callList = callListener.computeIfAbsent(lk, k -> new ArrayList<>());
+        callList.add(call);
+
+    }
+
+    @Override
+    public void reconnect() {
+        super.reconnect();
+    }
+
+    public static synchronized void unBind(int type, String key, ICall<?> call) {
+
+        String lk = getListenKey(type, key);
+        List<ICall<?>> callList = callListener.get(lk);
+        if (null != callList) {
+            callList.remove(call);
+        }
+
+    }
+
+    private static String getListenKey(int type, String key) {
+        return type + "-" + key;
     }
 
     @Override
@@ -38,7 +78,6 @@ public class MyWebSocketClient extends WebSocketClient {
 
     @Override
     public void onError(Exception e) {
-
 
         log.info("websocket onError : {}", e.getMessage());
 

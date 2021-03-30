@@ -24,7 +24,7 @@ public class ImUserFriendServiceImpl extends ServiceImpl<ImUserFriendMapper, ImU
     private CacheManager cacheManager;
 
     @Override
-    public boolean checkIsYouFriend(Long account, Long targetId) {
+    public boolean checkIsYouFriend(String account, String targetId) {
 
         return cacheManager.mapContainKey(CacheConstant.USER_FRIEND_LIST_PREFIX + account, String.valueOf(targetId));
 

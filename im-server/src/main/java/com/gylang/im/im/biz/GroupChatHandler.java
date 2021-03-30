@@ -46,7 +46,6 @@ public class GroupChatHandler implements IMRequestHandler {
             HistoryGroupChat groupChat = new HistoryGroupChat();
             MsgIdUtil.increase(message);
             groupChat.setMsgId(message.getMsgId());
-            groupChat.setTargetId(message.getReceive());
             groupChat.setMessage(JSON.toJSONString(message));
             groupChat.setSendId(me.getAccount());
             groupChat.setTimeStamp(message.getTimeStamp());

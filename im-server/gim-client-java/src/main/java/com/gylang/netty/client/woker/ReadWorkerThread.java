@@ -1,6 +1,9 @@
 package com.gylang.netty.client.woker;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
 /**
@@ -19,6 +22,10 @@ public class ReadWorkerThread extends Thread {
     @Override
     public void run() {
 
-        socket.
+        if (null != socket) {
+            InputStream inputStream = null;
+            SocketChannel channel = socket.getChannel();
+
+        }
     }
 }

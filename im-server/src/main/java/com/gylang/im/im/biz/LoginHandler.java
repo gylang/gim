@@ -43,8 +43,8 @@ public class LoginHandler implements NettyController<String> {
             // 用户已登录, 可以访问服务
             messageWrap.setContent("连接socket成功");
             messageWrap.setCode(CommonConstant.TRUE_INT_STR);
-            me.setAccount(uid);
-            sessionRepository.add(uid, me);
+            me.setAccount(String.valueOf(uid));
+            sessionRepository.add(String.valueOf(uid), me);
             // 发送上线事件
             eventProvider.sendEvent(EventType.USER_ONLINE, uid);
         } else {

@@ -48,14 +48,14 @@ public class FriendController {
     @RequestMapping("apply")
     public CommonResult<Boolean> applyFriend(@RequestBody UserApply userApply) {
         Long uid = userHelper.getUid();
-        userApply.setApplyId(uid);
+        userApply.setApplyId(String.valueOf(uid));
         return friendService.applyFriend(userApply);
     }
 
     @RequestMapping("answer")
     public CommonResult<Boolean> answer(@RequestBody UserApply userApply) {
         Long uid = userHelper.getUid();
-        userApply.setAnswerId(uid);
+        userApply.setAnswerId(String.valueOf(uid));
         return friendService.answer(userApply);
     }
 

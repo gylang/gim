@@ -36,18 +36,18 @@ public class PrivateChatHandler implements IMRequestHandler {
     public Object process(IMSession me, MessageWrap message) {
 
         // 1. 好友关系校验
-        if (userFriendService.checkIsYouFriend(me.getAccount(), message.getTargetId())) {
+        if (userFriendService.checkIsYouFriend(me.getAccount(), message.getReceive())) {
             // 发送消息
-            messageProvider.sendMsg(me, message.getTargetId(), message.copyBasic());
+            messageProvider.sendMsg(me, message.getReceive(), message.copyBasic());
 
         }
 
-        UserConfig userConfig = userConfigService.findUserConfig(message.getTargetId());
+        UserConfig userConfig = userConfigService.findUserConfig(message.getReceive());
         if (null == userConfig
                 || CommonConstant.TRUE_INT == userConfig.getReceiveStranger()) {
             // 2. 是否开启非常勿扰
             // 发送消息
-            messageProvider.sendMsg(me, message.getTargetId(), message.copyBasic());
+            messageProvider.sendMsg(me, message.getReceive(), message.copyBasic());
 
         } else {
             ErrorMessageWrap messageWrap = ErrorMessageWrap

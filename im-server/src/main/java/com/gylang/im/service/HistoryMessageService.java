@@ -16,7 +16,7 @@ public interface HistoryMessageService {
      * @param uid   用户ID
      * @param msgId 消息id
      */
-    void updatePrivateLastMsgId(Long uid, String msgId);
+    void updatePrivateLastMsgId(String uid, String msgId);
 
     /**
      * 更新最新接收到的群消息id
@@ -25,7 +25,7 @@ public interface HistoryMessageService {
      * @param uid     用户ID
      * @param msgId   消息id
      */
-    void updateGroupLastMsgIdHandler(Long groupId, Long uid, String msgId);
+    void updateGroupLastMsgIdHandler(String groupId, String uid, String msgId);
 
     /**
      * 获取个人离线消息
@@ -34,7 +34,7 @@ public interface HistoryMessageService {
      * @param uid  用户ID
      * @return 个人离线消息
      */
-    PageDTO<HistoryPrivateChat> privateHistory(PageDTO<HistoryPrivateChat> page, Long uid);
+    PageDTO<HistoryPrivateChat> privateHistory(PageDTO<HistoryPrivateChat> page, String uid);
 
 
     /**
@@ -44,7 +44,7 @@ public interface HistoryMessageService {
      * @param uid  用户ID
      * @return 群聊离线消息
      */
-    PageDTO<HistoryGroupChat> groupHistory(PageDTO<HistoryGroupChat> page, Long uid);
+    PageDTO<HistoryGroupChat> groupHistory(PageDTO<HistoryGroupChat> page, String uid);
 
     /**
      * 获取个人离线消息自增主键id

@@ -12,8 +12,10 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.handler.timeout.IdleStateHandler;
+import io.netty.util.CharsetUtil;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -60,7 +62,7 @@ public class WebJsonInitializer extends CustomInitializer<SocketChannel> {
         pipeline.addLast(new WebJsonMessageDecoder());
         pipeline.addLast(new WebJsonMessageEncoder());
 //        pipeline.addLast("DelimiterBasedFrameDecoder", new DelimiterBasedFrameDecoder(4096, Delimiters.lineDelimiter()));
-//        pipeline.addLast("StringDecoder", new StringDecoder(CharsetUtil.UTF_8));
+        pipeline.addLast("StringDecoder", new StringDecoder(CharsetUtil.UTF_8));
 //        pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
 //        pipeline.addLast("StringEncoder", new StringEncoder(CharsetUtil.UTF_8));
         pipeline.addLast("heart", new HeartCheckHandler(nettyConfiguration));

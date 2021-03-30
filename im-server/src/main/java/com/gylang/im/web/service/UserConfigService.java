@@ -12,5 +12,5 @@ import com.gylang.im.dao.entity.UserConfig;
 public interface UserConfigService extends IService<UserConfig> {
 
 
-    UserConfig findUserConfig(long targetId);
+    UserConfig findUserConfig(String targetId);
 }

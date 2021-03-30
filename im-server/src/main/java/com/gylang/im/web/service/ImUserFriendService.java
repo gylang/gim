@@ -11,5 +11,5 @@ import com.gylang.im.dao.entity.ImUserFriend;
 public interface ImUserFriendService extends IService<ImUserFriend> {
 
 
-    boolean checkIsYouFriend(Long account, Long targetId);
+    boolean checkIsYouFriend(String account, String targetId);
 }

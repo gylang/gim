@@ -19,7 +19,7 @@ public class UserConfigServiceImpl extends ServiceImpl<UserConfigMapper, UserCon
 
 
     @Override
-    public UserConfig findUserConfig(long targetId) {
+    public UserConfig findUserConfig(String targetId) {
 
         // 当前环境通过数据库信息获取用户信息
         return getOne(new QueryWrapper<UserConfig>()
