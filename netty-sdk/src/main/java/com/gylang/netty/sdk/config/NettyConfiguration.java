@@ -18,6 +18,7 @@ import com.gylang.netty.sdk.provider.MessageProvider;
 import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
 import com.gylang.netty.sdk.repo.IMSessionRepository;
 import com.gylang.netty.sdk.repo.NettyUserInfoFillHandler;
+import com.gylang.netty.sdk.util.MsgIdUtil;
 import lombok.Data;
 import lombok.Getter;
 
@@ -75,6 +76,8 @@ public class NettyConfiguration {
 
     /** 配置属性 */
     private NettyProperties nettyProperties;
+
+    private MsgIdUtil msgIdUtil;
     /**
      * 配置信息
      */

@@ -1,6 +1,5 @@
 package com.gylang.gim.im.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.gylang.cache.CacheManager;
 import com.gylang.gim.im.constant.CacheConstant;
 import com.gylang.gim.im.service.HistoryMessageService;
@@ -52,25 +51,26 @@ public class HistoryMessageServiceImpl implements HistoryMessageService {
     public void storePrivateChat(String uid, MessageWrap message) {
         redisTemplate.opsForZSet().add(CacheConstant.PRIVATE_CHAT_HISTORY + uid,
                 message,
-                message.getTimeStamp());
+                Long.parseLong(message.getCmd()));
     }
 
     @Override
     public void storeGroupChat(String groupId,  MessageWrap message) {
 
+        // 通过sort set 将消息放入缓存
         redisTemplate.opsForZSet().add(CacheConstant.GROUP_CHAT_HISTORY + message.getReceive(),
                 message,
-                message.getTimeStamp());
+                Long.parseLong(message.getCmd()));
     }
 
 
     @Override
     public Long privateHistoryId(String msgId) {
-        return MsgIdUtil.resolveUUID(msgId) * 100 + serverIndex;
+        return MsgIdUtil.getTimestamp(Long.parseLong(msgId));
     }
 
     @Override
     public Long groupHistoryId(String msgId) {
-        return null;
+        return MsgIdUtil.getTimestamp(Long.parseLong(msgId));
     }
 }

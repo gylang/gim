@@ -1,6 +1,7 @@
 package com.gylang.gim.im.domain;
 
 import com.gylang.im.common.enums.BaseCode;
+import com.gylang.netty.sdk.constant.ChatTypeEnum;
 import com.gylang.netty.sdk.constant.system.SystemMessageType;
 
 /**
@@ -14,6 +15,7 @@ public class ErrorMessageWrap extends ResponseMessageWrap {
         ErrorMessageWrap messageWrap = new ErrorMessageWrap();
         messageWrap.setCmd(SystemMessageType.ERROR_MSG);
         messageWrap.setCode(code);
+        messageWrap.setType(ChatTypeEnum.SYSTEM_MESSAGE.getType());
         messageWrap.setContent(msg);
         return messageWrap;
     }
