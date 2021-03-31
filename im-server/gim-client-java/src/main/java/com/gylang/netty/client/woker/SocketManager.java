@@ -1,11 +1,11 @@
 package com.gylang.netty.client.woker;
 
+import cn.hutool.core.thread.ThreadFactoryBuilder;
 import com.gylang.netty.client.call.ICall;
 import com.gylang.netty.client.coder.ClientMessageDecoder;
 import com.gylang.netty.client.coder.ClientMessageEncoder;
 import com.gylang.netty.client.constant.CommonConstant;
 import com.gylang.netty.client.domain.MessageWrap;
-import io.netty.util.concurrent.DefaultThreadFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -46,15 +46,15 @@ public class SocketManager {
     private Thread readWorker;
     private final ExecutorService WORKER_EXECUTOR =
             new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MINUTES,
-                    new LinkedBlockingQueue<>(), new DefaultThreadFactory("worker"));
+                    new LinkedBlockingQueue<>(), new ThreadFactoryBuilder().setNamePrefix("worker").build());
 
     private final ExecutorService BOSS_EXECUTOR =
             new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MINUTES,
-                    new LinkedBlockingQueue<>(), new DefaultThreadFactory("boss"));
+                    new LinkedBlockingQueue<>(), new ThreadFactoryBuilder().setNamePrefix("boss").build());
 
     private final ExecutorService LISTENER_EXECUTOR =
             new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MINUTES,
-                    new LinkedBlockingQueue<>(), new DefaultThreadFactory("listener"));
+                    new LinkedBlockingQueue<>(), new ThreadFactoryBuilder().setNamePrefix("listener").build());
 
 
     private final ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(1, new ThreadPoolExecutor.AbortPolicy());
