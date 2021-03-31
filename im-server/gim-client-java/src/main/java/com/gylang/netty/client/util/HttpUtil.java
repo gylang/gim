@@ -41,12 +41,6 @@ public class HttpUtil {
                 .addInterceptor(new CommonInterecptor())
                 .retryOnConnectionFailure(true);
 
-        OkHttpClient.Builder jsonClient = new OkHttpClient.Builder()
-                //设置超时时间
-                .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-                .addInterceptor(new CommonInterecptor())
-                .addInterceptor(new JsonInterecptor())
-                .retryOnConnectionFailure(true);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http:127.0.0.1:8888")
