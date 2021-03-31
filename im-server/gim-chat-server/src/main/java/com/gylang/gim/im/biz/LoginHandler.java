@@ -2,7 +2,7 @@ package com.gylang.gim.im.biz;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.gylang.cache.CacheManager;
+
 import com.gylang.gim.im.constant.cmd.PrivateChatCmd;
 import com.gylang.gim.im.constant.CommonConstant;
 import com.gylang.gim.im.constant.EventType;
@@ -14,6 +14,8 @@ import com.gylang.netty.sdk.event.EventProvider;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import com.gylang.netty.sdk.repo.IMSessionRepository;
 import com.gylang.netty.sdk.util.LocalSessionHolderUtil;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -30,14 +32,15 @@ public class LoginHandler implements IMRequestHandler {
     private EventProvider eventProvider;
     @Resource
     private IMSessionRepository sessionRepository;
-    @Resource
-    private CacheManager cacheManager;
 
+    @Resource
+    private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public Object process(IMSession me, MessageWrap message) {
         // 获取用户信息
-        JSONObject userCache = cacheManager.get(message.getContent());
+        String jsonStr = redisTemplate.opsForValue().get(message.getContent());
+        JSONObject userCache = JSONObject.parseObject(jsonStr);
         String uid = null != userCache ? userCache.getString("id") : null;
         MessageWrap messageWrap = new ResponseMessageWrap();
         messageWrap.setSender(me.getAccount());

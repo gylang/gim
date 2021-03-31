@@ -1,6 +1,5 @@
 package com.gylang.gim.im.biz;
 
-import com.gylang.cache.CacheManager;
 import com.gylang.gim.im.constant.cmd.GroupChatCmd;
 import com.gylang.gim.im.constant.cmd.PrivateChatCmd;
 import com.gylang.gim.im.constant.CacheConstant;
@@ -15,6 +14,7 @@ import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import com.gylang.netty.sdk.provider.MessageProvider;
 import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -29,18 +29,19 @@ import java.util.Map;
 public class GroupChatHandler implements IMRequestHandler {
     @Resource
     private MessageProvider messageProvider;
-    @Resource
-    private CacheManager cacheManager;
+
     @Resource
     private HistoryMessageService messageService;
     @Resource
     private IMGroupSessionRepository groupSessionRepository;
-
+    @Resource
+    private RedisTemplate<String, GroupConfig> redisTemplate;
     @Override
     public Object process(IMSession me, MessageWrap message) {
 
         // 1. 好友关系校验
-        Map<String, GroupConfig> config = cacheManager.getMap(CacheConstant.GROUP_CHAT_CONFIG + message.getReceive());
+        Map<String, GroupConfig> config = redisTemplate.<String, GroupConfig>opsForHash().
+                entries(CacheConstant.GROUP_CHAT_CONFIG + message.getReceive());
         GroupConfig senderConfig = config.get(message.getSender());
         if (null != senderConfig) {
             // 发送者是当前群聊用户

@@ -1,4 +1,4 @@
-package com.gylang.im.web.dto.cache;
+package com.gylang.gim.im.domain;
 
 import lombok.Data;
 

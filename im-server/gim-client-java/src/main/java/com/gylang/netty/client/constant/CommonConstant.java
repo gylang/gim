@@ -46,6 +46,5 @@ public enum CommonConstant {
 
     static {
         HEART.setType(ChatTypeEnum.SYSTEM_MESSAGE.getType());
-        HEART.setCmd(SystemMessageType.HEART);
     }
 }

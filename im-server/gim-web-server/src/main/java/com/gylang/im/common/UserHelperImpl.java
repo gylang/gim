@@ -3,7 +3,7 @@ package com.gylang.im.common;
 import com.gylang.cache.CacheManager;
 import com.gylang.im.common.constant.CommonConstant;
 import com.gylang.im.common.mybatis.UserHelper;
-import com.gylang.im.web.dto.cache.UserCache;
+import com.gylang.im.domain.UserCache;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;

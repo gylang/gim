@@ -2,7 +2,7 @@ package com.gylang.im.web.controller;
 
 import com.gylang.cache.CacheManager;
 import com.gylang.im.common.dto.CommonResult;
-import com.gylang.im.web.dto.cache.UserCache;
+import com.gylang.im.domain.UserCache;
 import com.gylang.im.web.dto.request.LoginRequest;
 import com.gylang.im.web.dto.request.RegistryRequest;
 import com.gylang.im.web.dto.response.LoginResponse;

@@ -12,7 +12,7 @@ import com.gylang.im.common.util.Asserts;
 import com.gylang.im.common.util.MappingUtil;
 import com.gylang.im.web.dao.entity.PtUser;
 import com.gylang.im.web.dao.entity.PtUserInfo;
-import com.gylang.im.web.dto.cache.UserCache;
+import com.gylang.im.domain.UserCache;
 import com.gylang.im.web.dto.request.LoginRequest;
 import com.gylang.im.web.dto.request.RegistryRequest;
 import com.gylang.im.web.dto.response.LoginResponse;

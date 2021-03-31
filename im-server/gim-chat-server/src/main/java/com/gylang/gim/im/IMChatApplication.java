@@ -1,7 +1,6 @@
 package com.gylang.gim.im;
 
 import com.alibaba.fastjson.JSON;
-import com.gylang.cache.RedisCacheSupport;
 import com.gylang.spring.netty.EnableIM;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
@@ -13,7 +12,6 @@ import org.springframework.context.ConfigurableApplicationContext;
  * data 2021/3/26
  */
 @EnableIM
-@RedisCacheSupport
 @SpringBootApplication
 @Slf4j
 public class IMChatApplication {

@@ -1,12 +1,10 @@
 package com.gylang.gim.im.service.impl;
 
-import com.gylang.cache.CacheManager;
 import com.gylang.gim.im.constant.CacheConstant;
 import com.gylang.gim.im.service.HistoryMessageService;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.util.MsgIdUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -21,8 +19,7 @@ import javax.annotation.Resource;
 @Slf4j
 public class HistoryMessageServiceImpl implements HistoryMessageService {
 
-    @Autowired
-    private CacheManager cacheManager;
+
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
@@ -37,13 +34,13 @@ public class HistoryMessageServiceImpl implements HistoryMessageService {
 
         // 用户量大 可以使用hash 先分组 再记录
         long targetSlot = Long.parseLong(uid) & (slot - 1);
-        cacheManager.setMapField(CacheConstant.PRIVATE_LAST_MSG_ID + targetSlot, uid, msgId);
+        redisTemplate.opsForHash().put(CacheConstant.PRIVATE_LAST_MSG_ID + targetSlot, uid, msgId);
     }
 
     @Override
     public void updateGroupLastMsgIdHandler(String groupId, String uid, String msgId) {
 
-        cacheManager.setMapField(CacheConstant.GROUP_LAST_MSG_ID + groupId, String.valueOf(uid), msgId);
+        redisTemplate.opsForHash().put(CacheConstant.GROUP_LAST_MSG_ID + groupId, String.valueOf(uid), msgId);
 
     }
 
