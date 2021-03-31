@@ -42,7 +42,7 @@ public class NettyConfiguration {
     /**
      * 根据名称装配，防止和客户端的ChannelInitializer冲突报错
      */
-    private CustomInitializer<?> serverChannelInitializer;
+    private List<CustomInitializer<?>> serverChannelInitializer;
     /** 事件监听 */
     private EventProvider eventProvider;
     /** 事件上下文 */

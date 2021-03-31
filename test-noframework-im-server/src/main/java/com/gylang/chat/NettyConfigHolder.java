@@ -1,5 +1,6 @@
 package com.gylang.chat;
 
+import cn.hutool.core.collection.CollUtil;
 import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.conveter.JsonConverter;
 import com.gylang.netty.sdk.event.DefaultEventProvider;
@@ -9,7 +10,7 @@ import com.gylang.netty.sdk.handler.adapter.DefaultNettyControllerAdapter;
 import com.gylang.netty.sdk.handler.adapter.DefaultRequestHandlerAdapter;
 import com.gylang.netty.sdk.handler.qos.DefaultIMessageReceiveQosHandler;
 import com.gylang.netty.sdk.handler.qos.DefaultIMessageSendQosHandler;
-import com.gylang.netty.sdk.initializer.WebJsonInitializer;
+import com.gylang.netty.sdk.initializer.WebSocketJsonInitializer;
 import com.gylang.netty.sdk.provider.DefaultMessageProvider;
 import com.gylang.netty.sdk.repo.DefaultGroupRepository;
 import com.gylang.netty.sdk.repo.DefaultIMRepository;
@@ -34,7 +35,7 @@ public class NettyConfigHolder {
 
     public static void init() {
 
-        nettyConfiguration.setServerChannelInitializer(new WebJsonInitializer());
+        nettyConfiguration.setServerChannelInitializer(CollUtil.newArrayList(new WebSocketJsonInitializer()));
         nettyConfiguration.setEventProvider(new DefaultEventProvider());
         nettyConfiguration.setEventContext(new EventContext());
         nettyConfiguration.setDataConverter(new JsonConverter());

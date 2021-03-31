@@ -33,6 +33,7 @@ public class NettyProperties {
     /** 异常重发机制 */
     private Integer reSendMsg;
 
+    private Map<String, Integer> socketType;
 
 
     private Map<String, Object> properties;

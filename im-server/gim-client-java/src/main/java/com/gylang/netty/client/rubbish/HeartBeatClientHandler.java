@@ -1,4 +1,4 @@
-package com.gylang.netty.client;
+package com.gylang.netty.client.rubbish;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.EventLoop;

@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
  * data 2020/11/6
  * @version v0.0.1
  */
-public class WebJsonInitializer extends CustomInitializer<SocketChannel> {
+public class WebSocketJsonInitializer extends CustomInitializer<SocketChannel> {
 
     private  Map<String, Object> properties;
 
@@ -75,6 +75,11 @@ public class WebJsonInitializer extends CustomInitializer<SocketChannel> {
         this.properties = configuration.getProperties();
         this.eventProvider = configuration.getEventProvider();
         this.dispatchAdapterHandler = configuration.getDispatchAdapterHandler();
+    }
+
+    @Override
+    public String getName() {
+        return "websocket";
     }
 }
 

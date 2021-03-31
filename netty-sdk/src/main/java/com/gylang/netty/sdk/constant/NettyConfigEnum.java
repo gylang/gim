@@ -41,7 +41,8 @@ public enum NettyConfigEnum {
     /**
      * 默认socket端口
      */
-    SOCKET_SERVER_PORT("socketServerPort", 46000),
+    WEBSOCKET_PORT("websocketPort", 46000),
+    SOCKET_PORT("socketPort", 46001),
     ;
     private final String name;
     private final Object value;

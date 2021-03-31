@@ -19,40 +19,47 @@
  *                                                                                     *
  ***************************************************************************************
  */
-package com.gylang.netty.sdk.coder;
-
+package com.gylang.netty.client.coder;
 
 import com.alibaba.fastjson.JSON;
-import com.gylang.netty.sdk.constant.CommConst;
-import com.gylang.netty.sdk.domain.MessageWrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.MessageToByteEncoder;
+import com.gylang.netty.client.constant.CommConst;
+import com.gylang.netty.client.domain.MessageWrap;
+
+import java.nio.ByteBuffer;
+
 
 /**
- * 服务端发送消息前编码
+ * 客户端消息发送前进行编码
  */
-public class AppMessageEncoder extends MessageToByteEncoder<MessageWrap> {
+public class ClientMessageEncoder {
 
-	@Override
-	protected void encode(final ChannelHandlerContext ctx, final MessageWrap data, ByteBuf out){
-		byte[] body = JSON.toJSONBytes(data);
-		byte[] header = createHeader((byte) data.getType(), body.length);
-		out.writeBytes(header);
-		out.writeBytes(body);
-	}
+    public ByteBuffer encode(MessageWrap body) {
 
+        byte[] data = JSON.toJSONBytes(body);
 
-	/**
-	 * 创建消息头，结构为 TLV格式（Tag,Length,Value）
-	 * 第一字节为消息类型
-	 * 第二，三字节为消息长度分隔为高低位2个字节
-	 */
-	private byte[] createHeader(byte type, int length) {
-		byte[] header = new byte[CommConst.DATA_HEADER_LENGTH];
-		header[0] = type;
-		header[1] = (byte) (length & 0xff);
-		header[2] = (byte) ((length >> 8) & 0xff);
-		return header;
-	}
+        ByteBuffer ioBuffer = ByteBuffer.allocate(data.length + CommConst.DATA_HEADER_LENGTH);
+
+        ioBuffer.put(createHeader((byte) body.getType(), data.length));
+        ioBuffer.put(data);
+        ioBuffer.flip();
+
+        return ioBuffer;
+
+    }
+
+    /**
+     * 消息体最大为65535
+     *
+     * @param type
+     * @param length
+     * @return
+     */
+    private byte[] createHeader(byte type, int length) {
+        byte[] header = new byte[CommConst.DATA_HEADER_LENGTH];
+        header[0] = type;
+        header[1] = (byte) (length & 0xff);
+        header[2] = (byte) ((length >> 8) & 0xff);
+        return header;
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.gylang.netty.client;
+package com.gylang.netty.client.rubbish;
 
 import com.google.protobuf.ByteString;
 import com.gylang.netty.client.domain.MessageWrapProto;

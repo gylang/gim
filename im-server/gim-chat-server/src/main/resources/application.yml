@@ -20,6 +20,11 @@ gylang:
     allIdle: 10
     lostConnectRetryNum: 10
     socketServerPort: 46000
+    socketType:
+      com.gylang.netty.sdk.initializer.WebSocketJsonInitializer: 46000
+      com.gylang.netty.sdk.initializer.AppSocketJsonInitializer: 46001
+
+
 
 mybatis-plus:
   configuration:
