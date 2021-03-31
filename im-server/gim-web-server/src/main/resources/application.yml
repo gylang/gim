@@ -1,0 +1,37 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: im-server
+  datasource:
+    url: jdbc:mysql://127.0.0.1:33060/gylang-im?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+
+# im
+gylang:
+  netty:
+    serverIp: 127.0.0.1
+    bossGroup: 4
+    workerGroup: 12
+    readerIdle: 10
+    writeIdle: 10
+    allIdle: 10
+    lostConnectRetryNum: 10
+    socketServerPort: 46000
+    socketType:
+      com.gylang.netty.sdk.initializer.WebSocketJsonInitializer: 46000
+      com.gylang.netty.sdk.initializer.AppSocketJsonInitializer: 46001
+
+
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  mapper-locations: classpath*:*/mappers/*.xml
+  type-aliases-package: com.gylang.im.dao.entity
+
+logging:
+  level:
+    root: debug

@@ -16,11 +16,11 @@ import org.springframework.context.ConfigurableApplicationContext;
 @RedisCacheSupport
 @SpringBootApplication
 @Slf4j
-public class IMApplication {
+public class IMChatApplication {
 
     public static void main(String[] args) {
 
-        ConfigurableApplicationContext applicationContext = SpringApplication.run(IMApplication.class);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(IMChatApplication.class);
         log.info("容器启动完成：共计加载了： {}", JSON.toJSONString(applicationContext.getBeanDefinitionNames()));
     }
 }

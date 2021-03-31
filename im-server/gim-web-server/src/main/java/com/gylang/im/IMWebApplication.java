@@ -1,7 +1,6 @@
 package com.gylang.im;
 
 import com.gylang.cache.RedisCacheSupport;
-import com.gylang.spring.netty.EnableIM;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,11 +11,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 @RedisCacheSupport
-@MapperScan("com.gylang.im.dao.mapper")
-
-public class IMServerApplication {
+@MapperScan("com.gylang.im.web.dao.mapper")
+public class IMWebApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(IMServerApplication.class, args);
+        SpringApplication.run(IMWebApplication.class, args);
     }
 }
