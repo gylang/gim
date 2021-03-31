@@ -2,12 +2,16 @@ package com.gylang.netty.client.util;
 
 import cn.hutool.core.lang.ClassScanner;
 import com.alibaba.fastjson.JSON;
-import com.gylang.netty.client.interceptor.TokenInterecptor;
+import com.alibaba.fastjson.support.retrofit.Retrofit2ConverterFactory;
+import com.gylang.netty.client.interceptor.CommonInterecptor;
+import com.gylang.netty.client.interceptor.JsonInterecptor;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import sun.net.www.protocol.http.logging.HttpLogFormatter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -32,23 +36,27 @@ public class HttpUtil {
 
 
         OkHttpClient.Builder client = new OkHttpClient.Builder()
-                .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)//设置超时时间
-                .addInterceptor(new TokenInterecptor())
+                //设置超时时间
+                .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+                .addInterceptor(new CommonInterecptor())
+                .retryOnConnectionFailure(true);
+
+        OkHttpClient.Builder jsonClient = new OkHttpClient.Builder()
+                //设置超时时间
+                .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+                .addInterceptor(new CommonInterecptor())
+                .addInterceptor(new JsonInterecptor())
                 .retryOnConnectionFailure(true);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http:127.0.0.1:8888")
                 .client(client.build())
-                .addConverterFactory(new Converter.Factory() {
-                    @Override
-                    public Converter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) {
-                        return (Converter<ResponseBody, Object>) value -> JSON.parseObject(value.bytes(), type);
-                    }
-                })
+                .addConverterFactory(Retrofit2ConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
         // 构建api代理了
         for (Class<?> clazz : apiClazzList) {
+
             apiProxy.put(clazz, retrofit.create(clazz));
         }
 
