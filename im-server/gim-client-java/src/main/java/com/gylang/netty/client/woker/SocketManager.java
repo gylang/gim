@@ -10,9 +10,11 @@ import com.gylang.netty.client.coder.ClientMessageEncoder;
 import com.gylang.netty.client.constant.CommonConstant;
 import com.gylang.netty.client.constant.cmd.PrivateChatCmd;
 import com.gylang.netty.client.domain.MessageWrap;
+import com.gylang.netty.client.enums.BaseResultCode;
 import com.gylang.netty.client.util.Store.UserStore;
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -23,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * socket管理
@@ -31,7 +34,7 @@ import java.util.concurrent.*;
  * data 2021/3/31
  */
 @Data
-@Builder
+@Slf4j
 public class SocketManager {
 
     private int writeBufferSize = 1024;
@@ -39,6 +42,7 @@ public class SocketManager {
     private int connectTimeOut = 10 * 1000;
     private SocketChannel socketChannel = null;
     private volatile boolean open = true;
+    private AtomicInteger login = new AtomicInteger(0);
     /**
      * 定时任务扫码间隔
      */
@@ -47,9 +51,7 @@ public class SocketManager {
      * 扫码最低时间间隔
      */
     private int messagesValidTime = 2 * 1000;
-
     private Map<String, List<ICall<?>>> callListener = new HashMap<>();
-
 
     private final ByteBuffer headerBuffer = ByteBuffer.allocate(3);
     private ByteBuffer readBuffer = ByteBuffer.allocate(readBufferSize);
@@ -84,7 +86,7 @@ public class SocketManager {
                     System.out.println("尝试重连");
                 } catch (IOException e) {
                     e.printStackTrace();
-                    call.call(e.getMessage());
+                    login.set(0);
                 }
             }
         });
@@ -102,7 +104,7 @@ public class SocketManager {
         socketChannel.socket().connect(new InetSocketAddress(ip, port), connectTimeOut);
         // 登录系统
         login();
-
+        bind(ChatTypeEnum.NOTIFY.getType(), PrivateChatCmd.SOCKET_CONNECTED, onLoginSuccess);
         // 心跳监测
         scheduledExecutorService.scheduleAtFixedRate(this::sendHeart,
                 checkInterval,
@@ -119,6 +121,9 @@ public class SocketManager {
     private void sendHeart() {
         if (socketChannel.isOpen()) {
             System.out.println("[发送心跳] : 连接正常");
+            if (0 == login.get()) {
+                login();
+            }
             send(CommonConstant.HEART);
         } else {
 
@@ -190,7 +195,7 @@ public class SocketManager {
 
         if (data instanceof MessageWrap) {
 
-            sendBroadcast((MessageWrap) data);
+            sendBroadcast(data);
 
         }
     }
@@ -204,6 +209,7 @@ public class SocketManager {
     }
 
     public void destroy() {
+
         closeSession();
     }
 
@@ -212,7 +218,7 @@ public class SocketManager {
     }
 
     public void closeSession() {
-
+        login.set(0);
         if (!isConnected()) {
             return;
         }
@@ -246,6 +252,9 @@ public class SocketManager {
 
         if (intent instanceof MessageWrap) {
             MessageWrap message = (MessageWrap) intent;
+            if (StrUtil.isEmpty(message.getCmd())) {
+                return;
+            }
             List<ICall<?>> callList = callListener.get(getListenKey(message.getType(), message.getCmd()));
             if (null != callList) {
                 for (ICall<?> iCall : callList) {
@@ -277,4 +286,13 @@ public class SocketManager {
     private String getListenKey(int type, String key) {
         return type + "-" + key;
     }
+
+
+    private ICall<MessageWrap> onLoginSuccess = messageWrap -> {
+        if (BaseResultCode.OK.getCode().equals(messageWrap.getCode())) {
+            login.set(1);
+        } else {
+            login.set(2);
+        }
+    };
 }

@@ -1,7 +1,5 @@
 package com.gylang.netty.client.call;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.ReflectUtil;
 import com.gylang.netty.client.domain.CommonResult;
 import com.gylang.netty.client.enums.BaseResultCode;
 import retrofit2.Call;

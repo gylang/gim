@@ -17,6 +17,6 @@ public class SocketHolder {
         private HolderLoad() {
         }
 
-        private static final SocketManager SOCKET_MANAGER = SocketManager.builder().build();
+        private static final SocketManager SOCKET_MANAGER = new SocketManager();
     }
 }

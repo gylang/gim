@@ -1,13 +1,16 @@
 package com.gylang.gim.im.biz;
 
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 
 import com.gylang.gim.im.constant.cmd.PrivateChatCmd;
 import com.gylang.gim.im.constant.CommonConstant;
 import com.gylang.gim.im.constant.EventType;
 import com.gylang.gim.im.domain.ResponseMessageWrap;
+import com.gylang.im.common.enums.BaseResultCode;
 import com.gylang.netty.sdk.annotation.NettyHandler;
+import com.gylang.netty.sdk.constant.ChatTypeEnum;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.event.EventProvider;
@@ -38,13 +41,20 @@ public class LoginHandler implements IMRequestHandler {
 
     @Override
     public Object process(IMSession me, MessageWrap message) {
-        // 获取用户信息
-        String jsonStr = redisTemplate.opsForValue().get(message.getContent());
-        JSONObject userCache = JSONObject.parseObject(jsonStr);
-        String uid = null != userCache ? userCache.getString("id") : null;
         MessageWrap messageWrap = new ResponseMessageWrap();
         messageWrap.setSender(me.getAccount());
         messageWrap.setCmd(PrivateChatCmd.SOCKET_CONNECTED);
+        messageWrap.setType(ChatTypeEnum.NOTIFY.getType());
+        // 获取用户信息
+        if (StrUtil.isNotEmpty(me.getAccount())) {
+            messageWrap.setContent("连接socket成功");
+            messageWrap.setCode(BaseResultCode.OK.getCode());
+            return messageWrap;
+        }
+        String jsonStr = redisTemplate.opsForValue().get(message.getContent());
+        JSONObject userCache = JSONObject.parseObject(jsonStr);
+        String uid = null != userCache ? userCache.getString("id") : null;
+
         if (null != uid) {
             // 用户已登录, 可以访问服务
             messageWrap.setContent("连接socket成功");

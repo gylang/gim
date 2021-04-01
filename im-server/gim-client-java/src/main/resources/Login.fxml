@@ -9,7 +9,7 @@
             <children>
                 <TextField id="username" fx:id="username" prefHeight="65.0" prefWidth="506.0" promptText="账号" />
                 <PasswordField id="password" fx:id="password" prefHeight="65.0" prefWidth="506.0" promptText="密码" />
-                <HBox prefHeight="100.0" prefWidth="200.0">
+                <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0">
                     <children>
                         <Button id="loginBtn" fx:id="loginBtn" mnemonicParsing="false" onAction="#doLogin" prefHeight="70.0" prefWidth="260.0" text="登录" />
                         <Button id="registerBtn" fx:id="registerBtn" mnemonicParsing="false" prefHeight="71.0" prefWidth="246.0" text="注册" />

@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 @RedisCacheSupport
+@EnableIM
 @MapperScan("com.gylang.im.dao.mapper")
 
 public class IMServerApplication {
