@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gylang.netty.client.gui.Login">
+    <children>
+        <VBox layoutX="47.0" layoutY="42.0" prefHeight="302.0" prefWidth="506.0">
+            <children>
+                <TextField id="username" fx:id="username" prefHeight="65.0" prefWidth="506.0" promptText="账号" />
+                <PasswordField id="password" fx:id="password" prefHeight="65.0" prefWidth="506.0" promptText="密码" />
+                <HBox prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <Button id="loginBtn" fx:id="loginBtn" mnemonicParsing="false" onAction="#doLogin" prefHeight="70.0" prefWidth="260.0" text="登录" />
+                        <Button id="registerBtn" fx:id="registerBtn" mnemonicParsing="false" prefHeight="71.0" prefWidth="246.0" text="注册" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

@@ -1,11 +1,18 @@
 package com.gylang.netty.client.woker;
 
 import cn.hutool.core.thread.ThreadFactoryBuilder;
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import com.gylang.netty.client.call.ICall;
+import com.gylang.netty.client.coder.ChatTypeEnum;
 import com.gylang.netty.client.coder.ClientMessageDecoder;
 import com.gylang.netty.client.coder.ClientMessageEncoder;
 import com.gylang.netty.client.constant.CommonConstant;
+import com.gylang.netty.client.constant.cmd.PrivateChatCmd;
 import com.gylang.netty.client.domain.MessageWrap;
+import com.gylang.netty.client.util.Store.UserStore;
+import lombok.Builder;
+import lombok.Data;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -18,16 +25,20 @@ import java.util.Map;
 import java.util.concurrent.*;
 
 /**
+ * socket管理
+ *
  * @author gylang
  * data 2021/3/31
  */
+@Data
+@Builder
 public class SocketManager {
 
-    private int WRITE_BUFFER_SIZE = 1024;
-    private int READ_BUFFER_SIZE = 2048;
-    private int CONNECT_TIME_OUT = 10 * 1000;
+    private int writeBufferSize = 1024;
+    private int readBufferSize = 2048;
+    private int connectTimeOut = 10 * 1000;
     private SocketChannel socketChannel = null;
-
+    private volatile boolean open = true;
     /**
      * 定时任务扫码间隔
      */
@@ -41,60 +52,68 @@ public class SocketManager {
 
 
     private final ByteBuffer headerBuffer = ByteBuffer.allocate(3);
-    private ByteBuffer readBuffer = ByteBuffer.allocate(READ_BUFFER_SIZE);
+    private ByteBuffer readBuffer = ByteBuffer.allocate(readBufferSize);
 
-    private Thread readWorker;
-    private final ExecutorService WORKER_EXECUTOR =
+    /** 工作线程 处理消息的发送 */
+    private final ExecutorService workerExecutor =
             new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MINUTES,
                     new LinkedBlockingQueue<>(), new ThreadFactoryBuilder().setNamePrefix("worker").build());
-
-    private final ExecutorService BOSS_EXECUTOR =
+    /** 处理消息的连接 消息的接收 */
+    private final ExecutorService bossExecutor =
             new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MINUTES,
                     new LinkedBlockingQueue<>(), new ThreadFactoryBuilder().setNamePrefix("boss").build());
-
-    private final ExecutorService LISTENER_EXECUTOR =
+    /** 消息的分发 */
+    private final ExecutorService listenerExecutor =
             new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MINUTES,
                     new LinkedBlockingQueue<>(), new ThreadFactoryBuilder().setNamePrefix("listener").build());
 
-
+    /** 定时任务心跳 */
     private final ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(1, new ThreadPoolExecutor.AbortPolicy());
 
-
+    /** 消息解码 */
     private final ClientMessageDecoder messageDecoder = new ClientMessageDecoder();
+    /** 消息编码 */
     private final ClientMessageEncoder messageEncoder = new ClientMessageEncoder();
 
     public void connect(String ip, Integer port, ICall<String> call) {
 
-        BOSS_EXECUTOR.execute(() -> {
-            try {
-                socketChannel = SocketChannel.open();
-                socketChannel.configureBlocking(true);
-                socketChannel.socket().setTcpNoDelay(true);
-                socketChannel.socket().setKeepAlive(true);
-                socketChannel.socket().setReceiveBufferSize(READ_BUFFER_SIZE);
-                socketChannel.socket().setSendBufferSize(WRITE_BUFFER_SIZE);
-
-                socketChannel.socket().connect(new InetSocketAddress(ip, port), CONNECT_TIME_OUT);
-
-                scheduledExecutorService.scheduleAtFixedRate(this::sendHeart,
-                        checkInterval,
-                        checkInterval,
-                        TimeUnit.MILLISECONDS);
-                /*
-                 *开始读取来自服务端的消息，先读取3个字节的消息头
-                 */
-                call.call("1");
-                while (socketChannel.read(headerBuffer) > 0) {
-                    handleSocketReadEvent();
+        bossExecutor.execute(() -> {
+            while (open) {
+                try {
+                    doConnect(ip, port, call);
+                    System.out.println("尝试重连");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    call.call(e.getMessage());
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("尝试重连");
-                connect(ip, port, call);
-                call.call(e.getMessage());
             }
         });
 
+    }
+
+    private void doConnect(String ip, Integer port, ICall<String> call) throws IOException {
+        // 开启连接
+        socketChannel = SocketChannel.open();
+        socketChannel.configureBlocking(true);
+        socketChannel.socket().setTcpNoDelay(true);
+        socketChannel.socket().setKeepAlive(true);
+        socketChannel.socket().setReceiveBufferSize(readBufferSize);
+        socketChannel.socket().setSendBufferSize(writeBufferSize);
+        socketChannel.socket().connect(new InetSocketAddress(ip, port), connectTimeOut);
+        // 登录系统
+        login();
+
+        // 心跳监测
+        scheduledExecutorService.scheduleAtFixedRate(this::sendHeart,
+                checkInterval,
+                checkInterval,
+                TimeUnit.MILLISECONDS);
+
+        // 开始读取来自服务端的消息，先读取3个字节的消息头
+        call.call("1");
+        while (socketChannel.read(headerBuffer) > 0) {
+            handleSocketReadEvent();
+        }
     }
 
     private void sendHeart() {
@@ -129,7 +148,7 @@ public class SocketManager {
             return;
         }
 
-        WORKER_EXECUTOR.execute(() -> {
+        workerExecutor.execute(() -> {
             int result = 0;
             try {
 
@@ -151,6 +170,21 @@ public class SocketManager {
         });
     }
 
+
+    public void login() {
+
+        String token = UserStore.getInstance().getToken();
+        if (StrUtil.isNotEmpty(token)) {
+
+            send(MessageWrap.builder()
+                    .type(ChatTypeEnum.PRIVATE_CHAT.getType())
+                    .cmd(PrivateChatCmd.LOGIN_SOCKET)
+                    .msgId(IdUtil.getSnowflake(1, 1).nextIdStr())
+                    .content(token)
+                    .build());
+        }
+
+    }
 
     public void messageReceived(Object data) {
 
@@ -196,8 +230,8 @@ public class SocketManager {
 
         readBuffer.clear();
 
-        if (readBuffer.capacity() > READ_BUFFER_SIZE) {
-            readBuffer = ByteBuffer.allocate(READ_BUFFER_SIZE);
+        if (readBuffer.capacity() > readBufferSize) {
+            readBuffer = ByteBuffer.allocate(readBufferSize);
         }
 
         sendBroadcast(CommonConstant.HEART);
@@ -215,7 +249,7 @@ public class SocketManager {
             List<ICall<?>> callList = callListener.get(getListenKey(message.getType(), message.getCmd()));
             if (null != callList) {
                 for (ICall<?> iCall : callList) {
-                    LISTENER_EXECUTOR.execute(() -> ((ICall<MessageWrap>) iCall).call(message));
+                    listenerExecutor.execute(() -> ((ICall<MessageWrap>) iCall).call(message));
 
                 }
             }

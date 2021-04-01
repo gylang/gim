@@ -1,12 +1,8 @@
 package com.gylang.netty.client;
 
-import cn.hutool.core.util.IdUtil;
 import com.gylang.netty.client.api.AuthApi;
 import com.gylang.netty.client.call.ICallback;
-import com.gylang.netty.client.coder.ChatTypeEnum;
-import com.gylang.netty.client.constant.cmd.PrivateChatCmd;
 import com.gylang.netty.client.domain.CommonResult;
-import com.gylang.netty.client.domain.MessageWrap;
 import com.gylang.netty.client.domain.request.LoginRequest;
 import com.gylang.netty.client.domain.response.LoginResponse;
 import com.gylang.netty.client.util.HttpUtil;
@@ -55,18 +51,12 @@ public class SocketClientApplication {
                 data.setUsername("111");
                 System.out.println(data.getUsername());
                 // 连接socket
-                SocketHolder.getInstance()
-                        .send(MessageWrap.builder()
-                                .type(ChatTypeEnum.PRIVATE_CHAT.getType())
-                                .cmd(PrivateChatCmd.LOGIN_SOCKET)
-                                .msgId(IdUtil.getSnowflake(1, 1).nextIdStr())
-                                .content(data.getToken())
-                                .build());
+
             }
 
             @Override
             public void fail(Call<CommonResult<LoginResponse>> call, CommonResult<?> response) {
-
+                System.out.println("[登录失败] : " + response.getMsg());
             }
         });
 

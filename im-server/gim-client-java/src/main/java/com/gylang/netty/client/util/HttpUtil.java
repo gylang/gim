@@ -1,20 +1,12 @@
 package com.gylang.netty.client.util;
 
 import cn.hutool.core.lang.ClassScanner;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.support.retrofit.Retrofit2ConverterFactory;
 import com.gylang.netty.client.interceptor.CommonInterecptor;
-import com.gylang.netty.client.interceptor.JsonInterecptor;
 import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import sun.net.www.protocol.http.logging.HttpLogFormatter;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
