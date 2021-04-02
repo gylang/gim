@@ -9,9 +9,13 @@ import lombok.Data;
 @Data
 public class UserStore {
 
-    private final static UserStore u = new UserStore();
+    private static final UserStore u = new UserStore();
 
     private String token;
+
+    private String nickname;
+
+    private String username;
 
     private UserStore() {
     }

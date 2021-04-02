@@ -42,7 +42,7 @@ public class QosAdapterHandler implements BizRequestAdapter<MessageWrap> {
                 // 接收 保证可靠 - 服务端ack
                 receiveQosHandler.handle(message, me);
                 return InokeFinished.getInstance();
-            } else if (receiveQosHandler.hasReceived(message.getMsgId())) {
+            } else if (receiveQosHandler.hasReceived(me.getAccount(), message.getClientMsgId())) {
                 // 业务消息重发 响应客户端
                 receiveQosHandler.handle(message, me);
                 return null;

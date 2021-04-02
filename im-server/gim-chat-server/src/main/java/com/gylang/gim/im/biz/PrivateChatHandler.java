@@ -2,8 +2,10 @@ package com.gylang.gim.im.biz;
 
 import com.gylang.gim.im.constant.cmd.PrivateChatCmd;
 import com.gylang.gim.im.domain.AckMessageWrap;
+import com.gylang.gim.im.domain.ResponseMessageWrap;
 import com.gylang.gim.im.service.HistoryMessageService;
 import com.gylang.gim.im.service.SendAccessService;
+import com.gylang.im.common.enums.BaseResultCode;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
@@ -40,9 +42,12 @@ public class PrivateChatHandler implements IMRequestHandler {
                 messageService.storePrivateChat(message.getReceive(), message);
             }
             messageProvider.sendMsg(me, message.getReceive(), message.copyBasic());
+            return ResponseMessageWrap.copy(message);
 
         }
-
-        return new AckMessageWrap(message);
+        AckMessageWrap ackMessageWrap = new AckMessageWrap(message);
+        ackMessageWrap.setCode(BaseResultCode.NOT_ACCESS_PRIVATE_RESOURCE.getCode());
+        ackMessageWrap.setContent(BaseResultCode.NOT_ACCESS_PRIVATE_RESOURCE.getMsg());
+        return ackMessageWrap;
     }
 }

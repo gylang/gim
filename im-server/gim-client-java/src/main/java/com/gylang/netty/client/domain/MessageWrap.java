@@ -37,6 +37,7 @@ public class MessageWrap implements Serializable {
     /** 接收者类型 */
     private byte receiverType;
 
+    private String clientMsgId;
 
     /** 消息id */
     private String msgId;

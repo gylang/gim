@@ -1,8 +1,8 @@
 package com.gylang.netty.client;
 
 import com.gylang.netty.client.util.HttpUtil;
-import com.gylang.netty.client.woker.SocketHolder;
-import com.gylang.netty.client.woker.SocketManager;
+import com.gylang.netty.client.socket.SocketHolder;
+import com.gylang.netty.client.socket.SocketManager;
 
 /**
  * @author gylang

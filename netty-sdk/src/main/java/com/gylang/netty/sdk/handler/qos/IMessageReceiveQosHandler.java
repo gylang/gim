@@ -36,14 +36,14 @@ public interface IMessageReceiveQosHandler extends AfterConfigInitialize {
      * @param msgId 消息序列号
      * @return 是否接收
      */
-    boolean hasReceived(String msgId);
+    boolean hasReceived(String senderId, String msgId);
 
     /**
      * 添加已接收队列
      *
      * @param messageWrap 消息
      */
-    void addReceived(MessageWrap messageWrap);
+    void addReceived(String senderId);
 
     /**
      * 启动扫码器

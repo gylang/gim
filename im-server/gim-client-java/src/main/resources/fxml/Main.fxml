@@ -17,7 +17,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button contentDisplay="CENTER" mnemonicParsing="false" prefHeight="98.0" prefWidth="308.0" text="单聊" />
+            <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#openPrivateChat" prefHeight="98.0" prefWidth="308.0" text="单聊" />
             <Button contentDisplay="CENTER" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" prefHeight="98.0" prefWidth="308.0" text="日志" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Button contentDisplay="CENTER" layoutX="315.0" layoutY="13.0" mnemonicParsing="false" prefHeight="98.0" prefWidth="308.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Button contentDisplay="CENTER" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" prefHeight="98.0" prefWidth="308.0" GridPane.rowIndex="3" />

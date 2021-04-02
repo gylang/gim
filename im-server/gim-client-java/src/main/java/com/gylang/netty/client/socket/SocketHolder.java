@@ -1,4 +1,4 @@
-package com.gylang.netty.client.woker;
+package com.gylang.netty.client.socket;
 
 /**
  * @author gylang

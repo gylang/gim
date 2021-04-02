@@ -39,15 +39,16 @@ public class DefaultIMessageReceiveQosHandler implements IMessageReceiveQosHandl
         if (ChatTypeEnum.SYSTEM_MESSAGE.getType() != message.getType() || !message.isQos()) {
             return;
         }
+        String key = getKey(target.getAccount(), message.getClientMsgId());
         // 2. 如果收到的是客户端的ack2包将将消息删除
         if (SystemMessageType.QOS_RECEIVE_ACK.equals(message.getCmd())) {
-            receiveMessages.remove(message.getMsgId());
+            receiveMessages.remove(key);
             return;
         }
         // 3. 接收到客户端的消息 msgId,将消息进行保存，
         // 3.1 如果已经存在，ack1给客户端，
-        if (!receiveMessages.containsKey(message.getMsgId())) {
-            addReceived(message);
+        if (!receiveMessages.containsKey(key)) {
+            addReceived(key);
         }
         // 修改message ack
         // 3.2 发送消息给客户端，ack
@@ -57,13 +58,13 @@ public class DefaultIMessageReceiveQosHandler implements IMessageReceiveQosHandl
     }
 
     @Override
-    public boolean hasReceived(String msgId) {
-        return receiveMessages.containsKey(msgId);
+    public boolean hasReceived(String senderId, String msgId) {
+        return receiveMessages.containsKey(getKey(senderId, msgId));
     }
 
     @Override
-    public void addReceived(MessageWrap messageWrap) {
-        receiveMessages.put(messageWrap.getMsgId(), System.currentTimeMillis() + messagesValidTime);
+    public void addReceived(String key) {
+        receiveMessages.put(key, System.currentTimeMillis() + messagesValidTime);
     }
 
     @Override
@@ -137,5 +138,10 @@ public class DefaultIMessageReceiveQosHandler implements IMessageReceiveQosHandl
         ScheduledExecutorService customScheduledExecutorService = configuration.getProperties(SCHEDULED_EXECUTOR_SERVICE);
         this.scheduledExecutorService = null == customScheduledExecutorService ? this.scheduledExecutorService : customScheduledExecutorService;
 
+    }
+
+    public String getKey(String senderId, String msgId) {
+
+        return senderId + ":" + msgId;
     }
 }

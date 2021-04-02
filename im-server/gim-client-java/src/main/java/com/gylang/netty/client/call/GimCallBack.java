@@ -4,7 +4,7 @@ package com.gylang.netty.client.call;
  * @author gylang
  * data 2021/3/30
  */
-public interface ICall<T> {
+public interface GimCallBack<T> {
 
     /**
      * 回调

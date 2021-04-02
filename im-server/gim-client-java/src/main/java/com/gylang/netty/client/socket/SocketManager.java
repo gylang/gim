@@ -1,9 +1,9 @@
-package com.gylang.netty.client.woker;
+package com.gylang.netty.client.socket;
 
 import cn.hutool.core.thread.ThreadFactoryBuilder;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
-import com.gylang.netty.client.call.ICall;
+import com.gylang.netty.client.call.GimCallBack;
 import com.gylang.netty.client.coder.ChatTypeEnum;
 import com.gylang.netty.client.coder.ClientMessageDecoder;
 import com.gylang.netty.client.coder.ClientMessageEncoder;
@@ -12,7 +12,6 @@ import com.gylang.netty.client.constant.cmd.PrivateChatCmd;
 import com.gylang.netty.client.domain.MessageWrap;
 import com.gylang.netty.client.enums.BaseResultCode;
 import com.gylang.netty.client.util.Store.UserStore;
-import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -51,7 +50,10 @@ public class SocketManager {
      * 扫码最低时间间隔
      */
     private int messagesValidTime = 2 * 1000;
-    private Map<String, List<ICall<?>>> callListener = new HashMap<>();
+    private Map<String, List<GimCallBack<MessageWrap>>> callListener = new HashMap<>();
+
+    /** 消息回调 */
+    private Map<String, GimCallBack<MessageWrap>> sendCallBack = new ConcurrentHashMap<>();
 
     private final ByteBuffer headerBuffer = ByteBuffer.allocate(3);
     private ByteBuffer readBuffer = ByteBuffer.allocate(readBufferSize);
@@ -77,13 +79,20 @@ public class SocketManager {
     /** 消息编码 */
     private final ClientMessageEncoder messageEncoder = new ClientMessageEncoder();
 
-    public void connect(String ip, Integer port, ICall<String> call) {
+    /**
+     * 连接socket
+     *
+     * @param ip          ip
+     * @param port        端口
+     * @param gimCallBack 回调
+     */
+    public void connect(String ip, Integer port, GimCallBack<String> gimCallBack) {
 
         bossExecutor.execute(() -> {
             while (open) {
                 try {
-                    doConnect(ip, port, call);
-                    System.out.println("尝试重连");
+                    doConnect(ip, port, gimCallBack);
+                    log.info("尝试重连");
                 } catch (IOException e) {
                     e.printStackTrace();
                     login.set(0);
@@ -93,7 +102,14 @@ public class SocketManager {
 
     }
 
-    private void doConnect(String ip, Integer port, ICall<String> call) throws IOException {
+    /**
+     * 连接socket
+     *
+     * @param ip          ip
+     * @param port        端口
+     * @param gimCallBack 回调
+     */
+    private void doConnect(String ip, Integer port, GimCallBack<String> gimCallBack) throws IOException {
         // 开启连接
         socketChannel = SocketChannel.open();
         socketChannel.configureBlocking(true);
@@ -112,41 +128,55 @@ public class SocketManager {
                 TimeUnit.MILLISECONDS);
 
         // 开始读取来自服务端的消息，先读取3个字节的消息头
-        call.call("1");
+        gimCallBack.call("1");
         while (socketChannel.read(headerBuffer) > 0) {
             handleSocketReadEvent();
         }
     }
 
+    /**
+     * 发送心跳
+     */
     private void sendHeart() {
         if (socketChannel.isOpen()) {
-            System.out.println("[发送心跳] : 连接正常");
+            log.info("[发送心跳] : 连接正常");
             if (0 == login.get()) {
                 login();
             }
             send(CommonConstant.HEART);
         } else {
 
-            System.out.println("[发送心跳] : 连接异常");
+            log.info("[发送心跳] : 连接异常");
         }
     }
 
+    /**
+     * 处理接受到的消息
+     */
     private void handleSocketReadEvent() throws IOException {
 
+        // 解码
         Object message = messageDecoder.doDecode(headerBuffer, socketChannel);
-
-//        LOGGER.messageReceived(socketChannel, message);
 
         if (CommonConstant.HEART == message) {
             send(CommonConstant.HEART);
             return;
         }
 
-        this.messageReceived(message);
+        // 广播
+        if (message instanceof MessageWrap) {
 
+            sendBroadcast(message);
+
+        }
 
     }
 
+    /**
+     * 发送消息
+     *
+     * @param body 消息体
+     */
     public void send(final MessageWrap body) {
 
         if (!isConnected()) {
@@ -175,6 +205,18 @@ public class SocketManager {
         });
     }
 
+    /**
+     * 带发送消息
+     *
+     * @param body        消息体
+     * @param gimCallBack 回调信息
+     */
+    public void sendAndCallBack(final MessageWrap body, GimCallBack<MessageWrap> gimCallBack) {
+
+        send(body);
+        sendCallBack.put(body.getClientMsgId(), gimCallBack);
+    }
+
 
     public void login() {
 
@@ -191,14 +233,7 @@ public class SocketManager {
 
     }
 
-    public void messageReceived(Object data) {
 
-        if (data instanceof MessageWrap) {
-
-            sendBroadcast(data);
-
-        }
-    }
 
     public void messageSent(MessageWrap data) {
 
@@ -226,6 +261,7 @@ public class SocketManager {
         try {
             socketChannel.close();
         } catch (IOException ignore) {
+            log.info(ignore.getMessage());
         } finally {
             this.sessionClosed();
         }
@@ -251,34 +287,44 @@ public class SocketManager {
         }
 
         if (intent instanceof MessageWrap) {
+
             MessageWrap message = (MessageWrap) intent;
             if (StrUtil.isEmpty(message.getCmd())) {
                 return;
             }
-            List<ICall<?>> callList = callListener.get(getListenKey(message.getType(), message.getCmd()));
-            if (null != callList) {
-                for (ICall<?> iCall : callList) {
-                    listenerExecutor.execute(() -> ((ICall<MessageWrap>) iCall).call(message));
+            // 发送消息到监听队列
+            List<GimCallBack<MessageWrap>> gimCallBackList = callListener.get(getListenKey(message.getType(), message.getCmd()));
+            if (null != gimCallBackList) {
+                for (GimCallBack<MessageWrap> gimCallBack : gimCallBackList) {
+                    listenerExecutor.execute(() -> gimCallBack.call(message));
 
+                }
+            }
+            // 判断是否有直接回调消息
+            if (null != message.getClientMsgId()) {
+                GimCallBack<MessageWrap> gimCallBack = sendCallBack.get(message.getClientMsgId());
+                if (null != gimCallBack) {
+                    gimCallBack.call(message);
+                    sendCallBack.remove(message.getClientMsgId());
                 }
             }
         }
     }
 
-    public synchronized void bind(int type, String key, ICall<?> call) {
+    public synchronized void bind(int type, String key, GimCallBack<MessageWrap> gimCallBack) {
 
         String lk = getListenKey(type, key);
-        List<ICall<?>> callList = callListener.computeIfAbsent(lk, k -> new ArrayList<>());
-        callList.add(call);
+        List<GimCallBack<MessageWrap>> gimCallBackList = callListener.computeIfAbsent(lk, k -> new ArrayList<>());
+        gimCallBackList.add(gimCallBack);
 
     }
 
-    public synchronized void unBind(int type, String key, ICall<?> call) {
+    public synchronized void unBind(int type, String key, GimCallBack<?> gimCallBack) {
 
         String lk = getListenKey(type, key);
-        List<ICall<?>> callList = callListener.get(lk);
-        if (null != callList) {
-            callList.remove(call);
+        List<GimCallBack<MessageWrap>> gimCallBackList = callListener.get(lk);
+        if (null != gimCallBackList) {
+            gimCallBackList.remove(gimCallBack);
         }
 
     }
@@ -288,7 +334,7 @@ public class SocketManager {
     }
 
 
-    private ICall<MessageWrap> onLoginSuccess = messageWrap -> {
+    private GimCallBack<MessageWrap> onLoginSuccess = messageWrap -> {
         if (BaseResultCode.OK.getCode().equals(messageWrap.getCode())) {
             login.set(1);
         } else {

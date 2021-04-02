@@ -1,9 +1,7 @@
-package com.gylang.netty.client.woker;
+package com.gylang.netty.client.socket;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
-import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
 /**

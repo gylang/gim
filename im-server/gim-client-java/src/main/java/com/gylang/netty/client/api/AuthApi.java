@@ -2,6 +2,7 @@ package com.gylang.netty.client.api;
 
 import com.gylang.netty.client.domain.CommonResult;
 import com.gylang.netty.client.domain.request.LoginRequest;
+import com.gylang.netty.client.domain.request.RegistryRequest;
 import com.gylang.netty.client.domain.response.LoginResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -23,4 +24,14 @@ public interface AuthApi {
      */
     @POST(AUTH_BASE + "/login")
     Call<CommonResult<LoginResponse>> login(@Body LoginRequest request);
+
+
+    /**
+     * 用户注册
+     *
+     * @param request 请求 参数
+     * @return 登录结果
+     */
+    @POST(AUTH_BASE + "/registry")
+    Call<CommonResult<LoginResponse>> registry(@Body RegistryRequest request);
 }

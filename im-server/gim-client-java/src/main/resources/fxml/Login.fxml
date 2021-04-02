@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gylang.netty.client.gui.Login">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gylang.netty.client.gui.controller.LoginController">
     <children>
         <VBox layoutX="47.0" layoutY="42.0" prefHeight="302.0" prefWidth="506.0">
             <children>
@@ -12,7 +12,7 @@
                 <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0">
                     <children>
                         <Button id="loginBtn" fx:id="loginBtn" mnemonicParsing="false" onAction="#doLogin" prefHeight="70.0" prefWidth="260.0" text="登录" />
-                        <Button id="registerBtn" fx:id="registerBtn" mnemonicParsing="false" prefHeight="71.0" prefWidth="246.0" text="注册" />
+                        <Button id="registerBtn" fx:id="registerBtn" mnemonicParsing="false" onAction="#doRegister" prefHeight="71.0" prefWidth="246.0" text="注册" />
                     </children>
                 </HBox>
             </children>

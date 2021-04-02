@@ -6,6 +6,7 @@ import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.constant.system.SystemMessageType;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.handler.qos.IMessageReceiveQosHandler;
 import com.gylang.netty.sdk.intercept.NettyIntercept;
 import com.gylang.netty.sdk.provider.MessageProvider;
 import io.netty.channel.ChannelHandlerContext;
@@ -20,9 +21,12 @@ public class NettyResponseIntercept implements NettyIntercept, AfterConfigInitia
 
     private MessageProvider messageProvider;
 
+    private IMessageReceiveQosHandler receiveQosHandler;
+
     @Override
     public void init(NettyConfiguration configuration) {
         this.messageProvider = configuration.getMessageProvider();
+        this.receiveQosHandler = configuration.getIMessageReceiveQosHandler();
     }
 
     @Override
@@ -38,9 +42,13 @@ public class NettyResponseIntercept implements NettyIntercept, AfterConfigInitia
     @Override
     public Object doAfter(ChannelHandlerContext ctx, IMSession me, MessageWrap message, Object result) {
 
+
         if (result instanceof ResponseMessageWrap) {
 
-            messageProvider.sendMsg(me, me, (MessageWrap) result);
+            MessageWrap wrap = (MessageWrap) result;
+            messageProvider.sendMsg(me, me, wrap);
+            receiveQosHandler.handle(wrap, me);
+
         }
         return result;
     }
