@@ -1,6 +1,6 @@
 package com.gylang.gim.im.biz;
 
-import com.gylang.gim.im.constant.cmd.PrivateChatCmd;
+import com.gylang.im.api.constant.cmd.PrivateChatCmd;
 import com.gylang.gim.im.service.HistoryMessageService;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.MessageWrap;

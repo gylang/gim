@@ -26,6 +26,7 @@
         <module>gylang-cross-server-im-starter</module>
         <module>im-server/gim-chat-server</module>
         <module>im-server/gim-web-server</module>
+        <module>im-server/gim-common-api</module>
 
     </modules>
     <distributionManagement>

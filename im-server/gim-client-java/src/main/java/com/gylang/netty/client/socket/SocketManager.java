@@ -4,12 +4,12 @@ import cn.hutool.core.thread.ThreadFactoryBuilder;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gylang.netty.client.call.GimCallBack;
-import com.gylang.netty.client.coder.ChatTypeEnum;
+import com.gylang.im.api.enums.ChatTypeEnum;
 import com.gylang.netty.client.coder.ClientMessageDecoder;
 import com.gylang.netty.client.coder.ClientMessageEncoder;
-import com.gylang.netty.client.constant.CommonConstant;
-import com.gylang.netty.client.constant.cmd.PrivateChatCmd;
-import com.gylang.netty.client.domain.MessageWrap;
+import com.gylang.im.api.constant.CommonConstant;
+import com.gylang.im.api.constant.cmd.PrivateChatCmd;
+import com.gylang.im.api.domain.MessageWrap;
 import com.gylang.netty.client.enums.BaseResultCode;
 import com.gylang.netty.client.util.Store.UserStore;
 import lombok.Data;
@@ -45,7 +45,7 @@ public class SocketManager {
     /**
      * 定时任务扫码间隔
      */
-    private int checkInterval = 5 * 1000;
+    private int checkInterval = 5;
     /**
      * 扫码最低时间间隔
      */
@@ -125,7 +125,7 @@ public class SocketManager {
         scheduledExecutorService.scheduleAtFixedRate(this::sendHeart,
                 checkInterval,
                 checkInterval,
-                TimeUnit.MILLISECONDS);
+                TimeUnit.SECONDS);
 
         // 开始读取来自服务端的消息，先读取3个字节的消息头
         gimCallBack.call("1");
@@ -178,7 +178,9 @@ public class SocketManager {
      * @param body 消息体
      */
     public void send(final MessageWrap body) {
-
+        if (log.isDebugEnabled()) {
+            log.debug("发送消息 : {}", body);
+        }
         if (!isConnected()) {
             return;
         }
@@ -198,9 +200,8 @@ public class SocketManager {
 
                 if (result <= 0) {
                     closeSession();
-                } else {
-                    messageSent(body);
-                }
+                }  // messageSent(body);
+
             }
         });
     }
@@ -232,7 +233,6 @@ public class SocketManager {
         }
 
     }
-
 
 
     public void messageSent(MessageWrap data) {

@@ -2,12 +2,13 @@ package com.gylang.netty.client.gui.controller;
 
 import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.TypeReference;
-import com.gylang.netty.client.coder.ChatTypeEnum;
-import com.gylang.netty.client.constant.cmd.PrivateChatCmd;
-import com.gylang.netty.client.domain.MessageWrap;
-import com.gylang.netty.client.domain.chat.ChatMsg;
+import com.gylang.im.api.enums.ChatTypeEnum;
+import com.gylang.im.api.constant.cmd.PrivateChatCmd;
+import com.gylang.im.api.domain.MessageWrap;
+import com.gylang.im.api.domain.chat.ChatMsg;
 import com.gylang.netty.client.enums.MockKey;
 import com.gylang.netty.client.gui.component.list.ChatListComponent;
+import com.gylang.netty.client.gui.dialog.CommonDialog;
 import com.gylang.netty.client.util.MockUtil;
 import com.gylang.netty.client.socket.SocketHolder;
 import javafx.application.Application;
@@ -73,23 +74,26 @@ public class PrivateChatController extends Application implements Initializable 
         String text = inputText.getText();
         MessageWrap messageWrap = MessageWrap.builder()
                 .type(ChatTypeEnum.PRIVATE_CHAT.getType())
-                .cmd(PrivateChatCmd.PRIVATE_CHAT)
-                .msgId(IdUtil.objectId())
+                .cmd(PrivateChatCmd.SIMPLE_PRIVATE_CHAT)
+                .clientMsgId(IdUtil.objectId())
                 .qos(true)
                 .receive(userId)
                 .content(text)
                 .build();
 
-        SocketHolder.getInstance().send(messageWrap);
+        SocketHolder.getInstance().sendAndCallBack(messageWrap, msg -> {
+            CommonDialog.getInstance().showMsg(msg.getContent());
+        });
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         chatListView.setCellFactory(callback -> new ChatListComponent());
+        userId = "111";
         List<ChatMsg> chatMsgList = MockUtil.mock(new TypeReference<List<ChatMsg>>() {})
                 .actual(new ArrayList<>())
-                .mockK(MockKey.PRIVATE_CHAT.getKey() + "111")
+                .mockK(MockKey.PRIVATE_CHAT.getKey() + userId)
                 .get();
         chatListView.setItems(FXCollections.observableList(chatMsgList));
 

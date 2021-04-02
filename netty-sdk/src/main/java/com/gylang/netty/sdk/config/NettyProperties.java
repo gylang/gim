@@ -2,7 +2,9 @@ package com.gylang.netty.sdk.config;
 
 import lombok.Data;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author gylang
@@ -37,4 +39,6 @@ public class NettyProperties {
 
 
     private Map<String, Object> properties;
+    /** 不用授权的消息 */
+    private Set<String> nonAuthCmd;
 }

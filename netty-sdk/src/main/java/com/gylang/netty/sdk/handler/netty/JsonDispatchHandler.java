@@ -3,7 +3,7 @@ package com.gylang.netty.sdk.handler.netty;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.event.EventProvider;
-import com.gylang.netty.sdk.handler.DispatchAdapterHandler;
+import com.gylang.netty.sdk.handler.IMessageRouter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JsonDispatchHandler extends SimpleChannelInboundHandler<MessageWrap> {
 
-    private final DispatchAdapterHandler dispatchAdapterHandler;
+    private final IMessageRouter IMessageRouter;
 
-    public JsonDispatchHandler(DispatchAdapterHandler bizDispatchHandler, EventProvider messagePusher) {
-        this.dispatchAdapterHandler = bizDispatchHandler;
+    public JsonDispatchHandler(IMessageRouter bizDispatchHandler, EventProvider messagePusher) {
+        this.IMessageRouter = bizDispatchHandler;
     }
 
 
@@ -35,7 +35,7 @@ public class JsonDispatchHandler extends SimpleChannelInboundHandler<MessageWrap
 
             return;
         }
-        dispatchAdapterHandler.process(ctx, session, msg);
+        IMessageRouter.process(ctx, session, msg);
 
     }
 

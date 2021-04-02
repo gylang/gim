@@ -1,9 +1,9 @@
 package com.gylang.netty.client.api;
 
-import com.gylang.netty.client.domain.CommonResult;
-import com.gylang.netty.client.domain.request.LoginRequest;
-import com.gylang.netty.client.domain.request.RegistryRequest;
-import com.gylang.netty.client.domain.response.LoginResponse;
+import com.gylang.im.api.domain.CommonResult;
+import com.gylang.im.api.domain.request.LoginRequest;
+import com.gylang.im.api.domain.request.RegistryRequest;
+import com.gylang.im.api.domain.response.LoginResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;

@@ -1,6 +1,6 @@
 package com.gylang.gim.im.service.impl;
 
-import com.gylang.gim.im.constant.CacheConstant;
+import com.gylang.im.api.constant.CacheConstant;
 import com.gylang.gim.im.service.SendAccessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

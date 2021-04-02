@@ -23,9 +23,9 @@ package com.gylang.netty.client.coder;
 
 
 import com.alibaba.fastjson.JSON;
-import com.gylang.netty.client.constant.CommConst;
-import com.gylang.netty.client.constant.CommonConstant;
-import com.gylang.netty.client.domain.MessageWrap;
+import com.gylang.im.api.constant.CommConst;
+import com.gylang.im.api.constant.CommonConstant;
+import com.gylang.im.api.domain.MessageWrap;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

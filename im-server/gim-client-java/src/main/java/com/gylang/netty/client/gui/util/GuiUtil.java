@@ -7,6 +7,8 @@ import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * 打开新窗口需要在内置线程组处理
+ *
  * @author gylang
  * data 2021/4/2
  */
@@ -23,13 +25,16 @@ public class GuiUtil {
         Platform.runLater(show);
     }
 
-
+    /**
+     * 打开新窗口
+     *
+     * @param view 新窗口
+     */
     public static void openNewView(Class<? extends Application> view) {
 
         // Read file fxml and draw interface.
 
-
-        GuiUtil.update( () -> {
+        GuiUtil.update(() -> {
             try {
                 Application application = ReflectUtil.newInstance(view);
                 application.start(GuiStore.getGuiStore().getMainStage());

@@ -43,25 +43,25 @@ public class DefaultMessageProvider implements MessageProvider {
     private Integer retryNum;
 
     @Override
-    public void sendMsg(IMSession me, String target, MessageWrap message) {
+    public int sendMsg(IMSession me, String target, MessageWrap message) {
 
-        sendMsgCallBack(me, target, message, null);
+        return sendMsgCallBack(me, target, message, null);
     }
 
     @Override
-    public void sendMsg(IMSession me, IMSession target, MessageWrap message) {
+    public int sendMsg(IMSession me, IMSession target, MessageWrap message) {
 
-        sendMsgCallBack(me, target, message, null);
+        return sendMsgCallBack(me, target, message, null);
     }
 
     @Override
-    public void sendMsgCallBack(IMSession me, String target, MessageWrap message, ChannelFutureListener listener) {
+    public int sendMsgCallBack(IMSession me, String target, MessageWrap message, ChannelFutureListener listener) {
         IMSession imSession = sessionRepository.find(target);
-        sendMsgCallBack(me, imSession, message, listener);
+        return sendMsgCallBack(me, imSession, message, listener);
     }
 
     @Override
-    public void sendMsgCallBack(IMSession me, IMSession target, MessageWrap message, ChannelFutureListener listener) {
+    public int sendMsgCallBack(IMSession me, IMSession target, MessageWrap message, ChannelFutureListener listener) {
 
         // todo remove 不应该将消息离线耦合到单一发送服务
         // 接收者不存在/离线
@@ -74,6 +74,10 @@ public class DefaultMessageProvider implements MessageProvider {
 //            }
 //            return;
 //        }
+        if (null == target) {
+            eventProvider.sendEvent(EventTypeConst.USER_NOT_FOUND, message);
+            return USER_NOT_FOUND;
+        }
         if (null != target.getSession()) {
             target.setSession(LocalSessionHolderUtil.getSession(target.getAccount()));
         }
@@ -85,7 +89,7 @@ public class DefaultMessageProvider implements MessageProvider {
         if (!Objects.equals(host, target.getServerIp())) {
             // 跨服务消息 发送事件
             eventProvider.sendEvent(EventTypeConst.CROSS_SERVER_PUSH, message);
-            return;
+            return CROSS_SERVER;
         }
 
         // 判断是否需要自动设置消息id
@@ -122,15 +126,15 @@ public class DefaultMessageProvider implements MessageProvider {
             cf.addListener(listener);
         }
 
-
+        return SENDING;
     }
 
 
     @Override
-    public void sendGroup(IMSession me, String target, MessageWrap message) {
+    public int sendGroup(IMSession me, String target, MessageWrap message) {
 
         AbstractSessionGroup sessionGroup = groupSessionRepository.findByKey(target);
-        sendGroup(me, sessionGroup, message);
+        return sendGroup(me, sessionGroup, message);
     }
 
     @Override
@@ -140,9 +144,9 @@ public class DefaultMessageProvider implements MessageProvider {
 
 
     @Override
-    public void sendGroup(IMSession me, AbstractSessionGroup target, MessageWrap message) {
+    public int sendGroup(IMSession me, AbstractSessionGroup target, MessageWrap message) {
         if (null == target) {
-            return;
+            return USER_NOT_FOUND;
         }
         message.setSender(me.getAccount());
         message.setReceive(target.getGroupId());
@@ -153,12 +157,12 @@ public class DefaultMessageProvider implements MessageProvider {
                 sendMsg(me, session, message);
             }
         }
+        return SENDING;
     }
 
     @Override
     public void sendAsyncGroup(IMSession me, AbstractSessionGroup target, MessageWrap message) {
         executor.execute(() -> sendGroup(me, target, message));
-
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.gylang.netty.client.socket;
 
-import com.gylang.netty.client.domain.MessageWrap;
+import com.gylang.im.api.domain.MessageWrap;
 
 /**
  * @author gylang

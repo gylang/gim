@@ -1,6 +1,6 @@
 package com.gylang.gim.im.biz;
 
-import com.gylang.gim.im.constant.cmd.PrivateChatCmd;
+import com.gylang.im.api.constant.cmd.PrivateChatCmd;
 import com.gylang.gim.im.domain.AckMessageWrap;
 import com.gylang.gim.im.domain.ResponseMessageWrap;
 import com.gylang.gim.im.service.HistoryMessageService;
@@ -37,12 +37,21 @@ public class PrivateChatHandler implements IMRequestHandler {
 
         // 发送消息
         if (access) {
-            // 将新消息存入 redis 刷入记录
-            if (message.isStore()) {
-                messageService.storePrivateChat(message.getReceive(), message);
+
+            int res = messageProvider.sendMsg(me, message.getReceive(), message.copyBasic());
+            if (!MessageProvider.USER_NOT_FOUND.equals(res)) {
+                // 将新消息存入 redis 刷入记录
+                if (message.isStore()) {
+                    messageService.storePrivateChat(message.getReceive(), message);
+                }
+                return ResponseMessageWrap.copy(message);
+            } else {
+                AckMessageWrap ackMessageWrap = new AckMessageWrap(message);
+                ackMessageWrap.setCode(BaseResultCode.VISIT_INTERCEPT.getCode());
+                ackMessageWrap.setContent("用户不存在");
+                return ackMessageWrap;
             }
-            messageProvider.sendMsg(me, message.getReceive(), message.copyBasic());
-            return ResponseMessageWrap.copy(message);
+
 
         }
         AckMessageWrap ackMessageWrap = new AckMessageWrap(message);

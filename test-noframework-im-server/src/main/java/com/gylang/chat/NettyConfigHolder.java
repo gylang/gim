@@ -47,7 +47,7 @@ public class NettyConfigHolder {
         bizRequestAdapterList.add(new DefaultNettyControllerAdapter());
         bizRequestAdapterList.add(new DefaultRequestHandlerAdapter());
         nettyConfiguration.setBizRequestAdapterList(bizRequestAdapterList);
-        nettyConfiguration.setDispatchAdapterHandler(new DefaultAdapterDispatch());
+        nettyConfiguration.setIMessageRouter(new DefaultMessageRouter());
         nettyConfiguration.setNettyInterceptList(new ArrayList<>());
         nettyConfiguration.setIMessageReceiveQosHandler(new DefaultIMessageReceiveQosHandler());
         nettyConfiguration.setIMessageSenderQosHandler(new DefaultIMessageSendQosHandler());

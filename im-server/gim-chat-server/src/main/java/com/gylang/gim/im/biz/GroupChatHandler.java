@@ -1,8 +1,7 @@
 package com.gylang.gim.im.biz;
 
-import com.gylang.gim.im.constant.cmd.GroupChatCmd;
-import com.gylang.gim.im.constant.cmd.PrivateChatCmd;
-import com.gylang.gim.im.constant.CacheConstant;
+import com.gylang.im.api.constant.cmd.GroupChatCmd;
+import com.gylang.im.api.constant.CacheConstant;
 import com.gylang.gim.im.domain.AckMessageWrap;
 import com.gylang.gim.im.domain.GroupConfig;
 import com.gylang.gim.im.service.HistoryMessageService;

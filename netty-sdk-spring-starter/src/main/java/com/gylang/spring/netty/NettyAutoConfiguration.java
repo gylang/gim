@@ -10,8 +10,8 @@ import com.gylang.netty.sdk.event.DefaultEventProvider;
 import com.gylang.netty.sdk.event.EventContext;
 import com.gylang.netty.sdk.event.EventProvider;
 import com.gylang.netty.sdk.handler.BizRequestAdapter;
-import com.gylang.netty.sdk.handler.DefaultAdapterDispatch;
-import com.gylang.netty.sdk.handler.DispatchAdapterHandler;
+import com.gylang.netty.sdk.handler.DefaultMessageRouter;
+import com.gylang.netty.sdk.handler.IMessageRouter;
 import com.gylang.netty.sdk.handler.adapter.DefaultNettyControllerAdapter;
 import com.gylang.netty.sdk.handler.adapter.DefaultRequestHandlerAdapter;
 import com.gylang.netty.sdk.handler.qos.*;
@@ -75,10 +75,10 @@ public class NettyAutoConfiguration implements InitializingBean {
     }
 
     @Bean
-    @ConditionalOnMissingBean(DispatchAdapterHandler.class)
-    public DispatchAdapterHandler dispatchAdapterHandler() {
+    @ConditionalOnMissingBean(IMessageRouter.class)
+    public IMessageRouter dispatchAdapterHandler() {
 
-        return new DefaultAdapterDispatch();
+        return new DefaultMessageRouter();
     }
 
     @Bean

@@ -5,7 +5,7 @@ import com.gylang.netty.sdk.coder.WebJsonMessageEncoder;
 import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.constant.NettyConfigEnum;
 import com.gylang.netty.sdk.event.EventProvider;
-import com.gylang.netty.sdk.handler.DispatchAdapterHandler;
+import com.gylang.netty.sdk.handler.IMessageRouter;
 import com.gylang.netty.sdk.handler.netty.HeartCheckHandler;
 import com.gylang.netty.sdk.handler.netty.JsonDispatchHandler;
 import io.netty.channel.ChannelPipeline;
@@ -35,7 +35,7 @@ public class WebSocketJsonInitializer extends CustomInitializer<SocketChannel> {
 
     private  EventProvider eventProvider;
 
-    private  DispatchAdapterHandler dispatchAdapterHandler;
+    private IMessageRouter IMessageRouter;
 
 
 
@@ -66,7 +66,7 @@ public class WebSocketJsonInitializer extends CustomInitializer<SocketChannel> {
 //        pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
 //        pipeline.addLast("StringEncoder", new StringEncoder(CharsetUtil.UTF_8));
         pipeline.addLast("heart", new HeartCheckHandler(nettyConfiguration));
-        pipeline.addLast("dispatch", new JsonDispatchHandler(dispatchAdapterHandler, eventProvider));
+        pipeline.addLast("dispatch", new JsonDispatchHandler(IMessageRouter, eventProvider));
     }
 
     @Override
@@ -74,7 +74,7 @@ public class WebSocketJsonInitializer extends CustomInitializer<SocketChannel> {
         this.nettyConfiguration = configuration;
         this.properties = configuration.getProperties();
         this.eventProvider = configuration.getEventProvider();
-        this.dispatchAdapterHandler = configuration.getDispatchAdapterHandler();
+        this.IMessageRouter = configuration.getIMessageRouter();
     }
 
     @Override

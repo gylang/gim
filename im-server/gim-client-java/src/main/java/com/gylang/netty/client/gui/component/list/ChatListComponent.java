@@ -1,7 +1,7 @@
 package com.gylang.netty.client.gui.component.list;
 
-import com.gylang.netty.client.GuiMainApplication;
-import com.gylang.netty.client.domain.chat.ChatMsg;
+import com.gylang.netty.client.GuiClientApplication;
+import com.gylang.im.api.domain.chat.ChatMsg;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListCell;
@@ -33,8 +33,8 @@ public class ChatListComponent extends ListCell<ChatMsg> implements Callback<Cla
     private static URL RIGHT = null;
 
     static {
-        LEFT = GuiMainApplication.class.getResource("/fxml/component/ChatMsgLeft.fxml");
-        RIGHT = GuiMainApplication.class.getResource("/fxml/component/ChatMsgRight.fxml");
+        LEFT = GuiClientApplication.class.getResource("/fxml/component/ChatMsgLeft.fxml");
+        RIGHT = GuiClientApplication.class.getResource("/fxml/component/ChatMsgRight.fxml");
     }
 
     @Override

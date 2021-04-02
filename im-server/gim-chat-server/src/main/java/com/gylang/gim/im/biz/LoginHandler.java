@@ -4,9 +4,9 @@ package com.gylang.gim.im.biz;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 
-import com.gylang.gim.im.constant.cmd.PrivateChatCmd;
-import com.gylang.gim.im.constant.CommonConstant;
-import com.gylang.gim.im.constant.EventType;
+import com.gylang.im.api.constant.cmd.PrivateChatCmd;
+import com.gylang.im.api.constant.CommonConstant;
+import com.gylang.im.api.constant.EventType;
 import com.gylang.gim.im.domain.ResponseMessageWrap;
 import com.gylang.im.common.enums.BaseResultCode;
 import com.gylang.netty.sdk.annotation.NettyHandler;
@@ -18,7 +18,6 @@ import com.gylang.netty.sdk.handler.IMRequestHandler;
 import com.gylang.netty.sdk.repo.IMSessionRepository;
 import com.gylang.netty.sdk.util.LocalSessionHolderUtil;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;

@@ -1,5 +1,6 @@
 package com.gylang.im.process;
 
+import cn.hutool.core.util.StrUtil;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.repo.IMSessionRepository;
 import com.gylang.netty.sdk.repo.NettyUserInfoFillHandler;
@@ -24,7 +25,9 @@ public class FillUserInfo implements NettyUserInfoFillHandler {
 
     @Override
     public void fill(IMSession session) {
-
+        if (StrUtil.isNotEmpty(session.getAccount())) {
+            return;
+        }
         IMSession imSession = repository.find(session.getAccount());
         if (null != imSession) {
         Channel channel = session.getSession();

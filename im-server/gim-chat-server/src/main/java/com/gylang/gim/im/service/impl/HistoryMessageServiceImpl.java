@@ -1,6 +1,6 @@
 package com.gylang.gim.im.service.impl;
 
-import com.gylang.gim.im.constant.CacheConstant;
+import com.gylang.im.api.constant.CacheConstant;
 import com.gylang.gim.im.service.HistoryMessageService;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.util.MsgIdUtil;

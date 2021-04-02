@@ -9,7 +9,7 @@ import com.gylang.netty.sdk.event.EventContext;
 import com.gylang.netty.sdk.event.EventProvider;
 import com.gylang.netty.sdk.event.message.MessageEventListener;
 import com.gylang.netty.sdk.handler.BizRequestAdapter;
-import com.gylang.netty.sdk.handler.DispatchAdapterHandler;
+import com.gylang.netty.sdk.handler.IMessageRouter;
 import com.gylang.netty.sdk.handler.qos.IMessageReceiveQosHandler;
 import com.gylang.netty.sdk.handler.qos.IMessageSenderQosHandler;
 import com.gylang.netty.sdk.initializer.CustomInitializer;
@@ -60,7 +60,7 @@ public class NettyConfiguration {
     /** 业务请求适配器 */
     private List<BizRequestAdapter<?>> bizRequestAdapterList;
     /** 适配分发器 */
-    private DispatchAdapterHandler dispatchAdapterHandler;
+    private IMessageRouter IMessageRouter;
     /** 线程池 */
     private ThreadPoolExecutor poolExecutor;
     /** 填充客户信息 */
