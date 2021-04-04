@@ -2,7 +2,7 @@ package com.gylang.im.web.service.biz;
 
 import com.gylang.im.common.dto.CommonResult;
 import com.gylang.im.web.dao.entity.UserApply;
-import com.gylang.im.web.dto.ImUserFriendDTO;
+import com.gylang.im.api.dto.ImUserFriendDTO;
 
 import java.util.List;
 

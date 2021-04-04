@@ -1,6 +1,6 @@
-package com.gylang.im.web.dto;
+package com.gylang.im.api.dto;
 
-import com.gylang.im.common.dto.BaseDTO;
+import com.gylang.im.api.domain.common.BaseDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -8,30 +8,51 @@ import java.util.Date;
 
 
 /**
- * (Role)实体类
+ * (MerUser)实体类
  *
  * @author makejava
  * @since 2021-03-03 21:58:55
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class RoleDTO extends BaseDTO {
-    private static final long serialVersionUID = -36304856830009628L;
+public class MerUserDTO extends BaseDTO {
+    private static final long serialVersionUID = 723354004020202662L;
 
 
     
     /**
-     * 用户id
+     * 用户名
      */    
     
-    private Long uid;
+    private String username;
 
     
     /**
-     * 角色类型
+     * 密码
      */    
     
-    private String roleType;
+    private String password;
+
+    
+    /**
+     * 电话号码
+     */    
+    
+    private String tel;
+
+    
+    /**
+     * 昵称
+     */    
+    
+    private String nickname;
+
+    
+    /**
+     * 密码盐
+     */    
+    
+    private String salt;
 
     
     /**

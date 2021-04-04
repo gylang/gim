@@ -17,4 +17,6 @@ public class LoginResponse {
 
     /** 昵称 */
     private String nickname;
+
+    private Long uid;
 }

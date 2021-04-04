@@ -1,10 +1,8 @@
 package com.gylang.im.web.service.biz;
 
-import com.gylang.im.common.constant.CacheConstant;
 import com.gylang.im.web.dto.ImUserFriendDTO;
 import com.gylang.im.common.dto.CommonResult;
 import com.gylang.im.dao.entity.UserApply;
-import org.springframework.cache.annotation.CacheEvict;
 
 import java.util.List;
 

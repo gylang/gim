@@ -1,4 +1,4 @@
-package com.gylang.im.common.dto;
+package com.gylang.im.api.domain.common;
 
 
 import java.io.Serializable;

@@ -11,7 +11,7 @@ import com.gylang.im.common.util.Asserts;
 import com.gylang.im.common.util.MappingUtil;
 import com.gylang.im.web.dao.entity.ImUserFriend;
 import com.gylang.im.web.dao.entity.UserApply;
-import com.gylang.im.web.dto.ImUserFriendDTO;
+import com.gylang.im.api.dto.ImUserFriendDTO;
 import com.gylang.im.web.service.ImUserFriendService;
 import com.gylang.im.web.service.UserApplyService;
 import com.gylang.im.web.service.biz.BizFriendService;

@@ -1,10 +1,13 @@
 package com.gylang.netty.client.gui.util;
 
 import cn.hutool.core.util.ReflectUtil;
+import com.gylang.im.api.domain.Kv;
 import com.gylang.netty.client.gui.GuiStore;
 import javafx.application.Application;
 import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Map;
 
 /**
  * 打开新窗口需要在内置线程组处理
@@ -25,18 +28,35 @@ public class GuiUtil {
         Platform.runLater(show);
     }
 
+    public static void openNewView(Class<? extends Application> view) {
+        openNewView(view, null);
+    }
+
     /**
      * 打开新窗口
      *
      * @param view 新窗口
      */
-    public static void openNewView(Class<? extends Application> view) {
+    public static void openNewView(Class<? extends Application> view, Object... argument) {
+
+        // Read file fxml and draw interface.
+
+        Application application = ReflectUtil.newInstance(view, argument);
+        openNewView(application);
+
+    }
+
+    /**
+     * 打开新窗口
+     *
+     * @param application 新窗口
+     */
+    public static void openNewView(Application application) {
 
         // Read file fxml and draw interface.
 
         GuiUtil.update(() -> {
             try {
-                Application application = ReflectUtil.newInstance(view);
                 application.start(GuiStore.getGuiStore().getMainStage());
             } catch (Exception e) {
                 e.printStackTrace();

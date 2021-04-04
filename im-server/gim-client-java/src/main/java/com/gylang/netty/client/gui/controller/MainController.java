@@ -37,4 +37,24 @@ public class MainController extends Application {
     public void openPrivateChat(ActionEvent actionEvent) {
         GuiUtil.openNewView(PrivateChatController.class);
     }
+
+    public void openLog(ActionEvent actionEvent) {
+
+    }
+
+    public void openFriendApply(ActionEvent actionEvent) {
+
+    }
+
+    public void openNotify(ActionEvent actionEvent) {
+
+    }
+
+    public void openGroupChat(ActionEvent actionEvent) {
+
+    }
+
+    public void openFriend(ActionEvent actionEvent) {
+        GuiUtil.openNewView(UserIndexController.class);
+    }
 }

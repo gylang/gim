@@ -2,7 +2,6 @@ package com.gylang.im.web.controller;
 
 import com.gylang.im.common.dto.CommonResult;
 import com.gylang.netty.sdk.domain.MessageWrap;
-import com.gylang.netty.sdk.provider.MessageProvider;
 import com.gylang.netty.sdk.repo.IMSessionRepository;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

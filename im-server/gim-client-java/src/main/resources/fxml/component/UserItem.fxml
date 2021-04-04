@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="30.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1"
+            fx:controller="com.gylang.netty.client.gui.component.list.UserItemListComponent"
+            xmlns:fx="http://javafx.com/fxml/1">
+    <HBox prefHeight="30.0" prefWidth="600.0">
+        <children>
+            <ImageView fx:id="avatar" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true"/>
+            <TextField fx:id="nickname" prefHeight="30.0" text="昵称">
+                <opaqueInsets>
+                    <Insets/>
+                </opaqueInsets>
+                <HBox.margin>
+                    <Insets left="10.0"/>
+                </HBox.margin>
+            </TextField>
+            <TextField fx:id="username" layoutX="70.0" layoutY="10.0" prefHeight="30.0" text="用户名">
+                <opaqueInsets>
+                    <Insets/>
+                </opaqueInsets>
+            </TextField>
+            <Button mnemonicParsing="false" onAction="#openChat" prefHeight="30.0" text="打开聊天"/>
+        </children>
+    </HBox>
+</AnchorPane>

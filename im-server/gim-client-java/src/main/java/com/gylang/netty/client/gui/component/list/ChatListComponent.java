@@ -1,7 +1,15 @@
 package com.gylang.netty.client.gui.component.list;
 
+import com.gylang.im.api.constant.cmd.PrivateChatCmd;
+import com.gylang.im.api.domain.MessageWrap;
+import com.gylang.im.api.enums.ChatTypeEnum;
 import com.gylang.netty.client.GuiClientApplication;
 import com.gylang.im.api.domain.chat.ChatMsg;
+import com.gylang.netty.client.call.GimCallBack;
+import com.gylang.netty.client.gui.util.GuiUtil;
+import com.gylang.netty.client.socket.SocketHolder;
+import com.gylang.netty.client.socket.SocketManager;
+import com.gylang.netty.client.util.Store.UserStore;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListCell;
@@ -28,7 +36,8 @@ public class ChatListComponent extends ListCell<ChatMsg> implements Callback<Cla
     public ImageView avatarView;
     public Text nicknameText;
     public TextArea msgText;
-
+    private String uid = "111";
+    private String nickname = "李元霸";
     private static URL LEFT = null;
     private static URL RIGHT = null;
 
@@ -66,7 +75,31 @@ public class ChatListComponent extends ListCell<ChatMsg> implements Callback<Cla
     public void initialize(URL location, ResourceBundle resources) {
 
         //
+        SocketHolder.getInstance()
+                .bind(ChatTypeEnum.PRIVATE_CHAT.getType(), PrivateChatCmd.SIMPLE_PRIVATE_CHAT, msg -> {
 
+                    UserStore userStore = UserStore.getInstance();
+                    if (userStore.getUid().equals(msg.getSender())
+                            && uid.equals(msg.getReceive())) {
+                        // 这是自己发出去得消息
+                        ChatMsg chatMsg = new ChatMsg();
+                        chatMsg.setContent(msg.getContent());
+                        chatMsg.setMsgId(msg.getMsgId());
+                        chatMsg.setTimeStamp(msg.getTimeStamp());
+                        chatMsg.setMe(true);
+                        chatMsg.setNickname(userStore.getNickname());
+                        GuiUtil.update(() -> updateItem(chatMsg, false));
+                    }
+                    if (uid.equals(msg.getSender())) {
+                        ChatMsg chatMsg = new ChatMsg();
+                        chatMsg.setContent(msg.getContent());
+                        chatMsg.setMsgId(msg.getMsgId());
+                        chatMsg.setTimeStamp(msg.getTimeStamp());
+                        chatMsg.setMe(false);
+                        chatMsg.setNickname(nickname);
+                        GuiUtil.update(() -> updateItem(chatMsg, false));
+                    }
+                });
 
     }
 

@@ -1,6 +1,6 @@
-package com.gylang.im.web.dto;
+package com.gylang.im.api.dto;
 
-import com.gylang.im.common.dto.BaseDTO;
+import com.gylang.im.api.domain.common.BaseDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -8,44 +8,51 @@ import java.util.Date;
 
 
 /**
- * 用户信息表(PtUserInfo)实体类
+ * 群组信息卡片(ImGroupCard)实体类
  *
  * @author makejava
- * @since 2021-03-03 21:58:55
+ * @since 2021-03-03 21:58:54
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class PtUserInfoDTO extends BaseDTO {
-    private static final long serialVersionUID = -95700292471008662L;
+public class ImGroupCardDTO extends BaseDTO {
+    private static final long serialVersionUID = -68379306861072010L;
 
 
     
     /**
-     * 用户id
-     */    
-    
-    private Long uid;
-
-    
-    /**
-     * 用户名称
+     * 群聊名
      */    
     
     private String name;
 
     
     /**
-     * 头像
+     * 群主
      */    
     
-    private String avatar;
+    private Long groupMaster;
 
     
     /**
-     * 简介
+     * 群类型
      */    
     
-    private String intro;
+    private String type;
+
+    
+    /**
+     * 群标签
+     */    
+    
+    private String label;
+
+    
+    /**
+     * 群公告
+     */    
+    
+    private String notice;
 
     
     /**

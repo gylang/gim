@@ -1,7 +1,5 @@
 package com.gylang.im.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.gylang.cache.CacheManager;
 import com.gylang.im.common.constant.CacheConstant;

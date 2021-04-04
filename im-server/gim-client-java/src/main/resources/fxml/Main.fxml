@@ -18,13 +18,13 @@
         </rowConstraints>
          <children>
             <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#openPrivateChat" prefHeight="98.0" prefWidth="308.0" text="单聊" />
-            <Button contentDisplay="CENTER" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" prefHeight="98.0" prefWidth="308.0" text="日志" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Button contentDisplay="CENTER" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" onAction="#openLog" prefHeight="98.0" prefWidth="308.0" text="日志" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Button contentDisplay="CENTER" layoutX="315.0" layoutY="13.0" mnemonicParsing="false" prefHeight="98.0" prefWidth="308.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Button contentDisplay="CENTER" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" prefHeight="98.0" prefWidth="308.0" GridPane.rowIndex="3" />
-            <Button contentDisplay="CENTER" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" prefHeight="98.0" prefWidth="308.0" text="通知" GridPane.rowIndex="2" />
+            <Button contentDisplay="CENTER" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" onAction="#openFriendApply" prefHeight="98.0" prefWidth="308.0" text="好友申请通知" GridPane.rowIndex="3" />
+            <Button contentDisplay="CENTER" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" onAction="#openNotify" prefHeight="98.0" prefWidth="308.0" text="通知" GridPane.rowIndex="2" />
             <Button contentDisplay="CENTER" layoutX="315.0" layoutY="13.0" mnemonicParsing="false" prefHeight="98.0" prefWidth="308.0" text="群聊" GridPane.columnIndex="1" />
-            <Button contentDisplay="CENTER" layoutX="315.0" layoutY="117.0" mnemonicParsing="false" prefHeight="98.0" prefWidth="308.0" text="群组" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Button contentDisplay="CENTER" layoutX="10.0" layoutY="117.0" mnemonicParsing="false" prefHeight="98.0" prefWidth="308.0" text="好友" GridPane.rowIndex="1" />
+            <Button contentDisplay="CENTER" layoutX="315.0" layoutY="117.0" mnemonicParsing="false" onAction="#openGroupChat" prefHeight="98.0" prefWidth="308.0" text="群组" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Button contentDisplay="CENTER" layoutX="10.0" layoutY="117.0" mnemonicParsing="false" onAction="#openFriend" prefHeight="98.0" prefWidth="308.0" text="好友" GridPane.rowIndex="1" />
          </children>
       </GridPane>
    </children>

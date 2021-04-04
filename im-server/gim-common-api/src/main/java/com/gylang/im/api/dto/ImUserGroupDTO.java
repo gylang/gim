@@ -1,6 +1,6 @@
-package com.gylang.im.web.dto;
+package com.gylang.im.api.dto;
 
-import com.gylang.im.common.dto.BaseDTO;
+import com.gylang.im.api.domain.common.BaseDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

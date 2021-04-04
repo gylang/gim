@@ -17,6 +17,8 @@ public class UserStore {
 
     private String username;
 
+    private String uid;
+
     private UserStore() {
     }
 

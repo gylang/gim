@@ -18,7 +18,7 @@ public class ChatMsg {
     /** 时间戳 */
     private Long timeStamp;
     /** 消息id */
-    private Long msgId;
+    private String msgId;
 
     private boolean me;
 

@@ -3,7 +3,7 @@ package com.gylang.im.web.controller;
 import com.gylang.im.common.dto.CommonResult;
 import com.gylang.im.common.mybatis.UserHelper;
 import com.gylang.im.web.dao.entity.UserApply;
-import com.gylang.im.web.dto.ImUserFriendDTO;
+import com.gylang.im.api.dto.ImUserFriendDTO;
 import com.gylang.im.web.service.biz.BizFriendService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

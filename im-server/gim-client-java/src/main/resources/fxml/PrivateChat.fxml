@@ -3,9 +3,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="565.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gylang.netty.client.gui.controller.PrivateChatController">
+<AnchorPane prefHeight="565.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" >
    <children>
-      <TextField fx:id="nickname" disable="true" editable="false" layoutX="6.0" layoutY="3.0" text="昵称" />
+      <TextField fx:id="nicknameView" disable="true" editable="false" layoutX="6.0" layoutY="3.0" text="昵称" />
       <VBox layoutX="3.0" layoutY="46.0" prefHeight="473.0" prefWidth="735.0">
          <children>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="319.0" prefWidth="581.0">

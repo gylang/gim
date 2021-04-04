@@ -38,7 +38,7 @@ public class GroupChatHandler implements IMRequestHandler {
     @Override
     public Object process(IMSession me, MessageWrap message) {
 
-        // 1. 好友关系校验
+        // 1. 群关系检验
         Map<String, GroupConfig> config = redisTemplate.<String, GroupConfig>opsForHash().
                 entries(CacheConstant.GROUP_CHAT_CONFIG + message.getReceive());
         GroupConfig senderConfig = config.get(message.getSender());

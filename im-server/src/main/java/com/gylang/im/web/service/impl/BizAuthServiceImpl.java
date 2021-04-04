@@ -15,7 +15,6 @@ import com.gylang.im.web.service.PtUserService;
 import com.gylang.im.common.constant.CacheConstant;
 import com.gylang.im.common.constant.CommonConstant;
 import com.gylang.im.common.dto.CommonResult;
-import com.gylang.im.common.enums.BaseResultCode;
 import com.gylang.im.common.util.Asserts;
 import com.gylang.im.common.util.MappingUtil;
 import com.gylang.im.dao.entity.PtUser;

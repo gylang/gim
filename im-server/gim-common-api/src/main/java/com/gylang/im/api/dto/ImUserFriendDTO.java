@@ -1,6 +1,6 @@
-package com.gylang.im.web.dto;
+package com.gylang.im.api.dto;
 
-import com.gylang.im.common.dto.BaseDTO;
+import com.gylang.im.api.domain.common.BaseDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -8,51 +8,54 @@ import java.util.Date;
 
 
 /**
- * (SysUser)实体类
+ * 好友关系表(ImUserFriend)实体类
  *
  * @author makejava
  * @since 2021-03-03 21:58:55
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class SysUserDTO extends BaseDTO {
-    private static final long serialVersionUID = 703858659884133808L;
+public class ImUserFriendDTO extends BaseDTO {
+    private static final long serialVersionUID = 767112916266390539L;
 
 
     
     /**
-     * 用户名
+     * 用户id
      */    
     
-    private String username;
+    private Long uid;
 
     
     /**
-     * 密码
+     * 好友id
      */    
     
-    private String password;
+    private Long friendId;
 
     
     /**
-     * 电话号码
+     * 好友分组id
      */    
     
-    private String tel;
+    private Long groupId;
 
     
     /**
-     * 昵称
+     * 好友备注, 默认为添加好友时的名称
      */    
     
     private String nickname;
 
-    
+    private String username;
+
+    private String avatar;
+
     /**
-     * 密码盐
+     * 普通好友0 星级好友1 特别关注2
      */    
     
-    private String salt;
+    private Integer starFlag;
 
     
     /**

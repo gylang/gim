@@ -1,6 +1,6 @@
-package com.gylang.im.web.dto;
+package com.gylang.im.api.dto;
 
-import com.gylang.im.common.dto.BaseDTO;
+import com.gylang.im.api.domain.common.BaseDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -8,51 +8,30 @@ import java.util.Date;
 
 
 /**
- * 群组信息卡片(ImGroupCard)实体类
+ * (Role)实体类
  *
  * @author makejava
- * @since 2021-03-03 21:58:54
+ * @since 2021-03-03 21:58:55
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ImGroupCardDTO extends BaseDTO {
-    private static final long serialVersionUID = -68379306861072010L;
+public class RoleDTO extends BaseDTO {
+    private static final long serialVersionUID = -36304856830009628L;
 
 
     
     /**
-     * 群聊名
+     * 用户id
      */    
     
-    private String name;
+    private Long uid;
 
     
     /**
-     * 群主
+     * 角色类型
      */    
     
-    private Long groupMaster;
-
-    
-    /**
-     * 群类型
-     */    
-    
-    private String type;
-
-    
-    /**
-     * 群标签
-     */    
-    
-    private String label;
-
-    
-    /**
-     * 群公告
-     */    
-    
-    private String notice;
+    private String roleType;
 
     
     /**
