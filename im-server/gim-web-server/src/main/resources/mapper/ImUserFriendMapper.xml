@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gylang.im.mapper.ImUserFriendMapper">
+
+
+    <select id="selectFriendListByUid" resultType="com.gylang.im.api.dto.UserFriendVO">
+
+        select f.id,
+               f.uid,
+               f.friend_id,
+               f.group_id,
+               f.remark_name,
+               f.star_flag,
+               f.create_time,
+               f.update_time,
+               f.create_by,
+               f.modify_by,
+               f.status,
+               f.is_delete,
+               f.tenant_id,
+               pu.username,
+               pu.nickname,
+               pui.name,
+               pui.avatar,
+               pui.intro
+        from im_user_friend f
+                 join pt_user pu on f.uid = pu.id
+                 left join pt_user_info pui on f.uid = pui.uid
+        where f.uid = #{uid};
+    </select>
+</mapper>
