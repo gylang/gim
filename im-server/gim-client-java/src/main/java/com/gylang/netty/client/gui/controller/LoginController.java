@@ -5,12 +5,12 @@ package com.gylang.netty.client.gui.controller;
  * data 2021/4/1
  */
 
-import com.gylang.netty.client.api.AuthApi;
-import com.gylang.netty.client.call.ICallback;
-import com.gylang.im.api.domain.CommonResult;
+import com.gylang.im.api.domain.common.CommonResult;
 import com.gylang.im.api.domain.request.LoginRequest;
 import com.gylang.im.api.domain.request.RegistryRequest;
 import com.gylang.im.api.domain.response.LoginResponse;
+import com.gylang.netty.client.api.AuthApi;
+import com.gylang.netty.client.call.ICallback;
 import com.gylang.netty.client.gui.GuiStore;
 import com.gylang.netty.client.gui.dialog.CommonDialog;
 import com.gylang.netty.client.gui.util.GuiUtil;

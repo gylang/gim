@@ -1,6 +1,7 @@
 package com.gylang.im.common.exception;
 
-import com.gylang.im.common.dto.CommonResult;
+
+import com.gylang.im.api.domain.common.CommonResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 

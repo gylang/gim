@@ -1,6 +1,6 @@
 package com.gylang.netty.client.call;
 
-import com.gylang.im.api.domain.CommonResult;
+import com.gylang.im.api.domain.common.CommonResult;
 import com.gylang.netty.client.enums.BaseResultCode;
 import retrofit2.Call;
 import retrofit2.Callback;

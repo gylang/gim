@@ -1,6 +1,6 @@
 package com.gylang.im.common.mybatis;
 
-import com.gylang.im.web.dto.cache.UserCache;
+import com.gylang.im.dto.cache.UserCache;
 
 /**
  * @author gylang

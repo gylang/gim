@@ -5,7 +5,7 @@ import com.gylang.im.common.constant.CommonConstant;
 import com.gylang.im.common.mybatis.UserHelper;
 import com.gylang.im.im.constant.BizChatCmd;
 import com.gylang.im.im.constant.EventType;
-import com.gylang.im.web.dto.msg.ResponseMessageWrap;
+import com.gylang.im.api.dto.msg.ResponseMessageWrap;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;

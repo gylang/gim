@@ -3,12 +3,12 @@ package com.gylang.im.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.gylang.cache.CacheManager;
 import com.gylang.im.common.constant.CacheConstant;
-import com.gylang.im.common.dto.PageDTO;
+import com.gylang.im.api.domain.common.PageResponse;
 import com.gylang.im.dao.entity.HistoryGroupChat;
 import com.gylang.im.dao.entity.HistoryPrivateChat;
 import com.gylang.im.service.HistoryMessageService;
-import com.gylang.im.web.service.HistoryGroupChatService;
-import com.gylang.im.web.service.HistoryPrivateChatService;
+import com.gylang.im.service.HistoryGroupChatService;
+import com.gylang.im.service.HistoryPrivateChatService;
 import com.gylang.netty.sdk.util.MsgIdUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +54,7 @@ public class HistoryMessageServiceImpl implements HistoryMessageService {
     }
 
     @Override
-    public PageDTO<HistoryPrivateChat> privateHistory(PageDTO<HistoryPrivateChat> page, String uid) {
+    public PageResponse<HistoryPrivateChat> privateHistory(PageResponse<HistoryPrivateChat> page, String uid) {
 
         long targetSlot = Long.parseLong(uid) & (slot - 1);
         long lastId = cacheManager.mapGet(CacheConstant.PRIVATE_LAST_MSG_ID + targetSlot, String.valueOf(uid));
@@ -64,7 +64,7 @@ public class HistoryMessageServiceImpl implements HistoryMessageService {
     }
 
     @Override
-    public PageDTO<HistoryGroupChat> groupHistory(PageDTO<HistoryGroupChat> page, String uid) {
+    public PageResponse<HistoryGroupChat> groupHistory(PageResponse<HistoryGroupChat> page, String uid) {
 
         long lastId = cacheManager.mapGet(CacheConstant.GROUP_LAST_MSG_ID + page.getParam().getReceive(), String.valueOf(uid));
         historyGroupChatService.page(page, Wrappers.<HistoryGroupChat>lambdaQuery()

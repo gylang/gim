@@ -1,6 +1,6 @@
 package com.gylang.netty.client.api;
 
-import com.gylang.im.api.domain.CommonResult;
+import com.gylang.im.api.domain.common.CommonResult;
 import com.gylang.im.api.domain.request.LoginRequest;
 import com.gylang.im.api.domain.request.RegistryRequest;
 import com.gylang.im.api.domain.response.LoginResponse;

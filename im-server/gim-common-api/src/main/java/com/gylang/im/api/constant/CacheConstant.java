@@ -31,4 +31,5 @@ public enum CacheConstant {
     /** 群聊历史数据缓存前缀 */
     public static final String GROUP_CHAT_HISTORY = "IM:USER:GROUP:CHAT:";
 
+    public static final String USER_LINK_STATUS = "IM:USER:LINK:STATUS";
 }

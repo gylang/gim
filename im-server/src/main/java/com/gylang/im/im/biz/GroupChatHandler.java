@@ -2,11 +2,11 @@ package com.gylang.im.im.biz;
 
 import com.alibaba.fastjson.JSON;
 import com.gylang.im.dao.entity.HistoryGroupChat;
-import com.gylang.im.web.dto.msg.ErrorMessageWrap;
+import com.gylang.im.api.dto.msg.ErrorMessageWrap;
 import com.gylang.im.common.enums.BaseResultCode;
-import com.gylang.im.web.service.HistoryGroupChatService;
-import com.gylang.im.web.service.ImUserGroupService;
-import com.gylang.im.web.service.UserConfigService;
+import com.gylang.im.service.HistoryGroupChatService;
+import com.gylang.im.service.ImUserGroupService;
+import com.gylang.im.service.UserConfigService;
 import com.gylang.im.im.constant.BizChatCmd;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.MessageWrap;

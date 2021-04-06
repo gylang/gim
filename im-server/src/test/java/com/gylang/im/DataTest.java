@@ -1,8 +1,8 @@
 package com.gylang.im;
 
 import cn.hutool.core.util.RandomUtil;
-import com.gylang.im.web.dto.request.RegistryRequest;
-import com.gylang.im.web.service.biz.BizAuthService;
+import com.gylang.im.api.dto.request.RegistryRequest;
+import com.gylang.im.service.biz.BizAuthService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

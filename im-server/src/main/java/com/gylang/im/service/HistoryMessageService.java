@@ -1,6 +1,6 @@
 package com.gylang.im.service;
 
-import com.gylang.im.common.dto.PageDTO;
+import com.gylang.im.api.domain.common.PageResponse;
 import com.gylang.im.dao.entity.HistoryGroupChat;
 import com.gylang.im.dao.entity.HistoryPrivateChat;
 
@@ -34,7 +34,7 @@ public interface HistoryMessageService {
      * @param uid  用户ID
      * @return 个人离线消息
      */
-    PageDTO<HistoryPrivateChat> privateHistory(PageDTO<HistoryPrivateChat> page, String uid);
+    PageResponse<HistoryPrivateChat> privateHistory(PageResponse<HistoryPrivateChat> page, String uid);
 
 
     /**
@@ -44,7 +44,7 @@ public interface HistoryMessageService {
      * @param uid  用户ID
      * @return 群聊离线消息
      */
-    PageDTO<HistoryGroupChat> groupHistory(PageDTO<HistoryGroupChat> page, String uid);
+    PageResponse<HistoryGroupChat> groupHistory(PageResponse<HistoryGroupChat> page, String uid);
 
     /**
      * 获取个人离线消息自增主键id

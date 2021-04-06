@@ -32,8 +32,9 @@ public final class MappingUtil {
     }
 
 
-    public static <S, D> void map(S sourceObject, D destinationObject) {
+    public static <S, D> D map(S sourceObject, D destinationObject) {
         MAPPERFACADE.map(sourceObject, destinationObject);
+        return destinationObject;
     }
 
 

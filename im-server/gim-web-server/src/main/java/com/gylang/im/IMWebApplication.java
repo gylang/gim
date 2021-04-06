@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 @RedisCacheSupport
-@MapperScan("com.gylang.im.web.dao.mapper")
+@MapperScan("com.gylang.im.mapper")
 public class IMWebApplication {
 
     public static void main(String[] args) {
