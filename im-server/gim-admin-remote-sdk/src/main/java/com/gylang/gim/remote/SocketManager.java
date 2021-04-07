@@ -3,14 +3,17 @@ package com.gylang.gim.remote;
 import cn.hutool.core.thread.ThreadFactoryBuilder;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
 import com.gylang.gim.api.constant.CommonConstant;
 import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
+import com.gylang.gim.api.constant.system.SystemRemoteType;
 import com.gylang.gim.api.domain.MessageWrap;
 import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.remote.call.GimCallBack;
 import com.gylang.gim.remote.coder.ClientMessageDecoder;
 import com.gylang.gim.remote.coder.ClientMessageEncoder;
+import com.gylang.gim.remote.domain.AdminUser;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,9 +47,7 @@ public class SocketManager {
     private AtomicInteger login = new AtomicInteger(0);
 
 
-    private String username;
-
-    private String password;
+    private String loginContent;
     /**
      * 定时任务扫码间隔
      */
@@ -93,8 +94,10 @@ public class SocketManager {
      */
     public void connect(String ip, Integer port,
                         String username, String password, GimCallBack<String> gimCallBack) {
-        this.username = username;
-        this.password = password;
+        AdminUser adminUser = new AdminUser();
+        adminUser.setUsername(username);
+        adminUser.setPassword(password);
+        loginContent = JSON.toJSONString(adminUser);
         bossExecutor.execute(() -> {
             while (open) {
                 try {
@@ -134,8 +137,8 @@ public class SocketManager {
                 checkInterval,
                 TimeUnit.SECONDS);
 
-        // 开始读取来自服务端的消息，先读取3个字节的消息头
         gimCallBack.call("1");
+        // 开始读取来自服务端的消息，先读取3个字节的消息头
         while (socketChannel.read(headerBuffer) > 0) {
             handleSocketReadEvent();
         }
@@ -228,13 +231,14 @@ public class SocketManager {
 
     public void login() {
 
-        if (StrUtil.isNotEmpty(token)) {
+        if (StrUtil.isNotEmpty(loginContent)) {
+
 
             send(MessageWrap.builder()
-                    .type(ChatTypeEnum.PRIVATE_CHAT.getType())
-                    .cmd(PrivateChatCmd.LOGIN_SOCKET)
-                    .msgId(IdUtil.getSnowflake(1, 1).nextIdStr())
-                    .content(token)
+                    .type(ChatTypeEnum.SYSTEM_MESSAGE.getType())
+                    .cmd(SystemRemoteType.REMOTE_LOGIN)
+                    .clientMsgId(IdUtil.getSnowflake(1, 1).nextIdStr())
+                    .content(loginContent)
                     .build());
         }
 

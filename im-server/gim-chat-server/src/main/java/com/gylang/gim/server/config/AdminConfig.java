@@ -12,7 +12,7 @@ import java.util.Map;
  * data 2021/4/7
  */
 @Component
-@ConfigurationProperties(value = "admin-user")
+@ConfigurationProperties(prefix = "gim")
 @Data
 public class AdminConfig {
 

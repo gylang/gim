@@ -1,4 +1,4 @@
-package com.gylang.netty.sdk.constant.system;
+package com.gylang.gim.api.constant.system;
 
 /**
  * @author gylang

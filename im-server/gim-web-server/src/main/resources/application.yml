@@ -33,7 +33,7 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
   mapper-locations: classpath*:*/mappers/*.xml
-  type-aliases-package: com.gylang.im.dao.entity
+  type-aliases-package: com.gylang.gim.web.entity
 
 logging:
   level:

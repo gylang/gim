@@ -1,27 +1,29 @@
-package com.gylang.gim.server.remote;
+package com.gylang.gim.server.handle.remote;
 
 import com.alibaba.fastjson.JSON;
+import com.gylang.gim.api.constant.system.SystemRemoteType;
 import com.gylang.gim.api.domain.push.PushMessage;
-import com.gylang.netty.sdk.constant.system.SystemRemoteType;
+import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import com.gylang.netty.sdk.provider.MessageProvider;
 import com.gylang.netty.sdk.util.MsgIdUtil;
-import com.gylang.spring.netty.annotation.SpringNettyHandler;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
+ * 组推送
  * @author gylang
  * data 2021/4/6
  */
 
-@SpringNettyHandler(SystemRemoteType.P2P_PUSH)
-public class Remote2PPushHandler implements IMRequestHandler {
-
+@Component
+@NettyHandler(SystemRemoteType.P2G_PUSH)
+public class Remote2GPushHandler implements IMRequestHandler {
 
     @Resource
     private ThreadPoolExecutor executor;
@@ -36,7 +38,7 @@ public class Remote2PPushHandler implements IMRequestHandler {
 
         PushMessage push = JSON.parseObject(message.getContent(), PushMessage.class);
 
-        List<String> receiveIdList = push.getReceiveId();
+         List<String> receiveIdList = push.getReceiveId();
         String msgId = MsgIdUtil.increase(message);
         if (receiveIdList.size() < BIZ_THREAD_CAP) {
             push(me, message, push, receiveIdList, msgId);
@@ -53,7 +55,7 @@ public class Remote2PPushHandler implements IMRequestHandler {
             messageWrap.setMsgId(msgId);
             messageWrap.setContent(push.getContent());
             message.setReceive(id);
-            messageProvider.sendMsg(me, id, messageWrap);
+            messageProvider.sendGroup(me, id, messageWrap);
         }
     }
 }

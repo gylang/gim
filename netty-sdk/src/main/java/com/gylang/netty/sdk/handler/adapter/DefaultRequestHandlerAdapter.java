@@ -33,6 +33,7 @@ public class DefaultRequestHandlerAdapter implements BizRequestAdapter<IMRequest
     @Override
     public Object process(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
 
+
         IMRequestHandler requestHandler = handlerMap.get(message.getCmd());
         if (null == requestHandler) {
             return null;
