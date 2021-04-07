@@ -67,7 +67,7 @@ public class ServerStartConfiguration implements InitializingBean {
     private List<BizRequestAdapter<?>> bizRequestAdapterList;
     /** 适配分发器 */
     @Resource
-    private IMessageRouter IMessageRouter;
+    private IMessageRouter messageRouter;
     /** 线程池 */
     @Resource
     private ThreadPoolExecutor poolExecutor;
@@ -98,7 +98,7 @@ public class ServerStartConfiguration implements InitializingBean {
         nettyConfiguration.setMessageProvider(messageProvider);
         nettyConfiguration.setMessageEventListener(messageEventListener);
         nettyConfiguration.setBizRequestAdapterList(bizRequestAdapterList);
-        nettyConfiguration.setIMessageRouter(IMessageRouter);
+        nettyConfiguration.setIMessageRouter(messageRouter);
         nettyConfiguration.setPoolExecutor(poolExecutor);
         nettyConfiguration.setNettyUserInfoFillHandler(nettyUserInfoFillHandler);
         nettyConfiguration.setNettyInterceptList(nettyInterceptList);

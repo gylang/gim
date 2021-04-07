@@ -8,4 +8,6 @@ public interface SystemRemoteType {
 
 
     String P2P_PUSH = "P2PP";
+    String REMOTE_LOGIN = "RELN";
+    String P2G_PUSH = "P2PG";
 }

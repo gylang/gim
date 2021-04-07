@@ -3,7 +3,7 @@
 <mapper namespace="com.gylang.im.mapper.ImUserFriendMapper">
 
 
-    <select id="selectFriendListByUid" resultType="com.gylang.im.api.dto.UserFriendVO">
+    <select id="selectFriendListByUid" resultType="com.gylang.gim.web.api.dto.UserFriendVO">
 
         select f.id,
                f.uid,

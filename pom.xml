@@ -18,7 +18,6 @@
     <modules>
         <module>netty-sdk</module>
         <module>netty-sdk-spring-starter</module>
-        <module>test-client-java</module>
         <module>test-noframework-im-server</module>
         <module>test-spring-im-server</module>
         <module>im-server</module>
@@ -27,6 +26,7 @@
         <module>im-server/gim-chat-server</module>
         <module>im-server/gim-web-server</module>
         <module>im-server/gim-common-api</module>
+        <module>im-server/gim-remote-sdk</module>
 
     </modules>
     <distributionManagement>
