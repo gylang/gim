@@ -59,22 +59,13 @@
         </dependency>
 
 
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.69</version>
-        </dependency>
 
 
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-core</artifactId>
-            <version>5.5.6</version>
-        </dependency>
+
 
         <dependency>
             <groupId>org.gylang</groupId>
-            <artifactId>gim-common-api</artifactId>
+            <artifactId>gim-remote-sdk</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>

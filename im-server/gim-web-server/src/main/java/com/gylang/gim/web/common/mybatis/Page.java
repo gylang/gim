@@ -2,7 +2,7 @@ package com.gylang.gim.web.common.mybatis;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
-import com.gylang.gim.web.api.domain.common.PageResponse;
+import com.gylang.gim.api.domain.common.PageResponse;
 import lombok.Data;
 
 import java.util.List;

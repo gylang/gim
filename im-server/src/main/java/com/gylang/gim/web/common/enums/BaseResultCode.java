@@ -1,6 +1,6 @@
 package com.gylang.gim.web.common.enums;
 
-import com.gylang.gim.web.api.enums.BaseCode;
+import com.gylang.gim.api.enums.BaseCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

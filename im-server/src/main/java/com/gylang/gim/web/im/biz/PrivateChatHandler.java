@@ -1,7 +1,7 @@
 package com.gylang.gim.web.im.biz;
 
 import com.gylang.gim.web.common.constant.CommonConstant;
-import com.gylang.gim.web.api.enums.BaseResultCode;
+import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.web.dao.entity.UserConfig;
 import com.gylang.gim.web.im.constant.BizChatCmd;
 import com.gylang.gim.web.dto.msg.ErrorMessageWrap;

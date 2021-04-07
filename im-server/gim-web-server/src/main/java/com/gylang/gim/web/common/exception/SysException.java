@@ -1,7 +1,7 @@
 package com.gylang.gim.web.common.exception;
 
 
-import com.gylang.gim.web.api.enums.BaseCode;
+import com.gylang.gim.api.enums.BaseCode;
 
 /**
  * 系统异常

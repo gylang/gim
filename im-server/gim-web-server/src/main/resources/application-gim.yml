@@ -1,0 +1,5 @@
+gim:
+  port: 46001
+  ip: 127.0.01
+  username: webAdmin
+  password: 123456

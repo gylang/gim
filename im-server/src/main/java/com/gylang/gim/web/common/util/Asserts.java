@@ -9,7 +9,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
-import com.gylang.gim.web.api.enums.BaseCode;
+import com.gylang.gim.api.enums.BaseCode;
 import com.gylang.gim.web.common.exception.ValidateException;
 
 import java.util.Map;

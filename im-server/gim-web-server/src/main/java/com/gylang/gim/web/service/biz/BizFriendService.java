@@ -1,8 +1,8 @@
 package com.gylang.gim.web.service.biz;
 
-import com.gylang.gim.web.api.domain.common.CommonResult;
-import com.gylang.gim.web.api.dto.ImUserFriendDTO;
-import com.gylang.gim.web.api.dto.UserFriendVO;
+import com.gylang.gim.api.domain.common.CommonResult;
+import com.gylang.gim.api.dto.ImUserFriendDTO;
+import com.gylang.gim.api.dto.UserFriendVO;
 import com.gylang.gim.web.entity.UserApply;
 
 import java.util.List;

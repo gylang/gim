@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gylang.cache.CacheManager;
 import com.gylang.gim.web.common.constant.AnswerType;
 import com.gylang.gim.web.common.constant.CacheConstant;
-import com.gylang.gim.web.api.domain.common.CommonResult;
+import com.gylang.gim.api.domain.common.CommonResult;
 import com.gylang.gim.web.common.util.Asserts;
 import com.gylang.gim.web.common.util.MappingUtil;
 import com.gylang.gim.web.dao.entity.ImUserFriend;

@@ -1,7 +1,7 @@
 package com.gylang.gim.web.dto.msg;
 
-import com.gylang.gim.web.api.enums.BaseCode;
-import com.gylang.gim.web.api.dto.msg.ResponseMessageWrap;
+import com.gylang.gim.api.enums.BaseCode;
+import com.gylang.gim.api.dto.msg.ResponseMessageWrap;
 import com.gylang.netty.sdk.constant.system.SystemMessageType;
 
 /**

@@ -2,7 +2,7 @@ package com.gylang.gim.web.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.gylang.cache.CacheManager;
-import com.gylang.gim.web.api.domain.common.PageResponse;
+import com.gylang.gim.api.domain.common.PageResponse;
 import com.gylang.gim.web.common.constant.CacheConstant;
 import com.gylang.gim.web.common.mybatis.Page;
 import com.gylang.gim.web.entity.HistoryGroupChat;

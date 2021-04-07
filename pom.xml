@@ -27,6 +27,7 @@
         <module>im-server/gim-web-server</module>
         <module>im-server/gim-common-api</module>
         <module>im-server/gim-remote-sdk</module>
+        <module>im-server/gim-admin-remote-sdk</module>
 
     </modules>
     <distributionManagement>

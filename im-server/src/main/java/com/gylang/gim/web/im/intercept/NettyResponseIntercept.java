@@ -1,6 +1,6 @@
 package com.gylang.gim.web.im.intercept;
 
-import com.gylang.gim.web.api.dto.msg.ResponseMessageWrap;
+import com.gylang.gim.api.dto.msg.ResponseMessageWrap;
 import com.gylang.netty.sdk.common.AfterConfigInitialize;
 import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.constant.system.SystemMessageType;

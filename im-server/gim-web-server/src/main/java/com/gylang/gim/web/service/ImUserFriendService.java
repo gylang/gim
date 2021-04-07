@@ -1,7 +1,7 @@
 package com.gylang.gim.web.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.gylang.gim.web.api.dto.UserFriendVO;
+import com.gylang.gim.api.dto.UserFriendVO;
 import com.gylang.gim.web.entity.ImUserFriend;
 
 import java.util.List;

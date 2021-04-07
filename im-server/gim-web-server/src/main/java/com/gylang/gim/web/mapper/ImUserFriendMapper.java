@@ -1,7 +1,7 @@
 package com.gylang.gim.web.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.gylang.gim.web.api.dto.UserFriendVO;
+import com.gylang.gim.api.dto.UserFriendVO;
 import com.gylang.gim.web.entity.ImUserFriend;
 import org.apache.ibatis.annotations.Param;
 

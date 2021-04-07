@@ -71,5 +71,10 @@
             <artifactId>spring-boot-starter-jdbc</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.gylang</groupId>
+            <artifactId>gim-admin-remote-sdk</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

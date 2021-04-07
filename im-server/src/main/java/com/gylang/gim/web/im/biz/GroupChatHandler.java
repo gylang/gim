@@ -3,7 +3,7 @@ package com.gylang.gim.web.im.biz;
 import com.alibaba.fastjson.JSON;
 import com.gylang.gim.web.dao.entity.HistoryGroupChat;
 import com.gylang.gim.web.dto.msg.ErrorMessageWrap;
-import com.gylang.gim.web.api.enums.BaseResultCode;
+import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.web.service.HistoryGroupChatService;
 import com.gylang.gim.web.service.ImUserGroupService;
 import com.gylang.gim.web.service.UserConfigService;
