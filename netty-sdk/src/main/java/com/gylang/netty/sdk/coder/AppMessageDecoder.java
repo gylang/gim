@@ -22,9 +22,9 @@
 package com.gylang.netty.sdk.coder;
 
 import com.alibaba.fastjson.JSON;
-import com.gylang.netty.sdk.constant.ChatTypeEnum;
-import com.gylang.netty.sdk.constant.CommConst;
-import com.gylang.netty.sdk.constant.system.SystemMessageType;
+import com.gylang.gim.api.constant.CommConst;
+import com.gylang.gim.api.constant.cmd.SystemChatCmd;
+import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -42,7 +42,7 @@ public class AppMessageDecoder extends ByteToMessageDecoder {
 
     static {
         messageWrap.setType(ChatTypeEnum.SYSTEM_MESSAGE.getType());
-        messageWrap.setCmd(SystemMessageType.HEART);
+        messageWrap.setCmd(SystemChatCmd.HEART);
     }
 
     @Override

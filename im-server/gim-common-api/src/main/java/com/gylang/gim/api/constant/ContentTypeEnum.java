@@ -1,4 +1,4 @@
-package com.gylang.netty.sdk.constant;
+package com.gylang.gim.api.constant;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

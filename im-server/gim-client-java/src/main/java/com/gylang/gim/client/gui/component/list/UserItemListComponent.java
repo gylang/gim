@@ -38,4 +38,12 @@ public class UserItemListComponent extends BaseCell<ImUserFriendDTO> {
         ImUserFriendDTO item = getItem();
         GuiUtil.openNewView(new PrivateChatController(item));
     }
+
+
+
+    public void delFriendAction(ActionEvent actionEvent) {
+
+        log.info("{}", actionEvent.getSource());
+        ImUserFriendDTO item = getItem();
+    }
 }

@@ -1,8 +1,8 @@
 package com.gylang.netty.sdk.provider;
 
 import cn.hutool.core.util.StrUtil;
+import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.constant.EventTypeConst;
 import com.gylang.netty.sdk.constant.NettyConfigEnum;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;

@@ -1,7 +1,7 @@
 package com.gylang.gim.server.domain;
 
-import com.gylang.netty.sdk.constant.ChatTypeEnum;
-import com.gylang.netty.sdk.constant.system.SystemMessageType;
+import com.gylang.gim.api.constant.cmd.SystemChatCmd;
+import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.netty.sdk.domain.MessageWrap;
 
 /**
@@ -14,6 +14,6 @@ public class AckMessageWrap extends ResponseMessageWrap {
         setClientMsgId(message.getClientMsgId());
         setMsgId(message.getMsgId());
         setType(ChatTypeEnum.SYSTEM_MESSAGE.getType());
-        setCmd(SystemMessageType.QOS_RECEIVE_ACK);
+        setCmd(SystemChatCmd.QOS_RECEIVE_ACK);
     }
 }

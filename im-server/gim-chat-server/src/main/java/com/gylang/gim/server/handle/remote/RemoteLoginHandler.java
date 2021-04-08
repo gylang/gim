@@ -2,14 +2,14 @@ package com.gylang.gim.server.handle.remote;
 
 import com.alibaba.fastjson.JSON;
 import com.gylang.gim.api.constant.CommonConstant;
+import com.gylang.gim.api.constant.cmd.AdminChatCmd;
 import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
-import com.gylang.gim.api.constant.system.SystemRemoteType;
 import com.gylang.gim.api.enums.BaseResultCode;
+import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.server.config.AdminConfig;
 import com.gylang.gim.server.domain.AdminUser;
 import com.gylang.gim.server.domain.ResponseMessageWrap;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.constant.ChatTypeEnum;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
@@ -24,7 +24,7 @@ import java.util.Map;
  * data 2021/4/7
  */
 @Component
-@NettyHandler(SystemRemoteType.REMOTE_LOGIN)
+@NettyHandler(AdminChatCmd.REMOTE_LOGIN)
 public class RemoteLoginHandler implements IMRequestHandler {
 
     @Resource
@@ -46,15 +46,16 @@ public class RemoteLoginHandler implements IMRequestHandler {
             // 用户不存在
             messageWrap.setContent("授权失败，请验证你的用户密码");
             messageWrap.setCode(CommonConstant.FALSE_INT_STR);
-
+            return messageWrap;
         }
-        if (login.getPassword().equals(user.getPassword())) {
+        if (user.getPassword().equals(login.getPassword())) {
             // 验证成功
             me.setAccount(login.getUserId());
             LocalSessionHolderUtil.set(login.getUserId(), me.getSession());
             messageWrap.setCode(BaseResultCode.OK.getCode());
             return messageWrap;
         }
+        messageWrap.setContent("授权失败，请验证你的用户密码");
         return messageWrap;
     }
 }

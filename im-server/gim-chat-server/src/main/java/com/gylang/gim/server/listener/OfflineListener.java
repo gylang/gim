@@ -1,6 +1,6 @@
 package com.gylang.gim.server.listener;
 
-import com.gylang.netty.sdk.constant.EventTypeConst;
+import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.event.message.MessageEvent;
 import com.gylang.netty.sdk.event.message.MessageEventListener;

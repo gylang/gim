@@ -6,7 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.gylang.gim.api.constant.CommonConstant;
 import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
-import com.gylang.gim.api.constant.system.SystemRemoteType;
+import com.gylang.gim.api.constant.cmd.AdminChatCmd;
 import com.gylang.gim.api.domain.MessageWrap;
 import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.api.enums.ChatTypeEnum;
@@ -236,7 +236,7 @@ public class SocketManager {
 
             send(MessageWrap.builder()
                     .type(ChatTypeEnum.SYSTEM_MESSAGE.getType())
-                    .cmd(SystemRemoteType.REMOTE_LOGIN)
+                    .cmd(AdminChatCmd.REMOTE_LOGIN)
                     .clientMsgId(IdUtil.getSnowflake(1, 1).nextIdStr())
                     .content(loginContent)
                     .build());

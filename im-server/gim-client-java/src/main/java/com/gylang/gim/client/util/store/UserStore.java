@@ -1,4 +1,4 @@
-package com.gylang.gim.client.util.Store;
+package com.gylang.gim.client.util.store;
 
 import lombok.Data;
 

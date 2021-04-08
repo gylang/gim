@@ -23,7 +23,7 @@ package com.gylang.netty.sdk.coder;
 
 
 import com.alibaba.fastjson.JSON;
-import com.gylang.netty.sdk.constant.CommConst;
+import com.gylang.gim.api.constant.CommConst;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

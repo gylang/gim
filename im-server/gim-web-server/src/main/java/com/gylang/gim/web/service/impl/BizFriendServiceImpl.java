@@ -4,19 +4,19 @@ import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gylang.cache.CacheManager;
+import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.CommonResult;
 import com.gylang.gim.api.dto.ImUserFriendDTO;
+import com.gylang.gim.api.dto.UserFriendVO;
+import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.web.common.constant.AnswerType;
 import com.gylang.gim.web.common.constant.CacheConstant;
 import com.gylang.gim.web.common.util.Asserts;
-import com.gylang.gim.api.dto.UserFriendVO;
 import com.gylang.gim.web.entity.ImUserFriend;
 import com.gylang.gim.web.entity.UserApply;
 import com.gylang.gim.web.service.ImUserFriendService;
 import com.gylang.gim.web.service.UserApplyService;
 import com.gylang.gim.web.service.biz.BizFriendService;
-import com.gylang.netty.sdk.constant.ChatTypeEnum;
-import com.gylang.netty.sdk.constant.system.SystemMessageType;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.provider.MessageProvider;
@@ -161,7 +161,7 @@ public class BizFriendServiceImpl implements BizFriendService {
                     .receive(apply.getApplyId())
                     .content(apply.getAnswerId() + ": 拒绝添加好友!")
                     .type(ChatTypeEnum.NOTIFY.getType())
-                    .cmd(SystemMessageType.NOTIFY)
+                    .cmd(SystemChatCmd.NOTIFY)
                     .build();
             messageProvider.sendMsg(applySession, apply.getAnswerId(), rejectMsg);
         }

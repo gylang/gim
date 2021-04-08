@@ -3,7 +3,7 @@ package com.gylang.gim.client.gui.component.list;
 import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.client.GuiClientApplication;
-import com.gylang.gim.client.util.Store.UserStore;
+import com.gylang.gim.client.util.store.UserStore;
 import com.gylang.gim.remote.SocketHolder;
 import com.gylang.gim.api.domain.chat.ChatMsg;
 import com.gylang.gim.client.gui.util.GuiUtil;

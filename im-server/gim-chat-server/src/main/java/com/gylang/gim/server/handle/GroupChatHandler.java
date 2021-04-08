@@ -1,12 +1,12 @@
 package com.gylang.gim.server.handle;
 
+import com.gylang.gim.api.constant.CacheConstant;
+import com.gylang.gim.api.constant.cmd.GroupChatCmd;
+import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.server.domain.AckMessageWrap;
 import com.gylang.gim.server.domain.GroupConfig;
 import com.gylang.gim.server.service.HistoryMessageService;
-import com.gylang.gim.api.constant.cmd.GroupChatCmd;
-import com.gylang.gim.api.constant.CacheConstant;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.constant.system.SystemMessageType;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
 import com.gylang.netty.sdk.domain.model.IMSession;
@@ -46,7 +46,7 @@ public class GroupChatHandler implements IMRequestHandler {
             // 发送者是当前群聊用户
             if (senderConfig.isBanedSend()) {
                 AckMessageWrap messageWrap = new AckMessageWrap(message);
-                messageWrap.setCmd(SystemMessageType.ERROR_MSG);
+                messageWrap.setCmd(SystemChatCmd.ERROR_MSG);
                 messageWrap.setContent("你已被禁言!");
                 return messageWrap;
             } else {

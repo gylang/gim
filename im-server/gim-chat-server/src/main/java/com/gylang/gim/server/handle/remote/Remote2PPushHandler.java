@@ -1,7 +1,7 @@
 package com.gylang.gim.server.handle.remote;
 
 import com.alibaba.fastjson.JSON;
-import com.gylang.gim.api.constant.system.SystemRemoteType;
+import com.gylang.gim.api.constant.cmd.AdminChatCmd;
 import com.gylang.gim.api.domain.push.PushMessage;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.MessageWrap;
@@ -20,7 +20,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * data 2021/4/6
  */
 @Component
-@NettyHandler(SystemRemoteType.P2P_PUSH)
+@NettyHandler(AdminChatCmd.P2P_PUSH)
 public class Remote2PPushHandler implements IMRequestHandler {
 
 

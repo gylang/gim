@@ -1,7 +1,7 @@
 package com.gylang.gim.api.dto.msg;
 
 import com.gylang.gim.api.enums.BaseCode;
-import com.gylang.gim.api.constant.system.SystemMessageType;
+import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 
 /**
  * @author gylang
@@ -12,7 +12,7 @@ public class ErrorMessageWrap extends ResponseMessageWrap {
     public static ErrorMessageWrap build(String code, String msg) {
 
         ErrorMessageWrap messageWrap = new ErrorMessageWrap();
-        messageWrap.setCmd(SystemMessageType.ERROR_MSG);
+        messageWrap.setCmd(SystemChatCmd.ERROR_MSG);
         messageWrap.setCode(code);
         messageWrap.setContent(msg);
         return messageWrap;

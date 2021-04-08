@@ -1,9 +1,9 @@
 package com.gylang.netty.sdk.handler.qos;
 
+import com.gylang.gim.api.constant.EventTypeConst;
+import com.gylang.gim.api.constant.cmd.SystemChatCmd;
+import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.constant.ChatTypeEnum;
-import com.gylang.netty.sdk.constant.EventTypeConst;
-import com.gylang.netty.sdk.constant.system.SystemMessageType;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.event.EventProvider;
@@ -57,7 +57,7 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
             return;
         }
         // 2. 如果收到的是客户端的ack包将将消息删除
-        if (SystemMessageType.QOS_SEND_ACK.equals(message.getCmd())) {
+        if (SystemChatCmd.QOS_SEND_ACK.equals(message.getCmd())) {
             messageTimeStamp.remove(message.getMsgId());
             return;
         }

@@ -1,8 +1,8 @@
 package com.gylang.netty.sdk.handler.netty;
 
+import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.constant.NettyConfigEnum;
-import com.gylang.netty.sdk.constant.EventTypeConst;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.event.EventProvider;
 import io.netty.channel.ChannelHandler;

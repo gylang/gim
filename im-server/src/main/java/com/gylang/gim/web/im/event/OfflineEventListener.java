@@ -1,16 +1,16 @@
 package com.gylang.gim.web.im.event;
 
 import com.alibaba.fastjson.JSON;
+import com.gylang.gim.api.constant.EventTypeConst;
+import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.web.dao.entity.HistoryGroupChat;
 import com.gylang.gim.web.dao.entity.HistoryNotifyChat;
 import com.gylang.gim.web.dao.entity.HistoryPrivateChat;
 import com.gylang.gim.web.im.constant.ReceiveType;
-import com.gylang.gim.web.service.HistoryMessageService;
 import com.gylang.gim.web.service.HistoryGroupChatService;
+import com.gylang.gim.web.service.HistoryMessageService;
 import com.gylang.gim.web.service.HistoryNotifyChatService;
 import com.gylang.gim.web.service.HistoryPrivateChatService;
-import com.gylang.netty.sdk.constant.EventTypeConst;
-import com.gylang.netty.sdk.constant.system.SystemMessageType;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.event.message.MessageEvent;
 import com.gylang.netty.sdk.event.message.MessageEventListener;
@@ -42,7 +42,7 @@ public class OfflineEventListener implements MessageEventListener<MessageWrap> {
         if (null != message) {
 
             // 拼装入库消息
-            if (SystemMessageType.NOTIFY.equals(message.getCmd())) {
+            if (SystemChatCmd.NOTIFY.equals(message.getCmd())) {
                 HistoryNotifyChat chat = new HistoryNotifyChat();
                 chat.setMsgId(message.getMsgId());
                 chat.setSendId(message.getSender());

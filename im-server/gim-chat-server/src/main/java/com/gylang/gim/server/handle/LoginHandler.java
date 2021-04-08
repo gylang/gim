@@ -3,14 +3,13 @@ package com.gylang.gim.server.handle;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
-
-import com.gylang.gim.server.domain.ResponseMessageWrap;
-import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
 import com.gylang.gim.api.constant.CommonConstant;
-import com.gylang.gim.api.constant.EventType;
+import com.gylang.gim.api.constant.EventTypeConst;
+import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
 import com.gylang.gim.api.enums.BaseResultCode;
+import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.server.domain.ResponseMessageWrap;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.constant.ChatTypeEnum;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.event.EventProvider;
@@ -61,7 +60,7 @@ public class LoginHandler implements IMRequestHandler {
             me.setAccount(uid);
             sessionRepository.add(uid, me);
             // 发送上线事件
-            eventProvider.sendEvent(EventType.USER_ONLINE, uid);
+            eventProvider.sendEvent(EventTypeConst.USER_ONLINE, uid);
             // bind 上下文
             LocalSessionHolderUtil.set(uid, me.getSession());
         } else {

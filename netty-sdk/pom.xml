@@ -97,6 +97,11 @@
             <artifactId>logback-classic</artifactId>
             <version>1.2.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.gylang</groupId>
+            <artifactId>gim-common-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
 
         <!--        生成protobuf-->
     </dependencies>

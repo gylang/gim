@@ -1,4 +1,4 @@
-package com.gylang.netty.sdk.constant;
+package com.gylang.gim.api.constant;
 
 /**
  * 内置消息通知的常量
@@ -38,4 +38,7 @@ public interface EventTypeConst {
     String PERSISTENCE_EVENT = "PERSISTENCE_EVENT";
     /** 持久化事件 */
     String USER_NOT_FOUND = "USER_NOT_FOUND";
+
+    String USER_ONLINE = "USER_ONLINE";
+
 }

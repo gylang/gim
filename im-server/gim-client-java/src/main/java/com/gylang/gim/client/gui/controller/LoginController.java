@@ -11,7 +11,7 @@ import com.gylang.gim.api.domain.request.RegistryRequest;
 import com.gylang.gim.api.domain.response.LoginResponse;
 import com.gylang.gim.client.gui.GuiStore;
 import com.gylang.gim.client.util.HttpUtil;
-import com.gylang.gim.client.util.Store.UserStore;
+import com.gylang.gim.client.util.store.UserStore;
 import com.gylang.gim.client.api.AuthApi;
 import com.gylang.gim.client.call.ICallback;
 import com.gylang.gim.client.gui.dialog.CommonDialog;

@@ -1,8 +1,9 @@
 package com.gylang.netty.sdk.handler.qos;
 
+import cn.hutool.core.thread.ThreadFactoryBuilder;
+import com.gylang.gim.api.constant.cmd.SystemChatCmd;
+import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.constant.ChatTypeEnum;
-import com.gylang.netty.sdk.constant.system.SystemMessageType;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,7 @@ public class DefaultIMessageReceiveQosHandler implements IMessageReceiveQosHandl
     /** 消息超时时间 */
     private int messagesValidTime = 10 * 10 * 1000;
     /** 定时扫码器 */
-    private ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(1);
+    private ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(1, ThreadFactoryBuilder.create().setNamePrefix("receive-qos-scanner").build());
 
 
     private boolean executing = false;
@@ -41,7 +42,7 @@ public class DefaultIMessageReceiveQosHandler implements IMessageReceiveQosHandl
         }
         String key = getKey(target.getAccount(), message.getClientMsgId());
         // 2. 如果收到的是客户端的ack2包将将消息删除
-        if (SystemMessageType.QOS_RECEIVE_ACK.equals(message.getCmd())) {
+        if (SystemChatCmd.QOS_RECEIVE_ACK.equals(message.getCmd())) {
             receiveMessages.remove(key);
             return;
         }
@@ -52,7 +53,7 @@ public class DefaultIMessageReceiveQosHandler implements IMessageReceiveQosHandl
         }
         // 修改message ack
         // 3.2 发送消息给客户端，ack
-        message.setCmd(SystemMessageType.QOS_RECEIVE_ACK);
+        message.setCmd(SystemChatCmd.QOS_RECEIVE_ACK);
         target.getSession().writeAndFlush(message);
 
     }

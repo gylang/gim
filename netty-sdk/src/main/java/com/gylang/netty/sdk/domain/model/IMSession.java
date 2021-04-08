@@ -21,7 +21,7 @@
  */
 package com.gylang.netty.sdk.domain.model;
 
-import com.gylang.netty.sdk.constant.CommConst;
+import com.gylang.gim.api.constant.CommConst;
 import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
 import lombok.Data;

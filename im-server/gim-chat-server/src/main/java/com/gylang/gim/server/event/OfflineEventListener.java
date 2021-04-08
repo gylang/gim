@@ -1,7 +1,7 @@
 package com.gylang.gim.server.event;
 
 import com.gylang.gim.server.service.HistoryMessageService;
-import com.gylang.netty.sdk.constant.EventTypeConst;
+import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.event.message.MessageEvent;
 import com.gylang.netty.sdk.event.message.MessageEventListener;
