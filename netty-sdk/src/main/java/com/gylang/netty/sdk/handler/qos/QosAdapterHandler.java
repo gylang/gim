@@ -10,6 +10,7 @@ import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.BizRequestAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
  * @author gylang
  * data 2021/3/3
  */
+@Slf4j
 public class QosAdapterHandler implements BizRequestAdapter<MessageWrap> {
 
     private IMessageSenderQosHandler senderQosHandler;
@@ -42,9 +44,11 @@ public class QosAdapterHandler implements BizRequestAdapter<MessageWrap> {
         // 接受方 qos = 1 响应客户点 ack1 并执行正常业务逻辑
         if (QosConstant.INSURE_ONE_ARRIVE == message.getQos()) {
             AckMessage ackMessage = new AckMessage(message);
-            ackMessage.setAck(1);
-            me.getSession()
-                    .writeAndFlush(ackMessage);
+            ackMessage.setAck(QosConstant.RECEIVE_ACK1);
+            me.getSession().writeAndFlush(ackMessage);
+            if (log.isDebugEnabled()) {
+                log.debug("[qos1 - receiver] : 接收到客户端消息 , 响应客户端ack1");
+            }
             return null;
 
         }
@@ -57,29 +61,32 @@ public class QosAdapterHandler implements BizRequestAdapter<MessageWrap> {
             if (0 == message.getAck()) {
                 // 发送的是消息 检验去重
 
-                if (receiveQos2Handler.hasReceived(account, clientMsgId)) {
+                if (receiveQos2Handler.handle(message, me)) {
+                    // 消息未消费 缓存消息 防止重发
+                    if (log.isDebugEnabled()) {
+                        log.debug("[qos2 - receiver] : 接收到客户端[首发]消息 , 响应客户端ack1");
+                    }
+                    return null;
+                } else {
                     // 消息已经接受 响应ack1
                     AckMessage ackMessage = new AckMessage(message);
-                    ackMessage.setAck(1);
-                    me.getSession()
-                            .writeAndFlush(ackMessage);
+                    ackMessage.setAck(QosConstant.RECEIVE_ACK1);
+                    me.getSession().writeAndFlush(ackMessage);
+                    if (log.isDebugEnabled()) {
+                        log.debug("[qos2 - receiver] : 接收到客户端[重发]消息 , 响应客户端ack1");
+                    }
                     return InokeFinished.getInstance();
-                } else {
-                    // 消息未消费 缓存消息 防止重发
-                    receiveQos2Handler.handle(message, me);
-                    return null;
                 }
 
-            } else if (2 == message.getAck()) {
+            } else if (QosConstant.RECEIVE_ACK2 == message.getAck()) {
                 // 接受方 收到的消息为ack2 为服务端ack1的回复 可以直接去掉重发记录
                 receiveQos2Handler.remove(account, clientMsgId);
+
                 return InokeFinished.finish();
             }
 
 
         }
-
-
         return null;
     }
 

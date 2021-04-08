@@ -13,15 +13,7 @@ public class SocketClientApplication {
 
     public static void run() {
 
-        // 连接socket
-        SocketManager socketManager = SocketHolder.getInstance();
-        socketManager.connect("127.0.0.1", 46001, str -> {
-            if ("1".equals(str)) {
-                System.out.println("连接成功！");
-            } else {
-                System.out.println(str);
-            }
-        });
+
 
         // 初始化 retrofit
         HttpUtil.init();

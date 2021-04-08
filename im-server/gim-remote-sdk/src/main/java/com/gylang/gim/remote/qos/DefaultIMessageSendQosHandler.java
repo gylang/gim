@@ -1,14 +1,11 @@
-package com.gylang.netty.sdk.handler.qos;
+package com.gylang.gim.remote.qos;
 
-import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.gim.api.constant.QosConstant;
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.domain.model.IMSession;
-import com.gylang.netty.sdk.event.EventProvider;
-import com.gylang.netty.sdk.util.LocalSessionHolderUtil;
-import io.netty.channel.Channel;
+import com.gylang.gim.api.enums.BaseResultCode;
+import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.remote.SocketHolder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Iterator;
@@ -47,33 +44,30 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
     private int reSendNum = 3;
 
 
-    private EventProvider eventProvider;
-
     @Override
-    public void handle(MessageWrap message, IMSession target) {
+    public void handle(MessageWrap message) {
 
         // 1. 非qos
-        String msgId = message.getMsgId();
+        String msgId = message.getClientMsgId();
 
         // 2. ack = 1
-        if (SystemChatCmd.QOS_SEND_ACK.equals(message.getCmd())
-                && QosConstant.SEND_ACK1 == message.getAck()) {
+        if (SystemChatCmd.QOS_SEND_ACK.equals(message.getCmd()) && QosConstant.SEND_ACK1 == message.getAck()) {
 
             MessageWrap messageWrap = sentMessages.get(msgId);
-            if (null != messageWrap && messageWrap.getReceive().equals(target.getAccount())) {
-                // 存在重发记录 收到ack0客户端收到, 客户端ack1可以删除重发记录, 并响应ack2
+            if (null != messageWrap) {
+                // 存在重发记录 收到服务端ack1, 可以删除重发记录, qos2需要响应服务端
                 sentMessages.remove(msgId);
                 Long remove = messageTimeStamp.remove(msgId);
                 if (log.isDebugEnabled()) {
-                    log.debug("[qos1 - sender] : 接收到客户端ack1, 删除重发记录 : {}",null == remove ? "已经删除,这是重发" : "立即删除");
+                    log.debug("[qos1 - sender] : 接收到服务端ack1, 删除重发记录 : {}",null == remove ? "已经删除,这是重发" : "立即删除");
                 }
             }
             // qos2 需要响应客户点 响应ack2 让客户端删除重发ack1列表
             if (null != messageWrap && QosConstant.SEND_ACK2 == messageWrap.getQos()) {
                 message.setAck(QosConstant.SEND_ACK2);
-                target.getSession().writeAndFlush(message);
+                SocketHolder.getInstance().send(message);
                 if (log.isDebugEnabled()) {
-                    log.debug("[qos2 - sender] : 接收到客户端ack1, 响应客户端ack2");
+                    log.debug("[qos2 - sender] : 接收到服务端ack1, 响应服务端ack2");
                 }
             }
         }
@@ -89,8 +83,8 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
     @Override
     public void addReceived(MessageWrap messageWrap) {
         if (!hasReceived(messageWrap.getClientMsgId())) {
-            messageTimeStamp.put(messageWrap.getMsgId(), System.currentTimeMillis() + messagesValidTime);
-            sentMessages.put(messageWrap.getMsgId(), messageWrap);
+            messageTimeStamp.put(messageWrap.getClientMsgId(), System.currentTimeMillis() + messagesValidTime);
+            sentMessages.put(messageWrap.getClientMsgId(), messageWrap);
         }
     }
 
@@ -145,49 +139,37 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
                     log.debug("【QoS发送方】消息:msgId" + msg.getMsgId() + "的包已生存" + reSendNum
                             + "(最大允许" + reSendNum + "次数), 马上将删除之");
                     iterator.remove();
+                    // 重发次数超出限制 响应失败
+                    MessageWrap messageWrap = msg.copyBasic();
+                    messageWrap.setClientMsgId(msg.getClientMsgId());
+                    messageWrap.setMsg(msg.getMsgId());
+                    messageWrap.setType(ChatTypeEnum.SYSTEM_MESSAGE.getType());
+                    messageWrap.setCmd(SystemChatCmd.ERROR_MSG);
+                    messageWrap.setCode(BaseResultCode.WEBSOCKET_CONNECTION_ERROR.getCode());
+                    messageWrap.setMsg("消息发送失败");
+                    SocketHolder.getInstance().sendBroadcast(messageWrap);
 
                 }
 
             } else {
                 //消息重发
                 long timestamp = messageTimeStamp.get(key);
+                MessageWrap messageWrap = sentMessages.get(key);
                 if (now < timestamp) {
                     continue;
                 }
-                Channel session = LocalSessionHolderUtil.getSession(msg.getReceive());
-                if (null != session) {
-                    session.writeAndFlush(msg);
-                    msg.setRetryNum(msg.getRetryNum() + 1);
-                } else {
-                    // 用户离线
-                    if (msg.isOfflineMsgEvent()) {
-                        eventProvider.sendEvent(EventTypeConst.OFFLINE_MSG_EVENT, msg);
-                        iterator.remove();
-                    }
-                }
-            }
+                SocketHolder.getInstance().send(messageWrap);
+                msg.setRetryNum(msg.getRetryNum() + 1);
 
-            if (log.isDebugEnabled()) {
 
-                log.debug("【QoS发送方】END 暂存处理线程正在运行中，当前长度" + messageTimeStamp.size() + ".");
             }
+        }
+
+        if (log.isDebugEnabled()) {
+
+            log.debug("【QoS发送方】END 暂存处理线程正在运行中，当前长度" + messageTimeStamp.size() + ".");
         }
     }
 
 
-    @Override
-    public void init(NettyConfiguration configuration) {
-
-        Integer customCheckInterval = configuration.getProperties(CHECK_INTER_VAL_KEY);
-        this.checkInterval = (null == customCheckInterval || customCheckInterval <= 0)
-                ? this.checkInterval : customCheckInterval;
-
-
-        Integer customMessagesValidTime = configuration.getProperties(MESSAGES_VALID_TIME_KEY);
-        this.messagesValidTime = (null == customMessagesValidTime || customMessagesValidTime <= 0)
-                ? this.messagesValidTime : customMessagesValidTime;
-        ScheduledExecutorService customScheduledExecutorService = configuration.getProperties(SCHEDULED_EXECUTOR_SERVICE);
-        this.scheduledExecutorService = null == customScheduledExecutorService ? this.scheduledExecutorService : customScheduledExecutorService;
-        this.eventProvider = configuration.getEventProvider();
-    }
 }

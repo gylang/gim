@@ -16,15 +16,15 @@ public interface QosConstant {
     /** 主推 第一次发送 (包含消息) */
     int SEND_ACK0 = 0;
     /** 主推 收到客户端发送(重发)ack1回复收到服务端的消息 */
-    int SEND_ACK1 = 0;
+    int SEND_ACK1 = 1;
     /** 主推 回复客户端ack2 让客户端停止重发 */
-    int SEND_ACK2 = 0;
+    int SEND_ACK2 = 2;
     /** 服务端收到客户端消息 (包含消息) 存入消息列表,防止重发 */
     int RECEIVE_ACK0 = 0;
     /** 服务端收到客户端消息后(重发)回复ack 让客户端停止重发 */
-    int RECEIVE_ACK1 = 0;
+    int RECEIVE_ACK1 = 1;
     /** 服务端响应客户端ack2 让客户端停止重发 */
-    int RECEIVE_ACK2 = 0;
+    int RECEIVE_ACK2 = 2;
 
 
 }

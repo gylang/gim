@@ -4,6 +4,7 @@ import cn.hutool.core.thread.ThreadFactoryBuilder;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gylang.gim.api.constant.CommonConstant;
+import com.gylang.gim.api.constant.QosConstant;
 import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.enums.BaseResultCode;
@@ -11,6 +12,7 @@ import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.remote.call.GimCallBack;
 import com.gylang.gim.remote.coder.ClientMessageDecoder;
 import com.gylang.gim.remote.coder.ClientMessageEncoder;
+import com.gylang.gim.remote.qos.QosAdapterHandler;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,11 +43,14 @@ public class SocketManager {
     private SocketChannel socketChannel = null;
     private volatile boolean open = true;
     private String token;
+    private MessageWrap loginMsg;
     private AtomicInteger login = new AtomicInteger(0);
     /**
      * 定时任务扫码间隔
      */
     private int checkInterval = 5;
+    private int reconnect = 3;
+    private int reconnectNum = 1;
     /**
      * 扫码最低时间间隔
      */
@@ -78,6 +83,8 @@ public class SocketManager {
     private final ClientMessageDecoder messageDecoder = new ClientMessageDecoder();
     /** 消息编码 */
     private final ClientMessageEncoder messageEncoder = new ClientMessageEncoder();
+    private QosAdapterHandler qosAdapterHandler = new QosAdapterHandler();
+    private InetSocketAddress socketAddress;
 
     /**
      * 连接socket
@@ -86,8 +93,8 @@ public class SocketManager {
      * @param port        端口
      * @param gimCallBack 回调
      */
-    public void connect(String ip, Integer port, GimCallBack<String> gimCallBack) {
-
+    public void connect(String ip, Integer port, MessageWrap loginMsg, GimCallBack<String> gimCallBack) {
+        this.loginMsg = loginMsg;
         bossExecutor.execute(() -> {
             while (open) {
                 try {
@@ -111,16 +118,11 @@ public class SocketManager {
      */
     private void doConnect(String ip, Integer port, GimCallBack<String> gimCallBack) throws IOException {
         // 开启连接
-        socketChannel = SocketChannel.open();
-        socketChannel.configureBlocking(true);
-        socketChannel.socket().setTcpNoDelay(true);
-        socketChannel.socket().setKeepAlive(true);
-        socketChannel.socket().setReceiveBufferSize(readBufferSize);
-        socketChannel.socket().setSendBufferSize(writeBufferSize);
-        socketChannel.socket().connect(new InetSocketAddress(ip, port), connectTimeOut);
+        socketAddress = new InetSocketAddress(ip, port);
+        openConnect();
         // 登录系统
         login();
-        bind(ChatTypeEnum.NOTIFY.getType(), PrivateChatCmd.SOCKET_CONNECTED, onLoginSuccess);
+        bind(ChatTypeEnum.REPLY_CHAT.getType(), loginMsg.getCmd(), onLoginSuccess);
         // 心跳监测
         scheduledExecutorService.scheduleAtFixedRate(this::sendHeart,
                 checkInterval,
@@ -134,6 +136,16 @@ public class SocketManager {
         }
     }
 
+    private void openConnect() throws IOException {
+        socketChannel = SocketChannel.open();
+        socketChannel.configureBlocking(true);
+        socketChannel.socket().setTcpNoDelay(true);
+        socketChannel.socket().setKeepAlive(true);
+        socketChannel.socket().setReceiveBufferSize(readBufferSize);
+        socketChannel.socket().setSendBufferSize(writeBufferSize);
+        socketChannel.socket().connect(socketAddress, connectTimeOut);
+    }
+
     /**
      * 发送心跳
      */
@@ -145,8 +157,16 @@ public class SocketManager {
             }
             send(CommonConstant.HEART);
         } else {
-
-            log.info("[发送心跳] : 连接异常");
+            reconnect = reconnect % reconnectNum;
+            if (0 == reconnect) {
+                log.info("[发送心跳] : 连接异常, 进行重连");
+                try {
+                    socketChannel.close();
+                    openConnect();
+                } catch (IOException e) {
+                    log.info("[重连] : 重连失败");
+                }
+            }
         }
     }
 
@@ -187,6 +207,9 @@ public class SocketManager {
         }
 
         workerExecutor.execute(() -> {
+            if (QosConstant.ONE_AWAY != body.getQos()) {
+                qosAdapterHandler.getSenderQosHandler().addReceived(body);
+            }
             int result = 0;
             try {
 
@@ -222,14 +245,9 @@ public class SocketManager {
 
     public void login() {
 
-        if (StrUtil.isNotEmpty(token)) {
+        if (null != loginMsg) {
 
-            send(MessageWrap.builder()
-                    .type(ChatTypeEnum.PRIVATE_CHAT.getType())
-                    .cmd(PrivateChatCmd.LOGIN_SOCKET)
-                    .msgId(IdUtil.getSnowflake(1, 1).nextIdStr())
-                    .content(token)
-                    .build());
+            send(loginMsg);
         }
 
     }
@@ -280,15 +298,19 @@ public class SocketManager {
 
     }
 
-    private void sendBroadcast(final Object intent) {
+    public void sendBroadcast(final Object intent) {
 
         if (null == intent) {
             return;
         }
 
         if (intent instanceof MessageWrap) {
-
             MessageWrap message = (MessageWrap) intent;
+
+            if (null == qosAdapterHandler.process(message)) {
+                // qo校验过滤包
+                return;
+            }
             if (StrUtil.isEmpty(message.getCmd())) {
                 return;
             }

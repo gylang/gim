@@ -1,5 +1,6 @@
 package com.gylang.gim.server.handle.client;
 
+import com.gylang.gim.api.constant.QosConstant;
 import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.message.reply.ReplyMessage;
@@ -28,7 +29,7 @@ public class UpdatePrivateLastMsgIdHandler implements IMRequestHandler {
     public Object process(IMSession me, MessageWrap message) {
 
         historyMessageService.updatePrivateLastMsgId(me.getAccount(), message.getMsgId());
-        if (message.isQos()) {
+        if (QosConstant.ONE_AWAY != message.getQos()){
             return ReplyMessage.success(message);
         }
         return null;

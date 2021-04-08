@@ -1,8 +1,6 @@
-package com.gylang.netty.sdk.handler.qos;
+package com.gylang.gim.remote.qos;
 
-import com.gylang.netty.sdk.common.AfterConfigInitialize;
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.netty.sdk.domain.model.IMSession;
 
 /**
  * 处理收到接受到的消息，发送ack，保证消息已经接受成功
@@ -12,7 +10,7 @@ import com.gylang.netty.sdk.domain.model.IMSession;
  * @author gylang
  * data 2021/2/11
  */
-public interface IMessageReceiveQosHandler extends AfterConfigInitialize {
+public interface IMessageReceiveQos2Handler {
 
     String CHECK_INTER_VAL_KEY = "IMessageReceiveQosHandler.checkInterval";
 
@@ -25,20 +23,21 @@ public interface IMessageReceiveQosHandler extends AfterConfigInitialize {
 
     /**
      * 处处理消息
-     *  @param messageWrap 消息包装类
+     *
      * @param target      接收者
+     * @param messageWrap 消息包装类
      * @return
      */
-    boolean handle(MessageWrap messageWrap, IMSession target);
+    boolean handle(MessageWrap messageWrap);
 
     /**
      * 是否已经接收到当前消息
      * @param msgId 消息序列号
      * @return 是否接收
      */
-    boolean hasReceived(String senderId, String msgId);
+    boolean hasReceived(String msgId);
 
-    void remove(String senderId, String msgId);
+    void remove(String msgId);
 
     /**
      * 添加已接收队列

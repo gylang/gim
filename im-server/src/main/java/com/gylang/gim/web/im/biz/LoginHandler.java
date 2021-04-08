@@ -3,6 +3,7 @@ package com.gylang.gim.web.im.biz;
 
 import com.gylang.gim.web.common.constant.CommonConstant;
 import com.gylang.gim.web.common.mybatis.UserHelper;
+import com.gylang.gim.web.dto.msg.ResponseMessageWrap;
 import com.gylang.gim.web.im.constant.BizChatCmd;
 import com.gylang.gim.web.im.constant.EventType;
 import com.gylang.netty.sdk.annotation.NettyHandler;

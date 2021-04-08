@@ -1,5 +1,6 @@
 package com.gylang.gim.server.handle.client;
 
+import com.gylang.gim.api.constant.QosConstant;
 import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.server.service.HistoryMessageService;
 import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
@@ -26,7 +27,7 @@ public class UpdateGroupLastMsgIdHandler implements IMRequestHandler {
     @Override
     public Object process(IMSession me, MessageWrap message) {
         historyMessageService.updateGroupLastMsgIdHandler(message.getReceive(), me.getAccount(), message.getMsgId());
-        if (message.isQos()) {
+        if (QosConstant.ONE_AWAY != message.getQos()) {
             return ReplyMessage.success(message);
         }
         return null;

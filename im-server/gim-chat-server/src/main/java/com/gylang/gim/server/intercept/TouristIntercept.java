@@ -37,11 +37,11 @@ public class TouristIntercept implements NettyIntercept, AfterConfigInitialize {
     @Override
     public boolean doBefore(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
 
-        boolean hasAuth = nonAuthCMd.contains(message.getCmd()) || StrUtil.isNotEmpty(me.getAccount());
+        boolean nonAuth = nonAuthCMd.contains(message.getCmd()) || StrUtil.isNotEmpty(me.getAccount());
         if (log.isDebugEnabled()) {
-            log.debug("[ 非法消息拦截 ] : 是否授权接入 : {}, 发送的消息体 : {}", hasAuth ? me.getAccount() : hasAuth, message);
+            log.debug("[ 非法消息拦截 ] : 授权接入 : {}, 发送的消息体 : {}", nonAuth ? false : me.getAccount(), message);
         }
-        return !hasAuth;
+        return !nonAuth;
     }
 
     @Override

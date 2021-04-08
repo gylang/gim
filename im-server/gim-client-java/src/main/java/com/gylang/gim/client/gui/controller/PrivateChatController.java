@@ -2,6 +2,7 @@ package com.gylang.gim.client.gui.controller;
 
 import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.TypeReference;
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.dto.ImUserFriendDTO;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
@@ -101,7 +102,7 @@ public class PrivateChatController extends CustomApplication {
                 .type(ChatTypeEnum.PRIVATE_CHAT.getType())
                 .cmd(PrivateChatCmd.SIMPLE_PRIVATE_CHAT)
                 .clientMsgId(IdUtil.objectId())
-                .qos(true)
+                .qos(2)
                 .receive(userId)
                 .content(text)
                 .build();

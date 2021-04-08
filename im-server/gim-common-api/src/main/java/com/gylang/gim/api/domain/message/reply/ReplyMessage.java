@@ -26,6 +26,8 @@ public class ReplyMessage extends ResponseMessage {
     public static ReplyMessage reply(MessageWrap messageWrap, String code, String msg) {
         ReplyMessage message = new ReplyMessage();
         message.setClientMsgId(messageWrap.getClientMsgId());
+        message.setMsgId(messageWrap.getMsgId());
+        message.setCmd(messageWrap.getCmd());
         message.setCode(code);
         message.setMsg(msg);
         return message;

@@ -5,10 +5,16 @@ package com.gylang.gim.client.gui.controller;
  * data 2021/4/1
  */
 
+import cn.hutool.core.util.IdUtil;
+import com.alibaba.fastjson.JSON;
+import com.gylang.gim.api.constant.QosConstant;
+import com.gylang.gim.api.constant.cmd.AdminChatCmd;
 import com.gylang.gim.api.domain.common.CommonResult;
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.request.LoginRequest;
 import com.gylang.gim.api.domain.request.RegistryRequest;
 import com.gylang.gim.api.domain.response.LoginResponse;
+import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.client.gui.GuiStore;
 import com.gylang.gim.client.util.HttpUtil;
 import com.gylang.gim.client.util.store.UserStore;
@@ -16,6 +22,8 @@ import com.gylang.gim.client.api.AuthApi;
 import com.gylang.gim.client.call.ICallback;
 import com.gylang.gim.client.gui.dialog.CommonDialog;
 import com.gylang.gim.client.gui.util.GuiUtil;
+import com.gylang.gim.remote.SocketHolder;
+import com.gylang.gim.remote.SocketManager;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -98,7 +106,23 @@ public class LoginController extends Application {
                 data.setUsername("111");
                 log.info(data.getUsername());
                 // 连接socket
-//                CommonDialog.getInstance().showMsg(body.getMsg());
+                SocketManager socketManager = SocketHolder.getInstance();
+
+                MessageWrap messageWrap = MessageWrap.builder()
+                        .cmd(AdminChatCmd.REMOTE_LOGIN)
+                        .type(ChatTypeEnum.ADMIN_CHAT.getType())
+                        .clientMsgId(IdUtil.getSnowflake(1, 1).nextIdStr())
+                        .qos(QosConstant.ACCURACY_ONE_ARRIVE)
+                        .content(JSON.toJSONString(data.getToken()))
+                        .build();
+
+                socketManager.connect("127.0.0.1", 46001,messageWrap, str -> {
+                    if ("1".equals(str)) {
+                        System.out.println("连接成功！");
+                    } else {
+                        System.out.println(str);
+                    }
+                });
                 GuiUtil.openNewView(MainController.class);
                 GuiUtil.update(() -> GuiStore.getGuiStore().getMainStage().hide());
             }

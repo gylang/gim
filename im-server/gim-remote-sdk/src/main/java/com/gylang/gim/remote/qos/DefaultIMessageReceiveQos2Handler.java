@@ -1,10 +1,10 @@
-package com.gylang.netty.sdk.handler.qos;
+package com.gylang.gim.remote.qos;
 
 import cn.hutool.core.thread.ThreadFactoryBuilder;
+import com.gylang.gim.api.constant.QosConstant;
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.gim.remote.SocketHolder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -17,7 +17,7 @@ import java.util.concurrent.*;
  * data 2021/3/3
  */
 @Slf4j
-public class DefaultIMessageReceiveQosHandler implements IMessageReceiveQosHandler {
+public class DefaultIMessageReceiveQos2Handler implements IMessageReceiveQos2Handler {
 
 
     private final ConcurrentMap<String, Long> receiveMessages = new ConcurrentHashMap<>();
@@ -33,15 +33,17 @@ public class DefaultIMessageReceiveQosHandler implements IMessageReceiveQosHandl
 
 
     @Override
-    public boolean handle(MessageWrap message, IMSession target) {
+    public boolean handle(MessageWrap message) {
 
         // qos2 接受方处理 响应ack1
-        boolean add = addReceived(getKey(target.getAccount(), message.getClientMsgId()));
+        boolean add = addReceived(message.getMsgId());
         MessageWrap messageWrap = message.copyBasic();
         messageWrap.setClientMsgId(message.getMsgId());
         messageWrap.setMsgId(message.getMsgId());
         messageWrap.setCmd(SystemChatCmd.QOS_RECEIVE_ACK);
-        target.getSession().writeAndFlush(messageWrap);
+        messageWrap.setCmd(SystemChatCmd.QOS_RECEIVE_ACK);
+        messageWrap.setAck(QosConstant.RECEIVE_ACK1);
+        SocketHolder.getInstance().send(messageWrap);
         if (log.isDebugEnabled()) {
             log.debug("[qos2 - receiver] : 接收到服务端消息 , 响应服务端ack1");
         }
@@ -49,18 +51,17 @@ public class DefaultIMessageReceiveQosHandler implements IMessageReceiveQosHandl
     }
 
     @Override
-    public boolean hasReceived(String senderId, String msgId) {
-        return receiveMessages.containsKey(getKey(senderId, msgId));
+    public boolean hasReceived(String msgId) {
+        return receiveMessages.containsKey(msgId);
     }
 
     @Override
-    public void remove(String senderId, String msgId) {
-        receiveMessages.remove(getKey(senderId, msgId));
+    public void remove(String msgId) {
+        receiveMessages.remove(msgId);
     }
 
     @Override
     public boolean addReceived(String key) {
-        // 不考虑并发 客户端去重
         if (receiveMessages.containsKey(key)) {
             return false;
         }
@@ -116,22 +117,5 @@ public class DefaultIMessageReceiveQosHandler implements IMessageReceiveQosHandl
         }
     }
 
-    @Override
-    public void init(NettyConfiguration configuration) {
 
-        Integer customCheckInterval = configuration.getProperties(CHECK_INTER_VAL_KEY);
-        this.checkInterval = (null == customCheckInterval || customCheckInterval <= 0)
-                ? this.checkInterval : customCheckInterval;
-        Integer customMessagesValidTime = configuration.getProperties(MESSAGES_VALID_TIME_KEY);
-        this.messagesValidTime = (null == customMessagesValidTime || customMessagesValidTime <= 0)
-                ? this.messagesValidTime : customMessagesValidTime;
-        ScheduledExecutorService customScheduledExecutorService = configuration.getProperties(SCHEDULED_EXECUTOR_SERVICE);
-        this.scheduledExecutorService = null == customScheduledExecutorService ? this.scheduledExecutorService : customScheduledExecutorService;
-
-    }
-
-    public String getKey(String senderId, String msgId) {
-
-        return senderId + ":" + msgId;
-    }
 }
