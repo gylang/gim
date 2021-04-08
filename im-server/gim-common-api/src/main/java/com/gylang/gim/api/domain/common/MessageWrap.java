@@ -1,4 +1,4 @@
-package com.gylang.netty.sdk.domain;
+package com.gylang.gim.api.domain.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +32,8 @@ public class MessageWrap implements Serializable {
     private String contentType;
     /** 消息code */
     private String code;
+    /** 消息提示 */
+    private String msg;
     /** 接收者 */
     private String receive;
     /** 接收者类型 */

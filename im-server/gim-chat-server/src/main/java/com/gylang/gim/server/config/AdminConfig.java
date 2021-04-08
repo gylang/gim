@@ -1,6 +1,6 @@
 package com.gylang.gim.server.config;
 
-import com.gylang.gim.server.domain.AdminUser;
+import com.gylang.gim.api.domain.admin.AdminUser;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

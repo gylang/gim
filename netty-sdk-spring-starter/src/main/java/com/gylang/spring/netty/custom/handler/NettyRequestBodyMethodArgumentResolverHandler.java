@@ -3,7 +3,7 @@ package com.gylang.spring.netty.custom.handler;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ClassUtil;
 import com.alibaba.fastjson.JSON;
-import com.gylang.netty.sdk.domain.MessageWrap;
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.spring.netty.annotation.NettyBody;
 import com.gylang.spring.netty.custom.method.ControllerMethodMeta;

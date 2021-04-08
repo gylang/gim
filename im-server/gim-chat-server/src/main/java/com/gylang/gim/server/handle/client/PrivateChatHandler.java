@@ -1,13 +1,13 @@
-package com.gylang.gim.server.handle;
+package com.gylang.gim.server.handle.client;
 
-import com.gylang.gim.server.domain.AckMessageWrap;
-import com.gylang.gim.server.domain.ResponseMessageWrap;
+import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
+import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.gim.api.domain.common.ResponseMessage;
+import com.gylang.gim.api.domain.message.reply.ReplyMessage;
+import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.server.service.HistoryMessageService;
 import com.gylang.gim.server.service.SendAccessService;
-import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
-import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import com.gylang.netty.sdk.provider.MessageProvider;
@@ -44,19 +44,13 @@ public class PrivateChatHandler implements IMRequestHandler {
                 if (message.isStore()) {
                     messageService.storePrivateChat(message.getReceive(), message);
                 }
-                return ResponseMessageWrap.copy(message);
+                return ResponseMessage.copy(message);
             } else {
-                AckMessageWrap ackMessageWrap = new AckMessageWrap(message);
-                ackMessageWrap.setCode(BaseResultCode.VISIT_INTERCEPT.getCode());
-                ackMessageWrap.setContent("用户不存在");
-                return ackMessageWrap;
+                return ReplyMessage.reply(message, BaseResultCode.VISIT_INTERCEPT.getCode(), "用户不存在");
             }
 
 
         }
-        AckMessageWrap ackMessageWrap = new AckMessageWrap(message);
-        ackMessageWrap.setCode(BaseResultCode.NOT_ACCESS_PRIVATE_RESOURCE.getCode());
-        ackMessageWrap.setContent(BaseResultCode.NOT_ACCESS_PRIVATE_RESOURCE.getMsg());
-        return ackMessageWrap;
+        return ReplyMessage.reply(message, BaseResultCode.NOT_ACCESS_PRIVATE_RESOURCE);
     }
 }

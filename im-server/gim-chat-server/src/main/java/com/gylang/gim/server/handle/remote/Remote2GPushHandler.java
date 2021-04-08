@@ -2,9 +2,11 @@ package com.gylang.gim.server.handle.remote;
 
 import com.alibaba.fastjson.JSON;
 import com.gylang.gim.api.constant.cmd.AdminChatCmd;
+import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.api.domain.push.PushMessage;
+import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import com.gylang.netty.sdk.provider.MessageProvider;
@@ -46,7 +48,7 @@ public class Remote2GPushHandler implements IMRequestHandler {
             executor.execute(() -> push(me, message, push, receiveIdList, msgId));
         }
 
-        return null;
+        return ReplyMessage.reply(message, BaseResultCode.NOT_ACCESS_PRIVATE_RESOURCE);
     }
 
     private void push(IMSession me, MessageWrap message, PushMessage push, List<String> receiveIdList, String msgId) {

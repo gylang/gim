@@ -1,10 +1,10 @@
 package com.gylang.gim.web.im.intercept;
 
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
-import com.gylang.gim.api.dto.msg.ResponseMessageWrap;
+import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.gim.web.dto.msg.ResponseMessageWrap;
 import com.gylang.netty.sdk.common.AfterConfigInitialize;
 import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.intercept.NettyIntercept;
 import com.gylang.netty.sdk.provider.MessageProvider;

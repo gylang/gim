@@ -1,15 +1,13 @@
-package com.gylang.gim.server.domain;
-
-import com.gylang.netty.sdk.domain.MessageWrap;
+package com.gylang.gim.api.domain.common;
 
 /**
  * @author gylang
  * data 2021/3/6
  */
-public class ResponseMessageWrap extends MessageWrap {
+public class ResponseMessage extends MessageWrap {
 
-    public static ResponseMessageWrap copy(MessageWrap messageWrap) {
-        ResponseMessageWrap copyObj = new ResponseMessageWrap();
+    public static ResponseMessage copy(MessageWrap messageWrap) {
+        ResponseMessage copyObj = new ResponseMessage();
         copyObj.setCmd(messageWrap.getCmd());
         copyObj.setSender(messageWrap.getSender());
         copyObj.setType(messageWrap.getType());

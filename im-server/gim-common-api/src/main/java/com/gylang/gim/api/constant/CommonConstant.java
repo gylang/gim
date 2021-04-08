@@ -1,7 +1,7 @@
 package com.gylang.gim.api.constant;
 
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.enums.ChatTypeEnum;
-import com.gylang.gim.api.domain.MessageWrap;
 
 /**
  * @author gylang

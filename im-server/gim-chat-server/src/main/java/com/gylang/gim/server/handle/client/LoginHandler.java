@@ -1,4 +1,4 @@
-package com.gylang.gim.server.handle;
+package com.gylang.gim.server.handle.client;
 
 
 import cn.hutool.core.util.StrUtil;
@@ -6,11 +6,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.gylang.gim.api.constant.CommonConstant;
 import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
+import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.gim.api.domain.common.ResponseMessage;
 import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.api.enums.ChatTypeEnum;
-import com.gylang.gim.server.domain.ResponseMessageWrap;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.event.EventProvider;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
@@ -39,7 +39,7 @@ public class LoginHandler implements IMRequestHandler {
 
     @Override
     public Object process(IMSession me, MessageWrap message) {
-        MessageWrap messageWrap = new ResponseMessageWrap();
+        MessageWrap messageWrap = new ResponseMessage();
         messageWrap.setSender(me.getAccount());
         messageWrap.setCmd(PrivateChatCmd.SOCKET_CONNECTED);
         messageWrap.setType(ChatTypeEnum.NOTIFY.getType());

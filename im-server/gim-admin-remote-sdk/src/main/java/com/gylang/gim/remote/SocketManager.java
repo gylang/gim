@@ -7,7 +7,6 @@ import com.alibaba.fastjson.JSON;
 import com.gylang.gim.api.constant.CommonConstant;
 import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
 import com.gylang.gim.api.constant.cmd.AdminChatCmd;
-import com.gylang.gim.api.domain.MessageWrap;
 import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.remote.call.GimCallBack;

@@ -11,7 +11,7 @@ import com.gylang.gim.web.service.HistoryGroupChatService;
 import com.gylang.gim.web.service.HistoryMessageService;
 import com.gylang.gim.web.service.HistoryNotifyChatService;
 import com.gylang.gim.web.service.HistoryPrivateChatService;
-import com.gylang.netty.sdk.domain.MessageWrap;
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.event.message.MessageEvent;
 import com.gylang.netty.sdk.event.message.MessageEventListener;
 import org.springframework.stereotype.Component;

@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.constant.NettyConfigEnum;
-import com.gylang.netty.sdk.domain.MessageWrap;
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.event.EventProvider;
@@ -63,33 +63,27 @@ public class DefaultMessageProvider implements MessageProvider {
     @Override
     public int sendMsgCallBack(IMSession me, IMSession target, MessageWrap message, ChannelFutureListener listener) {
 
-        // todo remove 不应该将消息离线耦合到单一发送服务
-        // 接收者不存在/离线
-//        if (null == target || null == target.getSession()) {
-//            if (message.isOfflineMsgEvent()) {
-//                eventProvider.sendEvent(EventTypeConst.OFFLINE_MSG_EVENT, message);
-//            }
-//            if (message.isPersistenceEvent()) {
-//                eventProvider.sendEvent(EventTypeConst.PERSISTENCE_EVENT, message);
-//            }
-//            return;
-//        }
+
         if (null == target) {
             eventProvider.sendEvent(EventTypeConst.USER_NOT_FOUND, message);
             return USER_NOT_FOUND;
         }
+        // 设置接收者 channel
         if (null != target.getSession()) {
             target.setSession(LocalSessionHolderUtil.getSession(target.getAccount()));
         }
-        message.setSender(null != me ? me.getAccount() : null);
-        if (StrUtil.isEmpty(message.getReceive())) {
-            message.setReceive(target.getAccount());
-        }
-        // 发送策略 如果本地发送失败（主要是跨服和用户离线）， 可以通过其他方式发送，桥接，mq
-        if (!Objects.equals(host, target.getServerIp())) {
+        // 发送策略 跨服传输 本地不存在当前channel 可以通过其他方式发送，桥接，mq
+        if (null == target.getSession() || !Objects.equals(host, target.getServerIp())) {
             // 跨服务消息 发送事件
             eventProvider.sendEvent(EventTypeConst.CROSS_SERVER_PUSH, message);
             return CROSS_SERVER;
+        }
+        // 设置 发送者
+        if (StrUtil.isNotEmpty(message.getSender())) {
+            message.setSender(null != me ? me.getAccount() : null);
+            if (StrUtil.isEmpty(message.getReceive())) {
+                message.setReceive(target.getAccount());
+            }
         }
 
         // 判断是否需要自动设置消息id

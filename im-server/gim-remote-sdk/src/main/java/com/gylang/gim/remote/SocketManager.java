@@ -8,7 +8,6 @@ import com.gylang.gim.remote.coder.ClientMessageDecoder;
 import com.gylang.gim.remote.coder.ClientMessageEncoder;
 import com.gylang.gim.api.constant.CommonConstant;
 import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
-import com.gylang.gim.api.domain.MessageWrap;
 import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import lombok.Data;

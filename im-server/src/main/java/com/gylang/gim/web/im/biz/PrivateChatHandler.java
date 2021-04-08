@@ -8,7 +8,7 @@ import com.gylang.gim.web.dto.msg.ErrorMessageWrap;
 import com.gylang.gim.web.service.ImUserFriendService;
 import com.gylang.gim.web.service.UserConfigService;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.domain.MessageWrap;
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import com.gylang.netty.sdk.provider.MessageProvider;

@@ -1,7 +1,7 @@
 package com.gylang.netty.sdk.intercept;
 
 import cn.hutool.core.collection.CollUtil;
-import com.gylang.netty.sdk.domain.MessageWrap;
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import io.netty.channel.ChannelHandlerContext;
 

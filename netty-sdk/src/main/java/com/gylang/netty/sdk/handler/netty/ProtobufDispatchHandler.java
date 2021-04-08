@@ -1,7 +1,7 @@
 //package com.gylang.netty.sdk.handler.netty;
 //
 //import com.gylang.netty.sdk.config.NettyConfiguration;
-//import com.gylang.netty.sdk.domain.MessageWrap;
+//import com.gylang.gim.api.domain.MessageWrap;
 //import com.gylang.netty.sdk.domain.model.IMSession;
 //import com.gylang.netty.sdk.domain.proto.MessageWrapProto;
 //import com.gylang.netty.sdk.handler.DispatchAdapterHandler;

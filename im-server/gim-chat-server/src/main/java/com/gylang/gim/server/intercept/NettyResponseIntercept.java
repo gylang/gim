@@ -1,10 +1,10 @@
 package com.gylang.gim.server.intercept;
 
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
-import com.gylang.gim.server.domain.ResponseMessageWrap;
+import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.gim.api.domain.common.ResponseMessage;
 import com.gylang.netty.sdk.common.AfterConfigInitialize;
 import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.qos.IMessageReceiveQosHandler;
 import com.gylang.netty.sdk.intercept.NettyIntercept;
@@ -43,7 +43,7 @@ public class NettyResponseIntercept implements NettyIntercept, AfterConfigInitia
     public Object doAfter(ChannelHandlerContext ctx, IMSession me, MessageWrap message, Object result) {
 
 
-        if (result instanceof ResponseMessageWrap) {
+        if (result instanceof ResponseMessage) {
 
             MessageWrap wrap = (MessageWrap) result;
             messageProvider.sendMsg(me, me, wrap);

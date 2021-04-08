@@ -1,7 +1,7 @@
 package com.gylang.gim.web.controller;
 
 import com.gylang.gim.api.domain.common.CommonResult;
-import com.gylang.netty.sdk.domain.MessageWrap;
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.repo.IMSessionRepository;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,19 +1,19 @@
 package com.gylang.gim.web.dto.msg;
 
+import com.gylang.gim.api.constant.cmd.SystemChatCmd;
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.enums.BaseCode;
-import com.gylang.gim.api.dto.msg.ResponseMessageWrap;
-import com.gylang.netty.sdk.constant.system.SystemMessageType;
 
 /**
  * @author gylang
  * data 2021/3/6
  */
-public class ErrorMessageWrap extends ResponseMessageWrap {
+public class ErrorMessageWrap extends MessageWrap {
 
     public static ErrorMessageWrap build(String code, String msg) {
 
         ErrorMessageWrap messageWrap = new ErrorMessageWrap();
-        messageWrap.setCmd(SystemMessageType.ERROR_MSG);
+        messageWrap.setCmd(SystemChatCmd.ERROR_MSG);
         messageWrap.setCode(code);
         messageWrap.setContent(msg);
         return messageWrap;

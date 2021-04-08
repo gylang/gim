@@ -3,7 +3,7 @@ package com.gylang.gim.server.intercept;
 import cn.hutool.core.util.StrUtil;
 import com.gylang.netty.sdk.common.AfterConfigInitialize;
 import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.domain.MessageWrap;
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.intercept.NettyIntercept;
 import io.netty.channel.ChannelHandlerContext;

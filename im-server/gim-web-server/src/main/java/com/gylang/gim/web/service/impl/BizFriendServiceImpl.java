@@ -17,7 +17,7 @@ import com.gylang.gim.web.entity.UserApply;
 import com.gylang.gim.web.service.ImUserFriendService;
 import com.gylang.gim.web.service.UserApplyService;
 import com.gylang.gim.web.service.biz.BizFriendService;
-import com.gylang.netty.sdk.domain.MessageWrap;
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.provider.MessageProvider;
 import lombok.extern.slf4j.Slf4j;

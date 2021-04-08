@@ -5,7 +5,6 @@ import com.alibaba.fastjson.TypeReference;
 import com.gylang.gim.api.dto.ImUserFriendDTO;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
-import com.gylang.gim.api.domain.MessageWrap;
 import com.gylang.gim.api.domain.chat.ChatMsg;
 import com.gylang.gim.client.enums.MockKey;
 import com.gylang.gim.client.gui.core.CustomApplication;

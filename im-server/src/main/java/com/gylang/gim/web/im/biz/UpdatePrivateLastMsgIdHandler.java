@@ -3,7 +3,7 @@ package com.gylang.gim.web.im.biz;
 import com.gylang.gim.web.im.constant.BizChatCmd;
 import com.gylang.gim.web.service.HistoryMessageService;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.domain.MessageWrap;
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import org.springframework.beans.factory.annotation.Autowired;

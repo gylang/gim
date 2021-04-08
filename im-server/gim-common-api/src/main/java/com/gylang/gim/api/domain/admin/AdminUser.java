@@ -1,4 +1,4 @@
-package com.gylang.gim.server.domain;
+package com.gylang.gim.api.domain.admin;
 
 import lombok.Data;
 

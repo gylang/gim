@@ -1,13 +1,13 @@
-package com.gylang.gim.server.handle;
+package com.gylang.gim.server.handle.client;
 
 import com.gylang.gim.api.constant.CacheConstant;
 import com.gylang.gim.api.constant.cmd.GroupChatCmd;
-import com.gylang.gim.api.constant.cmd.SystemChatCmd;
-import com.gylang.gim.server.domain.AckMessageWrap;
-import com.gylang.gim.server.domain.GroupConfig;
+import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.gim.api.domain.entity.GroupConfig;
+import com.gylang.gim.api.domain.message.reply.ReplyMessage;
+import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.server.service.HistoryMessageService;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
@@ -35,6 +35,7 @@ public class GroupChatHandler implements IMRequestHandler {
     private IMGroupSessionRepository groupSessionRepository;
     @Resource
     private RedisTemplate<String, GroupConfig> redisTemplate;
+
     @Override
     public Object process(IMSession me, MessageWrap message) {
 
@@ -45,10 +46,7 @@ public class GroupChatHandler implements IMRequestHandler {
         if (null != senderConfig) {
             // 发送者是当前群聊用户
             if (senderConfig.isBanedSend()) {
-                AckMessageWrap messageWrap = new AckMessageWrap(message);
-                messageWrap.setCmd(SystemChatCmd.ERROR_MSG);
-                messageWrap.setContent("你已被禁言!");
-                return messageWrap;
+                return ReplyMessage.reply(message, BaseResultCode.VISIT_INTERCEPT.getCode(), "用户被禁言");
             } else {
                 // 缓存用户消息
                 messageService.storeGroupChat(message.getReceive(), message);
@@ -57,8 +55,9 @@ public class GroupChatHandler implements IMRequestHandler {
                 for (IMSession session : group.getMemberList()) {
                     messageProvider.sendMsg(me, session, message.copyBasic());
                 }
+                return ReplyMessage.success(message);
             }
         }
-        return null;
+        return ReplyMessage.reply(message, BaseResultCode.EMAIL_CODE_ERROR.getCode(), "非群成员");
     }
 }

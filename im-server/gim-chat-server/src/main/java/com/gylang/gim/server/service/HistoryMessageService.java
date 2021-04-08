@@ -1,7 +1,7 @@
 package com.gylang.gim.server.service;
 
 
-import com.gylang.netty.sdk.domain.MessageWrap;
+import com.gylang.gim.api.domain.common.MessageWrap;
 
 /**
  * @author gylang

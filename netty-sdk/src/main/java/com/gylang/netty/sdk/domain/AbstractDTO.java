@@ -1,5 +1,7 @@
 package com.gylang.netty.sdk.domain;
 
+import com.gylang.gim.api.domain.common.MessageWrap;
+
 /**
  * @author gylang
  * data 2020/11/4

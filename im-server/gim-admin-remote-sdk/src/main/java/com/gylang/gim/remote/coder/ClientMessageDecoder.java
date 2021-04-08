@@ -25,7 +25,6 @@ package com.gylang.gim.remote.coder;
 import com.alibaba.fastjson.JSON;
 import com.gylang.gim.api.constant.CommConst;
 import com.gylang.gim.api.constant.CommonConstant;
-import com.gylang.gim.api.domain.MessageWrap;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
