@@ -2,6 +2,7 @@ package com.gylang.netty.sdk.provider;
 
 import cn.hutool.core.util.StrUtil;
 import com.gylang.gim.api.constant.EventTypeConst;
+import com.gylang.gim.api.constant.QosConstant;
 import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.constant.NettyConfigEnum;
 import com.gylang.gim.api.domain.common.MessageWrap;
@@ -99,9 +100,9 @@ public class DefaultMessageProvider implements MessageProvider {
         cf.addListener((ChannelFutureListener) channelFuture -> {
 
             if (!channelFuture.isSuccess()) {
-                if (message.isQos()) {
+                if (QosConstant.ONE_AWAY != message.getQos()) {
                     // 应用层确保消息可达
-                    iMessageSenderQosHandler.handle(message, target);
+                    iMessageSenderQosHandler.addReceived(message);
                 } else if (message.getRetryNum() > retryNum) {
                     // iMessageSenderQosHandler
                     if (message.isOfflineMsgEvent()) {

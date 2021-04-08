@@ -30,7 +30,7 @@ public class ChatHandler implements IMRequestHandler {
         MessageWrap messageWrap = new MessageWrap();
         messageWrap.setSender(me.getAccount());
         messageWrap.setContent("ACK");
-        messageWrap.setQos(true);
+        messageWrap.setQos(2);
         messageProvider.sendMsg(me, me, messageWrap);
         return message;
     }

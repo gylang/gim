@@ -2,12 +2,12 @@ package com.gylang.netty.sdk.handler.qos;
 
 import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
-import com.gylang.gim.api.enums.ChatTypeEnum;
-import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.event.EventProvider;
-import com.gylang.netty.sdk.repo.IMSessionRepository;
+import com.gylang.netty.sdk.util.LocalSessionHolderUtil;
+import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Iterator;
@@ -45,7 +45,6 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
 
     private int reSendNum = 3;
 
-    private IMSessionRepository imSessionRepository;
 
     private EventProvider eventProvider;
 
@@ -53,19 +52,24 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
     public void handle(MessageWrap message, IMSession target) {
 
         // 1. 非qos
-        if (ChatTypeEnum.SYSTEM_MESSAGE.getType() != message.getType() || !message.isQos()) {
-            return;
+        String msgId = message.getMsgId();
+
+        // 2. ack = 1
+        if (SystemChatCmd.QOS_SEND_ACK.equals(message.getCmd()) && 1 == message.getAck()) {
+
+            MessageWrap messageWrap = sentMessages.get(msgId);
+            if (null != messageWrap && messageWrap.getReceive().equals(target.getAccount())) {
+                // 存在重发记录 收到ack0客户端收到, 客户端ack1可以删除重发记录, 并响应ack2
+                sentMessages.remove(messageWrap.getMsgId());
+                messageTimeStamp.remove(messageWrap.getMsgId());
+            }
+            // qos2 需要响应客户点 响应ack2 让客户端删除重发ack1列表
+            if (null != messageWrap && 2 == messageWrap.getQos()) {
+                message.setAck(2);
+                target.getSession().writeAndFlush(message);
+            }
         }
-        // 2. 如果收到的是客户端的ack包将将消息删除
-        if (SystemChatCmd.QOS_SEND_ACK.equals(message.getCmd())) {
-            messageTimeStamp.remove(message.getMsgId());
-            return;
-        }
-        // 3. 接收到客户端的消息 msgId,将消息进行保存，
-        // 3.1 如果已经存在，ack1给客户端，
-        if (!messageTimeStamp.containsKey(message.getMsgId())) {
-            addReceived(message);
-        }
+
 
     }
 
@@ -140,15 +144,18 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
                 if (now < timestamp) {
                     continue;
                 }
-                IMSession imSession = imSessionRepository.find(msg.getReceive());
-                if (null != imSession && imSession.isConnected()) {
-
-                    imSession.getSession().writeAndFlush(timestamp);
+                Channel session = LocalSessionHolderUtil.getSession(msg.getReceive());
+                if (null != session) {
+                    session.writeAndFlush(timestamp);
                     msg.setRetryNum(msg.getRetryNum() + 1);
                 } else {
                     // 用户离线
                     if (msg.isOfflineMsgEvent()) {
+
                         eventProvider.sendEvent(EventTypeConst.OFFLINE_MSG_EVENT, timestamp);
+                    } else {
+                        // 可能是重连后的跨服
+                        eventProvider.sendEvent(EventTypeConst.CROSS_SERVER_PUSH, timestamp);
                     }
                     iterator.remove();
                 }
@@ -176,6 +183,5 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
         ScheduledExecutorService customScheduledExecutorService = configuration.getProperties(SCHEDULED_EXECUTOR_SERVICE);
         this.scheduledExecutorService = null == customScheduledExecutorService ? this.scheduledExecutorService : customScheduledExecutorService;
         this.eventProvider = configuration.getEventProvider();
-        this.imSessionRepository = configuration.getSessionRepository();
     }
 }

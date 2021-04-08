@@ -47,7 +47,9 @@ public class MessageWrap implements Serializable {
     private transient int retryNum;
 
     /** 是否使用质量服务, ack */
-    private boolean qos;
+    private int qos;
+
+    private int ack;
 
     /** 持久化消息事件 */
     private boolean store;

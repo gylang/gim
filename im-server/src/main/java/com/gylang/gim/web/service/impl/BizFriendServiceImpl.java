@@ -113,7 +113,7 @@ public class BizFriendServiceImpl implements BizFriendService {
                     .sender(userApply.getApplyId())
                     .content(JSON.toJSONString(userApply))
                     .offlineMsgEvent(false)
-                    .qos(true)
+                    .qos(1)
                     .build();
             // 发送消息
             IMSession imSession = new IMSession();
@@ -138,7 +138,7 @@ public class BizFriendServiceImpl implements BizFriendService {
 
             // 给申请者发送hello
             MessageWrap applyMsg = MessageWrap.builder()
-                    .qos(true)
+                    .qos(1)
                     .cmd(BizChatCmd.PRIVATE_CHAT)
                     .sender(apply.getAnswerId())
                     .receive(apply.getApplyId())
@@ -158,7 +158,7 @@ public class BizFriendServiceImpl implements BizFriendService {
         } else {
             // 拒绝
             MessageWrap rejectMsg = MessageWrap.builder()
-                    .qos(true)
+                    .qos(1)
                     .sender(apply.getAnswerId())
                     .receive(apply.getApplyId())
                     .content(apply.getAnswerId() + ": 拒绝添加好友!")

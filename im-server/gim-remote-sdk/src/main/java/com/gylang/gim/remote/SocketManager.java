@@ -3,13 +3,14 @@ package com.gylang.gim.remote;
 import cn.hutool.core.thread.ThreadFactoryBuilder;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import com.gylang.gim.api.constant.CommonConstant;
+import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
+import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.gim.api.enums.BaseResultCode;
+import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.remote.call.GimCallBack;
 import com.gylang.gim.remote.coder.ClientMessageDecoder;
 import com.gylang.gim.remote.coder.ClientMessageEncoder;
-import com.gylang.gim.api.constant.CommonConstant;
-import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
-import com.gylang.gim.api.enums.BaseResultCode;
-import com.gylang.gim.api.enums.ChatTypeEnum;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -177,6 +178,7 @@ public class SocketManager {
      * @param body 消息体
      */
     public void send(final MessageWrap body) {
+
         if (log.isDebugEnabled()) {
             log.debug("发送消息 : {}", body);
         }

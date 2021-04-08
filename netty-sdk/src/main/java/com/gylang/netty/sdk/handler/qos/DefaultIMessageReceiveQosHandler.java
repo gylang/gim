@@ -2,9 +2,8 @@ package com.gylang.netty.sdk.handler.qos;
 
 import cn.hutool.core.thread.ThreadFactoryBuilder;
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
-import com.gylang.gim.api.enums.ChatTypeEnum;
-import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,23 +35,8 @@ public class DefaultIMessageReceiveQosHandler implements IMessageReceiveQosHandl
     @Override
     public void handle(MessageWrap message, IMSession target) {
 
-        // 1. 非qos
-        if (ChatTypeEnum.SYSTEM_MESSAGE.getType() != message.getType() || !message.isQos()) {
-            return;
-        }
-        String key = getKey(target.getAccount(), message.getClientMsgId());
-        // 2. 如果收到的是客户端的ack2包将将消息删除
-        if (SystemChatCmd.QOS_RECEIVE_ACK.equals(message.getCmd())) {
-            receiveMessages.remove(key);
-            return;
-        }
-        // 3. 接收到客户端的消息 msgId,将消息进行保存，
-        // 3.1 如果已经存在，ack1给客户端，
-        if (!receiveMessages.containsKey(key)) {
-            addReceived(key);
-        }
-        // 修改message ack
-        // 3.2 发送消息给客户端，ack
+        // qos2 接受方处理 响应ack1
+        addReceived(getKey(target.getAccount(), message.getClientMsgId()));
         message.setCmd(SystemChatCmd.QOS_RECEIVE_ACK);
         target.getSession().writeAndFlush(message);
 
@@ -61,6 +45,11 @@ public class DefaultIMessageReceiveQosHandler implements IMessageReceiveQosHandl
     @Override
     public boolean hasReceived(String senderId, String msgId) {
         return receiveMessages.containsKey(getKey(senderId, msgId));
+    }
+
+    @Override
+    public void remove(String senderId, String msgId) {
+         receiveMessages.remove(getKey(senderId, msgId));
     }
 
     @Override
@@ -88,16 +77,7 @@ public class DefaultIMessageReceiveQosHandler implements IMessageReceiveQosHandl
     }
 
 
-    public static interface ScanReceive {
-        /**
-         * 清除qos队列
-         *
-         * @param receiveMessages   接收到的消息
-         * @param checkInterval     检查间隔
-         * @param messagesValidTime 消息过期时间
-         */
-        void scan(ConcurrentMap<String, Long> receiveMessages, long checkInterval, long messagesValidTime);
-    }
+
 
     public void scanReceive() {
 
