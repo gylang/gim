@@ -35,7 +35,7 @@ public class QosAdapterHandler implements BizRequestAdapter<MessageWrap> {
 
 
         // qos = 1/2 主发逻辑基本一直 统一处理
-        if (SystemChatCmd.QOS_SEND_ACK.equals(message.getCmd())) {
+        if (SystemChatCmd.QOS_SERVER_SEND_ACK.equals(message.getCmd())) {
             // qos 发送方
             senderQosHandler.handle(message, me);
             return InokeFinished.getInstance();
@@ -45,6 +45,7 @@ public class QosAdapterHandler implements BizRequestAdapter<MessageWrap> {
         if (QosConstant.INSURE_ONE_ARRIVE == message.getQos()) {
             AckMessage ackMessage = new AckMessage(message);
             ackMessage.setAck(QosConstant.RECEIVE_ACK1);
+            ackMessage.setCmd(SystemChatCmd.QOS_CLIENT_SEND_ACK);
             me.getSession().writeAndFlush(ackMessage);
             if (log.isDebugEnabled()) {
                 log.debug("[qos1 - receiver] : 接收到客户端消息 , 响应客户端ack1");
@@ -68,10 +69,6 @@ public class QosAdapterHandler implements BizRequestAdapter<MessageWrap> {
                     }
                     return null;
                 } else {
-                    // 消息已经接受 响应ack1
-                    AckMessage ackMessage = new AckMessage(message);
-                    ackMessage.setAck(QosConstant.RECEIVE_ACK1);
-                    me.getSession().writeAndFlush(ackMessage);
                     if (log.isDebugEnabled()) {
                         log.debug("[qos2 - receiver] : 接收到客户端[重发]消息 , 响应客户端ack1");
                     }

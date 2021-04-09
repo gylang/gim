@@ -4,6 +4,7 @@ import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.gim.api.constant.QosConstant;
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.gim.api.domain.message.sys.AckMessage;
 import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.event.EventProvider;
@@ -56,8 +57,7 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
         String msgId = message.getMsgId();
 
         // 2. ack = 1
-        if (SystemChatCmd.QOS_SEND_ACK.equals(message.getCmd())
-                && QosConstant.SEND_ACK1 == message.getAck()) {
+        if (QosConstant.SEND_ACK1 == message.getAck()) {
 
             MessageWrap messageWrap = sentMessages.get(msgId);
             if (null != messageWrap && messageWrap.getReceive().equals(target.getAccount())) {
@@ -65,13 +65,14 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
                 sentMessages.remove(msgId);
                 Long remove = messageTimeStamp.remove(msgId);
                 if (log.isDebugEnabled()) {
-                    log.debug("[qos1 - sender] : 接收到客户端ack1, 删除重发记录 : {}",null == remove ? "已经删除,这是重发" : "立即删除");
+                    log.debug("[qos1 - sender] : 接收到客户端ack1, 删除重发记录 : {}", null == remove ? "已经删除,这是重发" : "立即删除");
                 }
             }
             // qos2 需要响应客户点 响应ack2 让客户端删除重发ack1列表
-            if (null != messageWrap && QosConstant.SEND_ACK2 == messageWrap.getQos()) {
+            if (null != messageWrap && QosConstant.ACCURACY_ONE_ARRIVE == messageWrap.getQos()) {
+                AckMessage ackMessage = new AckMessage(SystemChatCmd.QOS_SERVER_SEND_ACK, messageWrap);
                 message.setAck(QosConstant.SEND_ACK2);
-                target.getSession().writeAndFlush(message);
+                target.getSession().writeAndFlush(ackMessage);
                 if (log.isDebugEnabled()) {
                     log.debug("[qos2 - sender] : 接收到客户端ack1, 响应客户端ack2");
                 }

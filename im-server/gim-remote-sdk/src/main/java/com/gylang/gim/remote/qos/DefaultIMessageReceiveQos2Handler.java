@@ -4,6 +4,8 @@ import cn.hutool.core.thread.ThreadFactoryBuilder;
 import com.gylang.gim.api.constant.QosConstant;
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.gim.api.domain.message.sys.AckMessage;
+import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.remote.SocketHolder;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,7 +22,8 @@ import java.util.concurrent.*;
 public class DefaultIMessageReceiveQos2Handler implements IMessageReceiveQos2Handler {
 
 
-    private final ConcurrentMap<String, Long> receiveMessages = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, MessageWrap> receiveMessages = new ConcurrentHashMap<>();
+
     /** 定时任务扫码间隔 */
     private int checkInterval = 10 * 1000;
     /** 消息超时时间 */
@@ -28,22 +31,19 @@ public class DefaultIMessageReceiveQos2Handler implements IMessageReceiveQos2Han
     /** 定时扫码器 */
     private ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(1, ThreadFactoryBuilder.create().setNamePrefix("receive-qos-scanner").build());
 
+    private int reSendNum = 3;
 
-    private boolean executing = false;
 
 
     @Override
     public boolean handle(MessageWrap message) {
 
         // qos2 接受方处理 响应ack1
-        boolean add = addReceived(message.getMsgId());
-        MessageWrap messageWrap = message.copyBasic();
-        messageWrap.setClientMsgId(message.getMsgId());
-        messageWrap.setMsgId(message.getMsgId());
-        messageWrap.setCmd(SystemChatCmd.QOS_RECEIVE_ACK);
-        messageWrap.setCmd(SystemChatCmd.QOS_RECEIVE_ACK);
+        boolean add = addReceived(message.getMsgId(), message);
+        MessageWrap messageWrap = new AckMessage(message);
         messageWrap.setAck(QosConstant.RECEIVE_ACK1);
-        SocketHolder.getInstance().send(messageWrap);
+        messageWrap.setCmd(SystemChatCmd.QOS_SERVER_SEND_ACK);
+        SocketHolder.getInstance().writeAndFlush(messageWrap);
         if (log.isDebugEnabled()) {
             log.debug("[qos2 - receiver] : 接收到服务端消息 , 响应服务端ack1");
         }
@@ -61,21 +61,17 @@ public class DefaultIMessageReceiveQos2Handler implements IMessageReceiveQos2Han
     }
 
     @Override
-    public boolean addReceived(String key) {
+    public boolean addReceived(String key, MessageWrap message) {
         if (receiveMessages.containsKey(key)) {
             return false;
         }
-        receiveMessages.put(key, System.currentTimeMillis() + messagesValidTime);
+        receiveMessages.put(key, message);
         return true;
     }
 
     @Override
     public void startup() {
-        scheduledExecutorService.scheduleAtFixedRate(() -> {
-                    executing = true;
-                    scanReceive();
-                    executing = false;
-                },
+        scheduledExecutorService.scheduleAtFixedRate(this::scanReceive,
                 checkInterval,
                 checkInterval,
                 TimeUnit.MILLISECONDS);
@@ -97,17 +93,31 @@ public class DefaultIMessageReceiveQos2Handler implements IMessageReceiveQos2Han
         }
 
         //** 遍历清除
-        for (Map.Entry<String, Long> entry : receiveMessages.entrySet()) {
+
+
+        for (Map.Entry<String, MessageWrap> entry : receiveMessages.entrySet()) {
             String key = entry.getKey();
-            long value = entry.getValue();
+            MessageWrap value = entry.getValue();
+
             // 删除接收消息表
-            long delta = System.currentTimeMillis() - value;
-            if (delta >= messagesValidTime) {
+            int retryNum = value.getRetryNum();
+            value.setRetryNum(retryNum + 1);
+            if (retryNum >= reSendNum) {
                 if (log.isDebugEnabled()) {
-                    log.debug("【QoS接收方】指纹为" + key + "的包已生存" + delta
-                            + "ms(最大允许" + messagesValidTime + "ms), 马上将删除之");
+                    log.debug("【QoS接收方】指纹为" + key + "的包已生存" + reSendNum
+                            + "次(最大允许" + reSendNum + "次), 马上将删除之");
                 }
                 receiveMessages.remove(key);
+            } else {
+                AckMessage ackMessage = new AckMessage();
+                ackMessage.setQos(QosConstant.ACCURACY_ONE_ARRIVE);
+                ackMessage.setAck(QosConstant.RECEIVE_ACK1);
+                ackMessage.setCmd(SystemChatCmd.QOS_CLIENT_SEND_ACK);
+                ackMessage.setType(ChatTypeEnum.SYSTEM_MESSAGE.getType());
+                ackMessage.setMsgId(key);
+                ackMessage.setClientMsgId(key);
+                SocketHolder.getInstance().writeAndFlush(ackMessage);
+
             }
         }
 

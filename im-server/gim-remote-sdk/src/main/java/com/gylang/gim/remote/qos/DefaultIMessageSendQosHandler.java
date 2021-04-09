@@ -3,6 +3,7 @@ package com.gylang.gim.remote.qos;
 import com.gylang.gim.api.constant.QosConstant;
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.gim.api.domain.message.sys.AckMessage;
 import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.remote.SocketHolder;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.*;
 
 /**
@@ -51,7 +53,7 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
         String msgId = message.getClientMsgId();
 
         // 2. ack = 1
-        if (SystemChatCmd.QOS_SEND_ACK.equals(message.getCmd()) && QosConstant.SEND_ACK1 == message.getAck()) {
+        if (QosConstant.SEND_ACK1 == message.getAck()) {
 
             MessageWrap messageWrap = sentMessages.get(msgId);
             if (null != messageWrap) {
@@ -59,13 +61,14 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
                 sentMessages.remove(msgId);
                 Long remove = messageTimeStamp.remove(msgId);
                 if (log.isDebugEnabled()) {
-                    log.debug("[qos1 - sender] : 接收到服务端ack1, 删除重发记录 : {}",null == remove ? "已经删除,这是重发" : "立即删除");
+                    log.debug("[qos1 - sender] : 接收到服务端ack1, 删除重发记录 : {}", null == remove ? "已经删除,这是重发" : "立即删除");
                 }
             }
             // qos2 需要响应客户点 响应ack2 让客户端删除重发ack1列表
             if (null != messageWrap && QosConstant.SEND_ACK2 == messageWrap.getQos()) {
-                message.setAck(QosConstant.SEND_ACK2);
-                SocketHolder.getInstance().send(message);
+                AckMessage ackMessage = new AckMessage(SystemChatCmd.QOS_SERVER_SEND_ACK, messageWrap);
+                ackMessage.setAck(QosConstant.SEND_ACK2);
+                SocketHolder.getInstance().writeAndFlush(ackMessage);
                 if (log.isDebugEnabled()) {
                     log.debug("[qos2 - sender] : 接收到服务端ack1, 响应服务端ack2");
                 }
@@ -128,7 +131,8 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
 
         //** 遍历清除
         long now = System.currentTimeMillis();
-        Iterator<Map.Entry<String, MessageWrap>> iterator = sentMessages.entrySet().iterator();
+        Set<Map.Entry<String, MessageWrap>> entries = sentMessages.entrySet();
+        Iterator<Map.Entry<String, MessageWrap>> iterator = entries.iterator();
         while (iterator.hasNext()) {
             Map.Entry<String, MessageWrap> entry = iterator.next();
             String key = entry.getKey();
@@ -136,7 +140,7 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
             // 删除接收消息表
             if (msg.getRetryNum() >= reSendNum) {
                 if (log.isDebugEnabled()) {
-                    log.debug("【QoS发送方】消息:msgId" + msg.getMsgId() + "的包已生存" + reSendNum
+                    log.debug("【QoS发送方】消息:msgId" + msg.getClientMsgId() + "的包已生存" + reSendNum
                             + "(最大允许" + reSendNum + "次数), 马上将删除之");
                     iterator.remove();
                     // 重发次数超出限制 响应失败
@@ -158,7 +162,7 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
                 if (now < timestamp) {
                     continue;
                 }
-                SocketHolder.getInstance().send(messageWrap);
+                SocketHolder.getInstance().writeAndFlush(messageWrap);
                 msg.setRetryNum(msg.getRetryNum() + 1);
 
 

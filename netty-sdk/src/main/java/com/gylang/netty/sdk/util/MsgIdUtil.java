@@ -18,6 +18,12 @@ import com.gylang.gim.api.domain.common.MessageWrap;
  */
 public class MsgIdUtil implements AfterConfigInitialize {
 
+    private static final MsgIdUtil msgIdUtil = new MsgIdUtil();
+
+    public static MsgIdUtil getMsgIdUtil() {
+        return msgIdUtil;
+    }
+
     private MsgIdUtil() {
     }
 

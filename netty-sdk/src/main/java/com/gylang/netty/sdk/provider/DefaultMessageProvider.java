@@ -88,7 +88,7 @@ public class DefaultMessageProvider implements MessageProvider {
         }
 
         // 判断是否需要自动设置消息id
-        if (StrUtil.isNotEmpty(message.getMsgId())) {
+        if (StrUtil.isEmpty(message.getMsgId())) {
             message.setMsgId(MsgIdUtil.increase(message));
         }
 //        // 持久化消息

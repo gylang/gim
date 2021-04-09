@@ -45,7 +45,7 @@ public interface IMessageReceiveQos2Handler {
      * @param key 消息id
      * @return
      */
-    boolean addReceived(String key);
+    boolean addReceived(String key, MessageWrap message);
 
     /**
      * 启动扫码器

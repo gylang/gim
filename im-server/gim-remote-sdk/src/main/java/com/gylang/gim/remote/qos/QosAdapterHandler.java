@@ -27,7 +27,7 @@ public class QosAdapterHandler {
 
 
         // qos = 1/2 主发逻辑基本一直 统一处理
-        if (SystemChatCmd.QOS_SEND_ACK.equals(message.getCmd())) {
+        if (SystemChatCmd.QOS_CLIENT_SEND_ACK.equals(message.getCmd())) {
             // qos 发送方
             senderQosHandler.handle(message);
             return null;
@@ -37,7 +37,8 @@ public class QosAdapterHandler {
         if (QosConstant.INSURE_ONE_ARRIVE == message.getQos()) {
             AckMessage ackMessage = new AckMessage(message);
             ackMessage.setAck(QosConstant.RECEIVE_ACK1);
-            SocketHolder.getInstance().send(ackMessage);
+            ackMessage.setCmd(SystemChatCmd.QOS_SERVER_SEND_ACK);
+            SocketHolder.getInstance().writeAndFlush(ackMessage);
             if (log.isDebugEnabled()) {
                 log.debug("[qos1 - receiver] : 接收到服务端消息 , 响应服务端ack1");
             }
@@ -60,16 +61,6 @@ public class QosAdapterHandler {
                     }
                     return message;
 
-                } else {
-                    // 消息已经接受 响应ack1
-                    AckMessage ackMessage = new AckMessage(message);
-                    ackMessage.setAck(QosConstant.RECEIVE_ACK1);
-                    SocketHolder.getInstance().send(ackMessage);
-                    if (log.isDebugEnabled()) {
-                        log.debug("[qos2 - receiver] : 接收到服务端[重发]消息 , 响应服务端ack1");
-                    }
-                    return null;
-
                 }
 
             } else if (QosConstant.RECEIVE_ACK2 == message.getAck()) {
@@ -82,7 +73,7 @@ public class QosAdapterHandler {
         }
 
 
-        return null;
+        return message;
     }
 
 

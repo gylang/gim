@@ -28,12 +28,12 @@ public class JsonDispatchHandler extends SimpleChannelInboundHandler<MessageWrap
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, MessageWrap msg) {
         IMSession session = new IMSession(ctx.channel());
-        if (log.isDebugEnabled()) {
-            log.info("[心跳包] : 用户id：{}，channelId：{}", session.getAccount(), session.getSession().id());
-        }
         if (null == msg || null == msg.getCmd()) {
 
             return;
+        }
+        if (log.isDebugEnabled()) {
+            log.info("[接收到客户端消息] : 用户id：{}，channelId：{}", session.getAccount(), session.getNid());
         }
         IMessageRouter.process(ctx, session, msg);
 

@@ -77,7 +77,7 @@ public class NettyConfiguration {
     /** 配置属性 */
     private NettyProperties nettyProperties;
 
-    private MsgIdUtil msgIdUtil;
+    private MsgIdUtil msgIdUtil = MsgIdUtil.getMsgIdUtil();
     /**
      * 配置信息
      */

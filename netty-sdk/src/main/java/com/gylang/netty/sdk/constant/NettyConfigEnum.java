@@ -28,8 +28,8 @@ public enum NettyConfigEnum {
     WRITE_IDLE("writeIdle", 10L),
     ALL_IDLE("allIdle", 10L),
     SERVER_ID("server_id", "0.0.0.0"),
-    WORKER_ID("worker_id", 1),
-    DATACENTER_ID("datacenter_id", 1),
+    WORKER_ID("workerId", 1),
+    DATACENTER_ID("datacenterId", 1),
     /**
      * 连接丢失重连次数
      */

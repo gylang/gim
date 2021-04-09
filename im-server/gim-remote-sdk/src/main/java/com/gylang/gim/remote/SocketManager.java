@@ -1,11 +1,9 @@
 package com.gylang.gim.remote;
 
 import cn.hutool.core.thread.ThreadFactoryBuilder;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.gylang.gim.api.constant.CommonConstant;
 import com.gylang.gim.api.constant.QosConstant;
-import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.api.enums.ChatTypeEnum;
@@ -51,6 +49,7 @@ public class SocketManager {
     private int checkInterval = 5;
     private int reconnect = 3;
     private int reconnectNum = 1;
+    private int rebindNum = 3;
     /**
      * 扫码最低时间间隔
      */
@@ -121,6 +120,7 @@ public class SocketManager {
         socketAddress = new InetSocketAddress(ip, port);
         openConnect();
         // 登录系统
+        login.set(2);
         login();
         bind(ChatTypeEnum.REPLY_CHAT.getType(), loginMsg.getCmd(), onLoginSuccess);
         // 心跳监测
@@ -153,6 +153,7 @@ public class SocketManager {
         if (socketChannel.isOpen()) {
             log.info("[发送心跳] : 连接正常");
             if (0 == login.get()) {
+                login.set(2);
                 login();
             }
             send(CommonConstant.HEART);
@@ -165,6 +166,7 @@ public class SocketManager {
                     openConnect();
                 } catch (IOException e) {
                     log.info("[重连] : 重连失败");
+                    login.set(0);
                 }
             }
         }
@@ -185,7 +187,7 @@ public class SocketManager {
 
         // 广播
         if (message instanceof MessageWrap) {
-
+            log.info("[接受到服务端消息] : {}", message);
             sendBroadcast(message);
 
         }
@@ -199,7 +201,7 @@ public class SocketManager {
      */
     public void send(final MessageWrap body) {
 
-        if (log.isDebugEnabled()) {
+        if (null != body.getCmd() && log.isDebugEnabled()) {
             log.debug("发送消息 : {}", body);
         }
         if (!isConnected()) {
@@ -210,24 +212,28 @@ public class SocketManager {
             if (QosConstant.ONE_AWAY != body.getQos()) {
                 qosAdapterHandler.getSenderQosHandler().addReceived(body);
             }
-            int result = 0;
-            try {
-
-                ByteBuffer buffer = messageEncoder.encode(body);
-                while (buffer.hasRemaining()) {
-                    result += socketChannel.write(buffer);
-                }
-
-            } catch (Exception e) {
-                result = -1;
-            } finally {
-
-                if (result <= 0) {
-                    closeSession();
-                }  // messageSent(body);
-
-            }
+            writeAndFlush(body);
         });
+    }
+
+    public void writeAndFlush(MessageWrap body) {
+        int result = 0;
+        try {
+
+            ByteBuffer buffer = messageEncoder.encode(body);
+            while (buffer.hasRemaining()) {
+                result += socketChannel.write(buffer);
+            }
+
+        } catch (Exception e) {
+            result = -1;
+        } finally {
+
+            if (result <= 0) {
+                closeSession();
+            }  // messageSent(body);
+
+        }
     }
 
     /**
@@ -307,11 +313,12 @@ public class SocketManager {
         if (intent instanceof MessageWrap) {
             MessageWrap message = (MessageWrap) intent;
 
-            if (null == qosAdapterHandler.process(message)) {
-                // qo校验过滤包
+
+            if (StrUtil.isEmpty(message.getCmd())) {
                 return;
             }
-            if (StrUtil.isEmpty(message.getCmd())) {
+            if (null == qosAdapterHandler.process(message)) {
+                // qo校验过滤包
                 return;
             }
             // 发送消息到监听队列
@@ -360,7 +367,12 @@ public class SocketManager {
         if (BaseResultCode.OK.getCode().equals(messageWrap.getCode())) {
             login.set(1);
         } else {
-            login.set(2);
+            rebindNum -= 1;
+            if (rebindNum <= 0) {
+                login.set(2);
+            } else {
+                login.set(0);
+            }
         }
     };
 }

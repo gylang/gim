@@ -27,7 +27,7 @@ public class NettyResponseIntercept implements NettyIntercept, AfterConfigInitia
 
     @Override
     public boolean support(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
-        return SystemChatCmd.QOS_RECEIVE_ACK != message.getCmd() && SystemChatCmd.QOS_SEND_ACK != message.getCmd();
+        return SystemChatCmd.QOS_CLIENT_SEND_ACK != message.getCmd() && SystemChatCmd.QOS_SERVER_SEND_ACK != message.getCmd();
     }
 
     @Override

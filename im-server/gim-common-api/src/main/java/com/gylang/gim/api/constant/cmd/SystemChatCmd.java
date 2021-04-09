@@ -8,9 +8,9 @@ package com.gylang.gim.api.constant.cmd;
 public enum SystemChatCmd {
     ;
     /** qos 服务端重发保证消息可达 - 收到客户端ack包 */
-    public static final String QOS_SEND_ACK = "-1";
+    public static final String QOS_SERVER_SEND_ACK = "-1";
     /** qos 监听客户端发送的消息是否收到 - 收到客户端ack确认删除相应监听列表 */
-    public static final String QOS_RECEIVE_ACK = "-2";
+    public static final String QOS_CLIENT_SEND_ACK = "-2";
     /** 通知类信息 */
     public static final String NOTIFY = "1";
     /** 错误消息、异常消息 */

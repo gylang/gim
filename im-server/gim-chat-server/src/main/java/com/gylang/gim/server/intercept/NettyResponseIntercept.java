@@ -1,6 +1,5 @@
 package com.gylang.gim.server.intercept;
 
-import com.gylang.gim.api.constant.QosConstant;
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.common.ResponseMessage;
@@ -32,7 +31,7 @@ public class NettyResponseIntercept implements NettyIntercept, AfterConfigInitia
 
     @Override
     public boolean support(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
-        return !SystemChatCmd.QOS_RECEIVE_ACK.equals(message.getCmd()) && !SystemChatCmd.QOS_SEND_ACK.equals(message.getCmd());
+        return !SystemChatCmd.QOS_CLIENT_SEND_ACK.equals(message.getCmd()) && !SystemChatCmd.QOS_SERVER_SEND_ACK.equals(message.getCmd());
     }
 
     @Override
@@ -48,9 +47,6 @@ public class NettyResponseIntercept implements NettyIntercept, AfterConfigInitia
 
             MessageWrap wrap = (MessageWrap) result;
             messageProvider.sendMsg(me, me, wrap);
-            if (QosConstant.ACCURACY_ONE_ARRIVE == message.getQos()) {
-                receiveQosHandler.handle(wrap, me);
-            }
 
         }
         return result;

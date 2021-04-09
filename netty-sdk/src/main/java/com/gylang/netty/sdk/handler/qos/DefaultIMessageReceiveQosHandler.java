@@ -1,8 +1,10 @@
 package com.gylang.netty.sdk.handler.qos;
 
 import cn.hutool.core.thread.ThreadFactoryBuilder;
+import com.gylang.gim.api.constant.QosConstant;
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.gim.api.domain.message.sys.AckMessage;
 import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import lombok.extern.slf4j.Slf4j;
@@ -36,15 +38,14 @@ public class DefaultIMessageReceiveQosHandler implements IMessageReceiveQosHandl
     public boolean handle(MessageWrap message, IMSession target) {
 
         // qos2 接受方处理 响应ack1
-        boolean add = addReceived(getKey(target.getAccount(), message.getClientMsgId()));
-        MessageWrap messageWrap = message.copyBasic();
-        messageWrap.setClientMsgId(message.getMsgId());
-        messageWrap.setMsgId(message.getMsgId());
-        messageWrap.setCmd(SystemChatCmd.QOS_RECEIVE_ACK);
+        // 使用后 uid, 客户端需要bind才能使用
+        // 使用nid 确保了当前会话不中断时的qos2能确保不重样, 但是连接断开释放之后消息可以重发,(客户端中断连接后)
+        // 仅使用 msgId 需要确保客户端的生成全局唯一id 可以实现可能出现伪造消息/数据量大时客户端生成的clientId一样
+        boolean add = addReceived(getKey(target.getNid(), message.getClientMsgId()));
+        MessageWrap messageWrap = new AckMessage(message);
+        messageWrap.setAck(QosConstant.RECEIVE_ACK1);
+        messageWrap.setCmd(SystemChatCmd.QOS_CLIENT_SEND_ACK);
         target.getSession().writeAndFlush(messageWrap);
-        if (log.isDebugEnabled()) {
-            log.debug("[qos2 - receiver] : 接收到服务端消息 , 响应服务端ack1");
-        }
         return add;
     }
 
