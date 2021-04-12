@@ -21,7 +21,7 @@ import java.util.concurrent.*;
  * data 2021/3/3
  */
 @Slf4j
-public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
+public class DefaultClientSenderSendQosHandler implements ClientSenderQosHandler {
 
     private final ConcurrentMap<String, Long> messageTimeStamp = new ConcurrentHashMap<>();
     private ConcurrentSkipListMap<String, MessageWrap> sentMessages = new ConcurrentSkipListMap<>();

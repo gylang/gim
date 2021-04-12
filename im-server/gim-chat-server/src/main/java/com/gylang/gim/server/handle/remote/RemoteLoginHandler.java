@@ -42,6 +42,7 @@ public class RemoteLoginHandler implements IMRequestHandler {
             me.setAccount(login.getUserId());
             LocalSessionHolderUtil.set(login.getUserId(), me.getSession());
             ReplyMessage success = ReplyMessage.success(message);
+            success.setSender(me.getAccount());
             success.setQos(2);
             return success;
         }

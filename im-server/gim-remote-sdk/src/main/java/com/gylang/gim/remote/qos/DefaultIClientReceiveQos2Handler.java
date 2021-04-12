@@ -19,7 +19,7 @@ import java.util.concurrent.*;
  * data 2021/3/3
  */
 @Slf4j
-public class DefaultIMessageReceiveQos2Handler implements IMessageReceiveQos2Handler {
+public class DefaultIClientReceiveQos2Handler implements ClientReceiveQos2Handler {
 
 
     private final ConcurrentMap<String, MessageWrap> receiveMessages = new ConcurrentHashMap<>();
@@ -109,15 +109,10 @@ public class DefaultIMessageReceiveQos2Handler implements IMessageReceiveQos2Han
                 }
                 receiveMessages.remove(key);
             } else {
-                AckMessage ackMessage = new AckMessage();
-                ackMessage.setQos(QosConstant.ACCURACY_ONE_ARRIVE);
-                ackMessage.setAck(QosConstant.RECEIVE_ACK1);
-                ackMessage.setCmd(SystemChatCmd.QOS_CLIENT_SEND_ACK);
-                ackMessage.setType(ChatTypeEnum.SYSTEM_MESSAGE.getType());
-                ackMessage.setMsgId(key);
-                ackMessage.setClientMsgId(key);
-                SocketHolder.getInstance().writeAndFlush(ackMessage);
-
+                SocketHolder.getInstance().writeAndFlush(value);
+                if (log.isDebugEnabled()) {
+                    log.debug("[qos2 - receiver] : [重发ack1] , 响应服务端ack0, msgId = {}", key);
+                }
             }
         }
 

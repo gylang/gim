@@ -17,7 +17,7 @@ public class ReplyMessage extends ResponseMessage {
 
     public static ReplyMessage success(MessageWrap msg) {
 
-        return success(msg, null);
+        return success(msg, "成功");
     }
     public static ReplyMessage success(MessageWrap messageWrap, String msg) {
         return reply(messageWrap, BaseResultCode.OK.getCode(), msg);
@@ -37,4 +37,5 @@ public class ReplyMessage extends ResponseMessage {
 
         return reply(messageWrap, resultCode.getCode(), resultCode.getMsg());
     }
+
 }

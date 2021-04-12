@@ -96,14 +96,14 @@ public class DefaultMessageProvider implements MessageProvider {
 //            eventProvider.sendEvent(EventTypeConst.PERSISTENCE_EVENT, message);
 //        }
         ChannelFuture cf = target.getSession().writeAndFlush(message);
-
+        if (QosConstant.ONE_AWAY != message.getQos()) {
+            // 应用层确保消息可达
+            iMessageSenderQosHandler.addReceived(message);
+        }
         cf.addListener((ChannelFutureListener) channelFuture -> {
 
             if (!channelFuture.isSuccess()) {
-                if (QosConstant.ONE_AWAY != message.getQos()) {
-                    // 应用层确保消息可达
-                    iMessageSenderQosHandler.addReceived(message);
-                } else if (message.getRetryNum() > retryNum) {
+                  if (message.getRetryNum() > retryNum) {
                     // iMessageSenderQosHandler
                     if (message.isOfflineMsgEvent()) {
                         // 消息发送失败 发送消息发送失败事件

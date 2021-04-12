@@ -10,7 +10,7 @@ import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.remote.call.GimCallBack;
 import com.gylang.gim.remote.coder.ClientMessageDecoder;
 import com.gylang.gim.remote.coder.ClientMessageEncoder;
-import com.gylang.gim.remote.qos.QosAdapterHandler;
+import com.gylang.gim.remote.qos.ClientQosAdapterHandler;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -82,7 +82,7 @@ public class SocketManager {
     private final ClientMessageDecoder messageDecoder = new ClientMessageDecoder();
     /** 消息编码 */
     private final ClientMessageEncoder messageEncoder = new ClientMessageEncoder();
-    private QosAdapterHandler qosAdapterHandler = new QosAdapterHandler();
+    private ClientQosAdapterHandler clientQosAdapterHandler = new ClientQosAdapterHandler();
     private InetSocketAddress socketAddress;
 
     /**
@@ -210,7 +210,7 @@ public class SocketManager {
 
         workerExecutor.execute(() -> {
             if (QosConstant.ONE_AWAY != body.getQos()) {
-                qosAdapterHandler.getSenderQosHandler().addReceived(body);
+                clientQosAdapterHandler.getSenderQosHandler().addReceived(body);
             }
             writeAndFlush(body);
         });
@@ -317,7 +317,7 @@ public class SocketManager {
             if (StrUtil.isEmpty(message.getCmd())) {
                 return;
             }
-            if (null == qosAdapterHandler.process(message)) {
+            if (null == clientQosAdapterHandler.process(message)) {
                 // qo校验过滤包
                 return;
             }

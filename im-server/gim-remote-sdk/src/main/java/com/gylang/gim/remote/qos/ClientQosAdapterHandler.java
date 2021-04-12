@@ -14,10 +14,10 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Data
-public class QosAdapterHandler {
+public class ClientQosAdapterHandler {
 
-    private IMessageSenderQosHandler senderQosHandler = new DefaultIMessageSendQosHandler();
-    private IMessageReceiveQos2Handler receiveQos2Handler = new DefaultIMessageReceiveQos2Handler();
+    private ClientSenderQosHandler senderQosHandler = new DefaultClientSenderSendQosHandler();
+    private ClientReceiveQos2Handler receiveQos2Handler = new DefaultIClientReceiveQos2Handler();
     {
         senderQosHandler.startup();
         receiveQos2Handler.startup();

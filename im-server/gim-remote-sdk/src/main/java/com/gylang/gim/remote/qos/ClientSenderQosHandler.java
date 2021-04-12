@@ -9,7 +9,7 @@ import com.gylang.gim.api.domain.common.MessageWrap;
  * @author gylang
  * data 2021/2/11
  */
-public interface IMessageSenderQosHandler {
+public interface ClientSenderQosHandler {
 
     String CHECK_INTER_VAL_KEY = "IMessageSenderQosHandler.checkInterval";
 

@@ -62,7 +62,8 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
         if (QosConstant.SEND_ACK1 == message.getAck()) {
 
             MessageWrap messageWrap = sentMessages.get(msgId);
-            if (null != messageWrap && messageWrap.getReceive().equals(target.getAccount())) {
+            if (null != messageWrap && null != messageWrap.getReceive()
+                    && messageWrap.getReceive().equals(target.getAccount())) {
                 // 存在重发记录 收到ack0客户端收到, 客户端ack1可以删除重发记录, 并响应ack2
                 sentMessages.remove(msgId);
                 Long remove = messageTimeStamp.remove(msgId);
@@ -73,7 +74,7 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
             // qos2 需要响应客户点 响应ack2 让客户端删除重发ack1列表
             if (null != messageWrap && QosConstant.ACCURACY_ONE_ARRIVE == messageWrap.getQos()) {
                 AckMessage ackMessage = new AckMessage(SystemChatCmd.QOS_SERVER_SEND_ACK, messageWrap);
-                message.setAck(QosConstant.SEND_ACK2);
+                ackMessage.setAck(QosConstant.SEND_ACK2);
                 target.getSession().writeAndFlush(ackMessage);
                 if (log.isDebugEnabled()) {
                     log.debug("[qos2 - sender] : 接收到客户端ack1, 响应客户端ack2");
@@ -91,7 +92,7 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
 
     @Override
     public void addReceived(MessageWrap messageWrap) {
-        if (!hasReceived(messageWrap.getClientMsgId())) {
+        if (!hasReceived(messageWrap.getMsgId())) {
             messageTimeStamp.put(messageWrap.getMsgId(), System.currentTimeMillis() + messagesValidTime);
             sentMessages.put(messageWrap.getMsgId(), messageWrap);
         }
