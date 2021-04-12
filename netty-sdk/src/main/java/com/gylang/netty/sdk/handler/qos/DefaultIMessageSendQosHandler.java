@@ -10,6 +10,7 @@ import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.event.EventProvider;
 import com.gylang.netty.sdk.util.LocalSessionHolderUtil;
 import io.netty.channel.Channel;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Iterator;
@@ -23,6 +24,7 @@ import java.util.concurrent.*;
  * data 2021/3/3
  */
 @Slf4j
+@Setter
 public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
 
     private final ConcurrentMap<String, Long> messageTimeStamp = new ConcurrentHashMap<>();

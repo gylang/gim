@@ -65,8 +65,8 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
                 }
             }
             // qos2 需要响应客户点 响应ack2 让客户端删除重发ack1列表
-            if (null != messageWrap && QosConstant.SEND_ACK2 == messageWrap.getQos()) {
-                AckMessage ackMessage = new AckMessage(SystemChatCmd.QOS_SERVER_SEND_ACK, messageWrap);
+            if (null != messageWrap && QosConstant.ACCURACY_ONE_ARRIVE == message.getQos()) {
+                AckMessage ackMessage = new AckMessage(SystemChatCmd.QOS_CLIENT_SEND_ACK, messageWrap);
                 ackMessage.setAck(QosConstant.SEND_ACK2);
                 SocketHolder.getInstance().writeAndFlush(ackMessage);
                 if (log.isDebugEnabled()) {

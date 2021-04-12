@@ -59,6 +59,8 @@ public class MessageWrap implements Serializable {
 
     private long timeStamp;
 
+    private boolean hasLogin;
+
 
     public MessageWrap copyBasic() {
 
