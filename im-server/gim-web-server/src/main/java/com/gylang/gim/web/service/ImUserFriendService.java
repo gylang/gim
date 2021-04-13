@@ -20,5 +20,5 @@ public interface ImUserFriendService extends IService<ImUserFriend> {
     /**
      * 查询好友
      */
-    List<UserFriendVO> selectFriendListByUid(Long id);
+    List<UserFriendVO> selectFriendListByUid(String id);
 }

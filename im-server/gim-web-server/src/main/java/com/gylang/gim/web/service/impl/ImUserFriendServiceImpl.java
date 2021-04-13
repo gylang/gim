@@ -36,7 +36,7 @@ public class ImUserFriendServiceImpl extends ServiceImpl<ImUserFriendMapper, ImU
     }
 
     @Override
-    public List<UserFriendVO> selectFriendListByUid(Long id) {
+    public List<UserFriendVO> selectFriendListByUid(String id) {
 
         return userFriendMapper.selectFriendListByUid(id);
     }

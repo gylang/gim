@@ -1,4 +1,4 @@
-package com.gylang.gim.web.common.constant;
+package com.gylang.gim.api.enums;
 
 /**
  * @author gylang

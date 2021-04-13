@@ -6,7 +6,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="30.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gylang.gim.client.gui.component.list.UserItemListComponent">
+<AnchorPane prefHeight="30.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <HBox prefHeight="30.0" prefWidth="600.0">
         <children>
             <ImageView fx:id="avatar" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
@@ -18,17 +18,16 @@
                     <Insets left="10.0" />
                 </HBox.margin>
             </TextField>
-            <TextField fx:id="username" layoutX="70.0" layoutY="10.0" prefHeight="30.0" text="用户名">
+            <TextField fx:id="username" layoutX="70.0" layoutY="10.0" prefHeight="30.0" prefWidth="130.0" text="用户名">
                 <opaqueInsets>
                     <Insets />
                 </opaqueInsets>
             </TextField>
-            <Button mnemonicParsing="false" onAction="#aggree" prefHeight="30.0" text="同意" textFill="#0b69d6" />
-         <Button fx:id="reject" mnemonicParsing="false" onAction="#reject" prefHeight="32.0" prefWidth="80.0" text="拒绝" textFill="#e41212">
+            <Button ellipsisString="同意" mnemonicParsing="false" onAction="#aggree" prefHeight="30.0" text="同意" textFill="#0b69d6" textOverrun="WORD_ELLIPSIS" />
+         <Button fx:id="reject" mnemonicParsing="false" onAction="#reject" prefHeight="30.0" prefWidth="43.0" text="拒绝" textFill="#e41212">
             <opaqueInsets>
                <Insets left="10.0" />
             </opaqueInsets>
-             <text fx:id="message"></text>
             <cursor>
                <Cursor fx:constant="DEFAULT" />
             </cursor>
@@ -36,6 +35,7 @@
                <Insets left="10.0" />
             </HBox.margin>
          </Button>
+         <TextField fx:id="message" prefHeight="30.0" prefWidth="175.0" />
         </children>
     </HBox>
 </AnchorPane>

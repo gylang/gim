@@ -19,5 +19,5 @@ public interface ImUserFriendMapper extends BaseMapper<ImUserFriend> {
     /**
      * 查询用户好友
      */
-    List<UserFriendVO> selectFriendListByUid(@Param("uid") Long id);
+    List<UserFriendVO> selectFriendListByUid(@Param("uid") String id);
 }

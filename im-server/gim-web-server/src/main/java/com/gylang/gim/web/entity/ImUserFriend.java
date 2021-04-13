@@ -24,13 +24,13 @@ public class ImUserFriend extends InnerBaseDO {
      * 用户id
      */
     @TableField("uid")
-    private Long uid;
+    private String uid;
 
     /**
      * 好友id
      */
     @TableField("friend_id")
-    private Long friendId;
+    private String friendId;
 
     /**
      * 好友分组id

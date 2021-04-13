@@ -24,14 +24,14 @@ public class ImUserFriendDTO extends BaseDTO {
      * 用户id
      */    
     
-    private Long uid;
+    private String uid;
 
     
     /**
      * 好友id
      */    
     
-    private Long friendId;
+    private String friendId;
 
     
     /**

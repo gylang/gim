@@ -9,7 +9,7 @@ import com.gylang.gim.api.domain.common.CommonResult;
 import com.gylang.gim.api.dto.ImUserFriendDTO;
 import com.gylang.gim.api.dto.UserFriendVO;
 import com.gylang.gim.api.enums.ChatTypeEnum;
-import com.gylang.gim.web.common.constant.AnswerType;
+import com.gylang.gim.api.enums.AnswerType;
 import com.gylang.gim.web.common.constant.CacheConstant;
 import com.gylang.gim.web.common.util.Asserts;
 import com.gylang.gim.web.entity.ImUserFriend;
@@ -48,7 +48,7 @@ public class BizFriendServiceImpl implements BizFriendService {
 
     @Override
     @Cacheable(value = CacheConstant.USER_FRIEND_LIST_PREFIX, key = "#p0")
-    public List<UserFriendVO> getFriendList(Long uid) {
+    public List<UserFriendVO> getFriendList(String uid) {
 
         return updateCacheList(uid);
     }
@@ -78,7 +78,7 @@ public class BizFriendServiceImpl implements BizFriendService {
 
     @CacheEvict(value = CacheConstant.USER_FRIEND_LIST_PREFIX, key = "#p0")
     @Override
-    public List<UserFriendVO> updateCacheList(Long id) {
+    public List<UserFriendVO> updateCacheList(String id) {
         List<UserFriendVO> userFriendList =
                 userFriendService.selectFriendListByUid(id);
         if (CollUtil.isNotEmpty(userFriendList)) {

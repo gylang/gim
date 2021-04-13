@@ -19,7 +19,7 @@ public interface BizFriendService {
      * @param uid 用户id
      * @return 好友列表
      */
-    List<UserFriendVO> getFriendList(Long uid);
+    List<UserFriendVO> getFriendList(String uid);
 
     /**
      * 添加好友
@@ -31,7 +31,7 @@ public interface BizFriendService {
 
     BizFriendService getProxy();
 
-    List<UserFriendVO> updateCacheList(Long id);
+    List<UserFriendVO> updateCacheList(String id);
 
     /**
      * 删除好友
