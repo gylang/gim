@@ -40,7 +40,7 @@ public class GuiClientApplication {
             e.printStackTrace();
         }
         BeanUtil.copyProperties(properties, ClientConfig.getInstance());
-        SocketClientApplication.main(args);
+        SocketClientApplication.run();
 
         LoginController.launch(LoginController.class, args);
 //        LoginController.launch(PrivateChatController.class, args);

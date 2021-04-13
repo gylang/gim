@@ -8,7 +8,6 @@ import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.server.service.HistoryMessageService;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import com.gylang.netty.sdk.provider.MessageProvider;
@@ -51,10 +50,10 @@ public class GroupChatHandler implements IMRequestHandler {
                 // 缓存用户消息
                 messageService.storeGroupChat(message.getReceive(), message);
                 // 发送群消息
-                AbstractSessionGroup group = groupSessionRepository.findByKey(message.getReceive());
-                for (IMSession session : group.getMemberList()) {
-                    messageProvider.sendMsg(me, session, message.copyBasic());
+                for (String account : config.keySet()) {
+                    messageProvider.sendMsg(me, account, message.copyBasic());
                 }
+
                 return ReplyMessage.success(message);
             }
         }
