@@ -23,7 +23,7 @@ public class HttpUtil {
 
     public static void init() {
 
-        Set<Class<?>> apiClazzList = ClassScanner.scanPackage("com.gylang.netty.client.api");
+        Set<Class<?>> apiClazzList = ClassScanner.scanPackage("com.gylang.gim.client.api");
 
 
 
