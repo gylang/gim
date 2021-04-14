@@ -41,22 +41,22 @@ public class FriendController {
 
     @RequestMapping("del")
     public CommonResult<Boolean> del(@RequestBody ImUserFriendDTO friend) {
-        Long uid = userHelper.getUid();
+        String uid = userHelper.getUid();
         friend.setUid(uid);
         return friendService.del(friend);
     }
 
     @RequestMapping("apply")
     public CommonResult<Boolean> applyFriend(@RequestBody UserApply userApply) {
-        Long uid = userHelper.getUid();
-        userApply.setApplyId(String.valueOf(uid));
+        String uid = userHelper.getUid();
+        userApply.setApplyId(uid);
         return friendService.applyFriend(userApply);
     }
 
     @RequestMapping("answer")
     public CommonResult<Boolean> answer(@RequestBody UserApply userApply) {
-        Long uid = userHelper.getUid();
-        userApply.setAnswerId(String.valueOf(uid));
+        String uid = userHelper.getUid();
+        userApply.setAnswerId(uid);
         return friendService.answer(userApply);
     }
 

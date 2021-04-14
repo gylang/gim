@@ -26,7 +26,7 @@ public class AutoFillConfig implements MetaObjectHandler {
         // 字段填充
         this.strictInsertFill(metaObject, "createTime", LocalDateTime.class, LocalDateTime.now());
         this.strictInsertFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
-        Long userId = null;
+        String userId = null;
         try {
             if (null != userHelper) {
                 userId = userHelper.getUid();
@@ -35,8 +35,8 @@ public class AutoFillConfig implements MetaObjectHandler {
             log.info("用户未登录");
         }
         log.info("【数据填充】：填充创建人 id: {}", userId);
-        this.strictInsertFill(metaObject, "createBy", Long.class, userId);
-        this.strictInsertFill(metaObject, "modifyBy", Long.class, userId);
+        this.strictInsertFill(metaObject, "createBy", String.class, userId);
+        this.strictInsertFill(metaObject, "modifyBy", String.class, userId);
         this.strictInsertFill(metaObject, "isDelete", Integer.class, 0);
     }
 
@@ -44,7 +44,7 @@ public class AutoFillConfig implements MetaObjectHandler {
     @Override
     public void updateFill(MetaObject metaObject) {
         this.strictInsertFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
-        Long userId = null;
+        String userId = null;
         try {
             if (null != userHelper) {
                 userId = userHelper.getUid();
@@ -53,7 +53,7 @@ public class AutoFillConfig implements MetaObjectHandler {
             log.info("用户未登录");
         }
         log.info("【数据填充】：填充创建人 id: {}", userId);
-        this.strictInsertFill(metaObject, "modifyBy", Long.class, userId);
+        this.strictInsertFill(metaObject, "modifyBy", String.class, userId);
 
     }
 

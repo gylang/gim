@@ -13,7 +13,7 @@ public interface UserHelper {
      *
      * @return 用户id
      */
-    Long getUid();
+    String getUid();
 
     /**
      * 获取用户id
@@ -21,7 +21,7 @@ public interface UserHelper {
      * @param token token
      * @return 用户ID
      */
-    Long getUid(String token);
+    String getUid(String token);
 
     /**
      * 获取用户信息

@@ -9,7 +9,7 @@ import com.gylang.gim.api.domain.common.CommonResult;
 import com.gylang.gim.api.dto.ImUserFriendDTO;
 import com.gylang.gim.api.dto.UserFriendVO;
 import com.gylang.gim.api.enums.ChatTypeEnum;
-import com.gylang.gim.api.enums.AnswerType;
+import com.gylang.gim.api.constant.AnswerType;
 import com.gylang.gim.web.common.constant.CacheConstant;
 import com.gylang.gim.web.common.util.Asserts;
 import com.gylang.gim.web.entity.ImUserFriend;
@@ -103,7 +103,7 @@ public class BizFriendServiceImpl implements BizFriendService {
                 .eq("uid", userApply.getApplyId())
                 .eq("friend_id", userApply.getAnswerId()));
         if (null == userFriend) {
-
+            userApply.setAnswerType(AnswerType.NOT_PROCESS);
             // 添加申请, 并通知好友
             userApplyService.save(userApply);
             MessageWrap messageWrap = MessageWrap.builder()
@@ -125,9 +125,9 @@ public class BizFriendServiceImpl implements BizFriendService {
     @Override
     public CommonResult<Boolean> answer(UserApply userApply) {
 
-        UserApply apply = userApplyService.getById(userApply.getAnswerId());
+        UserApply apply = userApplyService.getById(userApply.getApplyId());
         Asserts.notNull(apply, "好友申请不存在");
-
+        Asserts.isTrue(userApply.getAnswerId().equals(apply.getAnswerId()), "好友申请不存在");
         IMSession applySession = new IMSession();
         applySession.setAccount(apply.getAnswerId());
         if (AnswerType.AGREEMENT == userApply.getAnswerType()) {

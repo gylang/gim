@@ -23,12 +23,12 @@ public class UserHelperImpl implements UserHelper {
     private CacheManager cacheManager;
 
     @Override
-    public Long getUid() {
+    public String getUid() {
         return getUid(getToken());
     }
 
     @Override
-    public Long getUid(String token) {
+    public String getUid(String token) {
 
         UserCache userCache = getUserInfo(token);
         return null != userCache ? userCache.getId() : null;

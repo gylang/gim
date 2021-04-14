@@ -10,7 +10,7 @@ import lombok.Data;
 public class UserCache {
 
 
-    private Long id;
+    private String id;
     /**
      * 用户名
      */

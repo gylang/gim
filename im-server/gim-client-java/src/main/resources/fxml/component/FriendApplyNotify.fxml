@@ -23,7 +23,7 @@
                     <Insets />
                 </opaqueInsets>
             </TextField>
-            <Button ellipsisString="同意" mnemonicParsing="false" onAction="#aggree" prefHeight="30.0" text="同意" textFill="#0b69d6" textOverrun="WORD_ELLIPSIS" />
+            <Button ellipsisString="同意" fx:id="agree" mnemonicParsing="false" onAction="#agree" prefHeight="30.0" text="同意" textFill="#0b69d6" textOverrun="WORD_ELLIPSIS" />
          <Button fx:id="reject" mnemonicParsing="false" onAction="#reject" prefHeight="30.0" prefWidth="43.0" text="拒绝" textFill="#e41212">
             <opaqueInsets>
                <Insets left="10.0" />

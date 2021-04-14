@@ -1,4 +1,4 @@
-package com.gylang.gim.api.enums;
+package com.gylang.gim.api.constant;
 
 /**
  * @author gylang
@@ -6,6 +6,7 @@ package com.gylang.gim.api.enums;
  */
 public interface AnswerType {
 
+    int NOT_PROCESS = -1;
     /** 拒绝 */
     int REJECT = 0;
     /** 同意 */

@@ -22,7 +22,7 @@ public abstract class ICallback<T> implements Callback<T> {
                 fail(call, (CommonResult<?>) body);
             }
         } else {
-            fail(call, CommonResult.fail(BaseResultCode.SYSTEM_ERROR.getCode(), "响应类型无法解析"));
+            fail(call, CommonResult.fail(BaseResultCode.SYSTEM_ERROR.getCode(), response.message()));
         }
 
     }

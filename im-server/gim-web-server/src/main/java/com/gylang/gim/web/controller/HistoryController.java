@@ -33,14 +33,14 @@ public class HistoryController {
     @RequestMapping("/private")
     public CommonResult<PageResponse<HistoryPrivateChat>> privateHistory(@RequestBody Page<HistoryPrivateChat> privateChatPage) {
 
-        Long uid = userHelper.getUid();
+        String uid = userHelper.getUid();
         return CommonResult.ok(historyMessageService.privateHistory(privateChatPage, String.valueOf(uid)));
     }
 
     @RequestMapping("/group")
     public CommonResult<PageResponse<HistoryGroupChat>> groupHistory(@RequestBody Page<HistoryGroupChat> groupChatPage) {
 
-        Long uid = userHelper.getUid();
+        String uid = userHelper.getUid();
         PageResponse<HistoryGroupChat> page = historyMessageService.groupHistory(groupChatPage, String.valueOf(uid));
         return CommonResult.ok(page);
     }

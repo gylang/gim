@@ -4,6 +4,7 @@ import com.gylang.gim.api.domain.common.CommonResult;
 import com.gylang.gim.api.dto.ImUserFriendDTO;
 import com.gylang.gim.api.dto.UserFriendVO;
 import com.gylang.gim.api.dto.request.UserApplyRequest;
+import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
@@ -22,7 +23,7 @@ public interface FriendApi {
      * @return 好友列表
      */
     @POST(FRIEND_BASE + "/getList")
-    CommonResult<List<UserFriendVO>> friendList();
+    Call<CommonResult<List<UserFriendVO>>> friendList();
 
     /**
      * 添加好友
@@ -31,7 +32,7 @@ public interface FriendApi {
      * @return 添加好友
      */
     @POST(FRIEND_BASE + "/add")
-    CommonResult<Boolean> addFriend(@Body ImUserFriendDTO friend);
+    Call<CommonResult<Boolean>> addFriend(@Body ImUserFriendDTO friend);
 
     /**
      * 删除好友
@@ -40,7 +41,7 @@ public interface FriendApi {
      * @return 删除好友
      */
     @POST(FRIEND_BASE + "/del")
-    CommonResult<Boolean> del(@Body ImUserFriendDTO friend);
+    Call<CommonResult<Boolean>> del(@Body ImUserFriendDTO friend);
 
     /**
      * 好友申请
@@ -49,7 +50,7 @@ public interface FriendApi {
      * @return 好友申请
      */
     @POST(FRIEND_BASE + "/apply")
-    CommonResult<Boolean> applyFriend(@Body UserApplyRequest userApply);
+    Call<CommonResult<Boolean>> applyFriend(@Body UserApplyRequest userApply);
 
     /**
      * 申请回复
@@ -58,5 +59,5 @@ public interface FriendApi {
      * @return 申请回复
      */
     @POST(FRIEND_BASE + "/answer")
-    CommonResult<Boolean> answer(@Body UserApplyRequest userApply);
+    Call<CommonResult<Boolean>> answer(@Body UserApplyRequest userApply);
 }

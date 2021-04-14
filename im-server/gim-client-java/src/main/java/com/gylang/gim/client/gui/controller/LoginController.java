@@ -110,7 +110,7 @@ public class LoginController extends Application {
 
                 MessageWrap messageWrap = MessageWrap.builder()
                         .cmd(AdminChatCmd.REMOTE_LOGIN)
-                        .type(ChatTypeEnum.ADMIN_CHAT.getType())
+                        .type(ChatTypeEnum.PUSH_CHAT.getType())
                         .clientMsgId(IdUtil.getSnowflake(1, 1).nextIdStr())
                         .qos(QosConstant.ACCURACY_ONE_ARRIVE)
                         .content(JSON.toJSONString(data.getToken()))

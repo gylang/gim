@@ -19,7 +19,7 @@ public enum ChatTypeEnum {
     GROUP_CHAT(2, "组聊"),
     NOTIFY(3, "通知类"),
     CHAT_ROOM(4, "聊天室"),
-    ADMIN_CHAT(5, "系统服务类"),
+    PUSH_CHAT(5, "推送服务类"),
     REPLY_CHAT(6, "回复类"),
     ;
 

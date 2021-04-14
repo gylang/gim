@@ -57,7 +57,7 @@ public class PrivateChatController extends CustomApplication {
 
     public PrivateChatController(ImUserFriendDTO friend) {
 
-        this.userId = friend.getUid().toString();
+        this.userId = friend.getUid();
         this.username = friend.getUsername();
         this.nickname = friend.getNickname();
     }
