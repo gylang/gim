@@ -4,7 +4,7 @@ package com.gylang.gim.api.constant.cmd;
  * @author gylang
  * data 2021/4/6
  */
-public enum AdminChatCmd {
+public enum PushChatCmd {
 ;
 
     public static final String P2P_PUSH = "P2PP";

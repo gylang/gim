@@ -8,7 +8,7 @@ package com.gylang.gim.client.gui.controller;
 import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.JSON;
 import com.gylang.gim.api.constant.QosConstant;
-import com.gylang.gim.api.constant.cmd.AdminChatCmd;
+import com.gylang.gim.api.constant.cmd.PushChatCmd;
 import com.gylang.gim.api.domain.common.CommonResult;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.request.LoginRequest;
@@ -109,7 +109,7 @@ public class LoginController extends Application {
                 SocketManager socketManager = SocketHolder.getInstance();
 
                 MessageWrap messageWrap = MessageWrap.builder()
-                        .cmd(AdminChatCmd.REMOTE_LOGIN)
+                        .cmd(PushChatCmd.REMOTE_LOGIN)
                         .type(ChatTypeEnum.PUSH_CHAT.getType())
                         .clientMsgId(IdUtil.getSnowflake(1, 1).nextIdStr())
                         .qos(QosConstant.ACCURACY_ONE_ARRIVE)

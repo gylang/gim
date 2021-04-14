@@ -4,8 +4,11 @@ import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gylang.cache.CacheManager;
+import com.gylang.gim.api.constant.biztype.PushBizType;
+import com.gylang.gim.api.constant.cmd.PushChatCmd;
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.CommonResult;
+import com.gylang.gim.api.domain.push.PushMessage;
 import com.gylang.gim.api.dto.ImUserFriendDTO;
 import com.gylang.gim.api.dto.UserFriendVO;
 import com.gylang.gim.api.enums.ChatTypeEnum;
@@ -106,8 +109,13 @@ public class BizFriendServiceImpl implements BizFriendService {
             userApply.setAnswerType(AnswerType.NOT_PROCESS);
             // 添加申请, 并通知好友
             userApplyService.save(userApply);
+            //
+            PushMessage message = new PushMessage();
+            message.setContent(JSON.toJSONString(userApply));
+            message.setReceiveId(CollUtil.newArrayList(userApply.getApplyId()));
             MessageWrap messageWrap = MessageWrap.builder()
-                    .cmd("111")
+                    .cmd(PushChatCmd.P2P_PUSH)
+                    .bizType(PushBizType.userApply)
                     .sender(userApply.getApplyId())
                     .content(JSON.toJSONString(userApply))
                     .offlineMsgEvent(false)
@@ -125,7 +133,7 @@ public class BizFriendServiceImpl implements BizFriendService {
     @Override
     public CommonResult<Boolean> answer(UserApply userApply) {
 
-        UserApply apply = userApplyService.getById(userApply.getApplyId());
+        UserApply apply = userApplyService.getById(userApply.getId());
         Asserts.notNull(apply, "好友申请不存在");
         Asserts.isTrue(userApply.getAnswerId().equals(apply.getAnswerId()), "好友申请不存在");
         IMSession applySession = new IMSession();
@@ -135,11 +143,15 @@ public class BizFriendServiceImpl implements BizFriendService {
             apply.setAnswerType(userApply.getAnswerType());
 
             // 给申请者发送hello
+            PushMessage message = new PushMessage();
+            message.setContent(JSON.toJSONString(userApply));
+            message.setReceiveId(CollUtil.newArrayList(userApply.getApplyId()));
             MessageWrap applyMsg = MessageWrap.builder()
                     .qos(1)
-                    .cmd("111")
+                    .cmd(PushChatCmd.P2P_PUSH)
                     .sender(apply.getAnswerId())
                     .receive(apply.getApplyId())
+                    .bizType(PushBizType.userApplyAnswer)
                     .offlineMsgEvent(true)
                     .content("你好，我们已经是好友拉~")
                     .type(ChatTypeEnum.PRIVATE_CHAT.getType())
