@@ -9,7 +9,7 @@ import com.gylang.gim.admin.event.EventContext;
 import com.gylang.gim.admin.event.MessageEventListener;
 import com.gylang.gim.api.constant.CommonConstant;
 import com.gylang.gim.api.constant.QosConstant;
-import com.gylang.gim.api.constant.cmd.AdminChatCmd;
+import com.gylang.gim.api.constant.cmd.PushChatCmd;
 import com.gylang.gim.api.domain.admin.AdminUser;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.enums.ChatTypeEnum;
@@ -51,7 +51,7 @@ public class GimConfig {
         adminUser.setUsername(username);
         adminUser.setPassword(password);
         MessageWrap messageWrap = MessageWrap.builder()
-                .cmd(AdminChatCmd.REMOTE_LOGIN)
+                .cmd(PushChatCmd.REMOTE_LOGIN)
                 .type(ChatTypeEnum.PUSH_CHAT.getType())
                 .clientMsgId(IdWorker.getIdStr())
                 .qos(QosConstant.ACCURACY_ONE_ARRIVE)

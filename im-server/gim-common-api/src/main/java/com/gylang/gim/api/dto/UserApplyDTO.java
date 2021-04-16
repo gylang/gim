@@ -9,10 +9,10 @@ import lombok.Data;
 @Data
 public class UserApplyDTO {
 
+    private Long id;
     /**
      * 申请id
      */
-    
     private String applyId;
 
     private String username;

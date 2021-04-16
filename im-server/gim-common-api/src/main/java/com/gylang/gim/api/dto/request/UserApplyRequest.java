@@ -16,7 +16,7 @@ import lombok.EqualsAndHashCode;
 
 public class UserApplyRequest extends BaseDTO {
 
-
+    private Long id;
     /**
      * 申请id
      */

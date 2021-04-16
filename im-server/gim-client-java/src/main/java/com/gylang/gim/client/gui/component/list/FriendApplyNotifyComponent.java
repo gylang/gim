@@ -48,7 +48,7 @@ public class FriendApplyNotifyComponent extends BaseCell<UserApplyDTO> implement
     @FXML
     private Button reject;
 
-
+    private GimCallBack<MessageWrap> messageNotify;
     FriendApi friendApi = HttpUtil.getApi(FriendApi.class);
 
     public FriendApplyNotifyComponent() {
@@ -80,6 +80,7 @@ public class FriendApplyNotifyComponent extends BaseCell<UserApplyDTO> implement
         UserApplyDTO item = getItem();
         request.setApplyId(UserStore.getInstance().getUid());
         request.setAnswerId(item.getAnswerId());
+        request.setId(item.getId());
         request.setAnswerType(AnswerType.AGREEMENT);
         Call<CommonResult<Boolean>> answer = friendApi.answer(request);
         answer.enqueue(new ICallback<CommonResult<Boolean>>() {
@@ -106,6 +107,7 @@ public class FriendApplyNotifyComponent extends BaseCell<UserApplyDTO> implement
         UserApplyDTO item = getItem();
         request.setApplyId(UserStore.getInstance().getUid());
         request.setAnswerId(item.getAnswerId());
+        request.setId(item.getId());
         request.setAnswerType(AnswerType.REJECT);
         Call<CommonResult<Boolean>> answer = friendApi.answer(request);
         answer.enqueue(new ICallback<CommonResult<Boolean>>() {
@@ -129,14 +131,11 @@ public class FriendApplyNotifyComponent extends BaseCell<UserApplyDTO> implement
     public void initialize(URL location, ResourceBundle resources) {
 
         //
-        GimCallBack<MessageWrap> messageNotify = new GimCallBack<MessageWrap>() {
-            @Override
-            public void call(MessageWrap messageWrap) {
+         messageNotify = messageWrap -> {
 
-            }
-        };
-        // todo 一半
+         };
         SocketHolder.getInstance()
-                .bind(ChatTypeEnum.NOTIFY.getType(), NotifyChatCmd.MESSAGE_NOTIFY, null);
+                .bind(ChatTypeEnum.NOTIFY.getType(), NotifyChatCmd.MESSAGE_NOTIFY, messageNotify);
     }
+
 }
