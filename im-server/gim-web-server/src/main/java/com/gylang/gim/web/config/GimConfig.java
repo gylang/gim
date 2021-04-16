@@ -2,6 +2,11 @@ package com.gylang.gim.web.config;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.gylang.gim.admin.config.NettyConfiguration;
+import com.gylang.gim.admin.config.SimpleNettyConfigurationInitializer;
+import com.gylang.gim.admin.event.DefaultEventProvider;
+import com.gylang.gim.admin.event.EventContext;
+import com.gylang.gim.admin.event.MessageEventListener;
 import com.gylang.gim.api.constant.CommonConstant;
 import com.gylang.gim.api.constant.QosConstant;
 import com.gylang.gim.api.constant.cmd.AdminChatCmd;
@@ -11,9 +16,12 @@ import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.remote.SocketHolder;
 import com.gylang.gim.remote.SocketManager;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 /**
  * @author gylang
@@ -31,6 +39,9 @@ public class GimConfig {
     private String username;
     @Value("${gim.password}")
     private String password;
+
+    @Autowired
+    private List<MessageEventListener<MessageWrap>> eventListenerList;
 
     @Bean
     public SocketManager socketManager() {
@@ -57,4 +68,23 @@ public class GimConfig {
         return socketManager;
     }
 
+    @Bean
+    public NettyConfiguration nettyConfiguration() throws IllegalAccessException {
+
+                SocketManager socketManager = socketManager();
+        for (MessageEventListener<MessageWrap> eventListener : eventListenerList) {
+
+            for (String key : eventListener.bind()) {
+                String[] s = key.split("_");
+                socketManager.bind(Integer.parseInt(s[0]), s[1], messageWrap -> eventListener.onEvent(key, messageWrap));
+            }
+        }
+
+        NettyConfiguration nettyConfiguration = new NettyConfiguration();
+        nettyConfiguration.setMessageEventListener(eventListenerList);
+        nettyConfiguration.setEventContext(new EventContext());
+        nettyConfiguration.setEventProvider(new DefaultEventProvider());
+        new SimpleNettyConfigurationInitializer().initConfig(nettyConfiguration);
+        return nettyConfiguration;
+    }
 }

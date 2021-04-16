@@ -87,7 +87,7 @@ public class AppMessageDecoder extends ByteToMessageDecoder {
             return messageWrap;
         }
 
-        return JSON.<MessageWrap>parseObject(data, MessageWrap.class);
+        return JSON.parseObject(data, MessageWrap.class);
     }
 
     /**

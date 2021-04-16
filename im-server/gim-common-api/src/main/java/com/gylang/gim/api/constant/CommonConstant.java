@@ -42,6 +42,8 @@ public enum CommonConstant {
     public static final String PRIVATE_CHAT_ACCESS_CHECK = "PRIVATE_CHAT_ACCESS_CHECK";
 
     public static final MessageWrap HEART = new MessageWrap();
+    /** 系统发送 */
+    public static final String SYSTEM_SENDER = "0";
 
     static {
         HEART.setType(ChatTypeEnum.SYSTEM_MESSAGE.getType());

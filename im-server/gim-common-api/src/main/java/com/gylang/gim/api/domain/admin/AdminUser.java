@@ -16,4 +16,6 @@ public class AdminUser {
     private String name;
 
     private String userId;
+
+    private boolean loginEvent;
 }
