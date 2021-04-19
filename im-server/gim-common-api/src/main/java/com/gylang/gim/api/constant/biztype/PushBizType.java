@@ -8,4 +8,5 @@ public interface PushBizType {
 
     String userApply = "urAy";
     String userApplyAnswer = "urAyAr";
+    String batch_his_push = "bhp";
 }

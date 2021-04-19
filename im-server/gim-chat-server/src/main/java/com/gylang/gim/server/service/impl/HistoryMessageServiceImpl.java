@@ -33,14 +33,13 @@ public class HistoryMessageServiceImpl implements HistoryMessageService {
     public void updatePrivateLastMsgId(String uid, String msgId) {
 
         // 用户量大 可以使用hash 先分组 再记录
-        long targetSlot = Long.parseLong(uid) & (slot - 1);
-        redisTemplate.opsForHash().put(CacheConstant.PRIVATE_LAST_MSG_ID + targetSlot, uid, msgId);
+        redisTemplate.opsForHash().put(CacheConstant.LAST_MSG_ID + uid, "-1", msgId);
     }
 
     @Override
     public void updateGroupLastMsgIdHandler(String groupId, String uid, String msgId) {
 
-        redisTemplate.opsForHash().put(CacheConstant.GROUP_LAST_MSG_ID + groupId, String.valueOf(uid), msgId);
+        redisTemplate.opsForHash().put(CacheConstant.LAST_MSG_ID + uid, groupId, msgId);
 
     }
 
@@ -48,16 +47,16 @@ public class HistoryMessageServiceImpl implements HistoryMessageService {
     public void storePrivateChat(String uid, MessageWrap message) {
         redisTemplate.opsForZSet().add(CacheConstant.PRIVATE_CHAT_HISTORY + uid,
                 message,
-                Long.parseLong(message.getCmd()));
+                message.getTimeStamp());
     }
 
     @Override
-    public void storeGroupChat(String groupId,  MessageWrap message) {
+    public void storeGroupChat(String groupId, MessageWrap message) {
 
         // 通过sort set 将消息放入缓存
         redisTemplate.opsForZSet().add(CacheConstant.GROUP_CHAT_HISTORY + message.getReceive(),
                 message,
-                Long.parseLong(message.getCmd()));
+                message.getTimeStamp());
     }
 
 

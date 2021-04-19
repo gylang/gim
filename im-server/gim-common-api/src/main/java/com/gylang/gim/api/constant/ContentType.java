@@ -7,4 +7,6 @@ package com.gylang.gim.api.constant;
 public interface ContentType {
 
     String PLAINTEXT = "PLAINTEXT";
+    /** 批量消息 */
+    String BATCH = "BATCH";
 }

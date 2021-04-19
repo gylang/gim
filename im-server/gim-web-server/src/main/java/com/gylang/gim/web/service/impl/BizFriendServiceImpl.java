@@ -4,15 +4,17 @@ import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gylang.cache.CacheManager;
+import com.gylang.gim.api.constant.AnswerType;
 import com.gylang.gim.api.constant.biztype.PushBizType;
 import com.gylang.gim.api.constant.cmd.PushChatCmd;
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.CommonResult;
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.push.PushMessage;
 import com.gylang.gim.api.dto.ImUserFriendDTO;
 import com.gylang.gim.api.dto.UserFriendVO;
 import com.gylang.gim.api.enums.ChatTypeEnum;
-import com.gylang.gim.api.constant.AnswerType;
+import com.gylang.gim.remote.SocketManager;
 import com.gylang.gim.web.common.constant.CacheConstant;
 import com.gylang.gim.web.common.util.Asserts;
 import com.gylang.gim.web.entity.ImUserFriend;
@@ -20,9 +22,6 @@ import com.gylang.gim.web.entity.UserApply;
 import com.gylang.gim.web.service.ImUserFriendService;
 import com.gylang.gim.web.service.UserApplyService;
 import com.gylang.gim.web.service.biz.BizFriendService;
-import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.netty.sdk.domain.model.IMSession;
-import com.gylang.netty.sdk.provider.MessageProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.cache.annotation.CacheEvict;
@@ -47,7 +46,7 @@ public class BizFriendServiceImpl implements BizFriendService {
     @Resource
     private UserApplyService userApplyService;
 
-    private MessageProvider messageProvider;
+    private SocketManager socketManager;
 
     @Override
     @Cacheable(value = CacheConstant.USER_FRIEND_LIST_PREFIX, key = "#p0")
@@ -122,9 +121,7 @@ public class BizFriendServiceImpl implements BizFriendService {
                     .qos(1)
                     .build();
             // 发送消息
-            IMSession imSession = new IMSession();
-            imSession.setAccount(userApply.getApplyId());
-            messageProvider.sendMsg(imSession, userApply.getAnswerId(), messageWrap);
+            socketManager.send(messageWrap);
             // 通知消息
         }
         return CommonResult.ok();
@@ -136,8 +133,7 @@ public class BizFriendServiceImpl implements BizFriendService {
         UserApply apply = userApplyService.getById(userApply.getId());
         Asserts.notNull(apply, "好友申请不存在");
         Asserts.isTrue(userApply.getAnswerId().equals(apply.getAnswerId()), "好友申请不存在");
-        IMSession applySession = new IMSession();
-        applySession.setAccount(apply.getAnswerId());
+
         if (AnswerType.AGREEMENT == userApply.getAnswerType()) {
             // 同意添加好友
             apply.setAnswerType(userApply.getAnswerType());
@@ -156,15 +152,13 @@ public class BizFriendServiceImpl implements BizFriendService {
                     .content("你好，我们已经是好友拉~")
                     .type(ChatTypeEnum.PRIVATE_CHAT.getType())
                     .build();
-            messageProvider.sendMsg(applySession, apply.getApplyId(), applyMsg);
+            socketManager.send(applyMsg);
 
             // 给被申请方发送消息
             MessageWrap answerMsg = applyMsg.copyBasic();
             answerMsg.setSender(apply.getApplyId());
             answerMsg.setReceive(apply.getAnswerId());
-            IMSession answerSession = new IMSession();
-            answerSession.setAccount(apply.getApplyId());
-            messageProvider.sendMsg(answerSession, apply.getAnswerId(), answerMsg);
+            socketManager.send(applyMsg);
         } else {
             // 拒绝
             MessageWrap rejectMsg = MessageWrap.builder()
@@ -175,7 +169,7 @@ public class BizFriendServiceImpl implements BizFriendService {
                     .type(ChatTypeEnum.NOTIFY.getType())
                     .cmd(SystemChatCmd.NOTIFY)
                     .build();
-            messageProvider.sendMsg(applySession, apply.getAnswerId(), rejectMsg);
+            socketManager.send(rejectMsg);
         }
 
         return CommonResult.ok();
