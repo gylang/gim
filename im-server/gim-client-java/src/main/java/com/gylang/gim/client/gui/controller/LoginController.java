@@ -8,20 +8,21 @@ package com.gylang.gim.client.gui.controller;
 import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.JSON;
 import com.gylang.gim.api.constant.QosConstant;
-import com.gylang.gim.api.constant.cmd.PushChatCmd;
+import com.gylang.gim.api.constant.cmd.AuthChatCmd;
+import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.CommonResult;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.request.LoginRequest;
 import com.gylang.gim.api.domain.request.RegistryRequest;
 import com.gylang.gim.api.domain.response.LoginResponse;
 import com.gylang.gim.api.enums.ChatTypeEnum;
-import com.gylang.gim.client.gui.GuiStore;
-import com.gylang.gim.client.util.HttpUtil;
-import com.gylang.gim.client.util.store.UserStore;
 import com.gylang.gim.client.api.AuthApi;
 import com.gylang.gim.client.call.ICallback;
+import com.gylang.gim.client.gui.GuiStore;
 import com.gylang.gim.client.gui.dialog.CommonDialog;
 import com.gylang.gim.client.gui.util.GuiUtil;
+import com.gylang.gim.client.util.HttpUtil;
+import com.gylang.gim.client.util.store.UserStore;
 import com.gylang.gim.remote.SocketHolder;
 import com.gylang.gim.remote.SocketManager;
 import javafx.application.Application;
@@ -109,11 +110,11 @@ public class LoginController extends Application {
                 SocketManager socketManager = SocketHolder.getInstance();
 
                 MessageWrap messageWrap = MessageWrap.builder()
-                        .cmd(PushChatCmd.REMOTE_LOGIN)
-                        .type(ChatTypeEnum.PUSH_CHAT.getType())
+                        .cmd(AuthChatCmd.LOGIN_SOCKET)
+                        .type(ChatTypeEnum.AUTH_CHAT.getType())
                         .clientMsgId(IdUtil.getSnowflake(1, 1).nextIdStr())
                         .qos(QosConstant.ACCURACY_ONE_ARRIVE)
-                        .content(JSON.toJSONString(data.getToken()))
+                        .content(data.getToken())
                         .build();
 
                 socketManager.connect("127.0.0.1", 46001,messageWrap, str -> {

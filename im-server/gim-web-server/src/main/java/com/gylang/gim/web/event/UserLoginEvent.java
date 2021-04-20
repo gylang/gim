@@ -13,6 +13,7 @@ import com.gylang.gim.api.domain.push.PushMessage;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.remote.SocketManager;
 import com.gylang.gim.util.MsgIdUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
  * data 2021/4/16
  */
 @Component
+@Slf4j
 public class UserLoginEvent implements MessageEventListener<MessageWrap> {
 
     @Autowired
@@ -45,12 +47,19 @@ public class UserLoginEvent implements MessageEventListener<MessageWrap> {
     @Override
     public void onEvent(String key, MessageWrap m) {
 
-
+        // 异步任务
+        if (log.isDebugEnabled()) {
+            log.debug("接收到用户[{}]上线通知, 准备推送离线消息", key);
+        }
         CompletableFuture.runAsync(() -> {
             // 通过内置线程池处理
             // 获取用户msgId信箱
+
             Map<String, String> entries = redisTemplate.<String, String>opsForHash()
                     .entries(CacheConstant.LAST_MSG_ID + key);
+            if (log.isDebugEnabled()) {
+                log.debug("用户[{}]推送离线消息列表:{}", key, entries);
+            }
             String priMsgId = entries.get("-1");
             // 推送单聊信箱消息
             Long priLastTimeStamp = MsgIdUtil.getTimestamp(Long.parseLong(priMsgId)) - 1;
@@ -102,6 +111,6 @@ public class UserLoginEvent implements MessageEventListener<MessageWrap> {
 
     @Override
     public List<String> bind() {
-        return Collections.singletonList(ChatTypeEnum.NOTIFY.getType() + "_" + EventTypeConst.USER_ONLINE);
+        return Collections.singletonList(ChatTypeEnum.NOTIFY.getType() + "-" + EventTypeConst.USER_ONLINE);
     }
 }

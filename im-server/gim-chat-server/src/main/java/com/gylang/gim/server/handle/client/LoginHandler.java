@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.gylang.gim.api.constant.CommonConstant;
 import com.gylang.gim.api.constant.EventTypeConst;
+import com.gylang.gim.api.constant.cmd.AuthChatCmd;
 import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.common.ResponseMessage;
@@ -25,7 +26,7 @@ import javax.annotation.Resource;
  * @author gylang
  * data 2020/11/17
  */
-@NettyHandler(PrivateChatCmd.LOGIN_SOCKET)
+@NettyHandler(AuthChatCmd.LOGIN_SOCKET)
 @Component
 public class LoginHandler implements IMRequestHandler {
 
@@ -60,9 +61,9 @@ public class LoginHandler implements IMRequestHandler {
             me.setAccount(uid);
             sessionRepository.add(uid, me);
             // 发送上线事件
-            eventProvider.sendEvent(EventTypeConst.USER_ONLINE, uid);
             // bind 上下文
             LocalSessionHolderUtil.set(uid, me.getSession());
+            eventProvider.sendEvent(EventTypeConst.USER_ONLINE, uid);
         } else {
             // token无效
             messageWrap.setContent("用户访问无权连接socket服务");
@@ -71,4 +72,6 @@ public class LoginHandler implements IMRequestHandler {
         // 响应客户端
         return messageWrap;
     }
+
+
 }

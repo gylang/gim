@@ -2,7 +2,9 @@ package com.gylang.gim.remote;
 
 import cn.hutool.core.thread.ThreadFactoryBuilder;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
 import com.gylang.gim.api.constant.CommonConstant;
+import com.gylang.gim.api.constant.ContentType;
 import com.gylang.gim.api.constant.QosConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.enums.BaseResultCode;
@@ -304,15 +306,23 @@ public class SocketManager {
 
     }
 
-    public void sendBroadcast(final Object intent) {
+    public void sendBroadcast(final Object msg) {
 
-        if (null == intent) {
+        if (null == msg) {
             return;
         }
 
-        if (intent instanceof MessageWrap) {
-            MessageWrap message = (MessageWrap) intent;
-
+        if (msg instanceof MessageWrap) {
+            MessageWrap message = (MessageWrap) msg;
+            // 批量消息
+            if (ContentType.BATCH.equals(message.getContentType())) {
+                String batchMessageStr = message.getContent();
+                List<MessageWrap> batchMessage = JSON.parseArray(batchMessageStr, MessageWrap.class);
+                for (MessageWrap messageWrap : batchMessage) {
+                    sendBroadcast(messageWrap);
+                }
+                return;
+            }
 
             if (StrUtil.isEmpty(message.getCmd())) {
                 return;
@@ -323,12 +333,14 @@ public class SocketManager {
             }
             // 发送消息到监听队列
             List<GimCallBack<MessageWrap>> gimCallBackList = callListener.get(getListenKey(message.getType(), message.getCmd()));
-            if (null != gimCallBackList) {
-                for (GimCallBack<MessageWrap> gimCallBack : gimCallBackList) {
-                    listenerExecutor.execute(() -> gimCallBack.call(message));
-
+            listenerExecutor.execute(() -> {
+                if (null != gimCallBackList) {
+                    for (GimCallBack<MessageWrap> gimCallBack : gimCallBackList) {
+                        gimCallBack.call(message);
+                    }
                 }
-            }
+            });
+
             // 判断是否有直接回调消息
             if (null != message.getClientMsgId()) {
                 GimCallBack<MessageWrap> gimCallBack = sendCallBack.get(message.getClientMsgId());
@@ -358,7 +370,7 @@ public class SocketManager {
 
     }
 
-    private String getListenKey(int type, String key) {
+    public static String getListenKey(int type, String key) {
         return type + "-" + key;
     }
 

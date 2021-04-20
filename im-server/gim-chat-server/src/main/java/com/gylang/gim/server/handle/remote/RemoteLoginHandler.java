@@ -10,7 +10,9 @@ import com.gylang.gim.server.config.AdminConfig;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
+import com.gylang.netty.sdk.repo.IMSessionRepository;
 import com.gylang.netty.sdk.util.LocalSessionHolderUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -26,7 +28,8 @@ public class RemoteLoginHandler implements IMRequestHandler {
 
     @Resource
     private AdminConfig adminConfig;
-
+    @Autowired
+    private IMSessionRepository sessionRepository;
     @Override
     public Object process(IMSession me, MessageWrap message) {
 
@@ -44,6 +47,8 @@ public class RemoteLoginHandler implements IMRequestHandler {
             ReplyMessage success = ReplyMessage.success(message);
             success.setSender(me.getAccount());
             success.setQos(2);
+            LocalSessionHolderUtil.set(login.getUserId(), me.getSession());
+            sessionRepository.add(login.getUserId(), me);
             return success;
         }
         return ReplyMessage.reply(message, BaseResultCode.USERNAME_PASSWORD_ERROR);

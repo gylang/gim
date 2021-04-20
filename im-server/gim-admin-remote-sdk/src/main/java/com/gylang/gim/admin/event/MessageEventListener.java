@@ -25,5 +25,4 @@ public interface MessageEventListener<T> {
      */
     List<String> bind();
 
-
 }

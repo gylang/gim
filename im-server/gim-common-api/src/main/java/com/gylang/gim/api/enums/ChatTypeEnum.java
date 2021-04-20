@@ -21,6 +21,7 @@ public enum ChatTypeEnum {
     CHAT_ROOM(4, "聊天室"),
     PUSH_CHAT(5, "推送服务类"),
     REPLY_CHAT(6, "回复类"),
+    AUTH_CHAT(7, "授权类"),
     ;
 
     private final int type;

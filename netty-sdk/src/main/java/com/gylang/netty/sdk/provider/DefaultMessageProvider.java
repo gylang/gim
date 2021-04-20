@@ -70,7 +70,7 @@ public class DefaultMessageProvider implements MessageProvider {
             return USER_NOT_FOUND;
         }
         // 设置接收者 channel
-        if (null != target.getSession()) {
+        if (null == target.getSession()) {
             target.setSession(LocalSessionHolderUtil.getSession(target.getAccount()));
         }
         // 发送策略 跨服传输 本地不存在当前channel 可以通过其他方式发送，桥接，mq
@@ -81,7 +81,7 @@ public class DefaultMessageProvider implements MessageProvider {
         }
         // 设置 发送者
         if (StrUtil.isNotEmpty(message.getSender())) {
-            message.setSender(null != me ? me.getAccount() : null);
+            message.setSender(null == message.getSender() ? me.getAccount() : message.getSender());
             if (StrUtil.isEmpty(message.getReceive())) {
                 message.setReceive(target.getAccount());
             }
