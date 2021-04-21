@@ -1,8 +1,8 @@
 package com.gylang.netty.sdk.handler.netty;
 
+import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.constant.NettyConfigEnum;
-import com.gylang.netty.sdk.constant.EventTypeConst;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.event.EventProvider;
 import io.netty.channel.ChannelHandler;
@@ -41,7 +41,6 @@ public class HeartCheckHandler extends ChannelInboundHandlerAdapter {
     }
 
 
-
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
 
@@ -72,9 +71,9 @@ public class HeartCheckHandler extends ChannelInboundHandlerAdapter {
             if (ALL_IDLE.equals(event.state())) {
                 if (unRecPingTimes >= retry) {
                     // 连续超过N次未收到client的ping消息，那么关闭该通道，等待client重连
-                    ctx.channel().close();
-                    // 一分钟为重连 断开连接
                     eventProvider.sendAsyncEvent(EventTypeConst.OVER_TIME_CLOSE, new IMSession(ctx.channel()));
+                    // 一分钟为重连 断开连接
+                    ctx.channel().close();
                 } else {
                     // 失败计数器加1
                     unRecPingTimes++;
@@ -93,6 +92,11 @@ public class HeartCheckHandler extends ChannelInboundHandlerAdapter {
         if (cause instanceof IOException) {
             log.info("server " + ctx.channel().remoteAddress() + "关闭连接");
         }
+        super.exceptionCaught(ctx, cause);
     }
 
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        super.channelInactive(ctx);
+    }
 }

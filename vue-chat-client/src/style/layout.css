@@ -1,0 +1,25 @@
+.single_text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
+}
+
+.mt1{
+    margin-top: 1px;
+}
+.mb5{
+    margin-bottom: 5px;
+}
+.pt5{
+    padding-top: 5px;
+}
+
+.ml1{
+    margin-left: 1px;
+}
+.w100p {
+    width: 100%;
+}
+.h100p {
+    height: 100%;
+}

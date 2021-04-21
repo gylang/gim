@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="565.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" >
+   <children>
+      <TextField fx:id="nicknameView" disable="true" editable="false" layoutX="6.0" layoutY="3.0" text="昵称" />
+      <VBox layoutX="3.0" layoutY="46.0" prefHeight="473.0" prefWidth="735.0">
+         <children>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="319.0" prefWidth="581.0">
+               <children>
+                  <ListView fx:id="chatListView" layoutX="1.0" layoutY="7.0" maxWidth="729.0" prefHeight="301.0" prefWidth="729.0" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="168.0" prefWidth="735.0">
+               <children>
+                  <TextArea fx:id="inputText" layoutY="8.0" maxWidth="729.0" prefHeight="151.0" prefWidth="729.0" />
+               </children></AnchorPane>
+         </children></VBox>
+      <Button fx:id="send" layoutX="626.0" layoutY="528.0" mnemonicParsing="false" onAction="#sendMsg" prefHeight="23.0" prefWidth="88.0" text="发送" />
+   </children>
+</AnchorPane>

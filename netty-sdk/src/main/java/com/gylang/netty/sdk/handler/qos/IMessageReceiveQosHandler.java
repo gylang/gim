@@ -1,7 +1,7 @@
 package com.gylang.netty.sdk.handler.qos;
 
 import com.gylang.netty.sdk.common.AfterConfigInitialize;
-import com.gylang.netty.sdk.domain.MessageWrap;
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 
 /**
@@ -25,25 +25,29 @@ public interface IMessageReceiveQosHandler extends AfterConfigInitialize {
 
     /**
      * 处处理消息
-     *
-     * @param messageWrap 消息包装类
+     *  @param messageWrap 消息包装类
      * @param target      接收者
+     * @return
      */
-    void handle(MessageWrap messageWrap,  IMSession target);
+    boolean handle(MessageWrap messageWrap, IMSession target);
 
     /**
      * 是否已经接收到当前消息
      * @param msgId 消息序列号
      * @return 是否接收
      */
-    boolean hasReceived(String msgId);
+    boolean hasReceived(String senderId, String msgId);
 
+    void remove(String senderId, String msgId);
     /**
      * 添加已接收队列
      *
-     * @param messageWrap 消息
+     * @param key 消息id
+     * @return
      */
-    void addReceived(MessageWrap messageWrap);
+    boolean addReceived(String key, MessageWrap message);
+
+
 
     /**
      * 启动扫码器

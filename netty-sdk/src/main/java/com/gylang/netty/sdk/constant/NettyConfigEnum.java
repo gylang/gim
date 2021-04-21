@@ -28,10 +28,12 @@ public enum NettyConfigEnum {
     WRITE_IDLE("writeIdle", 10L),
     ALL_IDLE("allIdle", 10L),
     SERVER_ID("server_id", "0.0.0.0"),
+    WORKER_ID("workerId", 1),
+    DATACENTER_ID("datacenterId", 1),
     /**
      * 连接丢失重连次数
      */
-    LOST_CONNECT_RETRY_NUM("lostConnectRetryNum", 5),
+    LOST_CONNECT_RETRY_NUM("lostConnectRetryNum", 3),
     /**
      * 日志级别
      */
@@ -39,7 +41,8 @@ public enum NettyConfigEnum {
     /**
      * 默认socket端口
      */
-    SOCKET_SERVER_PORT("socketServerPort", 46000),
+    WEBSOCKET_PORT("websocketPort", 46000),
+    SOCKET_PORT("socketPort", 46001),
     ;
     private final String name;
     private final Object value;

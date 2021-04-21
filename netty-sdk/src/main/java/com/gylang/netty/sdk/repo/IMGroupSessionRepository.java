@@ -8,5 +8,5 @@ import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
  * @author gylang
  * data 2020/11/30
  */
-public interface IMGroupSessionRepository extends IRepository<Long, AbstractSessionGroup, AbstractSessionGroup> {
+public interface IMGroupSessionRepository extends IRepository<String, AbstractSessionGroup, AbstractSessionGroup> {
 }

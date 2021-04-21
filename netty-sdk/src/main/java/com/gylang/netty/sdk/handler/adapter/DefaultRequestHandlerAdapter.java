@@ -5,7 +5,7 @@ import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.common.InokeFinished;
 import com.gylang.netty.sdk.common.ObjectWrap;
 import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.domain.MessageWrap;
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.BizRequestAdapter;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
@@ -32,6 +32,7 @@ public class DefaultRequestHandlerAdapter implements BizRequestAdapter<IMRequest
 
     @Override
     public Object process(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
+
 
         IMRequestHandler requestHandler = handlerMap.get(message.getCmd());
         if (null == requestHandler) {

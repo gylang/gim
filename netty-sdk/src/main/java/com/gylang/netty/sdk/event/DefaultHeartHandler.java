@@ -7,7 +7,8 @@ import io.netty.channel.ChannelHandlerContext;
 
 import java.util.List;
 
-import static com.gylang.netty.sdk.constant.EventTypeConst.*;
+import static com.gylang.gim.api.constant.EventTypeConst.*;
+
 
 /**
  * 心跳检测消息通知

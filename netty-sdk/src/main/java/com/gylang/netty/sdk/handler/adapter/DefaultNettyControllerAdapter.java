@@ -6,7 +6,7 @@ import com.gylang.netty.sdk.common.InokeFinished;
 import com.gylang.netty.sdk.common.ObjectWrap;
 import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.conveter.DataConverter;
-import com.gylang.netty.sdk.domain.MessageWrap;
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.BizRequestAdapter;
 import com.gylang.netty.sdk.handler.NettyController;

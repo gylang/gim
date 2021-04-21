@@ -21,7 +21,7 @@
  */
 package com.gylang.netty.sdk.domain.model;
 
-import com.gylang.netty.sdk.constant.CommConst;
+import com.gylang.gim.api.constant.CommConst;
 import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
 import lombok.Data;
@@ -55,7 +55,7 @@ public class IMSession implements Serializable {
     /**
      * session绑定的用户账号
      */
-    private long account;
+    private String account;
 
     /**
      * session在本台服务器上的ID
@@ -140,18 +140,18 @@ public class IMSession implements Serializable {
         return session.id().asLongText();
     }
 
-    public long getAccount() {
-        Object attribute = getAttribute(CommConst.KEY_ACCOUNT);
+    public String getAccount() {
+        String attribute = (String) getAttribute(CommConst.KEY_ACCOUNT);
 
         if (null != attribute) {
-            this.account = (long) attribute;
+            this.account =  attribute;
             return this.account;
 
         }
         return account;
     }
 
-    public void setAccount(long account) {
+    public void setAccount(String account) {
         this.account = account;
 
         setAttribute(CommConst.KEY_ACCOUNT, account);

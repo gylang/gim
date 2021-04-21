@@ -1,0 +1,7 @@
+gim:
+  admin-user:
+    webAdmin:
+      password: 123456
+      name: web推送
+      userId: -2
+      loginEvent: true

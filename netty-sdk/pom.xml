@@ -13,18 +13,7 @@
     <version>1.0-SNAPSHOT</version>
 
 
-    <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <junit.version>4.12</junit.version>
-        <log4j.version>1.2.17</log4j.version>
-        <lombok.version>1.18.12</lombok.version>
-        <protobuf.java.version>3.11.1</protobuf.java.version>
-        <netty.version>4.1.44.Final</netty.version>
-        <slf4j.version>1.7.30</slf4j.version>
-    </properties>
+
     <dependencies>
         <dependency>
             <groupId>io.netty</groupId>
@@ -96,6 +85,11 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.gylang</groupId>
+            <artifactId>gim-common-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <!--        生成protobuf-->

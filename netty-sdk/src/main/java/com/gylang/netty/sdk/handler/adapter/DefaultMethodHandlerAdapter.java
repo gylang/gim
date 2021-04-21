@@ -8,7 +8,7 @@
 //import com.gylang.netty.sdk.annotation.NettyMapping;
 //import com.gylang.netty.sdk.call.NotifyProvider;
 //import com.gylang.netty.sdk.conveter.DataConverter;
-//import com.gylang.netty.sdk.domain.MessageWrap;
+//import com.gylang.gim.api.domain.MessageWrap;
 //import com.gylang.netty.sdk.domain.model.IMSession;
 //import com.gylang.netty.sdk.handler.BizRequestAdapter;
 //import io.netty.channel.ChannelHandlerContext;

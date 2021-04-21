@@ -3,7 +3,7 @@ package com.gylang.netty.sdk.conveter;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ClassUtil;
 import com.alibaba.fastjson.JSON;
-import com.gylang.netty.sdk.domain.MessageWrap;
+import com.gylang.gim.api.domain.common.MessageWrap;
 
 /**
  * json 数据转换

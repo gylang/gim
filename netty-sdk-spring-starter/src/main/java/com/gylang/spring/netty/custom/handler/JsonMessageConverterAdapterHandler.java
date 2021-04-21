@@ -2,7 +2,7 @@ package com.gylang.spring.netty.custom.handler;
 
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
-import com.gylang.netty.sdk.domain.MessageWrap;
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.spring.netty.custom.adapter.MessageConverterAdapter;
 import org.springframework.stereotype.Component;
 

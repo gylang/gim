@@ -3,6 +3,7 @@ package com.gylang.netty.sdk.config;
 import lombok.Data;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author gylang
@@ -33,7 +34,10 @@ public class NettyProperties {
     /** 异常重发机制 */
     private Integer reSendMsg;
 
+    private Map<String, Integer> socketType;
 
 
     private Map<String, Object> properties;
+    /** 不用授权的消息 */
+    private Set<String> nonAuthCmd;
 }

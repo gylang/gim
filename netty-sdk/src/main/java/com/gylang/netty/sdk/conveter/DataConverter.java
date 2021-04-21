@@ -1,6 +1,6 @@
 package com.gylang.netty.sdk.conveter;
 
-import com.gylang.netty.sdk.domain.MessageWrap;
+import com.gylang.gim.api.domain.common.MessageWrap;
 
 /**
  * 实体转化, 用于protobuf 或json等序列化之间进行切换

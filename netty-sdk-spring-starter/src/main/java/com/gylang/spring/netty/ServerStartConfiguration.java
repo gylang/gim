@@ -9,7 +9,7 @@ import com.gylang.netty.sdk.event.EventContext;
 import com.gylang.netty.sdk.event.EventProvider;
 import com.gylang.netty.sdk.event.message.MessageEventListener;
 import com.gylang.netty.sdk.handler.BizRequestAdapter;
-import com.gylang.netty.sdk.handler.DispatchAdapterHandler;
+import com.gylang.netty.sdk.handler.IMessageRouter;
 import com.gylang.netty.sdk.handler.qos.IMessageReceiveQosHandler;
 import com.gylang.netty.sdk.handler.qos.IMessageSenderQosHandler;
 import com.gylang.netty.sdk.initializer.CustomInitializer;
@@ -39,7 +39,7 @@ public class ServerStartConfiguration implements InitializingBean {
      * 根据名称装配，防止和客户端的ChannelInitializer冲突报错
      */
     @Resource
-    private CustomInitializer<?> serverChannelInitializer;
+    private List<CustomInitializer<?>> serverChannelInitializer;
     /** 事件监听 */
     @Resource
     private EventProvider eventProvider;
@@ -67,7 +67,7 @@ public class ServerStartConfiguration implements InitializingBean {
     private List<BizRequestAdapter<?>> bizRequestAdapterList;
     /** 适配分发器 */
     @Resource
-    private DispatchAdapterHandler dispatchAdapterHandler;
+    private IMessageRouter messageRouter;
     /** 线程池 */
     @Resource
     private ThreadPoolExecutor poolExecutor;
@@ -98,7 +98,7 @@ public class ServerStartConfiguration implements InitializingBean {
         nettyConfiguration.setMessageProvider(messageProvider);
         nettyConfiguration.setMessageEventListener(messageEventListener);
         nettyConfiguration.setBizRequestAdapterList(bizRequestAdapterList);
-        nettyConfiguration.setDispatchAdapterHandler(dispatchAdapterHandler);
+        nettyConfiguration.setIMessageRouter(messageRouter);
         nettyConfiguration.setPoolExecutor(poolExecutor);
         nettyConfiguration.setNettyUserInfoFillHandler(nettyUserInfoFillHandler);
         nettyConfiguration.setNettyInterceptList(nettyInterceptList);

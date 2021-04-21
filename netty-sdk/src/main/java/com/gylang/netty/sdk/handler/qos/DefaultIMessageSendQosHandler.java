@@ -1,12 +1,16 @@
 package com.gylang.netty.sdk.handler.qos;
 
+import com.gylang.gim.api.constant.EventTypeConst;
+import com.gylang.gim.api.constant.QosConstant;
+import com.gylang.gim.api.constant.cmd.SystemChatCmd;
+import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.gim.api.domain.message.sys.AckMessage;
 import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.constant.EventTypeConst;
-import com.gylang.netty.sdk.constant.MessageType;
-import com.gylang.netty.sdk.domain.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.event.EventProvider;
-import com.gylang.netty.sdk.repo.IMSessionRepository;
+import com.gylang.netty.sdk.util.LocalSessionHolderUtil;
+import io.netty.channel.Channel;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Iterator;
@@ -20,17 +24,24 @@ import java.util.concurrent.*;
  * data 2021/3/3
  */
 @Slf4j
+@Setter
 public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
 
     private final ConcurrentMap<String, Long> messageTimeStamp = new ConcurrentHashMap<>();
     private ConcurrentSkipListMap<String, MessageWrap> sentMessages = new ConcurrentSkipListMap<>();
 
 
-    /** 定时任务扫码间隔 */
+    /**
+     * 定时任务扫码间隔
+     */
     private int checkInterval = 5 * 1000;
-    /** 扫码最低时间间隔 */
+    /**
+     * 扫码最低时间间隔
+     */
     private int messagesValidTime = 2 * 1000;
-    /** 定时扫码器 */
+    /**
+     * 定时扫码器
+     */
     private ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(1, new ThreadPoolExecutor.AbortPolicy());
 
 
@@ -38,27 +49,39 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
 
     private int reSendNum = 3;
 
-    private IMSessionRepository imSessionRepository;
 
     private EventProvider eventProvider;
 
     @Override
-    public void handle(MessageWrap messageWrap, IMSession target) {
+    public void handle(MessageWrap message, IMSession target) {
 
         // 1. 非qos
-        if (!messageWrap.isQos()) {
-            return;
+        String msgId = message.getMsgId();
+
+        // 2. ack = 1
+        if (QosConstant.SEND_ACK1 == message.getAck()) {
+
+            MessageWrap messageWrap = sentMessages.get(msgId);
+            if (null != messageWrap && null != messageWrap.getReceive()
+                    && messageWrap.getReceive().equals(target.getAccount())) {
+                // 存在重发记录 收到ack0客户端收到, 客户端ack1可以删除重发记录, 并响应ack2
+                sentMessages.remove(msgId);
+                Long remove = messageTimeStamp.remove(msgId);
+                if (log.isDebugEnabled()) {
+                    log.debug("[qos1 - sender] : 接收到客户端ack1, 删除重发记录 : {}", null == remove ? "已经删除,这是重发" : "立即删除");
+                }
+            }
+            // qos2 需要响应客户点 响应ack2 让客户端删除重发ack1列表
+            if (null != messageWrap && QosConstant.ACCURACY_ONE_ARRIVE == messageWrap.getQos()) {
+                AckMessage ackMessage = new AckMessage(SystemChatCmd.QOS_SERVER_SEND_ACK, messageWrap);
+                ackMessage.setAck(QosConstant.SEND_ACK2);
+                target.getSession().writeAndFlush(ackMessage);
+                if (log.isDebugEnabled()) {
+                    log.debug("[qos2 - sender] : 接收到客户端ack1, 响应客户端ack2");
+                }
+            }
         }
-        // 2. 如果收到的是客户端的ack包将将消息删除
-        if (MessageType.QOS_SEND_ACK == messageWrap.getType()) {
-            messageTimeStamp.remove(messageWrap.getMsgId());
-            return;
-        }
-        // 3. 接收到客户端的消息 msgId,将消息进行保存，
-        // 3.1 如果已经存在，ack1给客户端，
-        if (!messageTimeStamp.containsKey(messageWrap.getMsgId())) {
-            addReceived(messageWrap);
-        }
+
 
     }
 
@@ -69,8 +92,10 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
 
     @Override
     public void addReceived(MessageWrap messageWrap) {
-        messageTimeStamp.put(messageWrap.getMsgId(), System.currentTimeMillis() + messagesValidTime);
-        sentMessages.put(messageWrap.getMsgId(), messageWrap);
+        if (!hasReceived(messageWrap.getMsgId())) {
+            messageTimeStamp.put(messageWrap.getMsgId(), System.currentTimeMillis() + messagesValidTime);
+            sentMessages.put(messageWrap.getMsgId(), messageWrap);
+        }
     }
 
     @Override
@@ -133,24 +158,23 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
                 if (now < timestamp) {
                     continue;
                 }
-                IMSession imSession = imSessionRepository.find(msg.getTargetId());
-                if (null != imSession && imSession.isConnected()) {
-
-                    imSession.getSession().writeAndFlush(timestamp);
+                Channel session = LocalSessionHolderUtil.getSession(msg.getReceive());
+                if (null != session) {
+                    session.writeAndFlush(msg);
                     msg.setRetryNum(msg.getRetryNum() + 1);
                 } else {
                     // 用户离线
                     if (msg.isOfflineMsgEvent()) {
-                        eventProvider.sendEvent(EventTypeConst.OFFLINE_MSG_EVENT, timestamp);
+                        eventProvider.sendEvent(EventTypeConst.OFFLINE_MSG_EVENT, msg);
+                        iterator.remove();
                     }
-                    iterator.remove();
                 }
             }
-        }
 
-        if (log.isDebugEnabled()) {
+            if (log.isDebugEnabled()) {
 
-            log.debug("【QoS发送方】END 暂存处理线程正在运行中，当前长度" + messageTimeStamp.size() + ".");
+                log.debug("【QoS发送方】END 暂存处理线程正在运行中，当前长度" + messageTimeStamp.size() + ".");
+            }
         }
     }
 
@@ -169,6 +193,5 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
         ScheduledExecutorService customScheduledExecutorService = configuration.getProperties(SCHEDULED_EXECUTOR_SERVICE);
         this.scheduledExecutorService = null == customScheduledExecutorService ? this.scheduledExecutorService : customScheduledExecutorService;
         this.eventProvider = configuration.getEventProvider();
-        this.imSessionRepository = configuration.getSessionRepository();
     }
 }

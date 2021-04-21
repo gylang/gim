@@ -1,14 +1,18 @@
 package com.gylang.netty.sdk.provider;
 
+import cn.hutool.core.util.StrUtil;
+import com.gylang.gim.api.constant.EventTypeConst;
+import com.gylang.gim.api.constant.QosConstant;
 import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.constant.EventTypeConst;
-import com.gylang.netty.sdk.domain.MessageWrap;
+import com.gylang.netty.sdk.constant.NettyConfigEnum;
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.event.EventProvider;
 import com.gylang.netty.sdk.handler.qos.IMessageSenderQosHandler;
 import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
 import com.gylang.netty.sdk.repo.IMSessionRepository;
+import com.gylang.netty.sdk.util.LocalSessionHolderUtil;
 import com.gylang.netty.sdk.util.MsgIdUtil;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -37,66 +41,78 @@ public class DefaultMessageProvider implements MessageProvider {
 
     private String host = null;
 
+    private Integer retryNum;
 
     @Override
-    public void sendMsg(IMSession me, Long target, MessageWrap message) {
+    public int sendMsg(IMSession me, String target, MessageWrap message) {
 
-        sendMsgCallBack(me, target, message, null);
+        return sendMsgCallBack(me, target, message, null);
     }
 
     @Override
-    public void sendMsg(IMSession me, IMSession target, MessageWrap message) {
+    public int sendMsg(IMSession me, IMSession target, MessageWrap message) {
 
-        sendMsgCallBack(me, target, message, null);
+        return sendMsgCallBack(me, target, message, null);
     }
 
     @Override
-    public void sendMsgCallBack(IMSession me, Long target, MessageWrap message, ChannelFutureListener listener) {
+    public int sendMsgCallBack(IMSession me, String target, MessageWrap message, ChannelFutureListener listener) {
         IMSession imSession = sessionRepository.find(target);
-        sendMsgCallBack(me, imSession, message, listener);
+        return sendMsgCallBack(me, imSession, message, listener);
     }
 
     @Override
-    public void sendMsgCallBack(IMSession me, IMSession target, MessageWrap message, ChannelFutureListener listener) {
-        // 接收者不存在/离线
-        if (null == target || null == target.getSession()) {
-            if (message.isOfflineMsgEvent()) {
-                eventProvider.sendEvent(EventTypeConst.OFFLINE_MSG_EVENT, message);
-            }
-            if (message.isPersistenceEvent()) {
-                eventProvider.sendEvent(EventTypeConst.PERSISTENCE_EVENT, message);
-            }
-            return;
-        }
-        message.setSender(null != me ? me.getAccount() : null);
-        if (message.getTargetId() <= 0) {
-            message.setTargetId(target.getAccount());
-        }
-        // 发送策略 如果本地发送失败（主要是跨服和用户离线）， 可以通过其他方式发送，桥接，mq
+    public int sendMsgCallBack(IMSession me, IMSession target, MessageWrap message, ChannelFutureListener listener) {
 
-        if (!Objects.equals(host, target.getServerIp())) {
-            // todo 跨服通信 1. 直连桥接 2. mq订阅发送
+
+        if (null == target) {
+            eventProvider.sendEvent(EventTypeConst.USER_NOT_FOUND, message);
+            return USER_NOT_FOUND;
+        }
+        // 设置接收者 channel
+        if (null == target.getSession()) {
+            target.setSession(LocalSessionHolderUtil.getSession(target.getAccount()));
+        }
+        // 发送策略 跨服传输 本地不存在当前channel 可以通过其他方式发送，桥接，mq
+        if (null == target.getSession() || !Objects.equals(host, target.getServerIp())) {
+            // 跨服务消息 发送事件
             eventProvider.sendEvent(EventTypeConst.CROSS_SERVER_PUSH, message);
-            return;
+            return CROSS_SERVER;
+        }
+        // 设置 发送者
+        if (StrUtil.isNotEmpty(message.getSender())) {
+            message.setSender(null == message.getSender() ? me.getAccount() : message.getSender());
+            if (StrUtil.isEmpty(message.getReceive())) {
+                message.setReceive(target.getAccount());
+            }
         }
 
-        // 本地发送
-        message.setMsgId(MsgIdUtil.increase(message));
-        // 持久化消息
-        if (message.isPersistenceEvent()) {
-            eventProvider.sendEvent(EventTypeConst.PERSISTENCE_EVENT, message);
+        // 判断是否需要自动设置消息id
+        if (StrUtil.isEmpty(message.getMsgId())) {
+            message.setMsgId(MsgIdUtil.increase(message));
         }
+//        // 持久化消息
+//        if (message.isPersistenceEvent()) {
+//            eventProvider.sendEvent(EventTypeConst.PERSISTENCE_EVENT, message);
+//        }
         ChannelFuture cf = target.getSession().writeAndFlush(message);
-
+        if (QosConstant.ONE_AWAY != message.getQos()) {
+            // 应用层确保消息可达
+            iMessageSenderQosHandler.addReceived(message);
+        }
         cf.addListener((ChannelFutureListener) channelFuture -> {
 
             if (!channelFuture.isSuccess()) {
-                if (message.isQos()) {
-                    // 应用层确保消息可达
-                    iMessageSenderQosHandler.handle(message, target);
-                } else if (message.isOfflineMsgEvent()) {
-                    // 发送离线消息事件
-                    eventProvider.sendEvent(EventTypeConst.OFFLINE_MSG_EVENT, message);
+                  if (message.getRetryNum() > retryNum) {
+                    // iMessageSenderQosHandler
+                    if (message.isOfflineMsgEvent()) {
+                        // 消息发送失败 发送消息发送失败事件
+                        eventProvider.sendEvent(EventTypeConst.OFFLINE_MSG_EVENT, message);
+                    }
+                } else {
+                    // 重发 可以设置定时器 重发
+                    message.setRetryNum(retryNum + 1);
+                    sendMsgCallBack(me, target, message, (ChannelFutureListener) channelFuture);
                 }
             }
 
@@ -105,27 +121,27 @@ public class DefaultMessageProvider implements MessageProvider {
             cf.addListener(listener);
         }
 
-
+        return SENDING;
     }
 
 
     @Override
-    public void sendGroup(IMSession me, Long target, MessageWrap message) {
+    public int sendGroup(IMSession me, String target, MessageWrap message) {
 
         AbstractSessionGroup sessionGroup = groupSessionRepository.findByKey(target);
-        sendGroup(me, sessionGroup, message);
+        return sendGroup(me, sessionGroup, message);
     }
 
     @Override
-    public void sendAsyncGroup(IMSession me, Long target, MessageWrap message) {
+    public void sendAsyncGroup(IMSession me, String target, MessageWrap message) {
         executor.execute(() -> sendGroup(me, target, message));
     }
 
 
     @Override
-    public void sendGroup(IMSession me, AbstractSessionGroup target, MessageWrap message) {
+    public int sendGroup(IMSession me, AbstractSessionGroup target, MessageWrap message) {
         if (null == target) {
-            return;
+            return USER_NOT_FOUND;
         }
         message.setSender(me.getAccount());
         message.setReceive(target.getGroupId());
@@ -136,12 +152,12 @@ public class DefaultMessageProvider implements MessageProvider {
                 sendMsg(me, session, message);
             }
         }
+        return SENDING;
     }
 
     @Override
     public void sendAsyncGroup(IMSession me, AbstractSessionGroup target, MessageWrap message) {
         executor.execute(() -> sendGroup(me, target, message));
-
     }
 
     @Override
@@ -152,5 +168,6 @@ public class DefaultMessageProvider implements MessageProvider {
         this.iMessageSenderQosHandler = configuration.getIMessageSenderQosHandler();
         this.eventProvider = configuration.getEventProvider();
         this.host = configuration.getProperties("serverId");
+        this.retryNum = configuration.getProperties(NettyConfigEnum.LOST_CONNECT_RETRY_NUM);
     }
 }

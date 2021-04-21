@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ListView fx:id="userListView" layoutX="5.0" layoutY="40.0" prefHeight="356.0" prefWidth="593.0" />
+      <TextField fx:id="title" text="主题" />
+   </children>
+</AnchorPane>

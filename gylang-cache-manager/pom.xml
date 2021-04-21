@@ -7,6 +7,7 @@
         <artifactId>netty-sdk-parent</artifactId>
         <groupId>org.gylang</groupId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>gylang-cache-manager</artifactId>
     <version>1.0.0-SNAPSHOT</version>
@@ -19,7 +20,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
-            <version>2.2.2.RELEASE</version>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

@@ -1,7 +1,7 @@
 package com.gylang.netty.sdk.provider;
 
 import com.gylang.netty.sdk.common.AfterConfigInitialize;
-import com.gylang.netty.sdk.domain.MessageWrap;
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import io.netty.channel.ChannelFutureListener;
@@ -20,7 +20,7 @@ public interface MessageProvider extends AfterConfigInitialize {
      * @param target  发送目标
      * @param message 发送消息
      */
-    void sendMsg(IMSession me, Long target, MessageWrap message);
+    int sendMsg(IMSession me, String target, MessageWrap message);
 
     /**
      * 发送消息 异步
@@ -29,7 +29,7 @@ public interface MessageProvider extends AfterConfigInitialize {
      * @param target  发送目标
      * @param message 发送消息
      */
-    void sendMsgCallBack(IMSession me, Long target, MessageWrap message, ChannelFutureListener listener);
+    int sendMsgCallBack(IMSession me, String target, MessageWrap message, ChannelFutureListener listener);
 
     /**
      * 发送消息
@@ -38,7 +38,7 @@ public interface MessageProvider extends AfterConfigInitialize {
      * @param target  发送目标
      * @param message 发送消息
      */
-    void sendMsg(IMSession me, IMSession target, MessageWrap message);
+    int sendMsg(IMSession me, IMSession target, MessageWrap message);
 
     /**
      * 发送消息 异步
@@ -47,7 +47,7 @@ public interface MessageProvider extends AfterConfigInitialize {
      * @param target  发送目标
      * @param message 发送消息
      */
-    void sendMsgCallBack(IMSession me, IMSession target, MessageWrap message, ChannelFutureListener listener);
+    int sendMsgCallBack(IMSession me, IMSession target, MessageWrap message, ChannelFutureListener listener);
 
     /**
      * 群送消息
@@ -56,7 +56,7 @@ public interface MessageProvider extends AfterConfigInitialize {
      * @param target  发送目标
      * @param message 发送消息
      */
-    void sendGroup(IMSession me, Long target, MessageWrap message);
+    int sendGroup(IMSession me, String target, MessageWrap message);
 
     /**
      * 群发消息 异步
@@ -65,7 +65,7 @@ public interface MessageProvider extends AfterConfigInitialize {
      * @param target  发送目标
      * @param message 发送消息
      */
-    void sendAsyncGroup(IMSession me, Long target, MessageWrap message);
+    void sendAsyncGroup(IMSession me, String target, MessageWrap message);
 
 
 
@@ -77,7 +77,7 @@ public interface MessageProvider extends AfterConfigInitialize {
      * @param target  发送目标
      * @param message 发送消息
      */
-    void sendGroup(IMSession me, AbstractSessionGroup target, MessageWrap message);
+    int sendGroup(IMSession me, AbstractSessionGroup target, MessageWrap message);
 
     /**
      * 群发消息 异步
@@ -88,5 +88,9 @@ public interface MessageProvider extends AfterConfigInitialize {
      */
     void sendAsyncGroup(IMSession me, AbstractSessionGroup target, MessageWrap message);
 
+    Integer SENDING = 1;
 
+    Integer USER_NOT_FOUND = 2;
+
+    Integer CROSS_SERVER = 3;
 }

@@ -9,15 +9,34 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <junit.version>4.12</junit.version>
+        <log4j.version>1.2.17</log4j.version>
+        <lombok.version>1.18.12</lombok.version>
+        <protobuf.java.version>3.11.1</protobuf.java.version>
+        <netty.version>4.1.44.Final</netty.version>
+        <slf4j.version>1.7.30</slf4j.version>
+        <spring.version>2.2.1.RELEASE</spring.version>
 
+    </properties>
     <modules>
         <module>netty-sdk</module>
         <module>netty-sdk-spring-starter</module>
-        <module>netty-client-java-sdk</module>
-        <module>netty-console-chat</module>
-        <module>netty-im-server</module>
+        <module>test-noframework-im-server</module>
+        <module>test-spring-im-server</module>
         <module>im-server</module>
         <module>gylang-cache-manager</module>
+        <module>gylang-cross-server-im-starter</module>
+        <module>im-server/gim-chat-server</module>
+        <module>im-server/gim-web-server</module>
+        <module>im-server/gim-common-api</module>
+        <module>im-server/gim-remote-sdk</module>
+        <module>im-server/gim-admin-remote-sdk</module>
+
 
     </modules>
     <distributionManagement>
