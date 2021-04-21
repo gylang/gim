@@ -122,12 +122,14 @@ public class BizFriendServiceImpl implements BizFriendService {
             //
             PushMessage message = new PushMessage();
             message.setContent(JSON.toJSONString(userApply));
+
             message.setReceiveId(CollUtil.newArrayList(userApply.getApplyId()));
             MessageWrap messageWrap = MessageWrap.builder()
                     .cmd(PushChatCmd.P2P_PUSH)
                     .bizType(PushBizType.userApply)
+                    .type(ChatTypeEnum.PUSH_CHAT.getType())
                     .sender(userApply.getApplyId())
-                    .content(JSON.toJSONString(userApply))
+                    .content(JSON.toJSONString(message))
                     .offlineMsgEvent(false)
                     .qos(1)
                     .build();
@@ -151,7 +153,8 @@ public class BizFriendServiceImpl implements BizFriendService {
 
             // 给申请者发送hello
             PushMessage message = new PushMessage();
-            message.setContent(JSON.toJSONString(userApply));
+            message.setSender(userApply.getApplyId());
+            message.setContent("你好，我们已经是好友拉~");
             message.setReceiveId(CollUtil.newArrayList(userApply.getApplyId()));
             MessageWrap applyMsg = MessageWrap.builder()
                     .qos(1)
@@ -160,7 +163,7 @@ public class BizFriendServiceImpl implements BizFriendService {
                     .receive(apply.getApplyId())
                     .bizType(PushBizType.userApplyAnswer)
                     .offlineMsgEvent(true)
-                    .content("你好，我们已经是好友拉~")
+                    .content(JSON.toJSONString(message))
                     .type(ChatTypeEnum.PRIVATE_CHAT.getType())
                     .build();
             socketManager.send(applyMsg);

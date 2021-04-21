@@ -1,5 +1,6 @@
 package com.gylang.netty.sdk.handler.qos;
 
+import cn.hutool.core.util.StrUtil;
 import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.gim.api.constant.QosConstant;
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
@@ -57,7 +58,9 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
 
         // 1. 非qos
         String msgId = message.getMsgId();
-
+        if (StrUtil.isEmpty(msgId)) {
+            log.error("[主发消息msgId为空] : msg = {}", message);
+        }
         // 2. ack = 1
         if (QosConstant.SEND_ACK1 == message.getAck()) {
 

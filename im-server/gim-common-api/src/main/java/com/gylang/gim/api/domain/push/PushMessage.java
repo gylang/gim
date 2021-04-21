@@ -1,5 +1,6 @@
 package com.gylang.gim.api.domain.push;
 
+import com.gylang.gim.api.domain.common.MessageWrap;
 import lombok.Data;
 
 import java.util.List;
@@ -9,10 +10,10 @@ import java.util.List;
  * data 2021/4/7
  */
 @Data
-public class PushMessage {
+public class PushMessage extends MessageWrap {
 
     /** 接收者id列表 */
     private List<String> receiveId;
-    /** 内容 */
-    private String content;
+
+
 }

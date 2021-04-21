@@ -1,6 +1,7 @@
 package com.gylang.gim.util;
 
 import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.util.IdUtil;
 import com.gylang.gim.api.domain.common.MessageWrap;
 
 /**
@@ -26,7 +27,7 @@ public class MsgIdUtil  {
 
     private static int dataCenter = 1;
 
-    private static Snowflake snowflake;
+    private static Snowflake snowflake = IdUtil.getSnowflake(1, 1);
     private static int machine = 1;
     /**
      * 16^3 -1 = 4905
@@ -68,7 +69,7 @@ public class MsgIdUtil  {
         long nextId = snowflake.nextId();
         message.setTimeStamp(nextId);
         String s = Long.toString(nextId);
-        message.setMsgId(s);
+        message.setClientMsgId(s);
         return s;
     }
 

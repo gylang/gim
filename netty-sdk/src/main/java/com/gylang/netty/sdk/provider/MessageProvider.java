@@ -5,6 +5,8 @@ import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import io.netty.channel.ChannelFutureListener;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 
 /**
  * @author gylang
@@ -29,7 +31,7 @@ public interface MessageProvider extends AfterConfigInitialize {
      * @param target  发送目标
      * @param message 发送消息
      */
-    int sendMsgCallBack(IMSession me, String target, MessageWrap message, ChannelFutureListener listener);
+    int sendMsgCallBack(IMSession me, String target, MessageWrap message, GenericFutureListener<? extends Future<? super Void>> listener);
 
     /**
      * 发送消息
@@ -47,7 +49,7 @@ public interface MessageProvider extends AfterConfigInitialize {
      * @param target  发送目标
      * @param message 发送消息
      */
-    int sendMsgCallBack(IMSession me, IMSession target, MessageWrap message, ChannelFutureListener listener);
+    int sendMsgCallBack(IMSession me, IMSession target, MessageWrap message, GenericFutureListener<? extends Future<? super Void>> listener);
 
     /**
      * 群送消息

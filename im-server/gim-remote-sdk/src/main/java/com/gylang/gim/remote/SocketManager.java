@@ -13,6 +13,7 @@ import com.gylang.gim.remote.call.GimCallBack;
 import com.gylang.gim.remote.coder.ClientMessageDecoder;
 import com.gylang.gim.remote.coder.ClientMessageEncoder;
 import com.gylang.gim.remote.qos.ClientQosAdapterHandler;
+import com.gylang.gim.util.MsgIdUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -209,7 +210,7 @@ public class SocketManager {
         if (!isConnected()) {
             return;
         }
-
+        MsgIdUtil.increase(body);
         workerExecutor.execute(() -> {
             if (QosConstant.ONE_AWAY != body.getQos()) {
                 clientQosAdapterHandler.getSenderQosHandler().addReceived(body);

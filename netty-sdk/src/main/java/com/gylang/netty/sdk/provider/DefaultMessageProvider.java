@@ -16,6 +16,8 @@ import com.gylang.netty.sdk.util.LocalSessionHolderUtil;
 import com.gylang.netty.sdk.util.MsgIdUtil;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 
 import java.util.Objects;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -56,13 +58,13 @@ public class DefaultMessageProvider implements MessageProvider {
     }
 
     @Override
-    public int sendMsgCallBack(IMSession me, String target, MessageWrap message, ChannelFutureListener listener) {
+    public int sendMsgCallBack(IMSession me, String target, MessageWrap message, GenericFutureListener<? extends Future<? super Void>> listener) {
         IMSession imSession = sessionRepository.find(target);
         return sendMsgCallBack(me, imSession, message, listener);
     }
 
     @Override
-    public int sendMsgCallBack(IMSession me, IMSession target, MessageWrap message, ChannelFutureListener listener) {
+    public int sendMsgCallBack(IMSession me, IMSession target, MessageWrap message, GenericFutureListener<? extends Future<? super Void>> listener) {
 
 
         if (null == target) {
@@ -100,7 +102,7 @@ public class DefaultMessageProvider implements MessageProvider {
             // 应用层确保消息可达
             iMessageSenderQosHandler.addReceived(message);
         }
-        cf.addListener((ChannelFutureListener) channelFuture -> {
+        cf.addListener( channelFuture -> {
 
             if (!channelFuture.isSuccess()) {
                   if (message.getRetryNum() > retryNum) {
@@ -112,7 +114,7 @@ public class DefaultMessageProvider implements MessageProvider {
                 } else {
                     // 重发 可以设置定时器 重发
                     message.setRetryNum(retryNum + 1);
-                    sendMsgCallBack(me, target, message, (ChannelFutureListener) channelFuture);
+                    sendMsgCallBack(me, target, message,  listener);
                 }
             }
 

@@ -65,7 +65,8 @@ public class UserSearchItemC extends BaseCellC<PtUserDTO> implements Initializab
     public void applyEvent(ActionEvent event) {
         UserApplyRequest request = new UserApplyRequest();
         request.setApplyId(UserStore.getInstance().getUid());
-        request.setAnswerId(getItem().getEmail());
+        request.setAnswerId(getItem().getId().toString());
+        request.setLeaveWord(UserStore.getInstance().getNickname() + "申请添加好友");
         Call<CommonResult<Boolean>> answer = friendApi.applyFriend(request);
         answer.enqueue(new ICallback<CommonResult<Boolean>>() {
             @Override
