@@ -3,8 +3,8 @@ package com.gylang.gim.web.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.gylang.cache.CacheManager;
 import com.gylang.gim.api.constant.AnswerType;
+import com.gylang.gim.api.constant.CacheConstant;
 import com.gylang.gim.api.constant.biztype.PushBizType;
 import com.gylang.gim.api.constant.cmd.PushChatCmd;
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
@@ -15,7 +15,6 @@ import com.gylang.gim.api.dto.ImUserFriendDTO;
 import com.gylang.gim.api.dto.UserFriendVO;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.remote.SocketManager;
-import com.gylang.gim.web.common.constant.CacheConstant;
 import com.gylang.gim.web.common.util.Asserts;
 import com.gylang.gim.web.entity.ImUserFriend;
 import com.gylang.gim.web.entity.UserApply;
@@ -26,6 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -37,12 +38,13 @@ import java.util.List;
  */
 @Service
 @Slf4j
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 public class BizFriendServiceImpl implements BizFriendService {
 
     @Resource
     private ImUserFriendService userFriendService;
     @Resource
-    private CacheManager cacheManager;
+    private RedisTemplate<String, String> redisTemplate;
     @Resource
     private UserApplyService userApplyService;
 
@@ -70,6 +72,10 @@ public class BizFriendServiceImpl implements BizFriendService {
         // 可以直接通过 操作hash 新增field
         proxy.updateCacheList(friend.getFriendId());
         proxy.updateCacheList(friend.getUid());
+
+        // 更新好友白名单记录
+        redisTemplate.opsForSet().add(CacheConstant.WHITE_LIST_CHECK + friend.getUid(), friend.getFriendId());
+        redisTemplate.opsForSet().add(CacheConstant.WHITE_LIST_CHECK + friend.getFriendId(), friend.getUid());
         return CommonResult.ok();
     }
 
@@ -86,13 +92,20 @@ public class BizFriendServiceImpl implements BizFriendService {
         if (CollUtil.isNotEmpty(userFriendList)) {
             return userFriendList;
         }
+
         return CollUtil.empty(ImUserFriendDTO.class);
     }
 
     @Override
     public CommonResult<Boolean> del(ImUserFriendDTO friend) {
 
-        userFriendService.removeByIds(CollUtil.newArrayList(friend.getFriendId(), friend.getUid()));
+        userFriendService.lambdaUpdate()
+                .or(w -> w.eq(ImUserFriend::getUid, friend.getUid()).eq(ImUserFriend::getFriendId, friend.getFriendId()))
+                .or(w -> w.eq(ImUserFriend::getFriendId, friend.getUid()).eq(ImUserFriend::getUid, friend.getFriendId()))
+                .remove();
+        // 更新白名单
+        redisTemplate.opsForSet().remove(CacheConstant.WHITE_LIST_CHECK + friend.getUid(), friend.getFriendId());
+        redisTemplate.opsForSet().remove(CacheConstant.WHITE_LIST_CHECK + friend.getFriendId(), friend.getUid());
         getProxy().updateCacheList(friend.getFriendId());
         return CommonResult.ok();
     }
@@ -159,6 +172,9 @@ public class BizFriendServiceImpl implements BizFriendService {
             answerMsg.setSender(apply.getApplyId());
             answerMsg.setReceive(apply.getAnswerId());
             socketManager.send(applyMsg);
+            // 更新好友白名单记录
+            redisTemplate.opsForSet().add(CacheConstant.WHITE_LIST_CHECK + userApply.getApplyId(), userApply.getAnswerId());
+            redisTemplate.opsForSet().add(CacheConstant.WHITE_LIST_CHECK + userApply.getAnswerId(), userApply.getApplyId());
         } else {
             // 拒绝
             MessageWrap rejectMsg = MessageWrap.builder()
