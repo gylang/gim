@@ -5,6 +5,7 @@ import com.gylang.gim.client.GuiClientApplication;
 import com.gylang.gim.client.gui.controller.PrivateChatController;
 import com.gylang.gim.client.gui.util.GuiUtil;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +17,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UserItemC extends BaseCellC<ImUserFriendDTO> {
 
-
+    @FXML
     public ImageView avatar;
+    @FXML
     public TextField nickname;
+    @FXML
     public TextField username;
 
     public UserItemC() {
@@ -32,7 +35,7 @@ public class UserItemC extends BaseCellC<ImUserFriendDTO> {
         nickname.setText(item.getNickname());
         username.setText(item.getUsername());
     }
-
+    @FXML
     public void openChat(ActionEvent actionEvent) {
         log.info("{}", actionEvent.getSource());
         ImUserFriendDTO item = getItem();
@@ -40,7 +43,7 @@ public class UserItemC extends BaseCellC<ImUserFriendDTO> {
     }
 
 
-
+    @FXML
     public void delFriendAction(ActionEvent actionEvent) {
 
         log.info("{}", actionEvent.getSource());

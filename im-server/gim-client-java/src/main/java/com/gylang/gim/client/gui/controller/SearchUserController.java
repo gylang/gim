@@ -45,11 +45,21 @@ public class SearchUserController extends CustomApplication {
 
 
     @Override
+    public void beforeInit(URL location, ResourceBundle resources) {
+
+    }
+
+    @Override
     public void init(URL location, ResourceBundle resources) {
         // 构建listView
 
         userListView.setCellFactory(callback -> new UserSearchItemC());
         userListView.setItems(FXCollections.observableList(new ArrayList<>()));
+    }
+
+    @Override
+    public void afterInit(URL location, ResourceBundle resources) {
+
     }
 
     @FXML

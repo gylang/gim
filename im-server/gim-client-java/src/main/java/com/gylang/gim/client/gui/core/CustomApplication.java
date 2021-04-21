@@ -1,7 +1,9 @@
 package com.gylang.gim.client.gui.core;
 
+import com.gylang.gim.client.gui.GuiStore;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -16,11 +18,13 @@ import java.util.ResourceBundle;
  */
 
 @Slf4j
-public abstract class CustomApplication extends Application implements InitializerCallBack {
+public abstract class CustomApplication extends Application implements Initializable {
 
     private String title;
 
     private String url;
+
+    private Stage stage;
 
     public CustomApplication(String title, String url) {
         this.title = title;
@@ -31,30 +35,30 @@ public abstract class CustomApplication extends Application implements Initializ
     public void start(Stage primaryStage) throws Exception {
 
 
-        final Stage main = new Stage();
+        stage = new Stage();
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource(url));
-
-        loader.setController(this);
+        Object t1 = this;
+        loader.setController(t1);
         Parent load = loader.load();
-
-        main.setTitle(title);
-        main.setScene(new Scene(load));
-        main.show();
-
+        stage.setTitle(title);
+        stage.setScene(new Scene(load));
+        stage.show();
     }
+
 
     @Override
-    public void init(URL location, ResourceBundle resources) {
-
+    public final void initialize(URL location, ResourceBundle resources) {
+        GuiStore.store(this, stage);
+        beforeInit(location, resources);
+        init(location, resources);
+        afterInit(location, resources);
     }
 
-    @Override
-    public void beforeInit(URL location, ResourceBundle resources) {
+    public abstract void beforeInit(URL location, ResourceBundle resources);
 
-    }
+    public abstract void init(URL location, ResourceBundle resources);
 
-    @Override
-    public void afterInit(URL location, ResourceBundle resources) {
+    public abstract void afterInit(URL location, ResourceBundle resources);
 
-    }
 }

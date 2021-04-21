@@ -7,6 +7,7 @@ import com.gylang.gim.client.gui.component.UserItemC;
 import com.gylang.gim.client.gui.core.CustomApplication;
 import com.gylang.gim.client.util.MockUtil;
 import javafx.collections.FXCollections;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +24,8 @@ import java.util.ResourceBundle;
  * data 2021/4/3
  */
 @Slf4j
-public class UserIndexController extends CustomApplication implements Initializable {
-
+public class UserIndexController extends CustomApplication {
+    @FXML
     public ListView<ImUserFriendDTO> userListView;
 
     public UserIndexController() {
@@ -32,11 +33,13 @@ public class UserIndexController extends CustomApplication implements Initializa
     }
 
 
+    @Override
+    public void beforeInit(URL location, ResourceBundle resources) {
+
+    }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-
+    public void init(URL location, ResourceBundle resources) {
         userListView.setCellFactory(callback -> new UserItemC());
         List<ImUserFriendDTO> chatMsgList = MockUtil.mock(new TypeReference<List<ImUserFriendDTO>>() {
         })
@@ -44,5 +47,10 @@ public class UserIndexController extends CustomApplication implements Initializa
                 .mockK(MockKey.USER_ITEM_LIST.getKey())
                 .get();
         userListView.setItems(FXCollections.observableList(chatMsgList));
+    }
+
+    @Override
+    public void afterInit(URL location, ResourceBundle resources) {
+
     }
 }

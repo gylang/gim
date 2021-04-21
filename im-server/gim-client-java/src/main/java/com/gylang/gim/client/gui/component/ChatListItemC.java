@@ -7,6 +7,7 @@ import com.gylang.gim.client.util.store.UserStore;
 import com.gylang.gim.remote.SocketHolder;
 import com.gylang.gim.api.domain.chat.ChatMsg;
 import com.gylang.gim.client.gui.util.GuiUtil;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListCell;
@@ -29,9 +30,11 @@ import java.util.ResourceBundle;
 @Slf4j
 public class ChatListItemC extends ListCell<ChatMsg> implements Callback<Class<?>, Object>, Initializable {
 
-
+    @FXML
     public ImageView avatarView;
+    @FXML
     public Text nicknameText;
+    @FXML
     public TextArea msgText;
     private String uid = "111";
     private String nickname = "李元霸";

@@ -41,6 +41,11 @@ public class ListViewController extends CustomApplication {
 
 
     @Override
+    public void beforeInit(URL location, ResourceBundle resources) {
+
+    }
+
+    @Override
     public void init(URL location, ResourceBundle resources) {
 
 
@@ -54,6 +59,11 @@ public class ListViewController extends CustomApplication {
         chatListView.setItems(FXCollections.observableList(chatMsgList));
 
         // 增加监听器 监听消息回调
+
+    }
+
+    @Override
+    public void afterInit(URL location, ResourceBundle resources) {
 
     }
 }

@@ -67,7 +67,7 @@ public class PrivateChatController extends CustomApplication {
 
     }
 
-
+    @FXML
     public void sendMsg(ActionEvent actionEvent) {
 
         // 获取消息体
@@ -85,6 +85,11 @@ public class PrivateChatController extends CustomApplication {
     }
 
     @Override
+    public void beforeInit(URL location, ResourceBundle resources) {
+
+    }
+
+    @Override
     public void init(URL location, ResourceBundle resources) {
 
         nicknameView.setText(username);
@@ -97,6 +102,11 @@ public class PrivateChatController extends CustomApplication {
         chatListView.setItems(FXCollections.observableList(chatMsgList));
 
         // 增加监听器 监听消息回调
+
+    }
+
+    @Override
+    public void afterInit(URL location, ResourceBundle resources) {
 
     }
 }

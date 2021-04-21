@@ -13,16 +13,5 @@ public interface InitializerCallBack extends Initializable {
 
 
 
-    @Override
-    default void initialize(URL location, ResourceBundle resources) {
-        beforeInit(location, resources);
-        init(location, resources);
-        afterInit(location, resources);
-    }
 
-    void beforeInit(URL location, ResourceBundle resources);
-
-    void init(URL location, ResourceBundle resources);
-
-    void afterInit(URL location, ResourceBundle resources);
 }

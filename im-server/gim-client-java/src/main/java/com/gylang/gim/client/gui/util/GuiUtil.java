@@ -1,11 +1,15 @@
 package com.gylang.gim.client.gui.util;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.exceptions.UtilException;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.gylang.gim.client.gui.GuiStore;
 import javafx.application.Application;
 import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Arrays;
 
 /**
  * 打开新窗口需要在内置线程组处理
@@ -27,7 +31,16 @@ public class GuiUtil {
     }
 
     public static void openNewView(Class<? extends Application> view) {
-        openNewView(view, null);
+        openNewView(view, new Object[]{});
+    }
+
+    public static void openNewViewAndCloseCurrent(Object current, Class<? extends Application> view) {
+        openNewView(view);
+        GuiStore.close(current);
+    }
+    public static void openNewViewAndCloseCurrent(Object current, Class<? extends Application> view, Object... argument) {
+        openNewView(view, argument);
+        GuiStore.close(current);
     }
 
     /**
@@ -59,7 +72,7 @@ public class GuiUtil {
 
         GuiUtil.update(() -> {
             try {
-                application.start(GuiStore.getGuiStore().getMainStage());
+                application.start(null);
             } catch (Exception e) {
                 e.printStackTrace();
             }

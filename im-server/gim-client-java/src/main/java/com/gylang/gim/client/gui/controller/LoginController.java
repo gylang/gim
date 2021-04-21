@@ -2,6 +2,7 @@ package com.gylang.gim.client.gui.controller;
 
 /**
  * 登录页面
+ *
  * @author gylang
  * data 2021/4/1
  */
@@ -18,19 +19,15 @@ import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.client.api.AuthApi;
 import com.gylang.gim.client.call.ICallback;
 import com.gylang.gim.client.gui.GuiStore;
+import com.gylang.gim.client.gui.core.CustomApplication;
 import com.gylang.gim.client.gui.dialog.CommonDialog;
 import com.gylang.gim.client.gui.util.GuiUtil;
 import com.gylang.gim.client.util.HttpUtil;
 import com.gylang.gim.client.util.store.UserStore;
 import com.gylang.gim.remote.SocketHolder;
 import com.gylang.gim.remote.SocketManager;
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -43,7 +40,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 @Slf4j
-public class LoginController extends Application implements Initializable {
+public class LoginController extends CustomApplication {
 
     @FXML
     public Button loginBtn;
@@ -58,24 +55,17 @@ public class LoginController extends Application implements Initializable {
 
     private Stage current;
 
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        try {
-            current = primaryStage;
-            GuiStore.getGuiStore().setMainStage(current);
-            // Read file fxml and draw interface.
-            URL resource = getClass().getResource("/fxml/Login.fxml");
-            log.info("[start] : {}", resource);
-            Parent root = FXMLLoader.load(resource);
-            primaryStage.setTitle("My Application");
-            primaryStage.setScene(new Scene(root));
-            primaryStage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public LoginController() {
+        super("登录", "/fxml/Login.fxml");
     }
 
+    @Override
+    public void init(URL location, ResourceBundle resources) {
+        username.setText("admin");
+        password.setText("123456");
+    }
+
+    @FXML
     public void doLogin(ActionEvent actionEvent) {
         log.info(username.getText());
         log.info(password.getText());
@@ -88,6 +78,7 @@ public class LoginController extends Application implements Initializable {
         Call<CommonResult<LoginResponse>> resultCall = authApi.login(request);
 
 
+        Object t1 = this;
         resultCall.enqueue(new ICallback<CommonResult<LoginResponse>>() {
             @Override
             public void success(Call<CommonResult<LoginResponse>> call, Response<CommonResult<LoginResponse>> response) {
@@ -119,8 +110,7 @@ public class LoginController extends Application implements Initializable {
                         log.info(str);
                     }
                 });
-                GuiUtil.openNewView(MainController.class);
-                GuiUtil.update(() -> GuiStore.getGuiStore().getMainStage().hide());
+                GuiUtil.openNewViewAndCloseCurrent(t1, MainController.class);
             }
 
             @Override
@@ -132,6 +122,7 @@ public class LoginController extends Application implements Initializable {
         });
     }
 
+    @FXML
     public void doRegister(ActionEvent actionEvent) {
 
         log.info(username.getText());
@@ -171,8 +162,12 @@ public class LoginController extends Application implements Initializable {
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        username.setText("admin");
-        password.setText("123456");
+    public void beforeInit(URL location, ResourceBundle resources) {
+
+    }
+
+    @Override
+    public void afterInit(URL location, ResourceBundle resources) {
+
     }
 }
