@@ -25,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +37,6 @@ import java.util.List;
  */
 @Service
 @Slf4j
-@EnableAspectJAutoProxy(proxyTargetClass = true)
 public class BizFriendServiceImpl implements BizFriendService {
 
     @Resource
@@ -47,7 +45,7 @@ public class BizFriendServiceImpl implements BizFriendService {
     private RedisTemplate<String, String> redisTemplate;
     @Resource
     private UserApplyService userApplyService;
-
+    @Resource
     private SocketManager socketManager;
 
     @Override

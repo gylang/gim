@@ -5,8 +5,8 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gylang.gim.api.domain.common.CommonResult;
 import com.gylang.gim.api.domain.common.PageResponse;
+import com.gylang.gim.api.dto.PtUserDTO;
 import com.gylang.gim.web.common.mybatis.Page;
-import com.gylang.gim.web.common.util.MappingUtil;
 import com.gylang.gim.web.entity.PtUser;
 import com.gylang.gim.web.service.BizUserService;
 import com.gylang.gim.web.service.PtUserService;
@@ -25,7 +25,7 @@ public class BizUserServiceImpl implements BizUserService {
     private PtUserService ptUserService;
 
     @Override
-    public CommonResult<PageResponse<PtUser>> search(Page<PtUser> user) {
+    public CommonResult<PageResponse<PtUserDTO>> search(Page<PtUser> user) {
 
         PtUser param = ObjectUtil.defaultIfNull(user.getParam(), new PtUser());
 
@@ -35,6 +35,6 @@ public class BizUserServiceImpl implements BizUserService {
                 .or().likeRight(ObjectUtil.isNotNull(param.getId()), "id", param.getId())
 
         );
-        return CommonResult.ok(MappingUtil.map(userPageDTO, new PageResponse<>()));
+        return CommonResult.ok(userPageDTO.toDTO(PtUserDTO.class));
     }
 }

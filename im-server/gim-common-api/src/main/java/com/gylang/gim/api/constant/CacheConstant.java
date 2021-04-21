@@ -14,8 +14,6 @@ public enum CacheConstant {
     public static final String USER_FRIEND_LIST_PREFIX = "FRIEND:";
     /** 用户群列表 */
     public static final String GROUP_LIST_PREFIX = "GROUP:";
-    /** 用户群聊最新msgId */
-    public static final String GROUP_LAST_MSG_ID = "GROUP_LAST_MSG_ID:";
     /** 个人私聊最新消息msgId */
     public static final String LAST_MSG_ID = "LAST_MSG_ID:";
     /** 用户白名单 */

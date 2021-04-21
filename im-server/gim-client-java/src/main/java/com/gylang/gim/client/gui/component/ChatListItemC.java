@@ -1,4 +1,4 @@
-package com.gylang.gim.client.gui.component.list;
+package com.gylang.gim.client.gui.component;
 
 import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
 import com.gylang.gim.api.enums.ChatTypeEnum;
@@ -27,7 +27,7 @@ import java.util.ResourceBundle;
  * data 2021/4/2
  */
 @Slf4j
-public class ChatListComponent extends ListCell<ChatMsg> implements Callback<Class<?>, Object>, Initializable {
+public class ChatListItemC extends ListCell<ChatMsg> implements Callback<Class<?>, Object>, Initializable {
 
 
     public ImageView avatarView;

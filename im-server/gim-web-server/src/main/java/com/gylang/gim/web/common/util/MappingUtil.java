@@ -19,7 +19,7 @@ import java.util.Set;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class MappingUtil {
 
-    private static final MapperFacade MAPPERFACADE = new DefaultMapperFactory.Builder().build().getMapperFacade();
+    private static final MapperFacade MAPPERFACADE = new DefaultMapperFactory.Builder().mapNulls(false).build().getMapperFacade();
 
 
     public static <S, D> D map(S sourceObject, Class<D> destinationClass) {

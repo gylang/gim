@@ -3,6 +3,7 @@ package com.gylang.gim.web.common.mybatis;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.gylang.gim.api.domain.common.PageResponse;
+import com.gylang.gim.web.common.util.MappingUtil;
 import lombok.Data;
 
 import java.util.List;
@@ -92,11 +93,10 @@ public class Page<T> implements IPage<T> {
         this.param = param;
     }
 
-    public PageResponse<T> toDTO() {
-
-        PageResponse<T> pageResponse = new PageResponse<>();
+    public <S> PageResponse<S> toDTO(Class<S> clazz) {
+        PageResponse<S> pageResponse = new PageResponse<>();
         pageResponse.setCurrent(this.getCurrent());
-        pageResponse.setRecords(this.getRecords());
+        pageResponse.setRecords(MappingUtil.mapAsList(this.getRecords(), clazz));
         pageResponse.setSize(this.getSize());
         pageResponse.setTotal(this.getTotal());
         pageResponse.setPages(this.getPages());

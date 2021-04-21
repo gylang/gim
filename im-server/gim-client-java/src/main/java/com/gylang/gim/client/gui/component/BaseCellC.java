@@ -1,4 +1,4 @@
-package com.gylang.gim.client.gui.component.list;
+package com.gylang.gim.client.gui.component;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListCell;
@@ -6,17 +6,16 @@ import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
-import java.nio.charset.Charset;
 
 /**
  * @author gylang
  * data 2021/4/2
  */
-public abstract class BaseCell<T> extends ListCell<T> implements Callback<Class<?>, Object> {
+public abstract class BaseCellC<T> extends ListCell<T> implements Callback<Class<?>, Object> {
 
     private final URL fxmlUrl;
 
-    public BaseCell(URL fxmlUrl) {
+    public BaseCellC(URL fxmlUrl) {
         this.fxmlUrl = fxmlUrl;
     }
 
@@ -35,8 +34,9 @@ public abstract class BaseCell<T> extends ListCell<T> implements Callback<Class<
             } else {
                 // 创建节点，并绑定数据
                 try {
-                    setGraphic(FXMLLoader.load(fxmlUrl, null, null, this,
-                            Charset.forName(FXMLLoader.DEFAULT_CHARSET_NAME)));
+                    FXMLLoader loader = new FXMLLoader(fxmlUrl);
+                    loader.setController(this);
+                    setGraphic(loader.load());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

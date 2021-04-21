@@ -2,6 +2,7 @@ package com.gylang.gim.web.service;
 
 import com.gylang.gim.api.domain.common.CommonResult;
 import com.gylang.gim.api.domain.common.PageResponse;
+import com.gylang.gim.api.dto.PtUserDTO;
 import com.gylang.gim.web.common.mybatis.Page;
 import com.gylang.gim.web.entity.PtUser;
 
@@ -11,5 +12,5 @@ import com.gylang.gim.web.entity.PtUser;
  */
 public interface BizUserService {
 
-    CommonResult<PageResponse<PtUser>> search(Page<PtUser> user);
+    CommonResult<PageResponse<PtUserDTO>> search(Page<PtUser> user);
 }

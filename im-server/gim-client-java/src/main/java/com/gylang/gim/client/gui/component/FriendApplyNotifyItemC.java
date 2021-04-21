@@ -1,4 +1,4 @@
-package com.gylang.gim.client.gui.component.list;
+package com.gylang.gim.client.gui.component;
 
 import com.gylang.gim.api.constant.AnswerType;
 import com.gylang.gim.api.constant.cmd.NotifyChatCmd;
@@ -33,7 +33,7 @@ import java.util.ResourceBundle;
  * data 2021/4/2
  */
 @Slf4j
-public class FriendApplyNotifyComponent extends BaseCell<UserApplyDTO> implements Initializable {
+public class FriendApplyNotifyItemC extends BaseCellC<UserApplyDTO> implements Initializable {
 
     @FXML
     private ImageView avatar;
@@ -51,7 +51,7 @@ public class FriendApplyNotifyComponent extends BaseCell<UserApplyDTO> implement
     private GimCallBack<MessageWrap> messageNotify;
     FriendApi friendApi = HttpUtil.getApi(FriendApi.class);
 
-    public FriendApplyNotifyComponent() {
+    public FriendApplyNotifyItemC() {
         super(GuiClientApplication.class.getResource("/fxml/component/FriendApplyNotify.fxml"));
     }
 

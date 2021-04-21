@@ -4,8 +4,6 @@ import com.gylang.gim.api.domain.common.BaseDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.Date;
-
 
 /**
  * (PtUser)实体类
@@ -26,14 +24,7 @@ public class PtUserDTO extends BaseDTO {
     
     private String username;
 
-    
-    /**
-     * 密码
-     */    
-    
-    private String password;
 
-    
     /**
      * 邮箱
      */    
@@ -54,42 +45,8 @@ public class PtUserDTO extends BaseDTO {
     
     private String nickname;
 
-    
-    /**
-     * 密码盐
-     */    
-    
-    private String salt;
 
-    
-    /**
-     * 创建时间
-     */    
-    
-    private Date createTime;
 
-    
-    /**
-     * 修改时间
-     */    
-    
-    private Date updateTime;
-
-    
-    /**
-     * 创建人
-     */    
-    
-    private Long createBy;
-
-    
-    /**
-     * 修改人
-     */    
-    
-    private Long modifyBy;
-
-    
     /**
      * 状态
      */    

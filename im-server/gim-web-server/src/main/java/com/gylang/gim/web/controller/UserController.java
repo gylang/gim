@@ -2,6 +2,7 @@ package com.gylang.gim.web.controller;
 
 import com.gylang.gim.api.domain.common.CommonResult;
 import com.gylang.gim.api.domain.common.PageResponse;
+import com.gylang.gim.api.dto.PtUserDTO;
 import com.gylang.gim.web.common.mybatis.Page;
 import com.gylang.gim.web.entity.PtUser;
 import com.gylang.gim.web.service.BizUserService;
@@ -23,7 +24,7 @@ public class UserController {
     private BizUserService bizUserService;
 
     @RequestMapping("search")
-    public CommonResult<PageResponse<PtUser>> search(@RequestBody Page<PtUser> user) {
+    public CommonResult<PageResponse<PtUserDTO>> search(@RequestBody Page<PtUser> user) {
 
         return bizUserService.search(user);
 

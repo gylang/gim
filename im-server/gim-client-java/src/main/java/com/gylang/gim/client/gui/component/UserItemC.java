@@ -1,4 +1,4 @@
-package com.gylang.gim.client.gui.component.list;
+package com.gylang.gim.client.gui.component;
 
 import com.gylang.gim.api.dto.ImUserFriendDTO;
 import com.gylang.gim.client.GuiClientApplication;
@@ -14,14 +14,14 @@ import lombok.extern.slf4j.Slf4j;
  * data 2021/4/2
  */
 @Slf4j
-public class UserItemListComponent extends BaseCell<ImUserFriendDTO> {
+public class UserItemC extends BaseCellC<ImUserFriendDTO> {
 
 
     public ImageView avatar;
     public TextField nickname;
     public TextField username;
 
-    public UserItemListComponent() {
+    public UserItemC() {
         super(GuiClientApplication.class.getResource("/fxml/component/UserItem.fxml"));
     }
 

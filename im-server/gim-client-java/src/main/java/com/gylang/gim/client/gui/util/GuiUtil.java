@@ -1,5 +1,6 @@
 package com.gylang.gim.client.gui.util;
 
+import cn.hutool.core.exceptions.UtilException;
 import cn.hutool.core.util.ReflectUtil;
 import com.gylang.gim.client.gui.GuiStore;
 import javafx.application.Application;
@@ -38,8 +39,12 @@ public class GuiUtil {
 
         // Read file fxml and draw interface.
 
-        Application application = ReflectUtil.newInstance(view, argument);
-        openNewView(application);
+        try {
+            Application application = ReflectUtil.newInstance(view, argument);
+            openNewView(application);
+        } catch (UtilException e) {
+            e.getCause();
+        }
 
     }
 

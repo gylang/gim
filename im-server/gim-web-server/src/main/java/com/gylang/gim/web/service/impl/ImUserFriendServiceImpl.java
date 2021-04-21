@@ -2,7 +2,7 @@ package com.gylang.gim.web.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gylang.cache.CacheManager;
-import com.gylang.gim.web.common.constant.CacheConstant;
+import com.gylang.gim.api.constant.CacheConstant;
 import com.gylang.gim.api.dto.UserFriendVO;
 import com.gylang.gim.web.entity.ImUserFriend;
 import com.gylang.gim.web.mapper.ImUserFriendMapper;

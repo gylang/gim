@@ -40,6 +40,7 @@ public class HttpUtil {
                 .addConverterFactory(Retrofit2ConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
+
         // 构建api代理了
         for (Class<?> clazz : apiClazzList) {
 

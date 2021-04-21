@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import java.net.URL;
 
 /**
+ * 功能分类主页
+ *
  * @author gylang
  * data 2021/4/2
  */
@@ -34,8 +36,8 @@ public class MainController extends Application {
         main.show();
     }
 
-    public void openPrivateChat(ActionEvent actionEvent) {
-        GuiUtil.openNewView(PrivateChatController.class);
+    public void userSearchEvent(ActionEvent actionEvent) {
+        GuiUtil.openNewView(SearchUserController.class);
     }
 
     public void openLog(ActionEvent actionEvent) {
@@ -56,5 +58,9 @@ public class MainController extends Application {
 
     public void openFriend(ActionEvent actionEvent) {
         GuiUtil.openNewView(UserIndexController.class);
+    }
+
+    public void groupSearchEvent(ActionEvent actionEvent) {
+
     }
 }

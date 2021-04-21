@@ -1,15 +1,14 @@
 package com.gylang.gim.client.gui.controller;
 
 /**
+ * 登录页面
  * @author gylang
  * data 2021/4/1
  */
 
 import cn.hutool.core.util.IdUtil;
-import com.alibaba.fastjson.JSON;
 import com.gylang.gim.api.constant.QosConstant;
 import com.gylang.gim.api.constant.cmd.AuthChatCmd;
-import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.CommonResult;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.request.LoginRequest;
@@ -29,6 +28,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -40,9 +40,10 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 import java.net.URL;
+import java.util.ResourceBundle;
 
 @Slf4j
-public class LoginController extends Application {
+public class LoginController extends Application implements Initializable {
 
     @FXML
     public Button loginBtn;
@@ -74,12 +75,6 @@ public class LoginController extends Application {
             e.printStackTrace();
         }
     }
-
-    @Override
-    public void init() throws Exception {
-
-    }
-
 
     public void doLogin(ActionEvent actionEvent) {
         log.info(username.getText());
@@ -117,11 +112,11 @@ public class LoginController extends Application {
                         .content(data.getToken())
                         .build();
 
-                socketManager.connect("127.0.0.1", 46001,messageWrap, str -> {
+                socketManager.connect("127.0.0.1", 46001, messageWrap, str -> {
                     if ("1".equals(str)) {
-                        System.out.println("连接成功！");
+                        log.info("连接成功！");
                     } else {
-                        System.out.println(str);
+                        log.info(str);
                     }
                 });
                 GuiUtil.openNewView(MainController.class);
@@ -173,5 +168,11 @@ public class LoginController extends Application {
                 CommonDialog.getInstance().showMsg(response.getMsg());
             }
         });
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        username.setText("admin");
+        password.setText("123456");
     }
 }

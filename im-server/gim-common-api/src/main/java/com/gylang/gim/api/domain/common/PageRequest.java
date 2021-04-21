@@ -9,23 +9,18 @@ import java.util.List;
  * data 2021/3/7
  */
 @Data
-public class PageResponse<T> {
+public class PageRequest<T> {
 
+    private List<OrderItem> orderList;
 
-    private List<T> records;
+    private transient List<T> records;
 
-    private Long total;
 
     private Long size = 10L;
 
     private Long current = 1L;
 
-    private Long pages;
+    private transient T param;
 
-
-
-
-
-    
 
 }
