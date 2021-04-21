@@ -81,6 +81,7 @@ public class UserLoginEvent implements MessageEventListener<MessageWrap> {
 
         while (true) {
             int offset = 0;
+
             Set<ZSetOperations.TypedTuple<String>> typedTuples = redisTemplate.opsForZSet()
                     .rangeByScoreWithScores(key, score, -1, offset, count);
             // 没有消息
