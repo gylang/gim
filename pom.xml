@@ -36,6 +36,7 @@
         <module>im-server/gim-common-api</module>
         <module>im-server/gim-remote-sdk</module>
         <module>im-server/gim-admin-remote-sdk</module>
+        <module>web-rtc</module>
 
 
     </modules>
