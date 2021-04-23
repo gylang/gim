@@ -4,14 +4,6 @@ server:
 spring:
   application:
     name: im-server
-  datasource:
-    url: jdbc:mysql://127.0.0.1:33060/gylang-im?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
-    username: root
-    password: 123456
-  redis:
-    password: ${REDIS_PWD:123456}
-  profiles:
-    active: admin
 
 # im
 gylang:
@@ -26,14 +18,9 @@ gylang:
     socketServerPort: 46000
     nonAuthCmd:
       - LNST  #客户端接入
-      - RELN  # 服务端接入
     socketType:
       com.gylang.netty.sdk.initializer.WebSocketJsonInitializer: 46000
       com.gylang.netty.sdk.initializer.AppSocketJsonInitializer: 46001
-
-
-
-
 
 logging:
   level:

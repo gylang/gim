@@ -15,13 +15,11 @@ import java.lang.annotation.Target;
  * @version v0.0.1
  */
 @Component
-@NettyController
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SpringNettyController {
 
-    @AliasFor(annotation = NettyController.class, attribute = "value")
-    String value() default "";
+
 
     @AliasFor(annotation = Component.class, attribute = "value")
     String name() default "";

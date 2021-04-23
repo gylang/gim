@@ -18,7 +18,6 @@ import com.gylang.gim.api.domain.response.LoginResponse;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.client.api.AuthApi;
 import com.gylang.gim.client.call.ICallback;
-import com.gylang.gim.client.gui.GuiStore;
 import com.gylang.gim.client.gui.core.CustomApplication;
 import com.gylang.gim.client.gui.dialog.CommonDialog;
 import com.gylang.gim.client.gui.util.GuiUtil;
@@ -97,7 +96,7 @@ public class LoginController extends CustomApplication {
 
                 MessageWrap messageWrap = MessageWrap.builder()
                         .cmd(AuthChatCmd.LOGIN_SOCKET)
-                        .type(ChatTypeEnum.AUTH_CHAT.getType())
+                        .type(ChatTypeEnum.CLIENT_AUTH)
                         .clientMsgId(IdUtil.getSnowflake(1, 1).nextIdStr())
                         .qos(QosConstant.ACCURACY_ONE_ARRIVE)
                         .content(data.getToken())

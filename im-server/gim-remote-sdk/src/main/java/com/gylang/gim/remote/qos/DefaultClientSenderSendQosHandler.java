@@ -147,7 +147,7 @@ public class DefaultClientSenderSendQosHandler implements ClientSenderQosHandler
                     MessageWrap messageWrap = msg.copyBasic();
                     messageWrap.setClientMsgId(msg.getClientMsgId());
                     messageWrap.setMsg(msg.getMsgId());
-                    messageWrap.setType(ChatTypeEnum.SYSTEM_MESSAGE.getType());
+                    messageWrap.setType(ChatTypeEnum.SYSTEM_MESSAGE);
                     messageWrap.setCmd(SystemChatCmd.ERROR_MSG);
                     messageWrap.setCode(BaseResultCode.WEBSOCKET_CONNECTION_ERROR.getCode());
                     messageWrap.setMsg("消息发送失败");

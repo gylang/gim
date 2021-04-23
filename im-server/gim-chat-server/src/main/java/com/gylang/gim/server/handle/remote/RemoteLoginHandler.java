@@ -1,11 +1,11 @@
 package com.gylang.gim.server.handle.remote;
 
 import com.alibaba.fastjson.JSON;
-import com.gylang.gim.api.constant.cmd.PushChatCmd;
 import com.gylang.gim.api.domain.admin.AdminUser;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.api.enums.BaseResultCode;
+import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.server.config.AdminConfig;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.model.IMSession;
@@ -23,13 +23,14 @@ import java.util.Map;
  * data 2021/4/7
  */
 @Component
-@NettyHandler(PushChatCmd.REMOTE_LOGIN)
+@NettyHandler(ChatTypeEnum.REMOTE_LOGIN)
 public class RemoteLoginHandler implements IMRequestHandler {
 
     @Resource
     private AdminConfig adminConfig;
     @Autowired
     private IMSessionRepository sessionRepository;
+
     @Override
     public Object process(IMSession me, MessageWrap message) {
 

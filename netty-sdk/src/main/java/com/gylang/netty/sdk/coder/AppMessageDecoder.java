@@ -41,7 +41,7 @@ public class AppMessageDecoder extends ByteToMessageDecoder {
     private static final MessageWrap messageWrap = new MessageWrap();
 
     static {
-        messageWrap.setType(ChatTypeEnum.SYSTEM_MESSAGE.getType());
+        messageWrap.setType(ChatTypeEnum.SYSTEM_MESSAGE);
         messageWrap.setCmd(SystemChatCmd.HEART);
     }
 

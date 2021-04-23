@@ -52,7 +52,7 @@ public class GimConfig {
         adminUser.setPassword(password);
         MessageWrap messageWrap = MessageWrap.builder()
                 .cmd(PushChatCmd.REMOTE_LOGIN)
-                .type(ChatTypeEnum.PUSH_CHAT.getType())
+                .type(ChatTypeEnum.PUSH_CHAT)
                 .clientMsgId(IdWorker.getIdStr())
                 .qos(QosConstant.ACCURACY_ONE_ARRIVE)
                 .content(JSON.toJSONString(adminUser))

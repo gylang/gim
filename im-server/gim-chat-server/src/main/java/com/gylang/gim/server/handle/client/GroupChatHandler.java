@@ -1,11 +1,11 @@
 package com.gylang.gim.server.handle.client;
 
 import com.gylang.gim.api.constant.CacheConstant;
-import com.gylang.gim.api.constant.cmd.GroupChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.entity.GroupConfig;
 import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.api.enums.BaseResultCode;
+import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.server.service.HistoryMessageService;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.model.IMSession;
@@ -23,7 +23,7 @@ import java.util.Map;
  * data 2021/3/5
  */
 @Component
-@NettyHandler(GroupChatCmd.SIMPLE_GROUP_CHAT)
+@NettyHandler(ChatTypeEnum.GROUP_CHAT)
 public class GroupChatHandler implements IMRequestHandler {
     @Resource
     private MessageProvider messageProvider;

@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
  */
 @Component
 @Target(ElementType.TYPE)
-@NettyHandler(value = "")
+@NettyHandler
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SpringNettyHandler {
 

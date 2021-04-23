@@ -1,10 +1,11 @@
-package com.gylang.gim.server.handle.client;
+package com.gylang.grtc.handler;
 
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.gylang.gim.api.constant.CommonConstant;
 import com.gylang.gim.api.constant.EventTypeConst;
+import com.gylang.gim.api.constant.cmd.AuthChatCmd;
 import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.common.ResponseMessage;
@@ -25,7 +26,7 @@ import javax.annotation.Resource;
  * @author gylang
  * data 2020/11/17
  */
-@NettyHandler(ChatTypeEnum.CLIENT_AUTH)
+@NettyHandler(AuthChatCmd.LOGIN_SOCKET)
 @Component
 public class LoginHandler implements IMRequestHandler {
 

@@ -96,7 +96,7 @@ public class UserSearchItemC extends BaseCellC<PtUserDTO> implements Initializab
 
          };
         SocketHolder.getInstance()
-                .bind(ChatTypeEnum.NOTIFY.getType(), NotifyChatCmd.MESSAGE_NOTIFY, messageNotify);
+                .bind(ChatTypeEnum.NOTIFY, NotifyChatCmd.MESSAGE_NOTIFY, messageNotify);
     }
 
 }

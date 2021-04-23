@@ -112,6 +112,6 @@ public class UserLoginEvent implements MessageEventListener<MessageWrap> {
 
     @Override
     public List<String> bind() {
-        return Collections.singletonList(ChatTypeEnum.NOTIFY.getType() + "-" + EventTypeConst.USER_ONLINE);
+        return Collections.singletonList(ChatTypeEnum.NOTIFY + "-" + EventTypeConst.USER_ONLINE);
     }
 }

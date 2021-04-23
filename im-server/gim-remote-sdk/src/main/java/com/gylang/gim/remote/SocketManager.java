@@ -125,7 +125,7 @@ public class SocketManager {
         // 登录系统
         login.set(2);
         login();
-        bind(ChatTypeEnum.REPLY_CHAT.getType(), loginMsg.getCmd(), onLoginSuccess);
+        bind(ChatTypeEnum.REPLY_CHAT, loginMsg.getCmd(), onLoginSuccess);
         // 心跳监测
         scheduledExecutorService.scheduleAtFixedRate(this::sendHeart,
                 checkInterval,

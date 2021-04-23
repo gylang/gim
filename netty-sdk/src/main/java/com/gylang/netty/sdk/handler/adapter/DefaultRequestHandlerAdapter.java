@@ -28,7 +28,7 @@ import java.util.Map;
 public class DefaultRequestHandlerAdapter implements BizRequestAdapter<IMRequestHandler> {
 
 
-    private Map<String, IMRequestHandler> handlerMap;
+    private Map<Integer, IMRequestHandler> handlerMap;
 
     @Override
     public Object process(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {

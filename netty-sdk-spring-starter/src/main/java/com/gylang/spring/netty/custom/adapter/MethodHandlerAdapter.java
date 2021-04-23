@@ -1,13 +1,12 @@
 package com.gylang.spring.netty.custom.adapter;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.annotation.NettyMapping;
 import com.gylang.netty.sdk.common.InokeFinished;
 import com.gylang.netty.sdk.common.MethodWrap;
 import com.gylang.netty.sdk.common.ObjectWrap;
 import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.BizRequestAdapter;
 import com.gylang.netty.sdk.util.ObjectWrapUtil;
@@ -25,6 +24,7 @@ import java.util.Map;
 
 /**
  * 模仿类似spring的控制层, 实现参数解析调用,性能方面可能存在影响. 使用方便
+ *
  * @author gylang
  * data 2020/11/26
  * @version v0.0.1
@@ -36,7 +36,7 @@ public class MethodHandlerAdapter implements BizRequestAdapter<ControllerMethodM
     @Autowired
     private MethodArgumentResolverAdapter methodArgumentResolverAdapter;
 
-    private Map<String, ControllerMethodMeta> methodHandlerMap;
+    private Map<Integer, ControllerMethodMeta> methodHandlerMap;
 
     @Override
     public Object process(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
@@ -64,7 +64,7 @@ public class MethodHandlerAdapter implements BizRequestAdapter<ControllerMethodM
                     for (MethodWrap methodWrap : methodWrapList) {
                         NettyMapping nettyMapping = ObjectWrapUtil.findAnnotation(NettyMapping.class, methodWrap);
                         if (null != nettyMapping) {
-                            String bizKey = getBizKey(nettyController, nettyMapping);
+                            Integer bizKey = nettyMapping.value();
                             ControllerMethodMeta controllerMethodMeta = new ControllerMethodMeta();
                             controllerMethodMeta.setMethod(methodWrap.getMethod());
                             controllerMethodMeta.setNettyController(nettyController);
@@ -85,11 +85,6 @@ public class MethodHandlerAdapter implements BizRequestAdapter<ControllerMethodM
     @Override
     public Integer order() {
         return null;
-    }
-
-    private String getBizKey(SpringNettyController nettyController, NettyMapping nettyMapping) {
-
-        return StrUtil.isBlank(nettyController.value()) ? nettyMapping.value() : nettyController.value() + ":" + nettyMapping.value();
     }
 
 

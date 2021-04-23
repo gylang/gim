@@ -144,7 +144,7 @@ public class BizFriendServiceImpl implements BizFriendService {
                     .receive(apply.getApplyId())
                     .offlineMsgEvent(true)
                     .content("你好，我们已经是好友拉~")
-                    .type(ChatTypeEnum.PRIVATE_CHAT.getType())
+                    .type(ChatTypeEnum.PRIVATE_CHAT)
                     .build();
             messageProvider.sendMsg(applySession, apply.getApplyId(), applyMsg);
 
@@ -162,7 +162,7 @@ public class BizFriendServiceImpl implements BizFriendService {
                     .sender(apply.getAnswerId())
                     .receive(apply.getApplyId())
                     .content(apply.getAnswerId() + ": 拒绝添加好友!")
-                    .type(ChatTypeEnum.NOTIFY.getType())
+                    .type(ChatTypeEnum.NOTIFY)
                     .cmd(SystemChatCmd.NOTIFY)
                     .build();
             messageProvider.sendMsg(applySession, apply.getAnswerId(), rejectMsg);

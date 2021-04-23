@@ -16,5 +16,5 @@ public @interface NettyHandler {
     /**
      * 处理类型名称
      */
-    String value();
+    int value() default Integer.MAX_VALUE;
 }

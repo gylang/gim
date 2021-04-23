@@ -12,7 +12,7 @@ import com.gylang.gim.api.enums.ChatTypeEnum;
 public class ReplyMessage extends ResponseMessage {
 
     private ReplyMessage() {
-        setType(ChatTypeEnum.REPLY_CHAT.getType());
+        setType(ChatTypeEnum.REPLY_CHAT);
     }
 
     public static ReplyMessage success(MessageWrap msg) {

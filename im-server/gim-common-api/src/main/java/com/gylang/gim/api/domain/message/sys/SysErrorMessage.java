@@ -16,7 +16,7 @@ public class SysErrorMessage extends ResponseMessage {
         SysErrorMessage messageWrap = new SysErrorMessage();
         messageWrap.setCmd(SystemChatCmd.ERROR_MSG);
         messageWrap.setCode(code);
-        messageWrap.setType(ChatTypeEnum.SYSTEM_MESSAGE.getType());
+        messageWrap.setType(ChatTypeEnum.SYSTEM_MESSAGE);
         messageWrap.setContent(msg);
         return messageWrap;
     }

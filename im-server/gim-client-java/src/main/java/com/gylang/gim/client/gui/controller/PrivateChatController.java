@@ -73,7 +73,7 @@ public class PrivateChatController extends CustomApplication {
         // 获取消息体
         String text = inputText.getText();
         MessageWrap messageWrap = MessageWrap.builder()
-                .type(ChatTypeEnum.PRIVATE_CHAT.getType())
+                .type(ChatTypeEnum.PRIVATE_CHAT)
                 .cmd(PrivateChatCmd.SIMPLE_PRIVATE_CHAT)
                 .clientMsgId(IdUtil.objectId())
                 .qos(2)

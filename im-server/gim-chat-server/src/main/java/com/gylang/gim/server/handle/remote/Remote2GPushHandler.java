@@ -1,11 +1,11 @@
 package com.gylang.gim.server.handle.remote;
 
 import com.alibaba.fastjson.JSON;
-import com.gylang.gim.api.constant.cmd.PushChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.api.domain.push.PushMessage;
 import com.gylang.gim.api.enums.BaseResultCode;
+import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
@@ -19,12 +19,13 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * 组推送
+ *
  * @author gylang
  * data 2021/4/6
  */
 
 @Component
-@NettyHandler(PushChatCmd.P2G_PUSH)
+@NettyHandler(ChatTypeEnum.P2G_PUSH)
 public class Remote2GPushHandler implements IMRequestHandler {
 
     @Resource
@@ -40,7 +41,7 @@ public class Remote2GPushHandler implements IMRequestHandler {
 
         PushMessage push = JSON.parseObject(message.getContent(), PushMessage.class);
 
-         List<String> receiveIdList = push.getReceiveId();
+        List<String> receiveIdList = push.getReceiveId();
         String msgId = MsgIdUtil.increase(message);
         if (receiveIdList.size() < BIZ_THREAD_CAP) {
             push(me, message, push, receiveIdList, msgId);

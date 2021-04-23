@@ -5,6 +5,7 @@ import cn.hutool.core.util.IdUtil;
 import com.gylang.netty.sdk.common.AfterConfigInitialize;
 import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.gim.api.domain.common.MessageWrap;
+import lombok.Getter;
 
 /**
  * 消息id生成策略
@@ -28,7 +29,7 @@ public class MsgIdUtil implements AfterConfigInitialize {
     }
 
     private static int dataCenter;
-
+    @Getter
     private static Snowflake snowflake;
     private static int machine;
     /**

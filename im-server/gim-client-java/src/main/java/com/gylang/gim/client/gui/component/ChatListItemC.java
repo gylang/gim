@@ -76,7 +76,7 @@ public class ChatListItemC extends ListCell<ChatMsg> implements Callback<Class<?
 
         //
         SocketHolder.getInstance()
-                .bind(ChatTypeEnum.PRIVATE_CHAT.getType(), PrivateChatCmd.SIMPLE_PRIVATE_CHAT, msg -> {
+                .bind(ChatTypeEnum.PRIVATE_CHAT, PrivateChatCmd.SIMPLE_PRIVATE_CHAT, msg -> {
 
                     UserStore userStore = UserStore.getInstance();
                     if (userStore.getUid().equals(msg.getSender())

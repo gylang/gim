@@ -12,5 +12,5 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 public @interface NettyController {
 
-    String value() default "";
+    int value() default Integer.MAX_VALUE;
 }

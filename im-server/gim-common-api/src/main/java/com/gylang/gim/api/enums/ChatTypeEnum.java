@@ -1,30 +1,41 @@
 package com.gylang.gim.api.enums;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 /**
  * 指令类型操作类
  *
  * @author gylang
  * data 2021/3/26
  */
-@Getter
-@AllArgsConstructor
-public enum ChatTypeEnum {
+public interface ChatTypeEnum {
 
-    /** 聊天类型 */
-    SYSTEM_MESSAGE(-1, "系统类消息"),
-    PRIVATE_CHAT(1, "单聊"),
-    GROUP_CHAT(2, "组聊"),
-    NOTIFY(3, "通知类"),
-    CHAT_ROOM(4, "聊天室"),
-    PUSH_CHAT(5, "推送服务类"),
-    REPLY_CHAT(6, "回复类"),
-    AUTH_CHAT(7, "授权类"),
-    ;
+    /** 系统类消息 */
+    int SYSTEM_MESSAGE = -1;
+    /** 单聊 */
+    int PRIVATE_CHAT = 1;
+    /** 组聊 */
+    int GROUP_CHAT = 2;
+    /** 通知类 */
+    int NOTIFY = 3;
+    /** 聊天室 */
+    int CHAT_ROOM = 4;
+    /** 推送服务类 */
+    int PUSH_CHAT = 5;
+    /** 回复类 */
+    int REPLY_CHAT = 6;
+    /** 授权类 */
+    int CLIENT_AUTH = 7;
 
-    private final int type;
+    int GROUP_CHAT_LAST_MSG_ID = 8;
 
-    private final String mark;
+    int PRIVATE_CHAT_LAST_MSG_ID = 9;
+
+    int REMOTE_LOGIN = 10;
+
+    int P2G_PUSH = 11;
+
+    int P2P_PUSH = 12;
+
+
+
+    
 }

@@ -57,6 +57,6 @@ public enum CommonConstant {
     /** 个人私聊最新消息msgId */
     public static final String PRIVATE_LAST_MSG_ID = "PRIVATE_LAST_MSG_ID:";
     static {
-        HEART.setType(ChatTypeEnum.SYSTEM_MESSAGE.getType());
+        HEART.setType(ChatTypeEnum.SYSTEM_MESSAGE);
     }
 }

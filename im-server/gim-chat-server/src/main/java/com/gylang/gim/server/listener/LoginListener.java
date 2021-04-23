@@ -41,7 +41,7 @@ public class LoginListener implements MessageEventListener<String> {
                 MessageWrap messageWrap = new MessageWrap();
                 messageWrap.setQos(2);
                 messageWrap.setCmd(EventTypeConst.USER_ONLINE);
-                messageWrap.setType(ChatTypeEnum.NOTIFY.getType());
+                messageWrap.setType(ChatTypeEnum.NOTIFY);
                 messageWrap.setContent(loginUserId);
                 String sender = user.getUserId();
                 messageWrap.setReceive(sender);

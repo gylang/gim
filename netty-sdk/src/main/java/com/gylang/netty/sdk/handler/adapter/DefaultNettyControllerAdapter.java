@@ -30,8 +30,8 @@ import java.util.Map;
 public class DefaultNettyControllerAdapter implements BizRequestAdapter<NettyController<?>> {
 
     private static final String METHOD_NAME = "process";
-    private Map<String, NettyController<?>> nettyControllerMap;
-    private Map<String, Class<?>> paramTypeMap;
+    private Map<Integer, NettyController<?>> nettyControllerMap;
+    private Map<Integer, Class<?>> paramTypeMap;
     private DataConverter dataConverter;
 
 
@@ -40,8 +40,8 @@ public class DefaultNettyControllerAdapter implements BizRequestAdapter<NettyCon
 
         if (null != nettyControllerMap && null != paramTypeMap) {
 
-            NettyController<?> nettyController = nettyControllerMap.get(message.getCmd());
-            Class<?> paramType = paramTypeMap.get(message.getCmd());
+            NettyController<?> nettyController = nettyControllerMap.get(message.getType());
+            Class<?> paramType = paramTypeMap.get(message.getType());
             if (null == nettyController || null == paramType) {
                 return null;
             }

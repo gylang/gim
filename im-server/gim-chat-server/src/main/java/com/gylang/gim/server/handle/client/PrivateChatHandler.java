@@ -1,10 +1,10 @@
 package com.gylang.gim.server.handle.client;
 
-import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.common.ResponseMessage;
 import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.api.enums.BaseResultCode;
+import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.server.service.HistoryMessageService;
 import com.gylang.gim.server.service.SendAccessService;
 import com.gylang.netty.sdk.annotation.NettyHandler;
@@ -20,7 +20,7 @@ import javax.annotation.Resource;
  * data 2021/3/5
  */
 @Component
-@NettyHandler(PrivateChatCmd.SIMPLE_PRIVATE_CHAT)
+@NettyHandler(ChatTypeEnum.PRIVATE_CHAT)
 public class PrivateChatHandler implements IMRequestHandler {
     @Resource
     private MessageProvider messageProvider;
