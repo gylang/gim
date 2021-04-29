@@ -3,9 +3,6 @@ package com.gylang.netty.sdk.util;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ClassUtil;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @author gylang
  * data 2021/2/20

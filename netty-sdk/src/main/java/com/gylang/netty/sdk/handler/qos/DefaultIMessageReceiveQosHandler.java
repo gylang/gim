@@ -6,7 +6,6 @@ import com.gylang.gim.api.constant.QosConstant;
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.message.sys.AckMessage;
-import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.repo.IMSessionRepository;

@@ -1,10 +1,9 @@
 package com.gylang.netty.sdk.provider;
 
-import com.gylang.netty.sdk.common.AfterConfigInitialize;
 import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.netty.sdk.common.AfterConfigInitialize;
 import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
 import com.gylang.netty.sdk.domain.model.IMSession;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 

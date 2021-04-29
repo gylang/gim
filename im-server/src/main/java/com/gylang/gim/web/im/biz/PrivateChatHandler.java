@@ -1,14 +1,14 @@
 package com.gylang.gim.web.im.biz;
 
-import com.gylang.gim.web.common.constant.CommonConstant;
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.enums.BaseResultCode;
+import com.gylang.gim.web.common.constant.CommonConstant;
 import com.gylang.gim.web.dao.entity.UserConfig;
-import com.gylang.gim.web.im.constant.BizChatCmd;
 import com.gylang.gim.web.dto.msg.ErrorMessageWrap;
+import com.gylang.gim.web.im.constant.BizChatCmd;
 import com.gylang.gim.web.service.ImUserFriendService;
 import com.gylang.gim.web.service.UserConfigService;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import com.gylang.netty.sdk.provider.MessageProvider;

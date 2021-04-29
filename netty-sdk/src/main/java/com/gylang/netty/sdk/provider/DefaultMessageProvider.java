@@ -3,9 +3,9 @@ package com.gylang.netty.sdk.provider;
 import cn.hutool.core.util.StrUtil;
 import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.gim.api.constant.QosConstant;
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.constant.NettyConfigEnum;
-import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.event.EventProvider;
@@ -15,7 +15,6 @@ import com.gylang.netty.sdk.repo.IMSessionRepository;
 import com.gylang.netty.sdk.util.LocalSessionHolderUtil;
 import com.gylang.netty.sdk.util.MsgIdUtil;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 

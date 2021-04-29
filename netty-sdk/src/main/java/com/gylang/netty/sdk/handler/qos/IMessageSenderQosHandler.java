@@ -1,7 +1,7 @@
 package com.gylang.netty.sdk.handler.qos;
 
-import com.gylang.netty.sdk.common.AfterConfigInitialize;
 import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.netty.sdk.common.AfterConfigInitialize;
 import com.gylang.netty.sdk.domain.model.IMSession;
 
 /**

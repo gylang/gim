@@ -1,7 +1,6 @@
 package com.zone.test.webrtc;
 
 import com.alibaba.fastjson.JSON;
-import com.zone.test.model.User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;

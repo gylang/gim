@@ -1,7 +1,7 @@
 package com.gylang.netty.sdk.handler;
 
-import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.model.IMSession;
 
 /**

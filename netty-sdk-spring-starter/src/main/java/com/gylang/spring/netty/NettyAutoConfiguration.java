@@ -47,12 +47,14 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
+ * 自动配置类
+ *
  * @author gylang
  * data 2020/11/30
  */
 @Configuration
 @AutoConfigureBefore(ServerStartConfiguration.class)
-@Import({ServerStartConfiguration.class, SpringNettyProperties.class})
+@Import({ServerStartConfiguration.class})
 @ComponentScan("com.gylang.spring.netty.custom")
 @Slf4j
 public class NettyAutoConfiguration implements InitializingBean {

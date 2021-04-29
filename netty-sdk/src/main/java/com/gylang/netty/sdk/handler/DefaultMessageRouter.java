@@ -2,12 +2,12 @@ package com.gylang.netty.sdk.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.gylang.gim.api.constant.ContentType;
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.annotation.AdapterType;
-import com.gylang.netty.sdk.intercept.NettyIntercept;
 import com.gylang.netty.sdk.common.ObjectWrap;
 import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.intercept.NettyIntercept;
 import com.gylang.netty.sdk.repo.NettyUserInfoFillHandler;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;

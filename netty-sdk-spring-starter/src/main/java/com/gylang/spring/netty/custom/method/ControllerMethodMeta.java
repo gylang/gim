@@ -2,7 +2,6 @@ package com.gylang.spring.netty.custom.method;
 
 import com.gylang.netty.sdk.annotation.NettyMapping;
 import com.gylang.spring.netty.annotation.SpringNettyController;
-import com.gylang.spring.netty.custom.method.MethodArgument;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

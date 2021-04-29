@@ -1,9 +1,5 @@
 package com.gylang.grtc.context;
 
-import com.gylang.grtc.domain.Room;
-
-import java.util.Map;
-
 /**
  * @author gylang
  * data 2021/4/23

@@ -3,10 +3,10 @@ package com.gylang.gim.server.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
-import com.gylang.gim.server.service.UserLinkStatusService;
 import com.gylang.gim.api.constant.CacheConstant;
 import com.gylang.gim.api.constant.CommonConstant;
 import com.gylang.gim.api.domain.UserLinkStatus;
+import com.gylang.gim.server.service.UserLinkStatusService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 

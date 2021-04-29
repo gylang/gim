@@ -2,7 +2,6 @@ package com.gylang.gim.web.dao.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-
 import com.gylang.gim.web.common.mybatis.InnerBaseDO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

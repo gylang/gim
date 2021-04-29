@@ -2,9 +2,9 @@ package com.gylang.netty.sdk.util;
 
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.common.AfterConfigInitialize;
 import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.gim.api.domain.common.MessageWrap;
 import lombok.Getter;
 
 /**

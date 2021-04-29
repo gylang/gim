@@ -1,12 +1,12 @@
 package com.gylang.gim.web.controller;
 
 import com.gylang.cache.CacheManager;
+import com.gylang.gim.api.domain.common.CommonResult;
 import com.gylang.gim.web.dto.cache.UserCache;
 import com.gylang.gim.web.dto.request.LoginRequest;
 import com.gylang.gim.web.dto.request.RegistryRequest;
 import com.gylang.gim.web.dto.response.LoginResponse;
 import com.gylang.gim.web.service.biz.BizAuthService;
-import com.gylang.gim.api.domain.common.CommonResult;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 

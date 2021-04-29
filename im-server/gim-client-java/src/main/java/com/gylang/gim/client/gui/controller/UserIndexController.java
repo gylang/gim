@@ -8,7 +8,6 @@ import com.gylang.gim.client.gui.core.CustomApplication;
 import com.gylang.gim.client.util.MockUtil;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import lombok.extern.slf4j.Slf4j;
 

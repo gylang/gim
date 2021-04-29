@@ -10,7 +10,7 @@ import '@/style/style.css';
 import IndexDB from "@/util/IndexedDBStrategy"
 import socket from "@/util/socket";
 
-  setInterval(() => {
+setInterval(() => {
     socket.check()
 
   }, 2000)

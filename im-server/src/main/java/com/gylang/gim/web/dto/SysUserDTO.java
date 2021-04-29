@@ -1,7 +1,9 @@
 package com.gylang.gim.web.dto;
+
 import com.gylang.gim.common.dto.BaseDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
 import java.util.Date;
 
 

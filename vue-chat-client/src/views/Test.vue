@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import ChatStoreUtil from "@/util/ChatStoreUtil";
 
 export default {
   name: "Test",

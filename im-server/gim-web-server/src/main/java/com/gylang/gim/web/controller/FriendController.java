@@ -2,8 +2,8 @@ package com.gylang.gim.web.controller;
 
 import com.gylang.gim.api.domain.common.CommonResult;
 import com.gylang.gim.api.dto.ImUserFriendDTO;
-import com.gylang.gim.web.common.mybatis.UserHelper;
 import com.gylang.gim.api.dto.UserFriendVO;
+import com.gylang.gim.web.common.mybatis.UserHelper;
 import com.gylang.gim.web.entity.UserApply;
 import com.gylang.gim.web.service.biz.BizFriendService;
 import org.springframework.web.bind.annotation.RequestBody;
