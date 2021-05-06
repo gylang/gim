@@ -20,7 +20,6 @@ public class ResponseMessage extends MessageWrap {
         copyObj.setMsgId(messageWrap.getMsgId());
         copyObj.setRetryNum(messageWrap.getRetryNum());
         copyObj.setQos(messageWrap.getQos());
-        copyObj.setStore(messageWrap.isStore());
         copyObj.setOfflineMsgEvent(messageWrap.isOfflineMsgEvent());
         copyObj.setTimeStamp(messageWrap.getTimeStamp());
         return copyObj;

@@ -1,9 +1,9 @@
 package com.gylang.gim.web.common;
 
 import com.gylang.cache.CacheManager;
+import com.gylang.gim.api.domain.entity.UserCache;
 import com.gylang.gim.web.common.constant.CommonConstant;
 import com.gylang.gim.web.common.mybatis.UserHelper;
-import com.gylang.gim.web.domain.UserCache;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;

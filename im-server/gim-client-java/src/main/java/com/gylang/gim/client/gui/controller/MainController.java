@@ -54,6 +54,10 @@ public class MainController extends CustomApplication {
     public void groupSearchEvent(ActionEvent actionEvent) {
 
     }
+    @FXML
+    public void openconsole(ActionEvent actionEvent) {
+        GuiUtil.openNewView(new ConsoleController());
+    }
 
     @Override
     public void beforeInit(URL location, ResourceBundle resources) {

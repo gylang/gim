@@ -2,18 +2,23 @@ package com.gylang.gim.web.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.crypto.digest.DigestUtil;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.gylang.cache.CacheManager;
 import com.gylang.gim.api.constant.CacheConstant;
+import com.gylang.gim.api.constant.biztype.ManagerType;
 import com.gylang.gim.api.domain.common.CommonResult;
+import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.gim.api.domain.entity.UserCache;
 import com.gylang.gim.api.dto.request.LoginRequest;
 import com.gylang.gim.api.dto.request.RegistryRequest;
 import com.gylang.gim.api.dto.response.LoginResponse;
+import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.remote.SocketManager;
 import com.gylang.gim.web.common.constant.CommonConstant;
 import com.gylang.gim.web.common.util.Asserts;
 import com.gylang.gim.web.common.util.MappingUtil;
-import com.gylang.gim.web.domain.UserCache;
 import com.gylang.gim.web.entity.PtUser;
 import com.gylang.gim.web.entity.PtUserInfo;
 import com.gylang.gim.web.service.PtUserInfoService;
@@ -39,6 +44,8 @@ public class BizAuthServiceImpl implements BizAuthService {
     private PtUserInfoService userInfoService;
     @Resource
     private CacheManager cacheManager;
+    @Resource
+    private SocketManager socketManager;
 
     @Override
     public CommonResult<LoginResponse> login(@RequestBody LoginRequest request) {
@@ -69,10 +76,12 @@ public class BizAuthServiceImpl implements BizAuthService {
         String token = CacheConstant.AUTH_TOKEN_PREFIX + IdWorker.getId();
         loginResponse.setToken(token);
         cacheManager.set(token, userCache, 6 * 60 * 60L);
+        userCache.setToken(token);
+        pushNotify2ImServer(userCache);
         return CommonResult.ok(loginResponse);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public CommonResult<Boolean> registry(RegistryRequest request) {
 
@@ -104,5 +113,16 @@ public class BizAuthServiceImpl implements BizAuthService {
         save = save && userInfoService.save(ptUserInfo);
         Asserts.isTrue(save, "注册失败");
         return CommonResult.ok();
+    }
+
+    @Override
+    public void pushNotify2ImServer(UserCache userCache) {
+
+        MessageWrap messageWrap = new MessageWrap();
+        messageWrap.setQos(1);
+        messageWrap.setType(ChatTypeEnum.MANAGER);
+        messageWrap.setCmd(ManagerType.USER_APPLY_FOR_TOKEN_MANAGER);
+        messageWrap.setContent(JSON.toJSONString(userCache));
+        socketManager.send(messageWrap);
     }
 }

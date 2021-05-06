@@ -168,7 +168,7 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
                 } else {
                     // 用户离线
                     if (msg.isOfflineMsgEvent()) {
-                        eventProvider.sendEvent(EventTypeConst.OFFLINE_MSG_EVENT, msg);
+                        eventProvider.sendEvent(EventTypeConst.PERSISTENCE_MSG_EVENT, msg);
                         iterator.remove();
                     }
                 }

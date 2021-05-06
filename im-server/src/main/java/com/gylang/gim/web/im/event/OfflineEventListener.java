@@ -35,7 +35,7 @@ public class OfflineEventListener implements MessageEventListener<MessageWrap> {
     private HistoryMessageService historyMessageService;
 
     @Override
-    @MessageEvent(EventTypeConst.OFFLINE_MSG_EVENT)
+    @MessageEvent(EventTypeConst.PERSISTENCE_MSG_EVENT)
     public void onEvent(String key, MessageWrap message) {
 
         // 分类离线消息

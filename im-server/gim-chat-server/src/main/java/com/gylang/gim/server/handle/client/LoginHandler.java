@@ -2,7 +2,6 @@ package com.gylang.gim.server.handle.client;
 
 
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson.JSONObject;
 import com.gylang.gim.api.constant.CommonConstant;
 import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
@@ -33,14 +32,13 @@ public class LoginHandler implements IMRequestHandler {
     private EventProvider eventProvider;
     @Resource
     private IMSessionRepository sessionRepository;
-
     @Resource
     private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public Object process(IMSession me, MessageWrap message) {
+
         MessageWrap messageWrap = new ResponseMessage();
-        messageWrap.setSender(me.getAccount());
         messageWrap.setCmd(PrivateChatCmd.SOCKET_CONNECTED);
         messageWrap.setType(ChatTypeEnum.NOTIFY);
         // 获取用户信息
@@ -49,10 +47,7 @@ public class LoginHandler implements IMRequestHandler {
             messageWrap.setCode(BaseResultCode.OK.getCode());
             return messageWrap;
         }
-        String jsonStr = redisTemplate.opsForValue().get(message.getContent());
-        JSONObject userCache = JSONObject.parseObject(jsonStr);
-        String uid = null != userCache ? userCache.getString("id") : null;
-
+        String uid = redisTemplate.opsForValue().get(message.getContent());
         if (null != uid) {
             // 用户已登录, 可以访问服务
             messageWrap.setContent("连接socket成功");

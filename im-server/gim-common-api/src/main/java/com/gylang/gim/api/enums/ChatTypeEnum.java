@@ -35,6 +35,8 @@ public interface ChatTypeEnum {
 
     int P2P_PUSH = 12;
 
+    int MANAGER = 13;
+
 
 
     

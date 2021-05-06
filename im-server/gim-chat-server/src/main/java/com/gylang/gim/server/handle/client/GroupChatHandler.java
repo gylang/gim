@@ -1,17 +1,17 @@
 package com.gylang.gim.server.handle.client;
 
 import com.gylang.gim.api.constant.CacheConstant;
+import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.entity.GroupConfig;
 import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.api.enums.ChatTypeEnum;
-import com.gylang.gim.server.service.HistoryMessageService;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.event.EventProvider;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import com.gylang.netty.sdk.provider.MessageProvider;
-import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -27,13 +27,10 @@ import java.util.Map;
 public class GroupChatHandler implements IMRequestHandler {
     @Resource
     private MessageProvider messageProvider;
-
-    @Resource
-    private HistoryMessageService messageService;
-    @Resource
-    private IMGroupSessionRepository groupSessionRepository;
     @Resource
     private RedisTemplate<String, GroupConfig> redisTemplate;
+    @Resource
+    private EventProvider eventProvider;
 
     @Override
     public Object process(IMSession me, MessageWrap message) {
@@ -47,8 +44,9 @@ public class GroupChatHandler implements IMRequestHandler {
             if (senderConfig.isBanedSend()) {
                 return ReplyMessage.reply(message, BaseResultCode.VISIT_INTERCEPT.getCode(), "用户被禁言");
             } else {
-                // 缓存用户消息
-                messageService.storeGroupChat(message.getReceive(), message);
+                // 发送入库事件
+                message.setOfflineMsgEvent(false);
+                eventProvider.sendEvent(EventTypeConst.PERSISTENCE_MSG_EVENT, message);
                 // 发送群消息
                 for (String account : config.keySet()) {
                     messageProvider.sendMsg(me, account, message.copyBasic());

@@ -40,15 +40,10 @@ public class PrivateChatHandler implements IMRequestHandler {
 
             int res = messageProvider.sendMsg(me, message.getReceive(), message.copyBasic());
             if (!MessageProvider.USER_NOT_FOUND.equals(res)) {
-                // 将新消息存入 redis 刷入记录
-                if (message.isStore()) {
-                    messageService.storePrivateChat(message.getReceive(), message);
-                }
                 return ResponseMessage.copy(message);
             } else {
                 return ReplyMessage.reply(message, BaseResultCode.VISIT_INTERCEPT.getCode(), "用户不存在");
             }
-
 
         }
         return ReplyMessage.reply(message, BaseResultCode.NOT_ACCESS_PRIVATE_RESOURCE);

@@ -40,7 +40,6 @@ public class Remote2GPushHandler implements IMRequestHandler {
     public Object process(IMSession me, MessageWrap message) {
 
         PushMessage push = JSON.parseObject(message.getContent(), PushMessage.class);
-
         List<String> receiveIdList = push.getReceiveId();
         String msgId = MsgIdUtil.increase(message);
         if (receiveIdList.size() < BIZ_THREAD_CAP) {

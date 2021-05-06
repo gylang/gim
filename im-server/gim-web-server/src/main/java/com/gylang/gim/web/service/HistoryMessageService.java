@@ -1,5 +1,6 @@
 package com.gylang.gim.web.service;
 
+import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.common.PageResponse;
 import com.gylang.gim.web.common.mybatis.Page;
 import com.gylang.gim.web.entity.HistoryGroupChat;
@@ -62,4 +63,11 @@ public interface HistoryMessageService {
      * @return 群离线消息主键id
      */
     Long groupHistoryId(String msgId);
+
+    /**
+     * 离线消息入库 和 缓存
+     *
+     * @param msg
+     */
+    void store(MessageWrap msg);
 }

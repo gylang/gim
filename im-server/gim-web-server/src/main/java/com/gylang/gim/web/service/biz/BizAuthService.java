@@ -1,10 +1,10 @@
 package com.gylang.gim.web.service.biz;
 
 import com.gylang.gim.api.domain.common.CommonResult;
+import com.gylang.gim.api.domain.entity.UserCache;
 import com.gylang.gim.api.dto.request.LoginRequest;
 import com.gylang.gim.api.dto.request.RegistryRequest;
 import com.gylang.gim.api.dto.response.LoginResponse;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
@@ -14,8 +14,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface BizAuthService {
 
 
+    /**
+     * 登录
+     *
+     * @param request
+     * @return
+     */
     CommonResult<LoginResponse> login(@RequestBody LoginRequest request);
 
-    @Transactional
+    /**
+     * 注册
+     *
+     * @param request
+     * @return
+     */
     CommonResult<Boolean> registry(RegistryRequest request);
+
+    /**
+     * 通知im服务
+     *
+     * @param userCache
+     */
+    void pushNotify2ImServer(UserCache userCache);
 }

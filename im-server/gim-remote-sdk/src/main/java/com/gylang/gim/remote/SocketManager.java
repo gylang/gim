@@ -21,10 +21,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -58,6 +55,8 @@ public class SocketManager {
      */
     private int messagesValidTime = 2 * 1000;
     private Map<String, List<GimCallBack<MessageWrap>>> callListener = new HashMap<>();
+
+    private List<GimCallBack<MessageWrap>> globalCallListener = new LinkedList<>();
 
     /** 消息回调 */
     private Map<String, GimCallBack<MessageWrap>> sendCallBack = new ConcurrentHashMap<>();
@@ -332,9 +331,16 @@ public class SocketManager {
                 // qo校验过滤包
                 return;
             }
+
+
             // 发送消息到监听队列
             List<GimCallBack<MessageWrap>> gimCallBackList = callListener.get(getListenKey(message.getType(), message.getCmd()));
             listenerExecutor.execute(() -> {
+               // 全局监听
+                for (GimCallBack<MessageWrap> messageWrapGimCallBack : globalCallListener) {
+                    messageWrapGimCallBack.call(message);
+                }
+                // 业务监听
                 if (null != gimCallBackList) {
                     for (GimCallBack<MessageWrap> gimCallBack : gimCallBackList) {
                         gimCallBack.call(message);
@@ -361,6 +367,18 @@ public class SocketManager {
 
     }
 
+    public synchronized void globalBind(GimCallBack<MessageWrap> gimCallBack) {
+
+        globalCallListener.add(gimCallBack);
+
+    }
+
+    public synchronized void unGlobalBind(GimCallBack<MessageWrap> gimCallBack) {
+
+        globalCallListener.remove(gimCallBack);
+
+    }
+
     public synchronized void unBind(int type, String key, GimCallBack<?> gimCallBack) {
 
         String lk = getListenKey(type, key);
@@ -371,7 +389,7 @@ public class SocketManager {
 
     }
 
-    public static String getListenKey(int type, String key) {
+    private static String getListenKey(int type, String key) {
         return type + "-" + key;
     }
 

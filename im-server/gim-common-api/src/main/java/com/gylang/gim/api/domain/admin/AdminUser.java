@@ -18,4 +18,6 @@ public class AdminUser {
     private String userId;
 
     private boolean loginEvent;
+
+    private boolean persistence;
 }

@@ -7,7 +7,9 @@ package com.gylang.gim.api.constant;
 public enum CacheConstant {
     ;
     /** 授权用户前缀 */
-    public static final String AUTH_TOKEN_PREFIX = "USER:";
+    public static final String AUTH_TOKEN_PREFIX = "USER_TOKEN:";
+    /** 用户信息 */
+    public static final String USER = "USER:";
     /** 授权过期时间 */
     public static final long AUTH_TOKEN_EXPIRE = 60 * 60 * 6L;
     /** 好友列表缓存前缀 */

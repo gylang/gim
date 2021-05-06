@@ -26,7 +26,7 @@ public interface EventTypeConst {
     String OVER_TIME_CLOSE = "overTimeClose";
 
     /** 离线消息 */
-    String OFFLINE_MSG_EVENT = "OFFLINE_MSG_EVENT";
+    String PERSISTENCE_MSG_EVENT = "OFFLINE_MSG_EVENT";
 
     /** 上线事件 */
     String ONLINE_EVENT = "ONLINE_EVENT";
@@ -34,9 +34,10 @@ public interface EventTypeConst {
     /** 跨服消息推送 */
     String CROSS_SERVER_PUSH = "CROSS_SERVER_PUSH";
 
-    /** 持久化事件 */
-    String PERSISTENCE_EVENT = "PERSISTENCE_EVENT";
-    /** 持久化事件 */
+    /** 消息发送失败 */
+    String SEND_MES_ERROR = "SEND_MES_ERROR";
+
+    /** 未找到该用户 */
     String USER_NOT_FOUND = "USER_NOT_FOUND";
 
     String USER_ONLINE = "USER_ONLINE";

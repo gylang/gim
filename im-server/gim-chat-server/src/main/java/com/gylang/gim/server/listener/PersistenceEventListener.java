@@ -1,11 +1,13 @@
 package com.gylang.gim.server.listener;
 
+import com.alibaba.fastjson.JSON;
 import com.gylang.gim.api.constant.CommonConstant;
 import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.gim.api.domain.admin.AdminUser;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.server.config.AdminConfig;
+import com.gylang.gim.server.service.HistoryMessageService;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.event.message.MessageEvent;
 import com.gylang.netty.sdk.event.message.MessageEventListener;
@@ -15,17 +17,20 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
+ * 离线消息入库
+ *
  * @author gylang
- * data 2021/4/16
+ * data 2021/3/6
  */
 @Component
 @Slf4j
-public class LoginListener implements MessageEventListener<String>, InitializingBean {
+public class PersistenceEventListener implements MessageEventListener<MessageWrap>, InitializingBean {
 
     @Autowired
     private AdminConfig adminConfig;
@@ -34,20 +39,22 @@ public class LoginListener implements MessageEventListener<String>, Initializing
 
     private Set<Map.Entry<String, AdminUser>> adminUser;
 
-    @Override
-    @MessageEvent(EventTypeConst.USER_ONLINE)
-    public void onEvent(String key, String loginUserId) {
 
-        // todo redis 状态更新
+    @Resource
+    private HistoryMessageService historyMessageService;
+
+    @Override
+    @MessageEvent(EventTypeConst.PERSISTENCE_MSG_EVENT)
+    public void onEvent(String key, MessageWrap message) {
 
         // 用户上线通知
         for (Map.Entry<String, AdminUser> adminUserEntry : adminUser) {
             AdminUser user = adminUserEntry.getValue();
             MessageWrap messageWrap = new MessageWrap();
             messageWrap.setQos(2);
-            messageWrap.setCmd(EventTypeConst.USER_ONLINE);
+            messageWrap.setCmd(EventTypeConst.PERSISTENCE_MSG_EVENT);
             messageWrap.setType(ChatTypeEnum.NOTIFY);
-            messageWrap.setContent(loginUserId);
+            messageWrap.setContent(JSON.toJSONString(message));
             String sender = user.getUserId();
             messageWrap.setReceive(sender);
             messageWrap.setSender(CommonConstant.SYSTEM_SENDER);
@@ -56,7 +63,7 @@ public class LoginListener implements MessageEventListener<String>, Initializing
             if (log.isDebugEnabled()) {
                 log.debug("接收到用户[{}]上线事件, 给服务[{}]发送通知", key, user.getName());
             }
-            messageProvider.sendMsg(session, loginUserId, messageWrap);
+            messageProvider.sendMsg(session, sender, messageWrap);
 
         }
 
@@ -67,7 +74,7 @@ public class LoginListener implements MessageEventListener<String>, Initializing
 
         adminUser = adminConfig.getAdminUser()
                 .entrySet().stream()
-                .filter(u -> u.getValue().isLoginEvent())
+                .filter(u -> u.getValue().isPersistence())
                 .collect(Collectors.toSet());
     }
 }

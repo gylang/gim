@@ -92,29 +92,20 @@ public class DefaultMessageProvider implements MessageProvider {
         if (StrUtil.isEmpty(message.getMsgId())) {
             message.setMsgId(MsgIdUtil.increase(message));
         }
-//        // 持久化消息
-//        if (message.isPersistenceEvent()) {
-//            eventProvider.sendEvent(EventTypeConst.PERSISTENCE_EVENT, message);
-//        }
+        // 持久化消息
+        if (message.isOfflineMsgEvent()) {
+            eventProvider.sendEvent(EventTypeConst.PERSISTENCE_MSG_EVENT, message);
+        }
         ChannelFuture cf = target.getSession().writeAndFlush(message);
         if (QosConstant.ONE_AWAY != message.getQos()) {
             // 应用层确保消息可达
             iMessageSenderQosHandler.addReceived(message);
         }
-        cf.addListener( channelFuture -> {
+        cf.addListener(channelFuture -> {
 
             if (!channelFuture.isSuccess()) {
-                  if (message.getRetryNum() > retryNum) {
-                    // iMessageSenderQosHandler
-                    if (message.isOfflineMsgEvent()) {
-                        // 消息发送失败 发送消息发送失败事件
-                        eventProvider.sendEvent(EventTypeConst.OFFLINE_MSG_EVENT, message);
-                    }
-                } else {
-                    // 重发 可以设置定时器 重发
-                    message.setRetryNum(retryNum + 1);
-                    sendMsgCallBack(me, target, message,  listener);
-                }
+                // 消息发送失败 发送消息发送失败事件
+                eventProvider.sendEvent(EventTypeConst.SEND_MES_ERROR, message);
             }
 
         });

@@ -5,3 +5,4 @@ gim:
       name: web推送
       userId: -2
       loginEvent: true
+      persistence: true

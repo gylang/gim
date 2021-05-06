@@ -1,6 +1,6 @@
 package com.gylang.gim.web.common.mybatis;
 
-import com.gylang.gim.web.domain.UserCache;
+import com.gylang.gim.api.domain.entity.UserCache;
 
 /**
  * @author gylang
