@@ -25,8 +25,8 @@ gylang:
     lostConnectRetryNum: 10
     socketServerPort: 46000
     nonAuthCmd:
-      - LNST  #客户端接入
-      - RELN  # 服务端接入
+      - 7  #客户端接入
+      - 10  # 服务端接入
     socketType:
       com.gylang.netty.sdk.initializer.WebSocketJsonInitializer: 46000
       com.gylang.netty.sdk.initializer.AppSocketJsonInitializer: 46001

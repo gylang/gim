@@ -80,7 +80,9 @@ public class ClientMessageDecoder {
         }
 
 
-        return JSON.parseObject(bodyBuffer.array(), MessageWrap.class);
+        MessageWrap msg = JSON.parseObject(bodyBuffer.array(), MessageWrap.class);
+        msg.setType(type);
+        return msg;
     }
 
     /**

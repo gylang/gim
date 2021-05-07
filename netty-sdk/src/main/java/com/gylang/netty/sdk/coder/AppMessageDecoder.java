@@ -41,7 +41,7 @@ public class AppMessageDecoder extends ByteToMessageDecoder {
     private static final MessageWrap messageWrap = new MessageWrap();
 
     static {
-        messageWrap.setType(ChatTypeEnum.SYSTEM_MESSAGE);
+        messageWrap.setType(ChatTypeEnum.HEART);
         messageWrap.setCmd(SystemChatCmd.HEART);
     }
 
@@ -82,12 +82,14 @@ public class AppMessageDecoder extends ByteToMessageDecoder {
 
     public Object mappingMessageObject(byte[] data, byte type) {
 
-        if (CommConst.HEART == type) {
+        if (ChatTypeEnum.HEART == type) {
 
             return messageWrap;
         }
 
-        return JSON.parseObject(data, MessageWrap.class);
+        MessageWrap msg = JSON.parseObject(data, MessageWrap.class);
+        msg.setType(type);
+        return msg;
     }
 
     /**

@@ -40,7 +40,7 @@ public class MethodHandlerAdapter implements BizRequestAdapter<ControllerMethodM
 
     @Override
     public Object process(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
-        ControllerMethodMeta controllerMethodMeta = methodHandlerMap.get(message.getCmd());
+        ControllerMethodMeta controllerMethodMeta = methodHandlerMap.get(message.getType());
         if (null == controllerMethodMeta) {
             return null;
         }

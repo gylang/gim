@@ -7,7 +7,7 @@ package com.gylang.gim.api.enums;
  * data 2021/3/26
  */
 public interface ChatTypeEnum {
-
+    int HEART = -2;
     /** 系统类消息 */
     int SYSTEM_MESSAGE = -1;
     /** 单聊 */
@@ -38,6 +38,4 @@ public interface ChatTypeEnum {
     int MANAGER = 13;
 
 
-
-    
 }

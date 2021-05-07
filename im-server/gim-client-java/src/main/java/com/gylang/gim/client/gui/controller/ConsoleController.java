@@ -8,6 +8,7 @@ import com.gylang.gim.remote.SocketHolder;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -24,7 +25,7 @@ import java.util.ResourceBundle;
 public class ConsoleController extends CustomApplication {
 
     @FXML
-    private TextField textField;
+    private TextArea msgText;
     @FXML
     private ListView<TextField> userListView;
 
@@ -60,8 +61,8 @@ public class ConsoleController extends CustomApplication {
 
     @FXML
     public void send() {
-        String text = textField.getText();
+        String text = msgText.getText();
         SocketHolder.getInstance().send(JSON.parseObject(text, MessageWrap.class));
-        textField.setText("");
+        msgText.setText("");
     }
 }

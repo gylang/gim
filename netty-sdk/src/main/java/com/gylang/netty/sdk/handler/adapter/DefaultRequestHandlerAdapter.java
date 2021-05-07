@@ -34,7 +34,7 @@ public class DefaultRequestHandlerAdapter implements BizRequestAdapter<IMRequest
     public Object process(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
 
 
-        IMRequestHandler requestHandler = handlerMap.get(message.getCmd());
+        IMRequestHandler requestHandler = handlerMap.get(message.getType());
         if (null == requestHandler) {
             return null;
         }

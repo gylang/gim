@@ -95,14 +95,13 @@ public class LoginController extends CustomApplication {
                 SocketManager socketManager = SocketHolder.getInstance();
 
                 MessageWrap messageWrap = MessageWrap.builder()
-                        .cmd(AuthChatCmd.LOGIN_SOCKET)
                         .type(ChatTypeEnum.CLIENT_AUTH)
                         .clientMsgId(IdUtil.getSnowflake(1, 1).nextIdStr())
                         .qos(QosConstant.ACCURACY_ONE_ARRIVE)
-                        .content(data.getToken())
+                        .content(data.getSocketToken())
                         .build();
 
-                socketManager.connect("127.0.0.1", 46001, messageWrap, str -> {
+                socketManager.connect(data.getSocketIp(), data.getSocketPort(), messageWrap, str -> {
                     if ("1".equals(str)) {
                         log.info("连接成功！");
                     } else {

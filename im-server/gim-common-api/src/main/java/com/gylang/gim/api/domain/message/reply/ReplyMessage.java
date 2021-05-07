@@ -25,6 +25,7 @@ public class ReplyMessage extends ResponseMessage {
 
     public static ReplyMessage reply(MessageWrap messageWrap, String code, String msg) {
         ReplyMessage message = new ReplyMessage();
+        message.setType(ChatTypeEnum.REPLY_CHAT);
         message.setClientMsgId(messageWrap.getClientMsgId());
         message.setMsgId(messageWrap.getMsgId());
         message.setCmd(messageWrap.getCmd());

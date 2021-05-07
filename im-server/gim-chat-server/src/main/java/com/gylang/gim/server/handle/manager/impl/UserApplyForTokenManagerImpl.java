@@ -34,7 +34,7 @@ public class UserApplyForTokenManagerImpl implements ManagerService {
         redisTemplate.opsForValue().set(userCache.getToken(), userCache.getId(), userCache.getExpire(), TimeUnit.SECONDS);
 
         // 保存用户数据
-        redisTemplate.opsForValue().set(CacheConstant.USER + userCache.getId(), userCache);
+        redisTemplate.opsForValue().set(CacheConstant.USER + userCache.getId(), JSON.toJSONString(userCache));
 
         return ReplyMessage.success(messageWrap);
     }

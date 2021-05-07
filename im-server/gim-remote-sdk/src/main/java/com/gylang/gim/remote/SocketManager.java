@@ -203,7 +203,7 @@ public class SocketManager {
      */
     public void send(final MessageWrap body) {
 
-        if (null != body.getCmd() && log.isDebugEnabled()) {
+        if (ChatTypeEnum.HEART != body.getType() && log.isDebugEnabled()) {
             log.debug("发送消息 : {}", body);
         }
         if (!isConnected()) {

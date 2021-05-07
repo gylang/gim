@@ -54,7 +54,7 @@ public class MessageWrap implements Serializable {
     private int ack;
 
     /** 离线/失败消息事件发送 */
-    private transient boolean offlineMsgEvent = true;
+    private transient boolean offlineMsgEvent;
 
     private long timeStamp;
 

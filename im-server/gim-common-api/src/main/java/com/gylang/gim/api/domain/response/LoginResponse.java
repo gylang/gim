@@ -17,4 +17,11 @@ public class LoginResponse {
 
     /** 昵称 */
     private String nickname;
+
+
+    private String socketIp;
+
+    private Integer socketPort;
+
+    private String socketToken;
 }

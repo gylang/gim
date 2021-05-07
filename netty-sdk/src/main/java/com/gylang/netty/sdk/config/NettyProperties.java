@@ -39,5 +39,5 @@ public class NettyProperties {
 
     private Map<String, Object> properties;
     /** 不用授权的消息 */
-    private Set<String> nonAuthCmd;
+    private Set<Integer> nonAuthCmd;
 }

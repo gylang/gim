@@ -7,11 +7,12 @@ import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
-import com.gylang.netty.sdk.provider.MessageProvider;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author gylang
@@ -19,23 +20,31 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 @NettyHandler(ChatTypeEnum.MANAGER)
 @Component
-public class ManagerHandler implements IMRequestHandler {
+public class ManagerHandler implements IMRequestHandler, InitializingBean {
 
     @Resource
-    private ThreadPoolExecutor executor;
-
-    private static final int BIZ_THREAD_CAP = 20;
-
-    @Resource
-    private MessageProvider messageProvider;
+    private Map<String, ManagerService> managerServiceMap;
 
     @Override
     public Object process(IMSession me, MessageWrap message) {
 
-
-
-        return ReplyMessage.reply(message, BaseResultCode.NOT_ACCESS_PRIVATE_RESOURCE);
+        ManagerService managerService = managerServiceMap.get(message.getCmd());
+        if (null != managerService) {
+            MessageWrap messageWrap = managerService.doInvoke(me, message);
+            if (null != messageWrap) {
+                return ReplyMessage.reply(message, BaseResultCode.OK);
+            }
+            return null;
+        }
+        return ReplyMessage.reply(message, BaseResultCode.SYSTEM_VISIT_RESOURCE_ERROR);
     }
 
 
+    @Override
+    public void afterPropertiesSet() throws Exception {
+
+        managerServiceMap = managerServiceMap.values().stream()
+                .collect(Collectors.toMap(ManagerService::managerType, ms -> ms));
+
+    }
 }

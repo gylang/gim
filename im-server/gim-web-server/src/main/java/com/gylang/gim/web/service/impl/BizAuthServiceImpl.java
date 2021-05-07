@@ -74,7 +74,11 @@ public class BizAuthServiceImpl implements BizAuthService {
         UserCache userCache = MappingUtil.map(userInfo, UserCache.class);
         MappingUtil.map(ptUser, userCache);
         String token = CacheConstant.AUTH_TOKEN_PREFIX + IdWorker.getId();
-        loginResponse.setToken(token);
+        // 单机版
+        loginResponse.setSocketToken(token);
+        loginResponse.setSocketIp("127.0.0.1");
+        loginResponse.setSocketPort(46001);
+
         cacheManager.set(token, userCache, 6 * 60 * 60L);
         userCache.setToken(token);
         pushNotify2ImServer(userCache);

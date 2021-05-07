@@ -49,7 +49,7 @@ public class AppMessageEncoder extends MessageToByteEncoder<MessageWrap> {
 	 * 第二，三字节为消息长度分隔为高低位2个字节
 	 */
 	private byte[] createHeader(byte type, int length) {
-		byte[] header = new byte[CommConst.DATA_HEADER_LENGTH];
+		byte[] header = new byte[3];
 		header[0] = type;
 		header[1] = (byte) (length & 0xff);
 		header[2] = (byte) ((length >> 8) & 0xff);

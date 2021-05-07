@@ -22,7 +22,7 @@ import java.util.Set;
 @Order(1)
 public class TouristIntercept implements NettyIntercept, AfterConfigInitialize {
 
-    private Set<String> nonAuthCMd = null;
+    private Set<Integer> nonAuthCMd = null;
 
     @Override
     public void init(NettyConfiguration configuration) {
@@ -37,7 +37,7 @@ public class TouristIntercept implements NettyIntercept, AfterConfigInitialize {
     @Override
     public boolean doBefore(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
 
-        boolean nonAuth = nonAuthCMd.contains(message.getCmd()) || StrUtil.isNotEmpty(me.getAccount());
+        boolean nonAuth = nonAuthCMd.contains(message.getType()) || StrUtil.isNotEmpty(me.getAccount());
         if (log.isDebugEnabled()) {
             log.debug("[ 非法消息拦截 ] : 授权接入 : {}, 发送的消息体 : {}", nonAuth ? false : me.getAccount(), message);
         }

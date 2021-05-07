@@ -42,6 +42,9 @@ public enum CommonConstant {
     public static final String PRIVATE_CHAT_ACCESS_CHECK = "PRIVATE_CHAT_ACCESS_CHECK";
 
     public static final MessageWrap HEART = new MessageWrap();
+    static {
+        HEART.setType(ChatTypeEnum.HEART);
+    }
     /** 系统发送 */
     public static final String SYSTEM_SENDER = "0";
     /** 授权用户前缀 */
@@ -56,7 +59,5 @@ public enum CommonConstant {
     public static final String GROUP_LAST_MSG_ID = "GROUP_LAST_MSG_ID:";
     /** 个人私聊最新消息msgId */
     public static final String PRIVATE_LAST_MSG_ID = "PRIVATE_LAST_MSG_ID:";
-    static {
-        HEART.setType(ChatTypeEnum.SYSTEM_MESSAGE);
-    }
+
 }
