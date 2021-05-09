@@ -6,6 +6,7 @@ import com.gylang.gim.api.constant.QosConstant;
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.message.sys.AckMessage;
+import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.event.EventProvider;
@@ -76,7 +77,7 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
             }
             // qos2 需要响应客户点 响应ack2 让客户端删除重发ack1列表
             if (null != messageWrap && QosConstant.ACCURACY_ONE_ARRIVE == messageWrap.getQos()) {
-                AckMessage ackMessage = new AckMessage(SystemChatCmd.QOS_SERVER_SEND_ACK, messageWrap);
+                AckMessage ackMessage = new AckMessage(ChatTypeEnum.QOS_SERVER_SEND_ACK, messageWrap);
                 ackMessage.setAck(QosConstant.SEND_ACK2);
                 target.getSession().writeAndFlush(ackMessage);
                 if (log.isDebugEnabled()) {

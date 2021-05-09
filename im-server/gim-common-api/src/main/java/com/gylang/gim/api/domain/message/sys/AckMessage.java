@@ -13,8 +13,7 @@ public class AckMessage extends ResponseMessage {
 
 
     public AckMessage() {
-        setType(ChatTypeEnum.SYSTEM_MESSAGE);
-        setCmd(SystemChatCmd.QOS_CLIENT_SEND_ACK);
+        setType(ChatTypeEnum.QOS_CLIENT_SEND_ACK);
     }
     public AckMessage(String cmd) {
         setType(ChatTypeEnum.SYSTEM_MESSAGE);
@@ -25,14 +24,13 @@ public class AckMessage extends ResponseMessage {
         setMsgId(message.getMsgId());
         setClientMsgId(message.getClientMsgId());
         setQos(message.getQos());
-        setType(ChatTypeEnum.SYSTEM_MESSAGE);
+        setType(message.getType());
         setCmd(message.getCmd());
     }
-    public AckMessage(String cmd,MessageWrap message) {
+    public AckMessage(int type,MessageWrap message) {
         setClientMsgId(message.getClientMsgId());
         setMsgId(message.getMsgId());
         setQos(message.getQos());
-        setType(ChatTypeEnum.SYSTEM_MESSAGE);
-        setCmd(cmd);
+        setType(type);
     }
 }

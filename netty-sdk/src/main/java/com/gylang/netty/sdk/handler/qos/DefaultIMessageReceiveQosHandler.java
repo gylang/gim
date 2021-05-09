@@ -6,6 +6,7 @@ import com.gylang.gim.api.constant.QosConstant;
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.message.sys.AckMessage;
+import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.netty.sdk.config.NettyConfiguration;
 import com.gylang.netty.sdk.domain.model.IMSession;
 import com.gylang.netty.sdk.repo.IMSessionRepository;
@@ -47,7 +48,7 @@ public class DefaultIMessageReceiveQosHandler implements IMessageReceiveQosHandl
         // 使用后 uid, 客户端需要bind才能使用
         // 使用nid 确保了当前会话不中断时的qos2能确保不重样, 但是连接断开释放之后消息可以重发,(客户端中断连接后)
         // 仅使用 msgId 需要确保客户端的生成全局唯一id 可以实现可能出现伪造消息/数据量大时客户端生成的clientId一样
-        AckMessage ackMessage = new AckMessage(SystemChatCmd.QOS_CLIENT_SEND_ACK, message);
+        AckMessage ackMessage = new AckMessage(ChatTypeEnum.QOS_CLIENT_SEND_ACK, message);
         ackMessage.setAck(QosConstant.RECEIVE_ACK1);
         boolean add = true;
         MessageWrap messageWrap = new AckMessage(message);
@@ -64,7 +65,7 @@ public class DefaultIMessageReceiveQosHandler implements IMessageReceiveQosHandl
             }
         }
         messageWrap.setAck(QosConstant.RECEIVE_ACK1);
-        messageWrap.setCmd(SystemChatCmd.QOS_CLIENT_SEND_ACK);
+        messageWrap.setType(ChatTypeEnum.QOS_CLIENT_SEND_ACK);
         target.getSession().writeAndFlush(messageWrap);
         return add;
     }

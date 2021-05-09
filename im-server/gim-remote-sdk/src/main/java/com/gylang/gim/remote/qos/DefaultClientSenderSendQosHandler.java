@@ -66,7 +66,7 @@ public class DefaultClientSenderSendQosHandler implements ClientSenderQosHandler
             }
             // qos2 需要响应客户点 响应ack2 让客户端删除重发ack1列表
             if (null != messageWrap && QosConstant.ACCURACY_ONE_ARRIVE == message.getQos()) {
-                AckMessage ackMessage = new AckMessage(SystemChatCmd.QOS_CLIENT_SEND_ACK, messageWrap);
+                AckMessage ackMessage = new AckMessage(ChatTypeEnum.QOS_CLIENT_SEND_ACK, messageWrap);
                 ackMessage.setAck(QosConstant.SEND_ACK2);
                 SocketHolder.getInstance().writeAndFlush(ackMessage);
                 if (log.isDebugEnabled()) {

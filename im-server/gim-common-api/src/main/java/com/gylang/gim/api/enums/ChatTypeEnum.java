@@ -7,6 +7,11 @@ package com.gylang.gim.api.enums;
  * data 2021/3/26
  */
 public interface ChatTypeEnum {
+
+    int QOS_SERVER_SEND_ACK = -4;
+
+    int QOS_CLIENT_SEND_ACK = -3;
+
     int HEART = -2;
     /** 系统类消息 */
     int SYSTEM_MESSAGE = -1;

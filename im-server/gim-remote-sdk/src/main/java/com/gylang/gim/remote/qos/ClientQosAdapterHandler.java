@@ -4,6 +4,7 @@ import com.gylang.gim.api.constant.QosConstant;
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.message.sys.AckMessage;
+import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.remote.SocketHolder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,7 @@ public class ClientQosAdapterHandler {
 
 
         // qos = 1/2 主发逻辑基本一直 统一处理
-        if (SystemChatCmd.QOS_CLIENT_SEND_ACK.equals(message.getCmd())) {
+        if (ChatTypeEnum.QOS_CLIENT_SEND_ACK == message.getType()) {
             // qos 发送方
             senderQosHandler.handle(message);
             return null;
@@ -37,7 +38,7 @@ public class ClientQosAdapterHandler {
         if (QosConstant.INSURE_ONE_ARRIVE == message.getQos()) {
             AckMessage ackMessage = new AckMessage(message);
             ackMessage.setAck(QosConstant.RECEIVE_ACK1);
-            ackMessage.setCmd(SystemChatCmd.QOS_SERVER_SEND_ACK);
+            ackMessage.setType(ChatTypeEnum.QOS_SERVER_SEND_ACK);
             SocketHolder.getInstance().writeAndFlush(ackMessage);
             if (log.isDebugEnabled()) {
                 log.debug("[qos1 - receiver] : 接收到服务端消息 , 响应服务端ack1");

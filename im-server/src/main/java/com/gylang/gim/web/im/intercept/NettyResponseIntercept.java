@@ -2,6 +2,7 @@ package com.gylang.gim.web.im.intercept;
 
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.web.dto.msg.ResponseMessageWrap;
 import com.gylang.netty.sdk.common.AfterConfigInitialize;
 import com.gylang.netty.sdk.config.NettyConfiguration;
@@ -27,7 +28,7 @@ public class NettyResponseIntercept implements NettyIntercept, AfterConfigInitia
 
     @Override
     public boolean support(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
-        return SystemChatCmd.QOS_CLIENT_SEND_ACK != message.getCmd() && SystemChatCmd.QOS_SERVER_SEND_ACK != message.getCmd();
+        return ChatTypeEnum.QOS_CLIENT_SEND_ACK != message.getType() && ChatTypeEnum.QOS_SERVER_SEND_ACK != message.getType();
     }
 
     @Override
