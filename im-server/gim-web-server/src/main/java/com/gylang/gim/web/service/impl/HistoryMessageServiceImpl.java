@@ -6,19 +6,23 @@ import com.gylang.cache.CacheManager;
 import com.gylang.gim.api.constant.CacheConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.common.PageResponse;
+import com.gylang.gim.api.domain.push.PushMessage;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.util.MsgIdUtil;
 import com.gylang.gim.web.common.mybatis.Page;
 import com.gylang.gim.web.entity.HistoryGroupChat;
 import com.gylang.gim.web.entity.HistoryPrivateChat;
-import com.gylang.gim.web.service.HistoryGroupChatService;
-import com.gylang.gim.web.service.HistoryMessageService;
-import com.gylang.gim.web.service.HistoryPrivateChatService;
+import com.gylang.gim.web.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.connection.StringRedisConnection;
 import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
 /**
@@ -35,6 +39,8 @@ public class HistoryMessageServiceImpl implements HistoryMessageService, ChatTyp
     private HistoryPrivateChatService historyPrivateChatService;
     @Autowired
     private HistoryGroupChatService historyGroupChatService;
+    @Autowired
+    private ImUserGroupService groupService;
 
     @Value("${gylang.netty.privateMsgSlot:3}")
     private Integer slot;
@@ -93,7 +99,7 @@ public class HistoryMessageServiceImpl implements HistoryMessageService, ChatTyp
     @Override
     public void store(MessageWrap msg) {
 
-        HashOperations<String, String, String> hashOperations = redisTemplate.<String, String>opsForHash();
+        ZSetOperations<String, String> hashOperations = redisTemplate.<String, String>opsForZSet();
         if (PRIVATE_CHAT == msg.getType()) {
             // 私聊入库
             HistoryPrivateChat privateChat = new HistoryPrivateChat();
@@ -107,28 +113,34 @@ public class HistoryMessageServiceImpl implements HistoryMessageService, ChatTyp
             //  投入缓存信箱 写扩散
             String msgStr = JSON.toJSONString(msg);
             // 收箱
-            hashOperations.put(CacheConstant.LAST_MSG_ID + msg.getReceive(), msg.getSender(), msgStr);
+            hashOperations.add(CacheConstant.CHAT_HISTORY + msg.getReceive(), msgStr, privateChat.getTimeStamp());
             // 发箱
-            hashOperations.put(CacheConstant.LAST_MSG_ID + msg.getSender(), msg.getReceive(), msgStr);
+            hashOperations.add(CacheConstant.CHAT_HISTORY + msg.getSender(),  msgStr, privateChat.getTimeStamp());
             // 发箱
         } else if (GROUP_CHAT == msg.getType()) {
             // 群聊入库
             HistoryGroupChat groupChat = new HistoryGroupChat();
-            groupChat.setMessage(msg.getContent());
+            PushMessage groupMessage = JSON.parseObject(msg.getContent(), PushMessage.class);
+            String message = groupMessage.getContent();
+            groupChat.setMessage(message);
             groupChat.setReceive(msg.getReceive());
             groupChat.setMsgId(msg.getMsgId());
             groupChat.setSendId(msg.getSender());
-            groupChat.setTimeStamp(MsgIdUtil.getTimestamp(msg.getTimeStamp()));
+            groupChat.setTimeStamp(MsgIdUtil.getTimestamp(Long.parseLong(msg.getMsgId())));
             historyGroupChatService.save(groupChat);
-            String msgStr = JSON.toJSONString(msg);
             //  投入缓存信箱 写扩散
+            redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
 
-            // 发箱
-            hashOperations.put(CacheConstant.LAST_MSG_ID + msg.getSender(), msg.getReceive(), msgStr);
-            // 收箱
-
+                StringRedisConnection stringRedisConnection = (StringRedisConnection) connection;
+                // 发箱
+                Long timeStamp = groupChat.getTimeStamp();
+                stringRedisConnection.zAdd(CacheConstant.CHAT_HISTORY + msg.getSender(), timeStamp, message);
+                // 收箱
+                for (String receive : groupMessage.getReceiveId()) {
+                    stringRedisConnection.zAdd(CacheConstant.CHAT_HISTORY + receive, timeStamp, message);
+                }
+                return null;
+            });
         }
-        //
-
     }
 }

@@ -28,6 +28,8 @@ public enum CacheConstant {
     public static final String GROUP_CHAT_CONFIG = "IM:USER:GROUP:CHAT:";
     /** 单聊历史数据缓存前缀 */
     public static final String PRIVATE_CHAT_HISTORY = "IM:USER:PRIVATE:CHAT:";
+    /** 聊天写扩展离线缓存 */
+    public static final String CHAT_HISTORY = "IM:HIST:CHAT:";
     /** 群聊历史数据缓存前缀 */
     public static final String GROUP_CHAT_HISTORY = "IM:USER:GROUP:CHAT:";
 

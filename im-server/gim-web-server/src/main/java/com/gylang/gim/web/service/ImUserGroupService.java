@@ -12,5 +12,11 @@ import com.gylang.gim.web.entity.ImUserGroup;
 public interface ImUserGroupService extends IService<ImUserGroup> {
 
 
+    /**
+     *
+     * @param account
+     * @param targetId
+     * @return
+     */
     boolean checkIsYouGroup(String account, String targetId);
 }
