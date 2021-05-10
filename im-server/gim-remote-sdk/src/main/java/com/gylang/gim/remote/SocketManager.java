@@ -1,7 +1,6 @@
 package com.gylang.gim.remote;
 
 import cn.hutool.core.thread.ThreadFactoryBuilder;
-import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.gylang.gim.api.constant.CommonConstant;
 import com.gylang.gim.api.constant.ContentType;
@@ -324,9 +323,6 @@ public class SocketManager {
                 return;
             }
 
-            if (StrUtil.isEmpty(message.getCmd())) {
-                return;
-            }
             if (null == clientQosAdapterHandler.process(message)) {
                 // qo校验过滤包
                 return;

@@ -3,6 +3,7 @@ package com.gylang.gim.remote.qos;
 import com.gylang.gim.api.constant.QosConstant;
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.gim.api.domain.common.QosMessageWrap;
 import com.gylang.gim.api.domain.message.sys.AckMessage;
 import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.api.enums.ChatTypeEnum;
@@ -23,9 +24,8 @@ import java.util.concurrent.*;
 @Slf4j
 public class DefaultClientSenderSendQosHandler implements ClientSenderQosHandler {
 
-    private final ConcurrentMap<String, Long> messageTimeStamp = new ConcurrentHashMap<>();
-    private ConcurrentSkipListMap<String, MessageWrap> sentMessages = new ConcurrentSkipListMap<>();
 
+    private final ConcurrentMap<String, QosMessageWrap> qosMessageWraps = new ConcurrentHashMap<>();
 
     /**
      * 定时任务扫码间隔
@@ -55,18 +55,17 @@ public class DefaultClientSenderSendQosHandler implements ClientSenderQosHandler
         // 2. ack = 1
         if (QosConstant.SEND_ACK1 == message.getAck()) {
 
-            MessageWrap messageWrap = sentMessages.get(msgId);
-            if (null != messageWrap) {
+            QosMessageWrap qosMessageWrap = qosMessageWraps.get(msgId);
+            if (null != qosMessageWrap) {
                 // 存在重发记录 收到服务端ack1, 可以删除重发记录, qos2需要响应服务端
-                sentMessages.remove(msgId);
-                Long remove = messageTimeStamp.remove(msgId);
+                QosMessageWrap remove = qosMessageWraps.remove(msgId);
                 if (log.isDebugEnabled()) {
                     log.debug("[qos1 - sender] : 接收到服务端ack1, 删除重发记录 : {}", null == remove ? "已经删除,这是重发" : "立即删除");
                 }
             }
             // qos2 需要响应客户点 响应ack2 让客户端删除重发ack1列表
-            if (null != messageWrap && QosConstant.ACCURACY_ONE_ARRIVE == message.getQos()) {
-                AckMessage ackMessage = new AckMessage(ChatTypeEnum.QOS_CLIENT_SEND_ACK, messageWrap);
+            if (null != qosMessageWrap && QosConstant.ACCURACY_ONE_ARRIVE == message.getQos()) {
+                AckMessage ackMessage = new AckMessage(ChatTypeEnum.QOS_CLIENT_SEND_ACK, qosMessageWrap.getMessageWrap());
                 ackMessage.setAck(QosConstant.SEND_ACK2);
                 SocketHolder.getInstance().writeAndFlush(ackMessage);
                 if (log.isDebugEnabled()) {
@@ -80,14 +79,13 @@ public class DefaultClientSenderSendQosHandler implements ClientSenderQosHandler
 
     @Override
     public boolean hasReceived(String msgId) {
-        return messageTimeStamp.containsKey(msgId);
+        return qosMessageWraps.containsKey(msgId);
     }
 
     @Override
     public void addReceived(MessageWrap messageWrap) {
         if (!hasReceived(messageWrap.getClientMsgId())) {
-            messageTimeStamp.put(messageWrap.getClientMsgId(), System.currentTimeMillis() + messagesValidTime);
-            sentMessages.put(messageWrap.getClientMsgId(), messageWrap);
+            qosMessageWraps.put(messageWrap.getClientMsgId(), new QosMessageWrap(messageWrap, System.currentTimeMillis() + messagesValidTime));
         }
     }
 
@@ -126,27 +124,26 @@ public class DefaultClientSenderSendQosHandler implements ClientSenderQosHandler
          */
         if (log.isDebugEnabled()) {
 
-            log.debug("【QoS发送方】START 暂存处理线程正在运行中，当前长度" + messageTimeStamp.size() + ".");
+            log.debug("【QoS发送方】START 暂存处理线程正在运行中，当前长度" + qosMessageWraps.size() + ".");
         }
 
         //** 遍历清除
         long now = System.currentTimeMillis();
-        Set<Map.Entry<String, MessageWrap>> entries = sentMessages.entrySet();
-        Iterator<Map.Entry<String, MessageWrap>> iterator = entries.iterator();
+        Set<Map.Entry<String, QosMessageWrap>> entries = qosMessageWraps.entrySet();
+        Iterator<Map.Entry<String, QosMessageWrap>> iterator = entries.iterator();
         while (iterator.hasNext()) {
-            Map.Entry<String, MessageWrap> entry = iterator.next();
-            String key = entry.getKey();
-            MessageWrap msg = entry.getValue();
+            Map.Entry<String, QosMessageWrap> entry = iterator.next();
+            QosMessageWrap qosMessageWrap = entry.getValue();
             // 删除接收消息表
-            if (msg.getRetryNum() >= reSendNum) {
+            if (qosMessageWrap.getSendNum() >= reSendNum) {
                 if (log.isDebugEnabled()) {
-                    log.debug("【QoS发送方】消息:msgId" + msg.getClientMsgId() + "的包已生存" + reSendNum
+                    log.debug("【QoS发送方】消息:msgId: " + qosMessageWrap.getClientMsgId() + "的包已生存" + reSendNum
                             + "(最大允许" + reSendNum + "次数), 马上将删除之");
                     iterator.remove();
                     // 重发次数超出限制 响应失败
-                    MessageWrap messageWrap = msg.copyBasic();
-                    messageWrap.setClientMsgId(msg.getClientMsgId());
-                    messageWrap.setMsg(msg.getMsgId());
+                    MessageWrap messageWrap = qosMessageWrap.getMessageWrap().copyBasic();
+                    messageWrap.setClientMsgId(qosMessageWrap.getClientMsgId());
+                    messageWrap.setMsg(qosMessageWrap.getMsgId());
                     messageWrap.setType(ChatTypeEnum.SYSTEM_MESSAGE);
                     messageWrap.setCmd(SystemChatCmd.ERROR_MSG);
                     messageWrap.setCode(BaseResultCode.WEBSOCKET_CONNECTION_ERROR.getCode());
@@ -157,13 +154,18 @@ public class DefaultClientSenderSendQosHandler implements ClientSenderQosHandler
 
             } else {
                 //消息重发
-                long timestamp = messageTimeStamp.get(key);
-                MessageWrap messageWrap = sentMessages.get(key);
+                long timestamp = qosMessageWrap.getNextTme();
+                MessageWrap messageWrap = qosMessageWrap.getMessageWrap();
                 if (now < timestamp) {
                     continue;
                 }
+                if (log.isDebugEnabled()) {
+                    log.debug("【QoS发送方】消息重发 : msgId: " + qosMessageWrap.getMsgId() + ", 消息重发" + qosMessageWrap.getSendNum());
+                    iterator.remove();
+
+                }
                 SocketHolder.getInstance().writeAndFlush(messageWrap);
-                msg.setRetryNum(msg.getRetryNum() + 1);
+                qosMessageWrap.setSendNum(qosMessageWrap.getSendNum() + 1);
 
 
             }
@@ -171,7 +173,7 @@ public class DefaultClientSenderSendQosHandler implements ClientSenderQosHandler
 
         if (log.isDebugEnabled()) {
 
-            log.debug("【QoS发送方】END 暂存处理线程正在运行中，当前长度" + messageTimeStamp.size() + ".");
+            log.debug("【QoS发送方】END 暂存处理线程正在运行中，当前长度" + qosMessageWraps.size() + ".");
         }
     }
 

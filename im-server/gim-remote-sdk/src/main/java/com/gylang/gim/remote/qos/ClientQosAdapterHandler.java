@@ -1,7 +1,6 @@
 package com.gylang.gim.remote.qos;
 
 import com.gylang.gim.api.constant.QosConstant;
-import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.message.sys.AckMessage;
 import com.gylang.gim.api.enums.ChatTypeEnum;
@@ -19,6 +18,7 @@ public class ClientQosAdapterHandler {
 
     private ClientSenderQosHandler senderQosHandler = new DefaultClientSenderSendQosHandler();
     private ClientReceiveQos2Handler receiveQos2Handler = new DefaultIClientReceiveQos2Handler();
+
     {
         senderQosHandler.startup();
         receiveQos2Handler.startup();
@@ -58,7 +58,7 @@ public class ClientQosAdapterHandler {
                 if (receiveQos2Handler.handle(message)) {
                     // 消息未消费 缓存消息 防止重发
                     if (log.isDebugEnabled()) {
-                        log.debug("[qos2 - receiver] : 接收到服务端[首发]消息 , 响应服务端ack1");
+                        log.debug("[qos2 - receiver] : 接收到服务端[消息msgId = {} ,首发]消息 , 响应服务端ack1", msgId);
                     }
                     return message;
 
@@ -67,6 +67,9 @@ public class ClientQosAdapterHandler {
             } else if (QosConstant.RECEIVE_ACK2 == message.getAck()) {
                 // 接受方 收到的消息为ack2 为服务端ack1的回复 可以直接去掉重发记录
                 receiveQos2Handler.remove(msgId);
+                if (log.isDebugEnabled()) {
+                    log.debug("[qos2 - receiver] : 接受方 收到的消息 [msgId = {}]为ack2 为服务端ack1的回复 可以直接去掉重发记录", msgId);
+                }
                 return null;
             }
 

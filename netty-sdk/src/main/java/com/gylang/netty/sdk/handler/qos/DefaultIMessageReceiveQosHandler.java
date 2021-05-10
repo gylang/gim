@@ -3,7 +3,6 @@ package com.gylang.netty.sdk.handler.qos;
 import cn.hutool.core.thread.ThreadFactoryBuilder;
 import cn.hutool.core.util.StrUtil;
 import com.gylang.gim.api.constant.QosConstant;
-import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.message.sys.AckMessage;
 import com.gylang.gim.api.enums.ChatTypeEnum;
