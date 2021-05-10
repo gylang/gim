@@ -45,7 +45,7 @@ public class ConsoleController extends CustomApplication {
 
         SocketHolder.getInstance().globalBind(msg -> GuiUtil.update(() -> {
             TextField textField = new TextField();
-            int type =  msg.getType();
+            int type = msg.getType();
             Color color = new Color(type, type, type, type);
             Background background = new Background(new BackgroundFill(color, null, null));
             textField.setBackground(background);
