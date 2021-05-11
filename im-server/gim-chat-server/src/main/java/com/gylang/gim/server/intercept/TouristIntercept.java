@@ -3,8 +3,8 @@ package com.gylang.gim.server.intercept;
 import cn.hutool.core.util.StrUtil;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.common.AfterConfigInitialize;
-import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.intercept.NettyIntercept;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
@@ -25,27 +25,29 @@ public class TouristIntercept implements NettyIntercept, AfterConfigInitialize {
     private Set<Integer> nonAuthCMd = null;
 
     @Override
-    public void init(NettyConfiguration configuration) {
-        nonAuthCMd = configuration.getNettyProperties().getNonAuthCmd();
+    public void init(GimGlobalConfiguration configuration) {
+        nonAuthCMd = configuration.getGimProperties().getNonAuthType();
     }
 
     @Override
-    public boolean support(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
+    public boolean support(ChannelHandlerContext ctx, GIMSession me, MessageWrap message) {
         return true;
     }
 
     @Override
-    public boolean doBefore(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
+    public boolean doBefore(ChannelHandlerContext ctx, GIMSession me, MessageWrap message) {
 
-        boolean nonAuth = nonAuthCMd.contains(message.getType()) || StrUtil.isNotEmpty(me.getAccount());
+        boolean canAccess = nonAuthCMd.contains(message.getType()) || StrUtil.isNotEmpty(me.getAccount());
         if (log.isDebugEnabled()) {
-            log.debug("[ 非法消息拦截 ] : 授权接入 : {}, 发送的消息体 : {}", nonAuth ? false : me.getAccount(), message);
+            if (!canAccess) {
+                log.debug("[非法消息拦截] :NID : {}, 发送的消息体 : {}", me.getNid(), message);
+            }
         }
-        return !nonAuth;
+        return !canAccess;
     }
 
     @Override
-    public Object doAfter(ChannelHandlerContext ctx, IMSession me, MessageWrap message, Object result) {
+    public Object doAfter(ChannelHandlerContext ctx, GIMSession me, MessageWrap message, Object result) {
         return result;
     }
 }

@@ -1,6 +1,6 @@
 package com.gylang.netty.sdk.protocol;
 
-import com.gylang.netty.sdk.config.NettyConfiguration;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
 
 /**
  * @author gylang
@@ -22,14 +22,11 @@ public class JsonProtocolHandler implements ProtocolHandler {
     public Object handle(byte version, short server, byte[] byteBuf) {
 
         // 不支持泛型
-//        return JSON.parseObject();
         return null;
     }
 
     @Override
-    public void init(NettyConfiguration configuration) {
-
-
-
+    public void init(GimGlobalConfiguration configuration) {
+        // todo
     }
 }

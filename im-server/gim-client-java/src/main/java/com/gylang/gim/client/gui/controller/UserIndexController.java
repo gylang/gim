@@ -32,10 +32,7 @@ public class UserIndexController extends CustomApplication {
     }
 
 
-    @Override
-    public void beforeInit(URL location, ResourceBundle resources) {
 
-    }
 
     @Override
     public void init(URL location, ResourceBundle resources) {
@@ -48,8 +45,5 @@ public class UserIndexController extends CustomApplication {
         userListView.setItems(FXCollections.observableList(chatMsgList));
     }
 
-    @Override
-    public void afterInit(URL location, ResourceBundle resources) {
 
-    }
 }

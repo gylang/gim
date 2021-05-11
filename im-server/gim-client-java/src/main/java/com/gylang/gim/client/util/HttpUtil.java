@@ -3,6 +3,8 @@ package com.gylang.gim.client.util;
 import cn.hutool.core.lang.ClassScanner;
 import com.alibaba.fastjson.support.retrofit.Retrofit2ConverterFactory;
 import com.gylang.gim.client.interceptor.CommonInterecptor;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -16,10 +18,11 @@ import java.util.concurrent.TimeUnit;
  * @author gylang
  * data 2021/3/31
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HttpUtil {
 
     private static final Map<Class<?>, Object> apiProxy = new HashMap<>();
-    private static long DEFAULT_TIMEOUT = 30L;
+    private static final long DEFAULT_TIMEOUT = 30L;
 
     public static void init() {
 

@@ -43,6 +43,5 @@ public class GuiClientApplication {
         SocketClientApplication.run();
 
         LoginController.launch(LoginController.class, args);
-//        LoginController.launch(PrivateChatController.class, args);
     }
 }

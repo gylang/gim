@@ -3,7 +3,7 @@ package com.gylang.spring.netty.custom.adapter;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ClassUtil;
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.spring.netty.custom.handler.MethodArgumentResolverHandler;
 import com.gylang.spring.netty.custom.method.ControllerMethodMeta;
 import com.gylang.spring.netty.custom.method.MethodArgument;
@@ -44,8 +44,8 @@ public class InnerArgumentResolveHandler implements MethodArgumentResolverHandle
             if (ClassUtil.isAssignable(methodArgument.getArgumentType(), ChannelHandlerContext.class)) {
                 controllerMethodMeta.pushCache(PREFIX + ChannelHandlerContext.class.getName(), methodArgument.getName());
                 support = true;
-            } else if (ClassUtil.isAssignable(methodArgument.getArgumentType(), IMSession.class)) {
-                controllerMethodMeta.pushCache(PREFIX + IMSession.class.getName(), methodArgument.getName());
+            } else if (ClassUtil.isAssignable(methodArgument.getArgumentType(), GIMSession.class)) {
+                controllerMethodMeta.pushCache(PREFIX + GIMSession.class.getName(), methodArgument.getName());
                 support = true;
             } else if (ClassUtil.isAssignable(methodArgument.getArgumentType(), MessageWrap.class)) {
                 controllerMethodMeta.pushCache(PREFIX + MessageWrap.class.getName(), methodArgument.getName());
@@ -60,12 +60,12 @@ public class InnerArgumentResolveHandler implements MethodArgumentResolverHandle
     }
 
     @Override
-    public boolean handler(ChannelHandlerContext ctx, IMSession me, MessageWrap message, MethodArgumentValue methodArgumentValue) {
+    public boolean handler(ChannelHandlerContext ctx, GIMSession me, MessageWrap message, MethodArgumentValue methodArgumentValue) {
 
         ControllerMethodMeta controllerMethodMeta = methodArgumentValue.getControllerMethodMeta();
 
         putValueIsExist(methodArgumentValue, getMethodArgumentIndex(controllerMethodMeta, ChannelHandlerContext.class), ctx);
-        putValueIsExist(methodArgumentValue, getMethodArgumentIndex(controllerMethodMeta, IMSession.class), me);
+        putValueIsExist(methodArgumentValue, getMethodArgumentIndex(controllerMethodMeta, GIMSession.class), me);
         putValueIsExist(methodArgumentValue, getMethodArgumentIndex(controllerMethodMeta, MessageWrap.class), message);
 
         return false;

@@ -4,8 +4,7 @@ import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.common.AfterConfigInitialize;
-import com.gylang.netty.sdk.config.NettyConfiguration;
-import lombok.Getter;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
 
 /**
  * 消息id生成策略
@@ -19,19 +18,16 @@ import lombok.Getter;
  */
 public class MsgIdUtil implements AfterConfigInitialize {
 
-    private static final MsgIdUtil msgIdUtil = new MsgIdUtil();
+    private static final MsgIdUtil MSG_ID = new MsgIdUtil();
 
-    public static MsgIdUtil getMsgIdUtil() {
-        return msgIdUtil;
+    public static MsgIdUtil getMsgId() {
+        return MSG_ID;
     }
 
     private MsgIdUtil() {
     }
 
-    private static int dataCenter;
-    @Getter
     private static Snowflake snowflake;
-    private static int machine;
     /**
      * 16^3 -1 = 4905
      */
@@ -59,14 +55,6 @@ public class MsgIdUtil implements AfterConfigInitialize {
      * @return 消息id
      */
     public static String increase(MessageWrap message) {
-
-//        long timeStamp = getTimeStamp();
-//        message.setTimeStamp(timeStamp);
-//        int offId = offId(timeStamp);
-        // 时间戳 + 序列化
-
-//        return String.join("-", Long.toHexString(timeStamp), String.valueOf(offId),
-//                Integer.toHexString(message.getType()), Long.toHexString(Long.parseLong(message.getReceive())));
 
         // 使用雪花算法 保持系统全局递增趋势
         long nextId = snowflake.nextId();
@@ -124,13 +112,14 @@ public class MsgIdUtil implements AfterConfigInitialize {
         return timestamp << SEQ_BIT | seq;
     }
 
-    public static Long getTimestamp(long snowflake) {
+    public static Long timestamp(long snowflake) {
 
         // 去除数据中心 序列号 影响 获取最原始的时间戳 可以用户查询最新消息
         return (snowflake >> TIMESTAMP_CALCULATE) << TIMESTAMP_CALCULATE;
     }
+
     @Override
-    public void init(NettyConfiguration configuration) {
+    public void init(GimGlobalConfiguration configuration) {
         int workerId = configuration.getProperties("workerId");
         int datacenterId = configuration.getProperties("datacenterId");
         snowflake = IdUtil.getSnowflake(workerId, datacenterId);

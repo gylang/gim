@@ -3,7 +3,7 @@ package com.gylang.netty.sdk.event.message;
 import java.lang.annotation.*;
 
 /**
- * 消息通知注解 用于标识消息类型
+ * 消息事件触发通知注解 用于标识消息类型
  *
  * @author gylang
  * data 2020/11/7
@@ -14,5 +14,9 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 public @interface MessageEvent {
 
+    /**
+     * 事件类型
+     * @return 事件类型
+     */
     String[] value();
 }

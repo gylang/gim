@@ -1,16 +1,16 @@
 package com.gylang.chat;
 
 import cn.hutool.core.collection.CollUtil;
-import com.gylang.netty.sdk.config.NettyConfiguration;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
 import com.gylang.netty.sdk.conveter.JsonConverter;
 import com.gylang.netty.sdk.event.DefaultEventProvider;
 import com.gylang.netty.sdk.event.EventContext;
 import com.gylang.netty.sdk.handler.BizRequestAdapter;
 import com.gylang.netty.sdk.handler.DefaultMessageRouter;
-import com.gylang.netty.sdk.handler.adapter.DefaultNettyControllerAdapter;
+import com.gylang.netty.sdk.handler.adapter.DefaultGimControllerAdapter;
 import com.gylang.netty.sdk.handler.adapter.DefaultRequestHandlerAdapter;
-import com.gylang.netty.sdk.handler.qos.DefaultIMessageReceiveQosHandler;
-import com.gylang.netty.sdk.handler.qos.DefaultIMessageSendQosHandler;
+import com.gylang.netty.sdk.handler.qos.DefaultGIMessageReceiveQosHandler;
+import com.gylang.netty.sdk.handler.qos.DefaultGIMessageSendQosHandler;
 import com.gylang.netty.sdk.initializer.WebSocketJsonInitializer;
 import com.gylang.netty.sdk.provider.DefaultMessageProvider;
 import com.gylang.netty.sdk.repo.DefaultGroupRepository;
@@ -28,30 +28,30 @@ import java.util.List;
 @Slf4j
 public class NettyConfigHolder {
 
-    private static NettyConfiguration nettyConfiguration = new NettyConfiguration();
+    private static GimGlobalConfiguration gimGlobalConfiguration = new GimGlobalConfiguration();
 
-    public static NettyConfiguration getInstance() {
-        return nettyConfiguration;
+    public static GimGlobalConfiguration getInstance() {
+        return gimGlobalConfiguration;
     }
 
     public static void init() {
 
-        nettyConfiguration.setServerChannelInitializer(CollUtil.newArrayList(new WebSocketJsonInitializer()));
-        nettyConfiguration.setEventProvider(new DefaultEventProvider());
-        nettyConfiguration.setEventContext(new EventContext());
-        nettyConfiguration.setDataConverter(new JsonConverter());
-        nettyConfiguration.setSessionRepository(new DefaultIMRepository());
-        nettyConfiguration.setGroupSessionRepository(new DefaultGroupRepository());
-        nettyConfiguration.setMessageProvider(new DefaultMessageProvider());
-        nettyConfiguration.setMessageEventListener(new ArrayList<>());
-        List<BizRequestAdapter<?>> bizRequestAdapterList = new ArrayList<>();
-        bizRequestAdapterList.add(new DefaultNettyControllerAdapter());
+        gimGlobalConfiguration.setServerChannelInitializer(CollUtil.newArrayList(new WebSocketJsonInitializer()));
+        gimGlobalConfiguration.setEventProvider(new DefaultEventProvider());
+        gimGlobalConfiguration.setEventContext(new EventContext());
+        gimGlobalConfiguration.setDataConverter(new JsonConverter());
+        gimGlobalConfiguration.setSessionRepository(new DefaultIMRepository());
+        gimGlobalConfiguration.setGroupSessionRepository(new DefaultGroupRepository());
+        gimGlobalConfiguration.setMessageProvider(new DefaultMessageProvider());
+        gimGlobalConfiguration.setMessageEventListener(new ArrayList<>());
+        List<BizRequestAdapter> bizRequestAdapterList = new ArrayList<>();
+        bizRequestAdapterList.add(new DefaultGimControllerAdapter());
         bizRequestAdapterList.add(new DefaultRequestHandlerAdapter());
-        nettyConfiguration.setBizRequestAdapterList(bizRequestAdapterList);
-        nettyConfiguration.setIMessageRouter(new DefaultMessageRouter());
-        nettyConfiguration.setNettyInterceptList(new ArrayList<>());
-        nettyConfiguration.setIMessageReceiveQosHandler(new DefaultIMessageReceiveQosHandler());
-        nettyConfiguration.setIMessageSenderQosHandler(new DefaultIMessageSendQosHandler());
+        gimGlobalConfiguration.setBizRequestAdapterList(bizRequestAdapterList);
+        gimGlobalConfiguration.setIMessageRouter(new DefaultMessageRouter());
+        gimGlobalConfiguration.setNettyInterceptList(new ArrayList<>());
+        gimGlobalConfiguration.setIMessageReceiveQosHandler(new DefaultGIMessageReceiveQosHandler());
+        gimGlobalConfiguration.setIMessageSenderQosHandler(new DefaultGIMessageSendQosHandler());
 
     }
 }

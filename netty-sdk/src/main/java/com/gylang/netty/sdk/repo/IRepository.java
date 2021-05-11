@@ -10,7 +10,7 @@ import java.util.Set;
  * data 2020/10/29
  * @version v0.0.1
  */
-public interface IRepository<KEY, QUERY, ENTITY> {
+public interface IRepository<K, R, T> {
 
     /**
      * 查找实体
@@ -18,7 +18,7 @@ public interface IRepository<KEY, QUERY, ENTITY> {
      * @param query 查询条件
      * @return 实体
      */
-    ENTITY find(QUERY query);
+    T find(R query);
 
     /**
      * 查找实体
@@ -26,19 +26,19 @@ public interface IRepository<KEY, QUERY, ENTITY> {
      * @param keys 关键字列表
      * @return 实体
      */
-    List<ENTITY> findByIds(Collection<KEY> keys);
+    List<T> findByIds(Collection<K> keys);
     /**
      * 查找所有实体
      *
      * @return 实体
      */
-    Collection<ENTITY> findAll();
+    Collection<T> findAll();
     /**
      * 查找关键字
      *
      * @return 实体
      */
-    Set<KEY> findAllKey();
+    Set<K> findAllKey();
 
     /**
      * 通过key查询实体
@@ -46,7 +46,7 @@ public interface IRepository<KEY, QUERY, ENTITY> {
      * @param key key
      * @return 实体
      */
-    ENTITY findByKey(KEY key);
+    T findByKey(K key);
 
     /**
      * 弹出一个实体
@@ -54,7 +54,7 @@ public interface IRepository<KEY, QUERY, ENTITY> {
      * @param key key
      * @return 被弹出的实体
      */
-    ENTITY popByKey(KEY key);
+    T popByKey(K key);
 
     /**
      * 弹出一个实体
@@ -62,7 +62,7 @@ public interface IRepository<KEY, QUERY, ENTITY> {
      * @param query 弹出条件
      * @return 被弹出的实体
      */
-    ENTITY pop(QUERY query);
+    T pop(R query);
 
     /**
      * 添加一个实体
@@ -71,6 +71,6 @@ public interface IRepository<KEY, QUERY, ENTITY> {
      * @param entity 实体
      * @return 被弹出的实体
      */
-    ENTITY add(KEY key, ENTITY entity);
+    T add(K key, T entity);
 
 }

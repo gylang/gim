@@ -7,5 +7,5 @@ package com.gylang.gim.api.constant.cmd;
 public interface AuthChatCmd {
 
     /** 登录 */
-    public static final String LOGIN_SOCKET = "LNST";
+    String LOGIN_SOCKET = "LNST";
 }

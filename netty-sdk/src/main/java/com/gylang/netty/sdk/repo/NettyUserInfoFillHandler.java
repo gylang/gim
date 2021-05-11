@@ -1,6 +1,6 @@
 package com.gylang.netty.sdk.repo;
 
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 
 /**
  * 填充用户信息
@@ -16,5 +16,5 @@ public interface NettyUserInfoFillHandler {
      *
      * @param session 用户信息
      */
-    void fill(IMSession session);
+    void fill(GIMSession session);
 }

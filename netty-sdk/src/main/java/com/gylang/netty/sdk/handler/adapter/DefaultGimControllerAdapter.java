@@ -3,13 +3,13 @@ package com.gylang.netty.sdk.handler.adapter;
 import cn.hutool.core.collection.CollUtil;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.common.InokeFinished;
+import com.gylang.netty.sdk.common.InvokeFinished;
 import com.gylang.netty.sdk.common.ObjectWrap;
-import com.gylang.netty.sdk.config.NettyConfiguration;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
 import com.gylang.netty.sdk.conveter.DataConverter;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.handler.BizRequestAdapter;
-import com.gylang.netty.sdk.handler.NettyController;
+import com.gylang.netty.sdk.handler.GimController;
 import com.gylang.netty.sdk.util.ObjectWrapUtil;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -22,33 +22,31 @@ import java.util.Map;
  *
  * @author gylang
  * data 2020/11/9
- * @author gylang
- * data 2020/11/9
  * @version v0.0.1
- * @see com.gylang.netty.sdk.handler.NettyController
+ * @see GimController
  */
-public class DefaultNettyControllerAdapter implements BizRequestAdapter<NettyController<?>> {
+public class DefaultGimControllerAdapter implements BizRequestAdapter {
 
     private static final String METHOD_NAME = "process";
-    private Map<Integer, NettyController<?>> nettyControllerMap;
+    private Map<Integer, GimController<?>> nettyControllerMap;
     private Map<Integer, Class<?>> paramTypeMap;
     private DataConverter dataConverter;
 
 
     @Override
-    public Object process(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
+    public Object process(ChannelHandlerContext ctx, GIMSession me, MessageWrap message) {
 
         if (null != nettyControllerMap && null != paramTypeMap) {
 
-            NettyController<?> nettyController = nettyControllerMap.get(message.getType());
+            GimController<?> gimController = nettyControllerMap.get(message.getType());
             Class<?> paramType = paramTypeMap.get(message.getType());
-            if (null == nettyController || null == paramType) {
+            if (null == gimController || null == paramType) {
                 return null;
             }
-
-            Object result = ((NettyController<Object>) nettyController)
+            @SuppressWarnings("unchecked")
+            Object result = ((GimController<Object>) gimController)
                     .process(me, dataConverter.converterTo(paramType, message));
-            return InokeFinished.finish(result);
+            return InvokeFinished.finish(result);
         }
         return null;
     }
@@ -66,12 +64,12 @@ public class DefaultNettyControllerAdapter implements BizRequestAdapter<NettyCon
         for (ObjectWrap objectWrap : nettyControllerList) {
 
             Object instance = objectWrap.getInstance();
-            if (instance instanceof NettyController) {
+            if (instance instanceof GimController) {
                 NettyHandler nettyHandler = ObjectWrapUtil.findAnnotation(NettyHandler.class, objectWrap);
                 if (null != nettyHandler) {
                     for (Method method : objectWrap.getUserType().getDeclaredMethods()) {
                         if (METHOD_NAME.equals(method.getName()) && !method.isBridge()) {
-                            nettyControllerMap.put(nettyHandler.value(), (NettyController<?>) instance);
+                            nettyControllerMap.put(nettyHandler.value(), (GimController<?>) instance);
                             paramTypeMap.put(nettyHandler.value(), method.getParameterTypes()[1]);
                         }
                     }
@@ -87,9 +85,9 @@ public class DefaultNettyControllerAdapter implements BizRequestAdapter<NettyCon
     }
 
     @Override
-    public void init(NettyConfiguration nettyConfiguration) {
-        dataConverter = nettyConfiguration.getDataConverter();
-        register(nettyConfiguration.getObjectWrapList());
+    public void init(GimGlobalConfiguration gimGlobalConfiguration) {
+        dataConverter = gimGlobalConfiguration.getDataConverter();
+        register(gimGlobalConfiguration.getObjectWrapList());
     }
 
 

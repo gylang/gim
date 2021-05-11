@@ -1,6 +1,5 @@
 package com.gylang.gim.api.domain.message.sys;
 
-import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.common.ResponseMessage;
 import com.gylang.gim.api.enums.ChatTypeEnum;

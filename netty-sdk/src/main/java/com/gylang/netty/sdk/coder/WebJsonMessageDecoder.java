@@ -152,7 +152,6 @@ public class WebJsonMessageDecoder extends SimpleChannelInboundHandler<Object> {
     private void handlerBinaryWebSocketFrame(ChannelHandlerContext ctx, BinaryWebSocketFrame frame) {
 
 
-
         byte[] data = new byte[frame.content().readableBytes()];
         frame.content().readBytes(data);
 

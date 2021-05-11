@@ -3,12 +3,14 @@ package com.gylang.netty.sdk.conveter;
 import com.gylang.gim.api.domain.common.MessageWrap;
 
 /**
- * 实体转化, 用于protobuf 或json等序列化之间进行切换
+ *
+ * todo 实体转化, 用于protobuf 或json等序列化之间进行切换
  *
  * @author gylang
  * data 2020/11/3
  * @version v0.0.1
  */
+
 public interface DataConverter {
     /**
      * 转成具体实体类型

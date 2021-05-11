@@ -2,7 +2,7 @@ package com.gylang.netty.sdk.handler.qos;
 
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.common.AfterConfigInitialize;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 
 /**
  * 处理收到接受到的消息，发送ack，保证消息已经接受成功
@@ -29,7 +29,7 @@ public interface IMessageReceiveQosHandler extends AfterConfigInitialize {
      * @param target      接收者
      * @return
      */
-    boolean handle(MessageWrap messageWrap, IMSession target);
+    boolean handle(MessageWrap messageWrap, GIMSession target);
 
     /**
      * 是否已经接收到当前消息

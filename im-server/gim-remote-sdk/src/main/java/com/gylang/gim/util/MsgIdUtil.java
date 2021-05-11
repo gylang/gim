@@ -25,10 +25,8 @@ public class MsgIdUtil  {
     private MsgIdUtil() {
     }
 
-    private static int dataCenter = 1;
 
     private static Snowflake snowflake = IdUtil.getSnowflake(1, 1);
-    private static int machine = 1;
     /**
      * 16^3 -1 = 4905
      */
@@ -56,14 +54,6 @@ public class MsgIdUtil  {
      * @return 消息id
      */
     public static String increase(MessageWrap message) {
-
-//        long timeStamp = getTimeStamp();
-//        message.setTimeStamp(timeStamp);
-//        int offId = offId(timeStamp);
-        // 时间戳 + 序列化
-
-//        return String.join("-", Long.toHexString(timeStamp), String.valueOf(offId),
-//                Integer.toHexString(message.getType()), Long.toHexString(Long.parseLong(message.getReceive())));
 
         // 使用雪花算法 保持系统全局递增趋势
         long nextId = snowflake.nextId();
@@ -121,7 +111,7 @@ public class MsgIdUtil  {
         return timestamp << SEQ_BIT | seq;
     }
 
-    public static Long getTimestamp(long snowflake) {
+    public static Long timestamp(long snowflake) {
 
         // 去除数据中心 序列号 影响 获取最原始的时间戳 可以用户查询最新消息
         return (snowflake >> TIMESTAMP_CALCULATE) << TIMESTAMP_CALCULATE;

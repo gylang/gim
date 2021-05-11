@@ -3,7 +3,7 @@ package com.gylang.netty.sdk.config;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.gylang.netty.sdk.common.ObjectWrap;
-import com.gylang.netty.sdk.constant.NettyConfigEnum;
+import com.gylang.netty.sdk.constant.GimDefaultConfigEnum;
 import com.gylang.netty.sdk.conveter.DataConverter;
 import com.gylang.netty.sdk.event.EventContext;
 import com.gylang.netty.sdk.event.EventProvider;
@@ -36,7 +36,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @version v0.0.1
  */
 @Data
-public class NettyConfiguration {
+public class GimGlobalConfiguration {
 
 
     /**
@@ -58,9 +58,9 @@ public class NettyConfiguration {
     /** 事件监听列表 */
     private List<MessageEventListener<?>> messageEventListener;
     /** 业务请求适配器 */
-    private List<BizRequestAdapter<?>> bizRequestAdapterList;
-    /** 适配分发器 */
-    private IMessageRouter IMessageRouter;
+    private List<BizRequestAdapter> bizRequestAdapterList;
+    /** 消息路由分发器 */
+    private IMessageRouter iMessageRouter;
     /** 线程池 */
     private ThreadPoolExecutor poolExecutor;
     /** 填充客户信息 */
@@ -69,22 +69,26 @@ public class NettyConfiguration {
     private List<NettyIntercept> nettyInterceptList;
     /** 上下文可能使用到的对象包装类集合 主要用于适配业务调用的bean注入 */
     private List<ObjectWrap> objectWrapList;
-    /** qos 发送 */
+    /** qos 发送处理器 */
     private IMessageReceiveQosHandler iMessageReceiveQosHandler;
     /** qos 接收 */
     private IMessageSenderQosHandler iMessageSenderQosHandler;
 
     /** 配置属性 */
-    private NettyProperties nettyProperties;
-
-    private MsgIdUtil msgIdUtil = MsgIdUtil.getMsgIdUtil();
+    private GimProperties gimProperties;
+    /** 消息id生成器 */
+    private MsgIdUtil msgIdUtil = MsgIdUtil.getMsgId();
     /**
      * 配置信息
      */
     @Getter
     private Map<String, Object> properties;
 
-    public void setBizRequestAdapterList(List<BizRequestAdapter<?>> requestAdapterList) {
+    /**
+     * 设置业务适配器
+     * @param requestAdapterList 适配器列表
+     */
+    public void setBizRequestAdapterList(List<BizRequestAdapter> requestAdapterList) {
         if (CollUtil.isNotEmpty(requestAdapterList)) {
 
             this.bizRequestAdapterList = CollUtil.sort(requestAdapterList, requestAdapterList.get(0));
@@ -94,13 +98,17 @@ public class NettyConfiguration {
 
     }
 
-    public void setNettyProperties(NettyProperties nettyProperties) {
-        this.nettyProperties = nettyProperties;
+    /**
+     * 设置配置参数
+     * @param gimProperties 参数
+     */
+    public void setGimProperties(GimProperties gimProperties) {
+        this.gimProperties = gimProperties;
         Map<String, Object> property = new HashMap<>();
-        if (null != nettyProperties.getProperties()) {
-        property.putAll(nettyProperties.getProperties());
+        if (null != gimProperties.getProperties()) {
+            property.putAll(gimProperties.getProperties());
         }
-        BeanUtil.beanToMap(nettyProperties, property, false, false);
+        BeanUtil.beanToMap(gimProperties, property, false, false);
         setProperties(property);
     }
 
@@ -111,7 +119,7 @@ public class NettyConfiguration {
      * @return 配置值
      */
     public <T> T getProperties(String key) {
-        return NettyConfigEnum.getValue(key, properties);
+        return GimDefaultConfigEnum.getValue(key, properties);
     }
 
     /**
@@ -120,11 +128,14 @@ public class NettyConfiguration {
      * @param key key
      * @return 配置值
      */
-    public <T> T getProperties(NettyConfigEnum key) {
+    public <T> T getProperties(GimDefaultConfigEnum key) {
         return key.getValue(properties);
     }
 
-
+    /**
+     * 额外自定义对象 用户各种组件初始化场景中使用
+     * @param objectWrapList 包装对象列表
+     */
     public void addObjectWrap(List<ObjectWrap> objectWrapList) {
         if (CollUtil.isEmpty(objectWrapList)) {
             this.objectWrapList = new ArrayList<>(objectWrapList);
@@ -132,14 +143,21 @@ public class NettyConfiguration {
         this.objectWrapList.addAll(objectWrapList);
     }
 
+    /**
+     * 额外自定义对象 用户各种组件初始化场景中使用
+     * @param objectWrap 包装对象
+     */
     public void addObjectWrap(ObjectWrap objectWrap) {
         if (null == objectWrapList) {
             this.objectWrapList = new ArrayList<>();
         }
         this.objectWrapList.add(objectWrap);
     }
-
-    public void addAdapter(BizRequestAdapter<?> bizRequestAdapter) {
+    /**
+     * 新增适配器
+     * @param bizRequestAdapter 包装对象
+     */
+    public void addAdapter(BizRequestAdapter bizRequestAdapter) {
 
         if (null == bizRequestAdapterList) {
             bizRequestAdapterList = new ArrayList<>();

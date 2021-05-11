@@ -1,6 +1,6 @@
 package com.gylang.netty.sdk.protocol;
 
-import com.gylang.netty.sdk.config.NettyConfiguration;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
 
 /**
  * @author gylang
@@ -23,7 +23,7 @@ public class ProtobufProtocolHandler implements ProtocolHandler{
     }
 
     @Override
-    public void init(NettyConfiguration configuration) {
+    public void init(GimGlobalConfiguration configuration) {
 
     }
 }

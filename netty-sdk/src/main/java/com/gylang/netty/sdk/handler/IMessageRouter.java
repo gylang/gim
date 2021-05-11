@@ -5,5 +5,5 @@ package com.gylang.netty.sdk.handler;
  * @author gylang
  * data 2020/12/1
  */
-public interface IMessageRouter extends IRequestAdapter<BizRequestAdapter<?>> {
+public interface IMessageRouter extends IRequestAdapter {
 }

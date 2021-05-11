@@ -23,5 +23,4 @@ public enum MockKey {
 
     private final String mark;
 
-    ;
 }

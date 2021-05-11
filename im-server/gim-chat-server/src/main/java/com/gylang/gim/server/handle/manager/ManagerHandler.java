@@ -5,7 +5,7 @@ import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
@@ -26,7 +26,7 @@ public class ManagerHandler implements IMRequestHandler, InitializingBean {
     private Map<String, ManagerService> managerServiceMap;
 
     @Override
-    public Object process(IMSession me, MessageWrap message) {
+    public Object process(GIMSession me, MessageWrap message) {
 
         ManagerService managerService = managerServiceMap.get(message.getCmd());
         if (null != managerService) {

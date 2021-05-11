@@ -20,7 +20,7 @@ public interface ChatTypeEnum {
     /** 组聊 */
     int GROUP_CHAT = 2;
     /** 通知类 */
-    int NOTIFY = 3;
+    int NOTIFY_CHAT = 3;
     /** 聊天室 */
     int CHAT_ROOM = 4;
     /** 推送服务类 */

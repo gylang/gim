@@ -10,7 +10,7 @@ import com.gylang.gim.api.domain.push.PushMessage;
 import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.event.EventProvider;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import com.gylang.netty.sdk.provider.MessageProvider;
@@ -35,7 +35,7 @@ public class GroupChatHandler implements IMRequestHandler {
     private EventProvider eventProvider;
 
     @Override
-    public Object process(IMSession me, MessageWrap message) {
+    public Object process(GIMSession me, MessageWrap message) {
 
         // 1. 群关系检验
         Map<String, GroupConfig> config = redisTemplate.<String, GroupConfig>opsForHash().

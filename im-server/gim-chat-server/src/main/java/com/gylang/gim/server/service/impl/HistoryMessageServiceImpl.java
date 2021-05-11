@@ -62,11 +62,11 @@ public class HistoryMessageServiceImpl implements HistoryMessageService {
 
     @Override
     public Long privateHistoryId(String msgId) {
-        return MsgIdUtil.getTimestamp(Long.parseLong(msgId));
+        return MsgIdUtil.timestamp(Long.parseLong(msgId));
     }
 
     @Override
     public Long groupHistoryId(String msgId) {
-        return MsgIdUtil.getTimestamp(Long.parseLong(msgId));
+        return MsgIdUtil.timestamp(Long.parseLong(msgId));
     }
 }

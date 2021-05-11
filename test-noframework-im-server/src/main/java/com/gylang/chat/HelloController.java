@@ -1,8 +1,8 @@
 package com.gylang.chat;
 
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.domain.model.IMSession;
-import com.gylang.netty.sdk.handler.NettyController;
+import com.gylang.netty.sdk.domain.model.GIMSession;
+import com.gylang.netty.sdk.handler.GimController;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -12,12 +12,12 @@ import lombok.extern.slf4j.Slf4j;
  */
 @NettyHandler("chat")
 @Slf4j
-public class HelloController implements NettyController<Void> {
+public class HelloController implements GimController<Void> {
 
 
 
     @Override
-    public Void process(IMSession me, Void requestBody) {
+    public Void process(GIMSession me, Void requestBody) {
 
         return null;
     }

@@ -108,13 +108,13 @@ public Object process(ChannelHandlerContext ctx, IMSession me, MessageWrap messa
 
     if (null != nettyControllerMap && null != paramTypeMap) {
 
-        NettyController<?> nettyController = nettyControllerMap.get(message.getCmd());
+        NettyController<?> gimController = nettyControllerMap.get(message.getCmd());
         Class<?> paramType = paramTypeMap.get(message.getCmd());
-        if (null == nettyController || null == paramType) {
+        if (null == gimController || null == paramType) {
             return null;
         }
 
-        Object result = ((NettyController<Object>) nettyController)
+        Object result = ((NettyController<Object>) gimController)
                 .process(me, dataConverter.converterTo(paramType, message));
         return null == result ? NlllSuccess.getInstance() : result;
     }
@@ -190,7 +190,7 @@ private IMessageReceiveQosHandler iMessageReceiveQosHandler;
 private IMessageSenderQosHandler iMessageSenderQosHandler;
 
 /** 配置属性 用于存储配置 */
-private NettyProperties nettyProperties;
+private NettyProperties gimProperties;
 /**
  * 配置信息
  */
@@ -263,33 +263,33 @@ public class ChatHandler implements IMRequestHandler {
 参考 netty-console-chat
 
 ```java
-nettyConfiguration.setServerChannelInitializer(new WebJsonInitializer());
-nettyConfiguration.setEventProvider(new DefaultEventProvider());
-nettyConfiguration.setEventContext(new EventContext());
-nettyConfiguration.setDataConverter(new JsonConverter());
-nettyConfiguration.setSessionRepository(new DefaultIMRepository());
-nettyConfiguration.setGroupSessionRepository(new DefaultGroupRepository());
-nettyConfiguration.setMessageProvider(new DefaultMessageProvider());
-nettyConfiguration.setMessageEventListener(new ArrayList<>());
+gimGlobalConfiguration.setServerChannelInitializer(new WebJsonInitializer());
+gimGlobalConfiguration.setEventProvider(new DefaultEventProvider());
+gimGlobalConfiguration.setEventContext(new EventContext());
+gimGlobalConfiguration.setDataConverter(new JsonConverter());
+gimGlobalConfiguration.setSessionRepository(new DefaultIMRepository());
+gimGlobalConfiguration.setGroupSessionRepository(new DefaultGroupRepository());
+gimGlobalConfiguration.setMessageProvider(new DefaultMessageProvider());
+gimGlobalConfiguration.setMessageEventListener(new ArrayList<>());
 List<BizRequestAdapter<?>> bizRequestAdapterList = new ArrayList<>();
 bizRequestAdapterList.add(new DefaultNettyControllerAdapter());
 bizRequestAdapterList.add(new DefaultRequestHandlerAdapter());
-nettyConfiguration.setBizRequestAdapterList(bizRequestAdapterList);
-nettyConfiguration.setDispatchAdapterHandler(new DefaultAdapterDispatch());
-nettyConfiguration.setNettyInterceptList(new ArrayList<>());
-nettyConfiguration.setIMessageReceiveQosHandler(new DefaultIMessageReceiveQosHandler());
-nettyConfiguration.setIMessageSenderQosHandler(new DefaultIMessageSendQosHandler());
+gimGlobalConfiguration.setBizRequestAdapterList(bizRequestAdapterList);
+gimGlobalConfiguration.setDispatchAdapterHandler(new DefaultAdapterDispatch());
+gimGlobalConfiguration.setNettyInterceptList(new ArrayList<>());
+gimGlobalConfiguration.setIMessageReceiveQosHandler(new DefaultIMessageReceiveQosHandler());
+gimGlobalConfiguration.setIMessageSenderQosHandler(new DefaultIMessageSendQosHandler());
 
 // 启动服务
 NettyConfigHolder.init();
 //业务执行参数
-NettyConfiguration nettyConfiguration = NettyConfigHolder.getInstance();
-nettyConfiguration.addObjectWrap(ObjectWrapUtil.resolver(JoinGroupHandler.class, new JoinGroupHandler()));
-nettyConfiguration.addObjectWrap(ObjectWrapUtil.resolver(SimpleChatGroupHandler.class, new SimpleChatGroupHandler()));
-nettyConfiguration.setMessageEventListener(CollUtil.newArrayList(new TestEventListener()));
-new SimpleNettyConfigurationInitializer().initConfig(nettyConfiguration);
+NettyConfiguration gimGlobalConfiguration = NettyConfigHolder.getInstance();
+gimGlobalConfiguration.addObjectWrap(ObjectWrapUtil.resolver(JoinGroupHandler.class, new JoinGroupHandler()));
+gimGlobalConfiguration.addObjectWrap(ObjectWrapUtil.resolver(SimpleChatGroupHandler.class, new SimpleChatGroupHandler()));
+gimGlobalConfiguration.setMessageEventListener(CollUtil.newArrayList(new TestEventListener()));
+new SimpleNettyConfigurationInitializer().initConfig(gimGlobalConfiguration);
 IMServer imServer = new IMServer();
-imServer.setNettyConfig(nettyConfiguration);
+imServer.setNettyConfig(gimGlobalConfiguration);
 imServer.start();
 ```
 

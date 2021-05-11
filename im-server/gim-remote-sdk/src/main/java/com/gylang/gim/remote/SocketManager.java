@@ -232,7 +232,7 @@ public class SocketManager {
 
             if (result <= 0) {
                 closeSession();
-            }  // messageSent(body);
+            }
 
         }
     }

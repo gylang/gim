@@ -2,7 +2,7 @@ package com.gylang.chat;
 
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 public class SimpleChatGroupHandler implements IMRequestHandler {
 
     @Override
-    public Object process(IMSession me, MessageWrap message) {
+    public Object process(GIMSession me, MessageWrap message) {
         log.info("收到消息 : {}", message.getContent());
         log.info("发送test事件");
         NettyConfigHolder.getInstance().getEventProvider().sendEvent("test", "hahaha这是一个事件消息");

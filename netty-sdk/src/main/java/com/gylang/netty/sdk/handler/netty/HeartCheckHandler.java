@@ -1,9 +1,9 @@
 package com.gylang.netty.sdk.handler.netty;
 
 import com.gylang.gim.api.constant.EventTypeConst;
-import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.constant.NettyConfigEnum;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.constant.GimDefaultConfigEnum;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.event.EventProvider;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -35,9 +35,9 @@ public class HeartCheckHandler extends ChannelInboundHandlerAdapter {
      */
     private int unRecPingTimes;
 
-    public HeartCheckHandler(NettyConfiguration nettyConfiguration) {
-        this.eventProvider = nettyConfiguration.getEventProvider();
-        this.properties = nettyConfiguration.getProperties();
+    public HeartCheckHandler(GimGlobalConfiguration gimGlobalConfiguration) {
+        this.eventProvider = gimGlobalConfiguration.getEventProvider();
+        this.properties = gimGlobalConfiguration.getProperties();
     }
 
 
@@ -67,11 +67,11 @@ public class HeartCheckHandler extends ChannelInboundHandlerAdapter {
                     eventType = "";
             }
             log.info("客户触发心跳事件: {}", eventType);
-            int retry = NettyConfigEnum.LOST_CONNECT_RETRY_NUM.getValue(properties);
+            int retry = GimDefaultConfigEnum.LOST_CONNECT_RETRY_NUM.getValue(properties);
             if (ALL_IDLE.equals(event.state())) {
                 if (unRecPingTimes >= retry) {
                     // 连续超过N次未收到client的ping消息，那么关闭该通道，等待client重连
-                    eventProvider.sendAsyncEvent(EventTypeConst.OVER_TIME_CLOSE, new IMSession(ctx.channel()));
+                    eventProvider.sendAsyncEvent(EventTypeConst.OVER_TIME_CLOSE, new GIMSession(ctx.channel()));
                     // 一分钟为重连 断开连接
                     ctx.channel().close();
                 } else {
@@ -95,8 +95,5 @@ public class HeartCheckHandler extends ChannelInboundHandlerAdapter {
         super.exceptionCaught(ctx, cause);
     }
 
-    @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        super.channelInactive(ctx);
-    }
+
 }

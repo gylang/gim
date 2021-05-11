@@ -2,7 +2,7 @@ package com.gylang.spring.netty.custom.register;
 
 import com.gylang.netty.sdk.common.MethodWrap;
 import com.gylang.netty.sdk.common.ObjectWrap;
-import com.gylang.netty.sdk.config.NettyConfiguration;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
 import com.gylang.spring.netty.annotation.SpringNettyController;
 import com.gylang.spring.netty.custom.reslove.MethodArgumentResolver;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ import java.util.Map;
 public class MethodHandlerBeanRegister implements InitializingBean {
 
     @Resource
-    private NettyConfiguration nettyConfiguration;
+    private GimGlobalConfiguration gimGlobalConfiguration;
     @Resource
     private ApplicationContext applicationContext;
     @Resource
@@ -44,7 +44,7 @@ public class MethodHandlerBeanRegister implements InitializingBean {
             objectWrap.setInstance(controller);
             objectWrap.setUserType(clazz);
             SpringNettyController nettyController = AnnotationUtils.findAnnotation(clazz, SpringNettyController.class);
-            objectWrap.addAnno(nettyController);
+            objectWrap.addAnnotation(nettyController);
             List<MethodWrap> methodWrapList = new ArrayList<>();
             for (Method method : clazz.getDeclaredMethods()) {
                 if (methodArgumentResolver.support(method)) {
@@ -56,6 +56,6 @@ public class MethodHandlerBeanRegister implements InitializingBean {
             objectWrap.setMethodWrapList(methodWrapList);
             objectWrapList.add(objectWrap);
         }
-        nettyConfiguration.addObjectWrap(objectWrapList);
+        gimGlobalConfiguration.addObjectWrap(objectWrapList);
     }
 }

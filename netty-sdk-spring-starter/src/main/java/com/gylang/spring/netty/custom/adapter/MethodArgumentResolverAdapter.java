@@ -1,8 +1,8 @@
 package com.gylang.spring.netty.custom.adapter;
 
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.netty.sdk.common.InokeFinished;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.common.InvokeFinished;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.spring.netty.custom.handler.MethodArgumentResolverHandler;
 import com.gylang.spring.netty.custom.method.MethodArgumentValue;
 import io.netty.channel.ChannelHandlerContext;
@@ -25,7 +25,7 @@ public class MethodArgumentResolverAdapter {
     @Autowired(required = false)
     private List<MethodHandlerPostProcess> methodHandlerPostProcessList;
 
-    public Object handler(ChannelHandlerContext ctx, IMSession me, MessageWrap message, MethodArgumentValue methodArgumentValue) {
+    public Object handler(ChannelHandlerContext ctx, GIMSession me, MessageWrap message, MethodArgumentValue methodArgumentValue) {
 
         // 解析通信信息
         for (MethodArgumentResolverHandler methodArgumentResolverHandler : methodArgumentResolverHandlerList) {
@@ -39,7 +39,7 @@ public class MethodArgumentResolverAdapter {
         }
         //调用业务方法
         Object processResult = methodArgumentValue.invoke();
-        processResult = null != processResult ? processResult : InokeFinished.getInstance();
+        processResult = null != processResult ? processResult : InvokeFinished.getInstance();
         // 执行后置处理器
         if (null == methodHandlerPostProcessList) {
             return processResult;

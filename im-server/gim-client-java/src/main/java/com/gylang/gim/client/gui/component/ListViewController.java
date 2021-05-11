@@ -40,10 +40,6 @@ public class ListViewController extends CustomApplication {
     }
 
 
-    @Override
-    public void beforeInit(URL location, ResourceBundle resources) {
-
-    }
 
     @Override
     public void init(URL location, ResourceBundle resources) {
@@ -62,8 +58,5 @@ public class ListViewController extends CustomApplication {
 
     }
 
-    @Override
-    public void afterInit(URL location, ResourceBundle resources) {
 
-    }
 }

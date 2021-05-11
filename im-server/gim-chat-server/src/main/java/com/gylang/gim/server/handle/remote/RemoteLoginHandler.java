@@ -8,7 +8,7 @@ import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.server.config.AdminConfig;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import com.gylang.netty.sdk.repo.IMSessionRepository;
 import com.gylang.netty.sdk.util.LocalSessionHolderUtil;
@@ -32,7 +32,7 @@ public class RemoteLoginHandler implements IMRequestHandler {
     private IMSessionRepository sessionRepository;
 
     @Override
-    public Object process(IMSession me, MessageWrap message) {
+    public Object process(GIMSession me, MessageWrap message) {
 
         AdminUser user = JSON.parseObject(message.getContent(), AdminUser.class);
         Map<String, AdminUser> adminUser = adminConfig.getAdminUser();

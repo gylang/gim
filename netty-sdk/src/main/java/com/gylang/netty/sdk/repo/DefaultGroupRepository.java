@@ -64,7 +64,7 @@ public class DefaultGroupRepository implements IMGroupSessionRepository {
 
     @Override
     public AbstractSessionGroup pop(AbstractSessionGroup sessionGroup) {
-        return groupMap.remove(sessionGroup);
+        return groupMap.remove(sessionGroup.getKey());
     }
 
     @Override

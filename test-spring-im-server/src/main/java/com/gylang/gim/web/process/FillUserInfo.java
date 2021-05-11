@@ -1,7 +1,7 @@
 package com.gylang.gim.web.process;
 
 import cn.hutool.core.util.StrUtil;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.repo.IMSessionRepository;
 import com.gylang.netty.sdk.repo.NettyUserInfoFillHandler;
 import io.netty.channel.Channel;
@@ -24,14 +24,14 @@ public class FillUserInfo implements NettyUserInfoFillHandler {
 
 
     @Override
-    public void fill(IMSession session) {
+    public void fill(GIMSession session) {
         if (StrUtil.isNotEmpty(session.getAccount())) {
             return;
         }
-        IMSession imSession = repository.find(session.getAccount());
-        if (null != imSession) {
+        GIMSession gimSession = repository.find(session.getAccount());
+        if (null != gimSession) {
         Channel channel = session.getSession();
-        BeanUtils.copyProperties(imSession, session);
+        BeanUtils.copyProperties(gimSession, session);
         session.setSession(channel);
         }
     }

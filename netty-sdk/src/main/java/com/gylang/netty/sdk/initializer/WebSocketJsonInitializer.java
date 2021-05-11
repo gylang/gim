@@ -2,9 +2,8 @@ package com.gylang.netty.sdk.initializer;
 
 import com.gylang.netty.sdk.coder.WebJsonMessageDecoder;
 import com.gylang.netty.sdk.coder.WebJsonMessageEncoder;
-import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.constant.NettyConfigEnum;
-import com.gylang.netty.sdk.event.EventProvider;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.constant.GimDefaultConfigEnum;
 import com.gylang.netty.sdk.handler.IMessageRouter;
 import com.gylang.netty.sdk.handler.netty.HeartCheckHandler;
 import com.gylang.netty.sdk.handler.netty.JsonDispatchHandler;
@@ -31,11 +30,10 @@ public class WebSocketJsonInitializer extends CustomInitializer<SocketChannel> {
 
     private  Map<String, Object> properties;
 
-    private  NettyConfiguration nettyConfiguration;
+    private GimGlobalConfiguration gimGlobalConfiguration;
 
-    private  EventProvider eventProvider;
 
-    private IMessageRouter IMessageRouter;
+    private IMessageRouter iMessageRouter;
 
 
 
@@ -50,9 +48,9 @@ public class WebSocketJsonInitializer extends CustomInitializer<SocketChannel> {
         // 写时间(设置时间内没有给客户端写入数据),
         // all时间(设置时间内没有 读操作 or 写操作))
         pipeline.addLast("IdleStateHandler", new IdleStateHandler(
-                NettyConfigEnum.READER_IDLE.getValue(properties),
-                NettyConfigEnum.WRITE_IDLE.getValue(properties),
-                NettyConfigEnum.ALL_IDLE.getValue(properties),
+                GimDefaultConfigEnum.READER_IDLE.getValue(properties),
+                GimDefaultConfigEnum.WRITE_IDLE.getValue(properties),
+                GimDefaultConfigEnum.ALL_IDLE.getValue(properties),
                 TimeUnit.SECONDS));
         //netty链式处理
         // 字符串 解码
@@ -61,20 +59,16 @@ public class WebSocketJsonInitializer extends CustomInitializer<SocketChannel> {
         pipeline.addLast(new HttpObjectAggregator(65536));
         pipeline.addLast(new WebJsonMessageDecoder());
         pipeline.addLast(new WebJsonMessageEncoder());
-//        pipeline.addLast("DelimiterBasedFrameDecoder", new DelimiterBasedFrameDecoder(4096, Delimiters.lineDelimiter()));
         pipeline.addLast("StringDecoder", new StringDecoder(CharsetUtil.UTF_8));
-//        pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
-//        pipeline.addLast("StringEncoder", new StringEncoder(CharsetUtil.UTF_8));
-        pipeline.addLast("heart", new HeartCheckHandler(nettyConfiguration));
-        pipeline.addLast("dispatch", new JsonDispatchHandler(IMessageRouter, eventProvider));
+        pipeline.addLast("heart", new HeartCheckHandler(gimGlobalConfiguration));
+        pipeline.addLast("dispatch", new JsonDispatchHandler(iMessageRouter));
     }
 
     @Override
-    public void init(NettyConfiguration configuration) {
-        this.nettyConfiguration = configuration;
+    public void init(GimGlobalConfiguration configuration) {
+        this.gimGlobalConfiguration = configuration;
         this.properties = configuration.getProperties();
-        this.eventProvider = configuration.getEventProvider();
-        this.IMessageRouter = configuration.getIMessageRouter();
+        this.iMessageRouter = configuration.getIMessageRouter();
     }
 
     @Override

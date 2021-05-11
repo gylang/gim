@@ -20,6 +20,8 @@ import java.util.function.Supplier;
  * 修改异常抛出 改为业务校验异常
  */
 public class Asserts {
+    private static final CharSequence BETWEEN_TEMPLATE = "Length must be between {} and {}.";
+
     private Asserts() {
     }
 
@@ -29,11 +31,11 @@ public class Asserts {
         }
     }
 
-    public static void isTrue(boolean expression, String errorMsgTemplate, Object... params)  {
+    public static void isTrue(boolean expression, String errorMsgTemplate, Object... params) {
         isTrue(expression, () -> new ValidateException(StrUtil.format(errorMsgTemplate, params)));
     }
 
-    public static void isTrue(boolean expression)  {
+    public static void isTrue(boolean expression) {
         isTrue(expression, "[Assertion failed] - this expression must be true");
     }
 
@@ -43,11 +45,11 @@ public class Asserts {
         }
     }
 
-    public static void isFalse(boolean expression, String errorMsgTemplate, Object... params)  {
+    public static void isFalse(boolean expression, String errorMsgTemplate, Object... params) {
         isFalse(expression, () -> new ValidateException(StrUtil.format(errorMsgTemplate, params)));
     }
 
-    public static void isFalse(boolean expression)  {
+    public static void isFalse(boolean expression) {
         isFalse(expression, "[Assertion failed] - this expression must be false");
     }
 
@@ -57,11 +59,11 @@ public class Asserts {
         }
     }
 
-    public static void isNull(Object object, String errorMsgTemplate, Object... params)  {
+    public static void isNull(Object object, String errorMsgTemplate, Object... params) {
         isNull(object, () -> new ValidateException(StrUtil.format(errorMsgTemplate, params)));
     }
 
-    public static void isNull(Object object)  {
+    public static void isNull(Object object) {
         isNull(object, "[Assertion failed] - the object argument must be null");
     }
 
@@ -72,14 +74,16 @@ public class Asserts {
             return object;
         }
     }
+
     public static <T> T notNull(T object, BaseCode baseCode) {
         return notNull(object, () -> new ValidateException(baseCode));
     }
-    public static <T> T notNull(T object, String errorMsgTemplate, Object... params)  {
+
+    public static <T> T notNull(T object, String errorMsgTemplate, Object... params) {
         return notNull(object, () -> new ValidateException(StrUtil.format(errorMsgTemplate, params)));
     }
 
-    public static <T> T notNull(T object)  {
+    public static <T> T notNull(T object) {
         return notNull(object, "[Assertion failed] - this argument is required; it must not be null");
     }
 
@@ -91,11 +95,11 @@ public class Asserts {
         }
     }
 
-    public static <T extends CharSequence> T notEmpty(T text, String errorMsgTemplate, Object... params)  {
+    public static <T extends CharSequence> T notEmpty(T text, String errorMsgTemplate, Object... params) {
         return notEmpty(text, () -> new ValidateException(StrUtil.format(errorMsgTemplate, params)));
     }
 
-    public static <T extends CharSequence> T notEmpty(T text)  {
+    public static <T extends CharSequence> T notEmpty(T text) {
         return notEmpty(text, "[Assertion failed] - this String argument must have length; it must not be null or empty");
     }
 
@@ -107,11 +111,11 @@ public class Asserts {
         }
     }
 
-    public static <T extends CharSequence> T notBlank(T text, String errorMsgTemplate, Object... params)  {
+    public static <T extends CharSequence> T notBlank(T text, String errorMsgTemplate, Object... params) {
         return notBlank(text, () -> new ValidateException(StrUtil.format(errorMsgTemplate, params)));
     }
 
-    public static <T extends CharSequence> T notBlank(T text)  {
+    public static <T extends CharSequence> T notBlank(T text) {
         return notBlank(text, "[Assertion failed] - this String argument must have text; it must not be null, empty, or blank");
     }
 
@@ -123,11 +127,11 @@ public class Asserts {
         }
     }
 
-    public static String notContain(String textToSearch, String substring, String errorMsgTemplate, Object... params)  {
+    public static String notContain(String textToSearch, String substring, String errorMsgTemplate, Object... params) {
         return notContain(textToSearch, substring, () -> new ValidateException(StrUtil.format(errorMsgTemplate, params)));
     }
 
-    public static String notContain(String textToSearch, String substring)  {
+    public static String notContain(String textToSearch, String substring) {
         return notContain(textToSearch, substring, "[Assertion failed] - this String argument must not contain the substring [{}]", substring);
     }
 
@@ -139,11 +143,11 @@ public class Asserts {
         }
     }
 
-    public static <T> T[] notEmpty(T[] array, String errorMsgTemplate, Object... params)  {
+    public static <T> T[] notEmpty(T[] array, String errorMsgTemplate, Object... params) {
         return notEmpty(array, () -> new ValidateException(StrUtil.format(errorMsgTemplate, params)));
     }
 
-    public static <T> T[] notEmpty(T[] array)  {
+    public static <T> T[] notEmpty(T[] array) {
         return notEmpty(array, "[Assertion failed] - this array must not be empty: it must contain at least 1 element");
     }
 
@@ -155,11 +159,11 @@ public class Asserts {
         }
     }
 
-    public static <T> T[] noNullElements(T[] array, String errorMsgTemplate, Object... params)  {
+    public static <T> T[] noNullElements(T[] array, String errorMsgTemplate, Object... params) {
         return noNullElements(array, () -> new ValidateException(StrUtil.format(errorMsgTemplate, params)));
     }
 
-    public static <T> T[] noNullElements(T[] array)  {
+    public static <T> T[] noNullElements(T[] array) {
         return noNullElements(array, "[Assertion failed] - this array must not contain any null elements");
     }
 
@@ -171,11 +175,11 @@ public class Asserts {
         }
     }
 
-    public static <E, T extends Iterable<E>> T notEmpty(T collection, String errorMsgTemplate, Object... params)  {
+    public static <E, T extends Iterable<E>> T notEmpty(T collection, String errorMsgTemplate, Object... params) {
         return notEmpty(collection, () -> new ValidateException(StrUtil.format(errorMsgTemplate, params)));
     }
 
-    public static <E, T extends Iterable<E>> T notEmpty(T collection)  {
+    public static <E, T extends Iterable<E>> T notEmpty(T collection) {
         return notEmpty(collection, "[Assertion failed] - this collection must not be empty: it must contain at least 1 element");
     }
 
@@ -187,11 +191,11 @@ public class Asserts {
         }
     }
 
-    public static <K, V, T extends Map<K, V>> T notEmpty(T map, String errorMsgTemplate, Object... params)  {
+    public static <K, V, T extends Map<K, V>> T notEmpty(T map, String errorMsgTemplate, Object... params) {
         return notEmpty(map, () -> new ValidateException(StrUtil.format(errorMsgTemplate, params)));
     }
 
-    public static <K, V, T extends Map<K, V>> T notEmpty(T map)  {
+    public static <K, V, T extends Map<K, V>> T notEmpty(T map) {
         return notEmpty(map, "[Assertion failed] - this map must not be empty; it must contain at least one entry");
     }
 
@@ -199,7 +203,7 @@ public class Asserts {
         return isInstanceOf(type, obj, "Object [{}] is not instanceof [{}]", obj, type);
     }
 
-    public static <T> T isInstanceOf(Class<?> type, T obj, String errorMsgTemplate, Object... params)  {
+    public static <T> T isInstanceOf(Class<?> type, T obj, String errorMsgTemplate, Object... params) {
         notNull(type, "Type to check against must not be null");
         if (!type.isInstance(obj)) {
             throw new ValidateException(StrUtil.format(errorMsgTemplate, params));
@@ -208,24 +212,24 @@ public class Asserts {
         }
     }
 
-    public static void isAssignable(Class<?> superType, Class<?> subType)  {
+    public static void isAssignable(Class<?> superType, Class<?> subType) {
         isAssignable(superType, subType, "{} is not assignable to {})", subType, superType);
     }
 
-    public static void isAssignable(Class<?> superType, Class<?> subType, String errorMsgTemplate, Object... params)  {
+    public static void isAssignable(Class<?> superType, Class<?> subType, String errorMsgTemplate, Object... params) {
         notNull(superType, "Type to check against must not be null");
         if (subType == null || !superType.isAssignableFrom(subType)) {
             throw new ValidateException(StrUtil.format(errorMsgTemplate, params));
         }
     }
 
-    public static void state(boolean expression, Supplier<String> errorMsgSupplier)  {
+    public static void state(boolean expression, Supplier<String> errorMsgSupplier) {
         if (!expression) {
-            throw new ValidateException((String) errorMsgSupplier.get());
+            throw new ValidateException(errorMsgSupplier.get());
         }
     }
 
-    public static void state(boolean expression, String errorMsgTemplate, Object... params)  {
+    public static void state(boolean expression, String errorMsgTemplate, Object... params) {
         if (!expression) {
             throw new ValidateException(StrUtil.format(errorMsgTemplate, params));
         }
@@ -251,7 +255,7 @@ public class Asserts {
         if (value >= min && value <= max) {
             return value;
         } else {
-            throw new ValidateException(StrUtil.format("Length must be between {} and {}.", new Object[]{min, max}));
+            throw new ValidateException(StrUtil.format(BETWEEN_TEMPLATE, min, max));
         }
     }
 
@@ -259,15 +263,15 @@ public class Asserts {
         if (value >= min && value <= max) {
             return value;
         } else {
-            throw new ValidateException(StrUtil.format("Length must be between {} and {}.", new Object[]{min, max}));
+            throw new ValidateException(StrUtil.format(BETWEEN_TEMPLATE, min, max));
         }
     }
 
     public static double checkBetween(double value, double min, double max) {
-        if (!(value < min) && !(value > max)) {
+        if (value >= min && value <= max) {
             return value;
         } else {
-            throw new ValidateException(StrUtil.format("Length must be between {} and {}.", new Object[]{min, max}));
+            throw new ValidateException(StrUtil.format(BETWEEN_TEMPLATE, min, max));
         }
     }
 
@@ -278,20 +282,20 @@ public class Asserts {
         double valueDouble = value.doubleValue();
         double minDouble = min.doubleValue();
         double maxDouble = max.doubleValue();
-        if (!(valueDouble < minDouble) && !(valueDouble > maxDouble)) {
+        if (valueDouble >= minDouble && valueDouble <= maxDouble) {
             return value;
         } else {
-            throw new ValidateException(StrUtil.format("Length must be between {} and {}.", new Object[]{min, max}));
+            throw new ValidateException(StrUtil.format(BETWEEN_TEMPLATE, min, max));
         }
     }
 
     private static String badIndexMsg(int index, int size, String desc, Object... params) {
         if (index < 0) {
-            return StrUtil.format("{} ({}) must not be negative", new Object[]{StrUtil.format(desc, params), index});
+            return StrUtil.format("{} ({}) must not be negative", StrUtil.format(desc, params), index);
         } else if (size < 0) {
             throw new ValidateException("negative size: " + size);
         } else {
-            return StrUtil.format("{} ({}) must be less than size ({})", new Object[]{StrUtil.format(desc, params), index, size});
+            return StrUtil.format("{} ({}) must be less than size ({})", StrUtil.format(desc, params), index, size);
         }
     }
 }

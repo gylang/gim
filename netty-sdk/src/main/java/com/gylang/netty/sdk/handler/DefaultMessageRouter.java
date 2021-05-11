@@ -5,8 +5,8 @@ import com.gylang.gim.api.constant.ContentType;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.annotation.AdapterType;
 import com.gylang.netty.sdk.common.ObjectWrap;
-import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.intercept.NettyIntercept;
 import com.gylang.netty.sdk.repo.NettyUserInfoFillHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -27,12 +27,12 @@ import java.util.List;
 @Slf4j
 public class DefaultMessageRouter implements IMessageRouter {
 
-    private List<BizRequestAdapter<?>> requestAdapterList = new ArrayList<>();
+    private List<BizRequestAdapter> requestAdapterList = new ArrayList<>();
     private NettyUserInfoFillHandler nettyUserInfoFillHandler;
     private List<NettyIntercept> nettyInterceptList;
 
     @Override
-    public Object process(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
+    public Object process(ChannelHandlerContext ctx, GIMSession me, MessageWrap message) {
 
 
         if (ContentType.BATCH.equals(message.getContentType())) {
@@ -56,7 +56,7 @@ public class DefaultMessageRouter implements IMessageRouter {
             // 消息被拦截
             return null;
         }
-        for (IRequestAdapter<?> adapter : requestAdapterList) {
+        for (IRequestAdapter adapter : requestAdapterList) {
             object = adapter.process(ctx, me, message);
             if (null != object) {
                 break;
@@ -78,9 +78,9 @@ public class DefaultMessageRouter implements IMessageRouter {
     }
 
     @Override
-    public void init(NettyConfiguration nettyConfiguration) {
-        this.nettyUserInfoFillHandler = nettyConfiguration.getNettyUserInfoFillHandler();
-        this.nettyInterceptList = nettyConfiguration.getNettyInterceptList();
-        this.requestAdapterList = nettyConfiguration.getBizRequestAdapterList();
+    public void init(GimGlobalConfiguration gimGlobalConfiguration) {
+        this.nettyUserInfoFillHandler = gimGlobalConfiguration.getNettyUserInfoFillHandler();
+        this.nettyInterceptList = gimGlobalConfiguration.getNettyInterceptList();
+        this.requestAdapterList = gimGlobalConfiguration.getBizRequestAdapterList();
     }
 }

@@ -44,10 +44,7 @@ public class SearchUserController extends CustomApplication {
     }
 
 
-    @Override
-    public void beforeInit(URL location, ResourceBundle resources) {
 
-    }
 
     @Override
     public void init(URL location, ResourceBundle resources) {
@@ -57,10 +54,7 @@ public class SearchUserController extends CustomApplication {
         userListView.setItems(FXCollections.observableList(new ArrayList<>()));
     }
 
-    @Override
-    public void afterInit(URL location, ResourceBundle resources) {
 
-    }
 
     @FXML
     public void searchEvent(Event event) {

@@ -7,9 +7,9 @@ package com.gylang.gim.api.constant;
  */
 public interface CommConst {
 
-    String YES = "1";
-    String KEY_ACCOUNT = "2";
+
+
 
     int DATA_HEADER_LENGTH = 12;
-    byte HEART = 0;
+
 }

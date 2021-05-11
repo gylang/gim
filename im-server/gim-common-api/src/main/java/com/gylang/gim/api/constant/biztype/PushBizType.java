@@ -6,7 +6,7 @@ package com.gylang.gim.api.constant.biztype;
  */
 public interface PushBizType {
 
-    String userApply = "urAy";
-    String userApplyAnswer = "urAyAr";
-    String batch_his_push = "bhp";
+    String USER_APPLY = "urAy";
+    String USER_APPLY_ANSWER = "urAyAr";
+    String BATCH_HIS_PUSH = "bhp";
 }

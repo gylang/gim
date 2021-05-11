@@ -4,10 +4,9 @@ import cn.hutool.core.util.StrUtil;
 import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.gim.api.constant.QosConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.constant.NettyConfigEnum;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
 import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.event.EventProvider;
 import com.gylang.netty.sdk.handler.qos.IMessageSenderQosHandler;
 import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
@@ -35,35 +34,34 @@ public class DefaultMessageProvider implements MessageProvider {
     private IMGroupSessionRepository groupSessionRepository;
     /** 线程池 */
     private ThreadPoolExecutor executor;
-
+    /** qos */
     private IMessageSenderQosHandler iMessageSenderQosHandler;
-
+    /** 事件发送器 */
     private EventProvider eventProvider;
-
+    /** host */
     private String host = null;
 
-    private Integer retryNum;
 
     @Override
-    public int sendMsg(IMSession me, String target, MessageWrap message) {
+    public int sendMsg(GIMSession me, String target, MessageWrap message) {
 
         return sendMsgCallBack(me, target, message, null);
     }
 
     @Override
-    public int sendMsg(IMSession me, IMSession target, MessageWrap message) {
+    public int sendMsg(GIMSession me, GIMSession target, MessageWrap message) {
 
         return sendMsgCallBack(me, target, message, null);
     }
 
     @Override
-    public int sendMsgCallBack(IMSession me, String target, MessageWrap message, GenericFutureListener<? extends Future<? super Void>> listener) {
-        IMSession imSession = sessionRepository.find(target);
-        return sendMsgCallBack(me, imSession, message, listener);
+    public int sendMsgCallBack(GIMSession me, String target, MessageWrap message, GenericFutureListener<? extends Future<? super Void>> listener) {
+        GIMSession gimSession = sessionRepository.find(target);
+        return sendMsgCallBack(me, gimSession, message, listener);
     }
 
     @Override
-    public int sendMsgCallBack(IMSession me, IMSession target, MessageWrap message, GenericFutureListener<? extends Future<? super Void>> listener) {
+    public int sendMsgCallBack(GIMSession me, GIMSession target, MessageWrap message, GenericFutureListener<? extends Future<? super Void>> listener) {
 
 
         if (null == target) {
@@ -118,26 +116,26 @@ public class DefaultMessageProvider implements MessageProvider {
 
 
     @Override
-    public int sendGroup(IMSession me, String target, MessageWrap message) {
+    public int sendGroup(GIMSession me, String target, MessageWrap message) {
 
         AbstractSessionGroup sessionGroup = groupSessionRepository.findByKey(target);
         return sendGroup(me, sessionGroup, message);
     }
 
     @Override
-    public void sendAsyncGroup(IMSession me, String target, MessageWrap message) {
+    public void sendAsyncGroup(GIMSession me, String target, MessageWrap message) {
         executor.execute(() -> sendGroup(me, target, message));
     }
 
 
     @Override
-    public int sendGroup(IMSession me, AbstractSessionGroup target, MessageWrap message) {
+    public int sendGroup(GIMSession me, AbstractSessionGroup target, MessageWrap message) {
         if (null == target) {
             return USER_NOT_FOUND;
         }
         message.setSender(me.getAccount());
         message.setReceive(target.getGroupId());
-        for (IMSession session : target.getMemberList()) {
+        for (GIMSession session : target.getMemberList()) {
             if (null != session.getSession()
                     && !me.getNid().equals(session.getNid())
                     && session.getSession().isActive()) {
@@ -148,18 +146,17 @@ public class DefaultMessageProvider implements MessageProvider {
     }
 
     @Override
-    public void sendAsyncGroup(IMSession me, AbstractSessionGroup target, MessageWrap message) {
+    public void sendAsyncGroup(GIMSession me, AbstractSessionGroup target, MessageWrap message) {
         executor.execute(() -> sendGroup(me, target, message));
     }
 
     @Override
-    public void init(NettyConfiguration configuration) {
+    public void init(GimGlobalConfiguration configuration) {
         this.sessionRepository = configuration.getSessionRepository();
         this.groupSessionRepository = configuration.getGroupSessionRepository();
         this.executor = configuration.getPoolExecutor();
         this.iMessageSenderQosHandler = configuration.getIMessageSenderQosHandler();
         this.eventProvider = configuration.getEventProvider();
         this.host = configuration.getProperties("serverId");
-        this.retryNum = configuration.getProperties(NettyConfigEnum.LOST_CONNECT_RETRY_NUM);
     }
 }

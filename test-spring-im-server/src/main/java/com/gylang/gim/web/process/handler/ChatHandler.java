@@ -2,7 +2,7 @@ package com.gylang.gim.web.process.handler;
 
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import com.gylang.netty.sdk.provider.MessageProvider;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ public class ChatHandler implements IMRequestHandler {
     private MessageProvider messageProvider;
 
     @Override
-    public Object process(IMSession me, MessageWrap message) {
+    public Object process(GIMSession me, MessageWrap message) {
 
 
         MessageWrap messageWrap = new MessageWrap();

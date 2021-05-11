@@ -3,11 +3,11 @@ package com.gylang.spring.netty.custom.adapter;
 import cn.hutool.core.collection.CollUtil;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.annotation.NettyMapping;
-import com.gylang.netty.sdk.common.InokeFinished;
+import com.gylang.netty.sdk.common.InvokeFinished;
 import com.gylang.netty.sdk.common.MethodWrap;
 import com.gylang.netty.sdk.common.ObjectWrap;
-import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.handler.BizRequestAdapter;
 import com.gylang.netty.sdk.util.ObjectWrapUtil;
 import com.gylang.spring.netty.annotation.SpringNettyController;
@@ -31,7 +31,7 @@ import java.util.Map;
  */
 @Component
 @Slf4j
-public class MethodHandlerAdapter implements BizRequestAdapter<ControllerMethodMeta> {
+public class MethodHandlerAdapter implements BizRequestAdapter {
 
     @Autowired
     private MethodArgumentResolverAdapter methodArgumentResolverAdapter;
@@ -39,7 +39,7 @@ public class MethodHandlerAdapter implements BizRequestAdapter<ControllerMethodM
     private Map<Integer, ControllerMethodMeta> methodHandlerMap;
 
     @Override
-    public Object process(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
+    public Object process(ChannelHandlerContext ctx, GIMSession me, MessageWrap message) {
         ControllerMethodMeta controllerMethodMeta = methodHandlerMap.get(message.getType());
         if (null == controllerMethodMeta) {
             return null;
@@ -47,7 +47,7 @@ public class MethodHandlerAdapter implements BizRequestAdapter<ControllerMethodM
         MethodArgumentValue methodArgumentValue = new MethodArgumentValue();
         methodArgumentValue.init(controllerMethodMeta);
         Object result = methodArgumentResolverAdapter.handler(ctx, me, message, methodArgumentValue);
-        return InokeFinished.finish(result);
+        return InvokeFinished.finish(result);
     }
 
 
@@ -91,7 +91,7 @@ public class MethodHandlerAdapter implements BizRequestAdapter<ControllerMethodM
 
 
     @Override
-    public void init(NettyConfiguration configuration) {
+    public void init(GimGlobalConfiguration configuration) {
         register(configuration.getObjectWrapList());
     }
 }

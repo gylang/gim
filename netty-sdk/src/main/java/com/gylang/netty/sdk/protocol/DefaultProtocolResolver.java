@@ -1,7 +1,7 @@
 package com.gylang.netty.sdk.protocol;
 
 import com.gylang.netty.sdk.common.AfterConfigInitialize;
-import com.gylang.netty.sdk.config.NettyConfiguration;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +20,7 @@ public class DefaultProtocolResolver implements ProtocolResolver, AfterConfigIni
     }
 
     @Override
-    public void init(NettyConfiguration configuration) {
+    public void init(GimGlobalConfiguration configuration) {
 
         // 注册内置两个协议处理器
         JsonProtocolHandler jsonProtocolHandler = new JsonProtocolHandler();

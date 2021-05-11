@@ -2,7 +2,7 @@ package com.gylang.netty.sdk.event;
 
 import cn.hutool.core.collection.CollUtil;
 import com.gylang.netty.sdk.common.AfterConfigInitialize;
-import com.gylang.netty.sdk.config.NettyConfiguration;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
 import com.gylang.netty.sdk.event.message.MessageEvent;
 import com.gylang.netty.sdk.event.message.MessageEventListener;
 
@@ -59,12 +59,12 @@ public class EventContext implements AfterConfigInitialize {
      * @param key 消息key
      * @param msg 消息内容
      */
+    @SuppressWarnings("unchecked")
     public void sendMsg(String key, Object msg) {
 
         List<MessageEventListener<?>> messageNotifies = eventListenerMap.get(key);
         if (null != messageNotifies) {
             for (MessageEventListener<?> messageEventListener : messageNotifies) {
-
                 ((MessageEventListener<Object>) messageEventListener).onEvent(key, msg);
             }
         }
@@ -72,7 +72,7 @@ public class EventContext implements AfterConfigInitialize {
 
 
     @Override
-    public void init(NettyConfiguration configuration) {
+    public void init(GimGlobalConfiguration configuration) {
         if (CollUtil.isNotEmpty(configuration.getMessageEventListener())) {
             for (MessageEventListener<?> messageEventListener : configuration.getMessageEventListener()) {
                 register(messageEventListener);

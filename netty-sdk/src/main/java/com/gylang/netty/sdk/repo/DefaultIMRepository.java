@@ -1,7 +1,7 @@
 package com.gylang.netty.sdk.repo;
 
 import com.gylang.netty.sdk.annotation.IMRepository;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,21 +16,21 @@ import java.util.concurrent.ConcurrentHashMap;
 @IMRepository
 public class DefaultIMRepository implements IMSessionRepository {
 
-    private Map<String, IMSession> repository = new ConcurrentHashMap<>();
+    private Map<String, GIMSession> repository = new ConcurrentHashMap<>();
 
     @Override
-    public IMSession find(String s) {
+    public GIMSession find(String s) {
         return repository.get(s);
     }
 
     @Override
-    public List<IMSession> findByIds(Collection<String> strings) {
+    public List<GIMSession> findByIds(Collection<String> strings) {
         if (null == strings) {
             throw new IllegalArgumentException("keys is not empty");
         }
-        List<IMSession> list = new ArrayList<>();
+        List<GIMSession> list = new ArrayList<>();
         for (String string : strings) {
-            IMSession session = repository.get(string);
+            GIMSession session = repository.get(string);
             if (null != session) {
                 list.add(session);
             }
@@ -39,7 +39,7 @@ public class DefaultIMRepository implements IMSessionRepository {
     }
 
     @Override
-    public Collection<IMSession> findAll() {
+    public Collection<GIMSession> findAll() {
         return repository.values();
     }
 
@@ -49,22 +49,22 @@ public class DefaultIMRepository implements IMSessionRepository {
     }
 
     @Override
-    public IMSession findByKey(String s) {
+    public GIMSession findByKey(String s) {
         return repository.get(s);
     }
 
     @Override
-    public IMSession popByKey(String s) {
+    public GIMSession popByKey(String s) {
         return repository.remove(s);
     }
 
     @Override
-    public IMSession pop(String s) {
+    public GIMSession pop(String s) {
         return repository.remove(s);
     }
 
     @Override
-    public IMSession add(String s, IMSession session) {
+    public GIMSession add(String s, GIMSession session) {
         return repository.put(s, session);
     }
 }

@@ -14,8 +14,16 @@ import lombok.Setter;
 @Getter
 public abstract class CustomInitializer<T extends Channel> extends ChannelInitializer<T> implements AfterConfigInitialize {
 
+    /**
+     * 初始化名称类型
+     *
+     * @return 初始化名称
+     */
     public abstract String getName();
 
+    /**
+     * 端口
+     */
     private Integer port;
 
 }

@@ -11,7 +11,7 @@ import com.gylang.gim.api.domain.common.ResponseMessage;
 import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.event.EventProvider;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import com.gylang.netty.sdk.repo.IMSessionRepository;
@@ -38,11 +38,11 @@ public class LoginHandler implements IMRequestHandler {
     private RedisTemplate<String, String> redisTemplate;
 
     @Override
-    public Object process(IMSession me, MessageWrap message) {
+    public Object process(GIMSession me, MessageWrap message) {
         MessageWrap messageWrap = new ResponseMessage();
         messageWrap.setSender(me.getAccount());
         messageWrap.setCmd(PrivateChatCmd.SOCKET_CONNECTED);
-        messageWrap.setType(ChatTypeEnum.NOTIFY);
+        messageWrap.setType(ChatTypeEnum.NOTIFY_CHAT);
         // 获取用户信息
         if (StrUtil.isNotEmpty(me.getAccount())) {
             messageWrap.setContent("连接socket成功");

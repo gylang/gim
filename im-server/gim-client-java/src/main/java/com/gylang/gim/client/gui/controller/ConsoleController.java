@@ -33,10 +33,7 @@ public class ConsoleController extends CustomApplication {
         super("操作台", "/fxml/ConsoleController.fxml");
     }
 
-    @Override
-    public void beforeInit(URL location, ResourceBundle resources) {
 
-    }
 
     @Override
     public void init(URL location, ResourceBundle resources) {
@@ -54,10 +51,6 @@ public class ConsoleController extends CustomApplication {
         }));
     }
 
-    @Override
-    public void afterInit(URL location, ResourceBundle resources) {
-
-    }
 
     @FXML
     public void send() {

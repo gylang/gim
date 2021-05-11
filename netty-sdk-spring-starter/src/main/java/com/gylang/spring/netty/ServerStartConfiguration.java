@@ -1,9 +1,9 @@
 package com.gylang.spring.netty;
 
 import com.gylang.netty.sdk.IMServer;
-import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.config.NettyProperties;
-import com.gylang.netty.sdk.config.SimpleNettyConfigurationInitializer;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.config.GimProperties;
+import com.gylang.netty.sdk.config.DefaultGimConfigurationInitializerHelper;
 import com.gylang.netty.sdk.conveter.DataConverter;
 import com.gylang.netty.sdk.event.EventContext;
 import com.gylang.netty.sdk.event.EventProvider;
@@ -64,7 +64,7 @@ public class ServerStartConfiguration implements InitializingBean {
     private List<MessageEventListener<?>> messageEventListener;
     /** 业务请求适配器 */
     @Resource
-    private List<BizRequestAdapter<?>> bizRequestAdapterList;
+    private List<BizRequestAdapter> bizRequestAdapterList;
     /** 适配分发器 */
     @Resource
     private IMessageRouter messageRouter;
@@ -82,34 +82,34 @@ public class ServerStartConfiguration implements InitializingBean {
     @Resource
     private IMessageReceiveQosHandler iMessageReceiveQosHandler;
     @Resource
-    private NettyConfiguration nettyConfiguration;
+    private GimGlobalConfiguration gimGlobalConfiguration;
     @Resource
-    private NettyProperties nettyProperties;
+    private GimProperties gimProperties;
 
     @Override
     public void afterPropertiesSet() throws Exception {
 
-        nettyConfiguration.setServerChannelInitializer(serverChannelInitializer);
-        nettyConfiguration.setEventProvider(eventProvider);
-        nettyConfiguration.setEventContext(eventContext);
-        nettyConfiguration.setDataConverter(dataConverter);
-        nettyConfiguration.setSessionRepository(sessionRepository);
-        nettyConfiguration.setGroupSessionRepository(groupSessionRepository);
-        nettyConfiguration.setMessageProvider(messageProvider);
-        nettyConfiguration.setMessageEventListener(messageEventListener);
-        nettyConfiguration.setBizRequestAdapterList(bizRequestAdapterList);
-        nettyConfiguration.setIMessageRouter(messageRouter);
-        nettyConfiguration.setPoolExecutor(poolExecutor);
-        nettyConfiguration.setNettyUserInfoFillHandler(nettyUserInfoFillHandler);
-        nettyConfiguration.setNettyInterceptList(nettyInterceptList);
-        nettyConfiguration.setIMessageReceiveQosHandler(iMessageReceiveQosHandler);
-        nettyConfiguration.setIMessageSenderQosHandler(iMessageSenderQosHandler);
-        nettyConfiguration.setNettyProperties(nettyProperties);
-        new SimpleNettyConfigurationInitializer().initConfig(nettyConfiguration);
+        gimGlobalConfiguration.setServerChannelInitializer(serverChannelInitializer);
+        gimGlobalConfiguration.setEventProvider(eventProvider);
+        gimGlobalConfiguration.setEventContext(eventContext);
+        gimGlobalConfiguration.setDataConverter(dataConverter);
+        gimGlobalConfiguration.setSessionRepository(sessionRepository);
+        gimGlobalConfiguration.setGroupSessionRepository(groupSessionRepository);
+        gimGlobalConfiguration.setMessageProvider(messageProvider);
+        gimGlobalConfiguration.setMessageEventListener(messageEventListener);
+        gimGlobalConfiguration.setBizRequestAdapterList(bizRequestAdapterList);
+        gimGlobalConfiguration.setIMessageRouter(messageRouter);
+        gimGlobalConfiguration.setPoolExecutor(poolExecutor);
+        gimGlobalConfiguration.setNettyUserInfoFillHandler(nettyUserInfoFillHandler);
+        gimGlobalConfiguration.setNettyInterceptList(nettyInterceptList);
+        gimGlobalConfiguration.setIMessageReceiveQosHandler(iMessageReceiveQosHandler);
+        gimGlobalConfiguration.setIMessageSenderQosHandler(iMessageSenderQosHandler);
+        gimGlobalConfiguration.setGimProperties(gimProperties);
+        new DefaultGimConfigurationInitializerHelper().initConfig(gimGlobalConfiguration);
 
         // 启动服务
         IMServer imServer = new IMServer();
-        imServer.setNettyConfig(nettyConfiguration);
+        imServer.setNettyConfig(gimGlobalConfiguration);
         imServer.start();
         log.info("初始化基础配置完成 : InitNettyServerConfiguration");
 

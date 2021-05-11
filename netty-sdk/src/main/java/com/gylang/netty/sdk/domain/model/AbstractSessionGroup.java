@@ -44,7 +44,7 @@ public class AbstractSessionGroup {
     /**
      * 队列
      */
-    private BlockingQueue<IMSession> memberList;
+    private BlockingQueue<GIMSession> memberList;
     /**
      * 线程执行器
      */
@@ -68,7 +68,7 @@ public class AbstractSessionGroup {
      * @param session 加入在者
      * @return 加入结果
      */
-    public boolean join(IMSession session) {
+    public boolean join(GIMSession session) {
 
         return memberList.offer(session);
     }
@@ -80,7 +80,7 @@ public class AbstractSessionGroup {
      * @param timeout 超时时间
      * @return 加入结果
      */
-    public boolean waitJoin(IMSession session, long timeout) {
+    public boolean waitJoin(GIMSession session, long timeout) {
 
         boolean offer = false;
         try {
@@ -100,7 +100,7 @@ public class AbstractSessionGroup {
      * @param session 加入会话
      * @return 加入结果
      */
-    public boolean remove(IMSession session) {
+    public boolean remove(GIMSession session) {
 
         return memberList.remove(session);
     }

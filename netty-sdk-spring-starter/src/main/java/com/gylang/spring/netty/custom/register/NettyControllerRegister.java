@@ -3,8 +3,8 @@ package com.gylang.spring.netty.custom.register;
 import cn.hutool.core.collection.CollUtil;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.common.ObjectWrap;
-import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.handler.NettyController;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.handler.GimController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,28 +25,28 @@ import java.util.List;
 public class NettyControllerRegister implements InitializingBean {
 
     @Resource
-    private NettyConfiguration nettyConfiguration;
+    private GimGlobalConfiguration gimGlobalConfiguration;
 
     @Autowired(required = false)
-    private List<NettyController> nettyControllerList;
+    private List<GimController> gimControllerList;
     @Override
     public void afterPropertiesSet() throws Exception {
         log.info("加载 controller消息处理器");
 
         List<ObjectWrap> objectWrapList = new ArrayList<>();
-        if (CollUtil.isEmpty(nettyControllerList)) {
+        if (CollUtil.isEmpty(gimControllerList)) {
             return;
         }
-        for (NettyController handler : nettyControllerList) {
+        for (GimController handler : gimControllerList) {
 
             ObjectWrap objectWrap = new ObjectWrap();
             Class<?> userClass = ClassUtils.getUserClass(handler);
             objectWrap.setInstance(handler);
             NettyHandler nettyHandler = AnnotationUtils.findAnnotation(userClass, NettyHandler.class);
-            objectWrap.addAnno(nettyHandler);
+            objectWrap.addAnnotation(nettyHandler);
             objectWrap.setUserType(userClass);
             objectWrapList.add(objectWrap);
         }
-        nettyConfiguration.addObjectWrap(objectWrapList);
+        gimGlobalConfiguration.addObjectWrap(objectWrapList);
     }
 }

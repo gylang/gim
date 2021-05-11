@@ -8,7 +8,7 @@ import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.server.service.HistoryMessageService;
 import com.gylang.gim.server.service.SendAccessService;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import com.gylang.netty.sdk.provider.MessageProvider;
 import org.springframework.stereotype.Component;
@@ -30,7 +30,7 @@ public class PrivateChatHandler implements IMRequestHandler {
     private SendAccessService sendAccessService;
 
     @Override
-    public Object process(IMSession me, MessageWrap message) {
+    public Object process(GIMSession me, MessageWrap message) {
 
 
         boolean access = sendAccessService.privateAccessCheck(me.getAccount(), message.getReceive());

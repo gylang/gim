@@ -11,19 +11,19 @@ import static com.gylang.gim.api.constant.EventTypeConst.*;
 
 
 /**
- * 心跳检测消息通知
+ * 心跳检测消息通知 监听器
  * @author gylang
  * data 2020/11/3
  * @version v0.0.1
  */
-public class DefaultHeartHandler implements IdleEvent, MessageEventListener<ChannelHandlerContext> {
+public class DefaultHeartListener implements IdleEvent, MessageEventListener<ChannelHandlerContext> {
 
     /**
      * 心跳监听实例
      */
     private final List<IdleEvent> idleEventList;
 
-    public DefaultHeartHandler(List<IdleEvent> idleEventList) {
+    public DefaultHeartListener(List<IdleEvent> idleEventList) {
         this.idleEventList = idleEventList;
     }
 

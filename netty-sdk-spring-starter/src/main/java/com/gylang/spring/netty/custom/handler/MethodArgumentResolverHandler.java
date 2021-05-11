@@ -1,13 +1,13 @@
 package com.gylang.spring.netty.custom.handler;
 
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.spring.netty.custom.method.ControllerMethodMeta;
 import com.gylang.spring.netty.custom.method.MethodArgumentValue;
 import io.netty.channel.ChannelHandlerContext;
 
 /**
- * todo 统一调用注册方法, 初始化support 实现反射方法cache 快速方法
+ *
  * @author gylang
  * data 2020/11/26
  * @version v0.0.1
@@ -32,5 +32,5 @@ public interface MethodArgumentResolverHandler {
      * @param methodArgumentValue 方法对用参数列表聚合对象
      * @return 判断是否终止执行(不执行后续处理器)
      */
-    boolean handler(ChannelHandlerContext ctx, IMSession me, MessageWrap message, MethodArgumentValue methodArgumentValue);
+    boolean handler(ChannelHandlerContext ctx, GIMSession me, MessageWrap message, MethodArgumentValue methodArgumentValue);
 }

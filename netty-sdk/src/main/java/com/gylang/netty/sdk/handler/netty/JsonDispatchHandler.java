@@ -2,8 +2,7 @@ package com.gylang.netty.sdk.handler.netty;
 
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.enums.ChatTypeEnum;
-import com.gylang.netty.sdk.domain.model.IMSession;
-import com.gylang.netty.sdk.event.EventProvider;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.handler.IMessageRouter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -19,16 +18,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JsonDispatchHandler extends SimpleChannelInboundHandler<MessageWrap> {
 
-    private final IMessageRouter IMessageRouter;
+    private final IMessageRouter iMessageRouter;
 
-    public JsonDispatchHandler(IMessageRouter bizDispatchHandler, EventProvider messagePusher) {
-        this.IMessageRouter = bizDispatchHandler;
+    public JsonDispatchHandler(IMessageRouter bizDispatchHandler) {
+        this.iMessageRouter = bizDispatchHandler;
     }
 
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, MessageWrap msg) {
-        IMSession session = new IMSession(ctx.channel());
+        GIMSession session = new GIMSession(ctx.channel());
         if (null == msg || ChatTypeEnum.HEART == msg.getType()) {
 
             return;
@@ -36,7 +35,7 @@ public class JsonDispatchHandler extends SimpleChannelInboundHandler<MessageWrap
         if (log.isDebugEnabled()) {
             log.info("[接收到客户端消息] : 用户id：{}，channelId：{}", session.getAccount(), session.getNid());
         }
-        IMessageRouter.process(ctx, session, msg);
+        iMessageRouter.process(ctx, session, msg);
 
     }
 

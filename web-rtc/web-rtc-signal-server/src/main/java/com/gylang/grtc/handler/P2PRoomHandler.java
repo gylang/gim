@@ -3,7 +3,7 @@ package com.gylang.grtc.handler;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.grtc.constant.SignalCmd;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import com.gylang.netty.sdk.provider.MessageProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class P2PRoomHandler implements IMRequestHandler {
     private MessageProvider messageProvider;
 
     @Override
-    public Object process(IMSession me, MessageWrap message) {
+    public Object process(GIMSession me, MessageWrap message) {
         // 直接拿转发信令
 
         messageProvider.sendMsg(me, message.getReceive(), message);

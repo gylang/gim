@@ -15,7 +15,7 @@ import java.util.Map;
  */
 @Getter
 @AllArgsConstructor
-public enum NettyConfigEnum {
+public enum GimDefaultConfigEnum {
     /**
      * 用来监控tcp链接 指定线程数 默认是1 用默认即可
      */
@@ -55,7 +55,7 @@ public enum NettyConfigEnum {
      */
     public static <T> T getValue(String name) {
 
-        for (NettyConfigEnum propertiesConst : values()) {
+        for (GimDefaultConfigEnum propertiesConst : values()) {
             if (propertiesConst.getName().equals(name)) {
                 return (T) propertiesConst.getValue();
             }

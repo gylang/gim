@@ -1,12 +1,12 @@
 package com.gylang.netty.sdk.event;
 
-import com.gylang.netty.sdk.config.NettyConfiguration;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
 import lombok.Data;
 
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * 消息发送器
+ * 事件发送器 发送事件
  * @author gylang
  * data 2020/11/8
  * @version v0.0.1
@@ -33,7 +33,7 @@ public class DefaultEventProvider implements EventProvider {
     }
 
     @Override
-    public void init(NettyConfiguration configuration) {
+    public void init(GimGlobalConfiguration configuration) {
         this.executor = configuration.getPoolExecutor();
         this.eventContext = configuration.getEventContext();
     }

@@ -3,7 +3,7 @@ package com.gylang.netty.sdk.event.message;
 import io.netty.channel.ChannelHandlerContext;
 
 /**
- * 在线状态通知
+ * 用户状态变更事件通知
  *
  * @author gylang
  * data 2020/11/3

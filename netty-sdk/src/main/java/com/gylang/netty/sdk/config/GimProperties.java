@@ -6,11 +6,13 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * 内置配置参数
+ *
  * @author gylang
  * data 2021/3/3
  */
 @Data
-public class NettyProperties {
+public class GimProperties {
 
     /** 服务器ip */
     private String serverIp;
@@ -36,8 +38,8 @@ public class NettyProperties {
 
     private Map<String, Integer> socketType;
 
-
+    /** 额外参数配置 */
     private Map<String, Object> properties;
-    /** 不用授权的消息 */
-    private Set<Integer> nonAuthCmd;
+    /** 非授权验证命令集 */
+    private Set<Integer> nonAuthType;
 }

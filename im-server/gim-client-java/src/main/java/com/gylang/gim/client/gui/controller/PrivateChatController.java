@@ -84,10 +84,7 @@ public class PrivateChatController extends CustomApplication {
         SocketHolder.getInstance().sendAndCallBack(messageWrap, msg -> CommonDialog.getInstance().showMsg(msg.getContent()));
     }
 
-    @Override
-    public void beforeInit(URL location, ResourceBundle resources) {
 
-    }
 
     @Override
     public void init(URL location, ResourceBundle resources) {
@@ -105,8 +102,5 @@ public class PrivateChatController extends CustomApplication {
 
     }
 
-    @Override
-    public void afterInit(URL location, ResourceBundle resources) {
 
-    }
 }

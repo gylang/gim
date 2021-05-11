@@ -126,7 +126,7 @@ public class BizFriendServiceImpl implements BizFriendService {
             message.setReceiveId(CollUtil.newArrayList(userApply.getApplyId()));
             MessageWrap messageWrap = MessageWrap.builder()
                     .cmd(PushChatCmd.P2P_PUSH)
-                    .bizType(PushBizType.userApply)
+                    .bizType(PushBizType.USER_APPLY)
                     .type(ChatTypeEnum.PUSH_CHAT)
                     .sender(userApply.getApplyId())
                     .content(JSON.toJSONString(message))
@@ -161,7 +161,7 @@ public class BizFriendServiceImpl implements BizFriendService {
                     .cmd(PushChatCmd.P2P_PUSH)
                     .sender(apply.getAnswerId())
                     .receive(apply.getApplyId())
-                    .bizType(PushBizType.userApplyAnswer)
+                    .bizType(PushBizType.USER_APPLY_ANSWER)
                     .offlineMsgEvent(true)
                     .content(JSON.toJSONString(message))
                     .type(ChatTypeEnum.PRIVATE_CHAT)
@@ -183,7 +183,7 @@ public class BizFriendServiceImpl implements BizFriendService {
                     .sender(apply.getAnswerId())
                     .receive(apply.getApplyId())
                     .content(apply.getAnswerId() + ": 拒绝添加好友!")
-                    .type(ChatTypeEnum.NOTIFY)
+                    .type(ChatTypeEnum.NOTIFY_CHAT)
                     .cmd(SystemChatCmd.NOTIFY)
                     .build();
             socketManager.send(rejectMsg);

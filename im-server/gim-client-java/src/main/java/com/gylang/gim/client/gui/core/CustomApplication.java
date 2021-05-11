@@ -26,7 +26,7 @@ public abstract class CustomApplication extends Application implements Initializ
 
     private Stage stage;
 
-    public CustomApplication(String title, String url) {
+    protected CustomApplication(String title, String url) {
         this.title = title;
         this.url = url;
     }
@@ -55,10 +55,31 @@ public abstract class CustomApplication extends Application implements Initializ
         afterInit(location, resources);
     }
 
-    public abstract void beforeInit(URL location, ResourceBundle resources);
+    /**
+     * 初始化前
+     *
+     * @param location
+     * @param resources
+     */
+    public void beforeInit(URL location, ResourceBundle resources) {
+    }
 
-    public abstract void init(URL location, ResourceBundle resources);
+    /**
+     * 初始化后
+     *
+     * @param location
+     * @param resources
+     */
+    public void init(URL location, ResourceBundle resources) {
+    }
 
-    public abstract void afterInit(URL location, ResourceBundle resources);
+    /**
+     * 初始化后
+     *
+     * @param location
+     * @param resources
+     */
+    public void afterInit(URL location, ResourceBundle resources) {
+    }
 
 }

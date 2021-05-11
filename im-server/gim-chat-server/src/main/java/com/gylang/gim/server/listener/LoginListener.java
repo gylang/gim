@@ -6,7 +6,7 @@ import com.gylang.gim.api.domain.admin.AdminUser;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.server.config.AdminConfig;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.event.message.MessageEvent;
 import com.gylang.netty.sdk.event.message.MessageEventListener;
 import com.gylang.netty.sdk.provider.MessageProvider;
@@ -46,12 +46,12 @@ public class LoginListener implements MessageEventListener<String>, Initializing
             MessageWrap messageWrap = new MessageWrap();
             messageWrap.setQos(2);
             messageWrap.setCmd(EventTypeConst.USER_ONLINE);
-            messageWrap.setType(ChatTypeEnum.NOTIFY);
+            messageWrap.setType(ChatTypeEnum.NOTIFY_CHAT);
             messageWrap.setContent(loginUserId);
             String sender = user.getUserId();
             messageWrap.setReceive(sender);
             messageWrap.setSender(CommonConstant.SYSTEM_SENDER);
-            IMSession session = new IMSession();
+            GIMSession session = new GIMSession();
             session.setAccount(CommonConstant.SYSTEM_SENDER);
             if (log.isDebugEnabled()) {
                 log.debug("接收到用户[{}]上线事件, 给服务[{}]发送通知", key, user.getName());

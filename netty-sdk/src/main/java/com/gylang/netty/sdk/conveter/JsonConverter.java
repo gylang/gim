@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.gylang.gim.api.domain.common.MessageWrap;
 
 /**
- * json 数据转换
+ * todo json 数据转换
  *
  * @author gylang
  * data 2020/11/8

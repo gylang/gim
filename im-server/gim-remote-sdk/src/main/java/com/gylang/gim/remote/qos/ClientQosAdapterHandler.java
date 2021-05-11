@@ -19,7 +19,7 @@ public class ClientQosAdapterHandler {
     private ClientSenderQosHandler senderQosHandler = new DefaultClientSenderSendQosHandler();
     private ClientReceiveQos2Handler receiveQos2Handler = new DefaultIClientReceiveQos2Handler();
 
-    {
+    public ClientQosAdapterHandler() {
         senderQosHandler.startup();
         receiveQos2Handler.startup();
     }

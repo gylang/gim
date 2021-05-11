@@ -3,7 +3,7 @@ package com.gylang.spring.netty.custom.register;
 import cn.hutool.core.collection.CollUtil;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.common.ObjectWrap;
-import com.gylang.netty.sdk.config.NettyConfiguration;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -25,7 +25,7 @@ import java.util.List;
 public class NettyHandlerRegister implements InitializingBean {
 
     @Resource
-    private NettyConfiguration nettyConfiguration;
+    private GimGlobalConfiguration gimGlobalConfiguration;
 
     @Autowired(required = false)
     private List<IMRequestHandler> imRequestHandlerList;
@@ -43,10 +43,10 @@ public class NettyHandlerRegister implements InitializingBean {
             Class<?> userClass = ClassUtils.getUserClass(handler);
             objectWrap.setInstance(handler);
             NettyHandler nettyHandler = AnnotationUtils.findAnnotation(userClass, NettyHandler.class);
-            objectWrap.addAnno(nettyHandler);
+            objectWrap.addAnnotation(nettyHandler);
             objectWrap.setUserType(userClass);
             objectWrapList.add(objectWrap);
         }
-        nettyConfiguration.addObjectWrap(objectWrapList);
+        gimGlobalConfiguration.addObjectWrap(objectWrapList);
     }
 }

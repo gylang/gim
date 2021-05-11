@@ -21,7 +21,7 @@
  */
 package com.gylang.netty.sdk.domain.model;
 
-import com.gylang.gim.api.constant.CommConst;
+import com.gylang.gim.api.constant.AttributeConstant;
 import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
 import lombok.Data;
@@ -36,16 +36,20 @@ import java.util.Objects;
  * IoSession包装类,集群时 将此对象存入表中
  */
 @Data
-public class IMSession implements Serializable {
+public class GIMSession implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     public static final String HOST = "HOST";
+
     public static final int STATE_ENABLED = 0;
     public static final int STATE_DISABLED = 1;
+
+    /** ios apns  */
     public static final int APNS_ON = 1;
     public static final int APNS_OFF = 0;
 
+    /** 设备类型 */
     public static final String CHANNEL_IOS = "ios";
     public static final String CHANNEL_ANDROID = "android";
     public static final String CHANNEL_WINDOWS = "windows";
@@ -126,13 +130,13 @@ public class IMSession implements Serializable {
      */
     private List<AbstractSessionGroup> groupList = new ArrayList<>();
 
-    public IMSession(Channel session) {
+    public GIMSession(Channel session) {
         this.session = session;
         this.nid = session.id().asLongText();
     }
 
 
-    public IMSession() {
+    public GIMSession() {
 
     }
 
@@ -141,7 +145,7 @@ public class IMSession implements Serializable {
     }
 
     public String getAccount() {
-        String attribute = (String) getAttribute(CommConst.KEY_ACCOUNT);
+        String attribute = (String) getAttribute(AttributeConstant.ACCOUNT);
 
         if (null != attribute) {
             this.account =  attribute;
@@ -154,7 +158,7 @@ public class IMSession implements Serializable {
     public void setAccount(String account) {
         this.account = account;
 
-        setAttribute(CommConst.KEY_ACCOUNT, account);
+        setAttribute(AttributeConstant.ACCOUNT, account);
     }
 
 
@@ -231,8 +235,8 @@ public class IMSession implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof IMSession) {
-            IMSession target = (IMSession) o;
+        if (o instanceof GIMSession) {
+            GIMSession target = (GIMSession) o;
             return Objects.equals(target.deviceId, deviceId) && Objects.equals(target.nid, nid)
                     && Objects.equals(target.serverIp, serverIp);
         }

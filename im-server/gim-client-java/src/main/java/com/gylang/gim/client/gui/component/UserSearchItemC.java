@@ -44,6 +44,7 @@ public class UserSearchItemC extends BaseCellC<PtUserDTO> implements Initializab
 
 
     private GimCallBack<MessageWrap> messageNotify;
+
     FriendApi friendApi = HttpUtil.getApi(FriendApi.class);
 
     public UserSearchItemC() {
@@ -91,12 +92,10 @@ public class UserSearchItemC extends BaseCellC<PtUserDTO> implements Initializab
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        //
          messageNotify = messageWrap -> {
-
          };
         SocketHolder.getInstance()
-                .bind(ChatTypeEnum.NOTIFY, NotifyChatCmd.MESSAGE_NOTIFY, messageNotify);
+                .bind(ChatTypeEnum.NOTIFY_CHAT, NotifyChatCmd.MESSAGE_NOTIFY, messageNotify);
     }
 
 }

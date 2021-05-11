@@ -62,13 +62,13 @@ public class UserLoginEvent implements MessageEventListener<MessageWrap> {
             }
             String priMsgId = entries.get("-1");
             // 推送单聊信箱消息
-            Long priLastTimeStamp = MsgIdUtil.getTimestamp(Long.parseLong(priMsgId)) - 1;
+            Long priLastTimeStamp = MsgIdUtil.timestamp(Long.parseLong(priMsgId)) - 1;
             batchPush(CacheConstant.PRIVATE_CHAT_HISTORY + key, priLastTimeStamp, priOncePushMsgNum);
 
             // 群聊消息
             entries.remove("-1");
             for (Map.Entry<String, String> entry : entries.entrySet()) {
-                Long groupLastTimeStamp = MsgIdUtil.getTimestamp(Long.parseLong(entry.getValue())) - 1;
+                Long groupLastTimeStamp = MsgIdUtil.timestamp(Long.parseLong(entry.getValue())) - 1;
                 batchPush(CacheConstant.GROUP_CHAT_HISTORY + key, groupLastTimeStamp, groupOncePushMsgNum);
             }
 
@@ -97,7 +97,7 @@ public class UserLoginEvent implements MessageEventListener<MessageWrap> {
             message.setReceiveId(CollUtil.newArrayList(key));
             MessageWrap messageWrap = MessageWrap.builder()
                     .cmd(PushChatCmd.P2P_PUSH)
-                    .bizType(PushBizType.batch_his_push)
+                    .bizType(PushBizType.BATCH_HIS_PUSH)
                     .contentType(ContentType.BATCH)
                     .content(JSON.toJSONString(msgStr))
                     .offlineMsgEvent(false)
@@ -112,6 +112,6 @@ public class UserLoginEvent implements MessageEventListener<MessageWrap> {
 
     @Override
     public List<String> bind() {
-        return Collections.singletonList(ChatTypeEnum.NOTIFY + "-" + EventTypeConst.USER_ONLINE);
+        return Collections.singletonList(ChatTypeEnum.NOTIFY_CHAT + "-" + EventTypeConst.USER_ONLINE);
     }
 }

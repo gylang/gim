@@ -1,14 +1,13 @@
 package com.gylang.netty.sdk.handler.qos;
 
 import com.gylang.gim.api.constant.QosConstant;
-import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.message.sys.AckMessage;
 import com.gylang.gim.api.enums.ChatTypeEnum;
-import com.gylang.netty.sdk.common.InokeFinished;
+import com.gylang.netty.sdk.common.InvokeFinished;
 import com.gylang.netty.sdk.common.ObjectWrap;
-import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.handler.BizRequestAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
@@ -16,30 +15,31 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 
 /**
+ * qos 处理器 支持qos1(保证至少一次可达) qos2(保证只有一次消费) 确保消息可达
  * @author gylang
  * data 2021/3/3
  */
 @Slf4j
-public class QosAdapterHandler implements BizRequestAdapter<MessageWrap> {
+public class QosAdapterHandler implements BizRequestAdapter {
 
     private IMessageSenderQosHandler senderQosHandler;
     private IMessageReceiveQosHandler receiveQos2Handler;
 
     @Override
-    public void init(NettyConfiguration configuration) {
+    public void init(GimGlobalConfiguration configuration) {
         this.senderQosHandler = configuration.getIMessageSenderQosHandler();
         this.receiveQos2Handler = configuration.getIMessageReceiveQosHandler();
     }
 
     @Override
-    public Object process(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
+    public Object process(ChannelHandlerContext ctx, GIMSession me, MessageWrap message) {
 
 
         // qos = 1/2 主发逻辑基本一直 统一处理
         if (ChatTypeEnum.QOS_SERVER_SEND_ACK == message.getType()) {
             // qos 发送方
             senderQosHandler.handle(message, me);
-            return InokeFinished.getInstance();
+            return InvokeFinished.getInstance();
         }
 
         // 接受方 qos = 1 响应客户点 ack1 并执行正常业务逻辑
@@ -73,14 +73,14 @@ public class QosAdapterHandler implements BizRequestAdapter<MessageWrap> {
                     if (log.isDebugEnabled()) {
                         log.debug("[qos2 - receiver] : 接收到客户端[重发]消息 , 响应客户端ack1");
                     }
-                    return InokeFinished.getInstance();
+                    return InvokeFinished.getInstance();
                 }
 
             } else if (QosConstant.RECEIVE_ACK2 == message.getAck()) {
                 // 接受方 收到的消息为ack2 为服务端ack1的回复 可以直接去掉重发记录
                 receiveQos2Handler.remove(account, clientMsgId);
 
-                return InokeFinished.finish();
+                return InvokeFinished.finish();
             }
 
 

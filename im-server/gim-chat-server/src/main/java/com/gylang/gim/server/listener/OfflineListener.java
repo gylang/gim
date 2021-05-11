@@ -1,7 +1,7 @@
 package com.gylang.gim.server.listener;
 
 import com.gylang.gim.api.constant.EventTypeConst;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.event.message.MessageEvent;
 import com.gylang.netty.sdk.event.message.MessageEventListener;
 import com.gylang.netty.sdk.repo.IMSessionRepository;
@@ -17,14 +17,14 @@ import javax.annotation.Resource;
  * data 2021/4/6
  */
 @Component
-public class OfflineListener implements MessageEventListener<IMSession> {
+public class OfflineListener implements MessageEventListener<GIMSession> {
 
     @Resource
     private IMSessionRepository sessionRepository;
 
     @Override
     @MessageEvent(EventTypeConst.OVER_TIME_CLOSE)
-    public void onEvent(String key, IMSession session) {
+    public void onEvent(String key, GIMSession session) {
 
         sessionRepository.popByKey(key);
         LocalSessionHolderUtil.remove(key);

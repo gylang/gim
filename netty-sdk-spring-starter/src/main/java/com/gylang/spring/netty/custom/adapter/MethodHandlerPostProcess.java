@@ -1,7 +1,7 @@
 package com.gylang.spring.netty.custom.adapter;
 
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.spring.netty.custom.method.ControllerMethodMeta;
 import com.gylang.spring.netty.custom.method.MethodArgumentValue;
 import io.netty.channel.ChannelHandlerContext;
@@ -31,5 +31,5 @@ public interface MethodHandlerPostProcess {
      * @param processResult       业务方法处理结果
      * @return 判断是否终止执行(不执行后续处理器)
      */
-    boolean handler(ChannelHandlerContext ctx, IMSession me, MessageWrap message, MethodArgumentValue methodArgumentValue, Object processResult);
+    boolean handler(ChannelHandlerContext ctx, GIMSession me, MessageWrap message, MethodArgumentValue methodArgumentValue, Object processResult);
 }

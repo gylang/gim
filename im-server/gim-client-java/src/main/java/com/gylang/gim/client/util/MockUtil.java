@@ -7,6 +7,8 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.gylang.gim.client.config.ClientConfig;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -18,9 +20,10 @@ import java.util.function.Supplier;
  * @author gylang
  * data 2021/4/2
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MockUtil {
 
-    private static final Map<String, String> mockData = new HashMap<>();
+    private static final Map<String, String> MOCK_DATA = new HashMap<>();
 
     static {
 
@@ -38,7 +41,7 @@ public class MockUtil {
                 // 读取 json
                 String key = StrUtil.subBefore(f.getName(), ".", true);
                 String json = IoUtil.read(FileUtil.getReader(f, StandardCharsets.UTF_8));
-                mockData.put(key, json);
+                MOCK_DATA.put(key, json);
             }
         }
     }
@@ -105,7 +108,7 @@ public class MockUtil {
                     return mockRet;
                 }
                 Assert.notNull(mockKey, "mock结果不存在");
-                String result = mockData.get(mockKey);
+                String result = MOCK_DATA.get(mockKey);
                 Assert.notNull(result, "mock结果不存在");
                 if (null != type) {
                     return JSON.parseObject(result, type);

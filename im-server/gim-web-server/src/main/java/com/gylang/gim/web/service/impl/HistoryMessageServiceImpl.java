@@ -12,14 +12,14 @@ import com.gylang.gim.util.MsgIdUtil;
 import com.gylang.gim.web.common.mybatis.Page;
 import com.gylang.gim.web.entity.HistoryGroupChat;
 import com.gylang.gim.web.entity.HistoryPrivateChat;
-import com.gylang.gim.web.service.*;
+import com.gylang.gim.web.service.HistoryGroupChatService;
+import com.gylang.gim.web.service.HistoryMessageService;
+import com.gylang.gim.web.service.HistoryPrivateChatService;
+import com.gylang.gim.web.service.ImUserGroupService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.StringRedisConnection;
-import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -107,7 +107,7 @@ public class HistoryMessageServiceImpl implements HistoryMessageService, ChatTyp
             privateChat.setReceive(msg.getReceive());
             privateChat.setMsgId(msg.getMsgId());
             privateChat.setSendId(msg.getSender());
-            privateChat.setTimeStamp(MsgIdUtil.getTimestamp(msg.getTimeStamp()));
+            privateChat.setTimeStamp(MsgIdUtil.timestamp(msg.getTimeStamp()));
             historyPrivateChatService.save(privateChat);
 
             //  投入缓存信箱 写扩散
@@ -126,7 +126,7 @@ public class HistoryMessageServiceImpl implements HistoryMessageService, ChatTyp
             groupChat.setReceive(msg.getReceive());
             groupChat.setMsgId(msg.getMsgId());
             groupChat.setSendId(msg.getSender());
-            groupChat.setTimeStamp(MsgIdUtil.getTimestamp(Long.parseLong(msg.getMsgId())));
+            groupChat.setTimeStamp(MsgIdUtil.timestamp(Long.parseLong(msg.getMsgId())));
             historyGroupChatService.save(groupChat);
             //  投入缓存信箱 写扩散
             redisTemplate.executePipelined((RedisCallback<Object>) connection -> {

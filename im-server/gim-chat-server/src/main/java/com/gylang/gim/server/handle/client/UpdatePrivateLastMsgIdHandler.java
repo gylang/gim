@@ -6,7 +6,7 @@ import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.server.service.HistoryMessageService;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,7 +26,7 @@ public class UpdatePrivateLastMsgIdHandler implements IMRequestHandler {
 
 
     @Override
-    public Object process(IMSession me, MessageWrap message) {
+    public Object process(GIMSession me, MessageWrap message) {
 
         historyMessageService.updatePrivateLastMsgId(me.getAccount(), message.getMsgId());
         if (QosConstant.ONE_AWAY != message.getQos()) {

@@ -2,7 +2,7 @@ package com.gylang.netty.sdk.handler.qos;
 
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.common.AfterConfigInitialize;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 
 /**
  * 处理发出消息是否已经安全送达，实现消息的重发
@@ -27,7 +27,7 @@ public interface IMessageSenderQosHandler extends AfterConfigInitialize {
      * @param messageWrap 消息包装类
      * @param target      接收者
      */
-    void handle(MessageWrap messageWrap, IMSession target);
+    void handle(MessageWrap messageWrap, GIMSession target);
 
     /**
      * 是否已经接收到当前消息

@@ -33,7 +33,9 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 import java.util.List;
 
 /**
- * 服务端接收消息路由解码，通过消息类型分发到不同的真正解码器
+ * 应用层协议解析器
+ *
+ * @author admin
  */
 public class AppMessageDecoder extends ByteToMessageDecoder {
 

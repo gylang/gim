@@ -4,7 +4,6 @@ import com.gylang.gim.api.domain.common.MessageWrap;
 import lombok.Data;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * @author gylang

@@ -47,6 +47,5 @@ public class UserItemC extends BaseCellC<ImUserFriendDTO> {
     public void delFriendAction(ActionEvent actionEvent) {
 
         log.info("{}", actionEvent.getSource());
-        ImUserFriendDTO item = getItem();
     }
 }

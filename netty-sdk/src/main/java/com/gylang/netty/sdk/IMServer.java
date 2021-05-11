@@ -1,7 +1,7 @@
 package com.gylang.netty.sdk;
 
-import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.constant.NettyConfigEnum;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.constant.GimDefaultConfigEnum;
 import com.gylang.netty.sdk.initializer.CustomInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 public class IMServer {
 
     @Setter
-    private NettyConfiguration nettyConfig;
+    private GimGlobalConfiguration nettyConfig;
 
 
     public void start() throws InterruptedException {
@@ -34,14 +34,14 @@ public class IMServer {
         for (CustomInitializer<?> customInitializer : nettyConfig.getServerChannelInitializer()) {
 
             EventLoopGroup workerGroup =
-                    new NioEventLoopGroup((Integer) NettyConfigEnum.WORKER_GROUP.getValue(nettyConfig.getProperties()));
+                    new NioEventLoopGroup((Integer) GimDefaultConfigEnum.WORKER_GROUP.getValue(nettyConfig.getProperties()));
             EventLoopGroup bossGroup =
-                    new NioEventLoopGroup((Integer) NettyConfigEnum.BOSS_GROUP.getValue(nettyConfig.getProperties()));
+                    new NioEventLoopGroup((Integer) GimDefaultConfigEnum.BOSS_GROUP.getValue(nettyConfig.getProperties()));
             ServerBootstrap serverBootstrap = new ServerBootstrap();
             // 三部曲启动 handler initializer bootstrap
             serverBootstrap.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
-                    .handler(new LoggingHandler((LogLevel) nettyConfig.getProperties(NettyConfigEnum.LOG_LEVEL)))
+                    .handler(new LoggingHandler((LogLevel) nettyConfig.getProperties(GimDefaultConfigEnum.LOG_LEVEL)))
                     .childHandler(customInitializer);
 
             ChannelFuture websocket = serverBootstrap
@@ -53,7 +53,7 @@ public class IMServer {
                 log.info("================{}:启动成功=====================");
                 log.info("==================端口:{}=======================",
                         customInitializer.getName(),
-                        nettyConfig.getProperties(NettyConfigEnum.WEBSOCKET_PORT));
+                        nettyConfig.getProperties(GimDefaultConfigEnum.WEBSOCKET_PORT));
                 log.info("==================================================");
             });
             // 监听服务关闭

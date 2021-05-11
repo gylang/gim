@@ -2,7 +2,7 @@ package com.gylang.netty.sdk.handler;
 
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 
 /**
  * 业务服务处理类, message.key 来确定调用的服务类型, 规约用于实现业务功能
@@ -16,6 +16,10 @@ public interface IMRequestHandler {
 
     /**
      * 处理收到客户端从长链接发送的数据
+     *
+     * @param me      当前会话用户
+     * @param message 消息
+     * @return 命令处理结果
      */
-    Object process(IMSession me, MessageWrap message);
+    Object process(GIMSession me, MessageWrap message);
 }

@@ -2,7 +2,6 @@ package com.gylang.gim.remote.qos;
 
 import cn.hutool.core.thread.ThreadFactoryBuilder;
 import com.gylang.gim.api.constant.QosConstant;
-import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.message.sys.AckMessage;
 import com.gylang.gim.api.enums.ChatTypeEnum;
@@ -19,15 +18,13 @@ import java.util.concurrent.*;
  * data 2021/3/3
  */
 @Slf4j
-public class DefaultIClientReceiveQos2Handler implements ClientReceiveQos2Handler {
+public class DefaultIClientReceiveQos2Handler implements ClientReceiveQos2Handler{
 
 
     private final ConcurrentMap<String, MessageWrap> receiveMessages = new ConcurrentHashMap<>();
 
     /** 定时任务扫码间隔 */
     private int checkInterval = 10 * 1000;
-    /** 消息超时时间 */
-    private int messagesValidTime = 10 * 10 * 1000;
     /** 定时扫码器 */
     private ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(1, ThreadFactoryBuilder.create().setNamePrefix("receive-qos-scanner").build());
 

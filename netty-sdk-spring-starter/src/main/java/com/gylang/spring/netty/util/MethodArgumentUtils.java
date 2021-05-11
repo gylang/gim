@@ -3,6 +3,8 @@ package com.gylang.spring.netty.util;
 import cn.hutool.core.collection.CollUtil;
 import com.gylang.spring.netty.custom.method.ControllerMethodMeta;
 import com.gylang.spring.netty.custom.method.MethodArgument;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;
@@ -15,6 +17,7 @@ import java.util.Set;
  * data 2020/11/27
  * @version v0.0.1
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MethodArgumentUtils {
     /**
      * 获取指定注解下参数
@@ -30,10 +33,10 @@ public class MethodArgumentUtils {
         if (CollUtil.isEmpty(argument)) {
             return null;
         }
-        boolean hasTargetANnotation = false;
+        boolean hasTargetAnnotation = false;
         for (MethodArgument methodArgument : argument.values()) {
-            hasTargetANnotation = null != getAnnotationFormArgument(methodArgument, annotation);
-            if (hasTargetANnotation) {
+            hasTargetAnnotation = null != getAnnotationFormArgument(methodArgument, annotation);
+            if (hasTargetAnnotation) {
                 return methodArgument;
             }
         }

@@ -7,8 +7,8 @@ import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.common.QosMessageWrap;
 import com.gylang.gim.api.domain.message.sys.AckMessage;
 import com.gylang.gim.api.enums.ChatTypeEnum;
-import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.event.EventProvider;
 import com.gylang.netty.sdk.util.LocalSessionHolderUtil;
 import io.netty.channel.Channel;
@@ -20,14 +20,14 @@ import java.util.Map;
 import java.util.concurrent.*;
 
 /**
- * 处理消息接收，回复客户端ack，保证服务能接收到消息ack
+ * 处理服务端发送方(主发)，回复客户端ack/消息重发，保证客户端能收到消息并回复ack1 和 主发响应ack2
  *
  * @author gylang
  * data 2021/3/3
  */
 @Slf4j
 @Setter
-public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
+public class DefaultGIMessageSendQosHandler implements IMessageSenderQosHandler {
 
 
     private final ConcurrentMap<String, QosMessageWrap> qosMessageWraps = new ConcurrentHashMap<>();
@@ -54,7 +54,7 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
     private EventProvider eventProvider;
 
     @Override
-    public void handle(MessageWrap message, IMSession target) {
+    public void handle(MessageWrap message, GIMSession target) {
 
         // 1. 非qos
         String msgId = message.getMsgId();
@@ -143,7 +143,6 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
         Iterator<Map.Entry<String, QosMessageWrap>> iterator = qosMessageWraps.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<String, QosMessageWrap> entry = iterator.next();
-            String key = entry.getKey();
             QosMessageWrap qosMessageWrap = entry.getValue();
             // 删除接收消息表
             if (qosMessageWrap.getSendNum() >= reSendNum) {
@@ -187,7 +186,7 @@ public class DefaultIMessageSendQosHandler implements IMessageSenderQosHandler {
 
 
     @Override
-    public void init(NettyConfiguration configuration) {
+    public void init(GimGlobalConfiguration configuration) {
 
         Integer customCheckInterval = configuration.getProperties(CHECK_INTER_VAL_KEY);
         this.checkInterval = (null == customCheckInterval || customCheckInterval <= 0)

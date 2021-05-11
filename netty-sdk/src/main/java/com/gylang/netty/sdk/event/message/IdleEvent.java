@@ -3,7 +3,7 @@ package com.gylang.netty.sdk.event.message;
 import io.netty.channel.ChannelHandlerContext;
 
 /**
- * 空闲等待通知
+ * 空闲等待事件通知
  * @author gylang
  * data 2020/11/3
  * @version v0.0.1

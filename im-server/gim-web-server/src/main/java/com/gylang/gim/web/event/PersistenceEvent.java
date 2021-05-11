@@ -39,6 +39,6 @@ public class PersistenceEvent implements MessageEventListener<MessageWrap> {
 
     @Override
     public List<String> bind() {
-        return Collections.singletonList(ChatTypeEnum.NOTIFY + "-" + EventTypeConst.PERSISTENCE_MSG_EVENT);
+        return Collections.singletonList(ChatTypeEnum.NOTIFY_CHAT + "-" + EventTypeConst.PERSISTENCE_MSG_EVENT);
     }
 }

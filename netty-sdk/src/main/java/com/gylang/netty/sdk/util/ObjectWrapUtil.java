@@ -6,6 +6,8 @@ import cn.hutool.core.util.ArrayUtil;
 import com.gylang.netty.sdk.common.MethodWrap;
 import com.gylang.netty.sdk.common.ObjectWrap;
 import com.gylang.netty.sdk.common.ParameterWrap;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -17,6 +19,7 @@ import java.util.List;
  * @author gylang
  * data 2021/2/21
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ObjectWrapUtil {
 
     public static <T> T findAnnotation(Class<?> type, ObjectWrap objectWrap) {

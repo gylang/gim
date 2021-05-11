@@ -6,8 +6,8 @@ import com.gylang.gim.api.constant.QosConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.message.sys.AckMessage;
 import com.gylang.gim.api.enums.ChatTypeEnum;
-import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.repo.IMSessionRepository;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -16,14 +16,14 @@ import java.util.Map;
 import java.util.concurrent.*;
 
 /**
- * 处理消息接收，回复客户端ack，保证服务能接收到消息ack
+ * 处理客户端主发消息(服务端消息接收方)，(重发)回复客户端ack，保证服务能接收到消息ack
  *
  * @author gylang
  * data 2021/3/3
  */
 @Slf4j
 @Setter
-public class DefaultIMessageReceiveQosHandler implements IMessageReceiveQosHandler {
+public class DefaultGIMessageReceiveQosHandler implements IMessageReceiveQosHandler {
 
 
     private final ConcurrentMap<String, MessageWrap> receiveMessages = new ConcurrentHashMap<>();
@@ -41,7 +41,7 @@ public class DefaultIMessageReceiveQosHandler implements IMessageReceiveQosHandl
 
 
     @Override
-    public boolean handle(MessageWrap message, IMSession target) {
+    public boolean handle(MessageWrap message, GIMSession target) {
 
         // qos2 接受方处理 响应ack1
         // 使用后 uid, 客户端需要bind才能使用
@@ -133,7 +133,7 @@ public class DefaultIMessageReceiveQosHandler implements IMessageReceiveQosHandl
                 receiveMessages.remove(key);
             } else {
                 // 处理客户端主发回应ack 所有发送的是给发送方
-                IMSession session = sessionRepository.find(value.getSender());
+                GIMSession session = sessionRepository.find(value.getSender());
                 if (null != session) {
                     session.getSession().writeAndFlush(value);
                 }
@@ -147,7 +147,7 @@ public class DefaultIMessageReceiveQosHandler implements IMessageReceiveQosHandl
     }
 
     @Override
-    public void init(NettyConfiguration configuration) {
+    public void init(GimGlobalConfiguration configuration) {
 
         Integer customCheckInterval = configuration.getProperties(CHECK_INTER_VAL_KEY);
         this.checkInterval = (null == customCheckInterval || customCheckInterval <= 0)

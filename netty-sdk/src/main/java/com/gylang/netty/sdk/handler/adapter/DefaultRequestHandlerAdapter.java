@@ -3,10 +3,10 @@ package com.gylang.netty.sdk.handler.adapter;
 import cn.hutool.core.collection.CollUtil;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.common.InokeFinished;
+import com.gylang.netty.sdk.common.InvokeFinished;
 import com.gylang.netty.sdk.common.ObjectWrap;
-import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.handler.BizRequestAdapter;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import com.gylang.netty.sdk.util.ObjectWrapUtil;
@@ -20,18 +20,16 @@ import java.util.Map;
  *
  * @author gylang
  * data 2020/11/9
- * @author gylang
- * data 2020/11/9
  * @version v0.0.1
  * @see com.gylang.netty.sdk.handler.IMRequestHandler
  */
-public class DefaultRequestHandlerAdapter implements BizRequestAdapter<IMRequestHandler> {
+public class DefaultRequestHandlerAdapter implements BizRequestAdapter {
 
 
     private Map<Integer, IMRequestHandler> handlerMap;
 
     @Override
-    public Object process(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
+    public Object process(ChannelHandlerContext ctx, GIMSession me, MessageWrap message) {
 
 
         IMRequestHandler requestHandler = handlerMap.get(message.getType());
@@ -39,7 +37,7 @@ public class DefaultRequestHandlerAdapter implements BizRequestAdapter<IMRequest
             return null;
         }
         Object result = requestHandler.process(me, message);
-        return InokeFinished.finish(result);
+        return InvokeFinished.finish(result);
     }
 
     @Override
@@ -65,8 +63,8 @@ public class DefaultRequestHandlerAdapter implements BizRequestAdapter<IMRequest
     }
 
     @Override
-    public void init(NettyConfiguration nettyConfiguration) {
-        register(nettyConfiguration.getObjectWrapList());
+    public void init(GimGlobalConfiguration gimGlobalConfiguration) {
+        register(gimGlobalConfiguration.getObjectWrapList());
     }
 
 

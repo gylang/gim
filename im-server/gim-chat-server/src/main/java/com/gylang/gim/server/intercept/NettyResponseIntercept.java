@@ -1,13 +1,11 @@
 package com.gylang.gim.server.intercept;
 
-import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.common.ResponseMessage;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.netty.sdk.common.AfterConfigInitialize;
-import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.domain.model.IMSession;
-import com.gylang.netty.sdk.handler.qos.IMessageReceiveQosHandler;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.intercept.NettyIntercept;
 import com.gylang.netty.sdk.provider.MessageProvider;
 import io.netty.channel.ChannelHandlerContext;
@@ -22,26 +20,24 @@ public class NettyResponseIntercept implements NettyIntercept, AfterConfigInitia
 
     private MessageProvider messageProvider;
 
-    private IMessageReceiveQosHandler receiveQosHandler;
 
     @Override
-    public void init(NettyConfiguration configuration) {
+    public void init(GimGlobalConfiguration configuration) {
         this.messageProvider = configuration.getMessageProvider();
-        this.receiveQosHandler = configuration.getIMessageReceiveQosHandler();
     }
 
     @Override
-    public boolean support(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
+    public boolean support(ChannelHandlerContext ctx, GIMSession me, MessageWrap message) {
         return ChatTypeEnum.QOS_CLIENT_SEND_ACK != message.getType() && ChatTypeEnum.QOS_SERVER_SEND_ACK != message.getType();
     }
 
     @Override
-    public boolean doBefore(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
+    public boolean doBefore(ChannelHandlerContext ctx, GIMSession me, MessageWrap message) {
         return false;
     }
 
     @Override
-    public Object doAfter(ChannelHandlerContext ctx, IMSession me, MessageWrap message, Object result) {
+    public Object doAfter(ChannelHandlerContext ctx, GIMSession me, MessageWrap message, Object result) {
 
 
         if (result instanceof ResponseMessage) {

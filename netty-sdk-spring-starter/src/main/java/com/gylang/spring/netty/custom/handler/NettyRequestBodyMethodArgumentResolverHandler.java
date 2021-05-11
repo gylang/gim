@@ -4,7 +4,7 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ClassUtil;
 import com.alibaba.fastjson.JSON;
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.spring.netty.annotation.NettyBody;
 import com.gylang.spring.netty.custom.method.ControllerMethodMeta;
 import com.gylang.spring.netty.custom.method.MethodArgument;
@@ -41,7 +41,7 @@ public class NettyRequestBodyMethodArgumentResolverHandler implements MethodArgu
     }
 
     @Override
-    public boolean handler(ChannelHandlerContext ctx, IMSession me, MessageWrap message, MethodArgumentValue methodArgumentValue) {
+    public boolean handler(ChannelHandlerContext ctx, GIMSession me, MessageWrap message, MethodArgumentValue methodArgumentValue) {
 
         ControllerMethodMeta controllerMethodMeta = methodArgumentValue.getControllerMethodMeta();
         String cache = controllerMethodMeta.getCache(cacheName);

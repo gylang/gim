@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 方法包装类 包装 方法对象 实例 注解 参数
+ *
  * @author gylang
  * data 2020/11/9
  * @version v0.0.1
@@ -24,7 +26,7 @@ public class MethodWrap {
     /** 参数 */
     private List<ParameterWrap> parameterWrapList;
 
-    public void addAnno(Annotation annotation) {
+    public void addAnnotation(Annotation annotation) {
         if (null == annotation) {
             return;
         }

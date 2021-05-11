@@ -49,6 +49,7 @@ public class FriendApplyNotifyItemC extends BaseCellC<UserApplyDTO> implements I
     private Button reject;
 
     private GimCallBack<MessageWrap> messageNotify;
+
     FriendApi friendApi = HttpUtil.getApi(FriendApi.class);
 
     public FriendApplyNotifyItemC() {
@@ -135,7 +136,7 @@ public class FriendApplyNotifyItemC extends BaseCellC<UserApplyDTO> implements I
 
          };
         SocketHolder.getInstance()
-                .bind(ChatTypeEnum.NOTIFY, NotifyChatCmd.MESSAGE_NOTIFY, messageNotify);
+                .bind(ChatTypeEnum.NOTIFY_CHAT, NotifyChatCmd.MESSAGE_NOTIFY, messageNotify);
     }
 
 }

@@ -33,7 +33,7 @@ public class MethodArgumentResolver implements AbstractResolver<Method, MethodWr
         // 方法处理器 用户存储方法信息 和 参数信息
         MethodWrap methodWrap = new MethodWrap();
         methodWrap.setMethod(method);
-        methodWrap.addAnno(AnnotationUtils.findAnnotation(method, NettyMapping.class));
+        methodWrap.addAnnotation(AnnotationUtils.findAnnotation(method, NettyMapping.class));
 
 
         // 解析参数

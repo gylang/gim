@@ -2,9 +2,9 @@ package com.gylang.spring.netty;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ReflectUtil;
-import com.gylang.netty.sdk.config.NettyConfiguration;
-import com.gylang.netty.sdk.config.NettyProperties;
-import com.gylang.netty.sdk.constant.NettyConfigEnum;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.config.GimProperties;
+import com.gylang.netty.sdk.constant.GimDefaultConfigEnum;
 import com.gylang.netty.sdk.conveter.DataConverter;
 import com.gylang.netty.sdk.event.DefaultEventProvider;
 import com.gylang.netty.sdk.event.EventContext;
@@ -12,7 +12,7 @@ import com.gylang.netty.sdk.event.EventProvider;
 import com.gylang.netty.sdk.handler.BizRequestAdapter;
 import com.gylang.netty.sdk.handler.DefaultMessageRouter;
 import com.gylang.netty.sdk.handler.IMessageRouter;
-import com.gylang.netty.sdk.handler.adapter.DefaultNettyControllerAdapter;
+import com.gylang.netty.sdk.handler.adapter.DefaultGimControllerAdapter;
 import com.gylang.netty.sdk.handler.adapter.DefaultRequestHandlerAdapter;
 import com.gylang.netty.sdk.handler.qos.*;
 import com.gylang.netty.sdk.initializer.CustomInitializer;
@@ -24,7 +24,6 @@ import com.gylang.netty.sdk.repo.DefaultIMRepository;
 import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
 import com.gylang.netty.sdk.repo.IMSessionRepository;
 import com.gylang.spring.netty.custom.adapter.MethodHandlerAdapter;
-import com.gylang.spring.netty.custom.method.ControllerMethodMeta;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -85,7 +84,7 @@ public class NettyAutoConfiguration implements InitializingBean {
 
     @Bean
     @ConditionalOnMissingBean(MethodHandlerAdapter.class)
-    public BizRequestAdapter<ControllerMethodMeta> bizRequestAdapter() {
+    public BizRequestAdapter bizRequestAdapter() {
         return new MethodHandlerAdapter();
     }
 
@@ -95,9 +94,9 @@ public class NettyAutoConfiguration implements InitializingBean {
     }
 
     @Bean
-    public NettyConfiguration nettyConfiguration() {
+    public GimGlobalConfiguration nettyConfiguration() {
 
-        return new NettyConfiguration();
+        return new GimGlobalConfiguration();
     }
 
     @Bean
@@ -121,9 +120,9 @@ public class NettyAutoConfiguration implements InitializingBean {
     }
 
     @Bean
-    public DefaultNettyControllerAdapter nettyControllerAdapter() {
+    public DefaultGimControllerAdapter nettyControllerAdapter() {
 
-        return new DefaultNettyControllerAdapter();
+        return new DefaultGimControllerAdapter();
     }
 
     @Bean
@@ -139,19 +138,19 @@ public class NettyAutoConfiguration implements InitializingBean {
     }
 
     @Bean
-    @ConfigurationProperties("gylang.netty")
-    public NettyProperties nettyProperties() {
-        return new NettyProperties();
+    @ConfigurationProperties("gylang.gim")
+    public GimProperties nettyProperties() {
+        return new GimProperties();
     }
 
 
     @Bean
-    public List<CustomInitializer<?>> customInitializer(@Autowired NettyProperties properties, @Autowired NettyConfiguration configuration) {
+    public List<CustomInitializer<?>> customInitializer(@Autowired GimProperties properties, @Autowired GimGlobalConfiguration configuration) {
         List<CustomInitializer<?>> customInitializerList = new ArrayList<>();
         Map<String, Integer> socketType = properties.getSocketType();
         if (CollUtil.isEmpty(socketType)) {
             WebSocketJsonInitializer initializer = new WebSocketJsonInitializer();
-            initializer.setPort(configuration.getProperties(NettyConfigEnum.WEBSOCKET_PORT));
+            initializer.setPort(configuration.getProperties(GimDefaultConfigEnum.WEBSOCKET_PORT));
             customInitializerList.add(initializer);
         } else {
             for (Map.Entry<String, Integer> entry : socketType.entrySet()) {
@@ -170,13 +169,13 @@ public class NettyAutoConfiguration implements InitializingBean {
     @Bean
     @ConditionalOnMissingBean(IMessageReceiveQosHandler.class)
     public IMessageReceiveQosHandler iMessageReceiveQosHandler() {
-        return new DefaultIMessageReceiveQosHandler();
+        return new DefaultGIMessageReceiveQosHandler();
     }
 
     @Bean
     @ConditionalOnMissingBean(IMessageSenderQosHandler.class)
     public IMessageSenderQosHandler iMessageSenderQosHandler() {
-        return new DefaultIMessageSendQosHandler();
+        return new DefaultGIMessageSendQosHandler();
     }
 
     @Bean

@@ -1,6 +1,6 @@
 package com.gylang.netty.sdk.common;
 
-import com.gylang.netty.sdk.config.NettyConfiguration;
+import com.gylang.netty.sdk.config.GimGlobalConfiguration;
 
 /**
  * @author gylang
@@ -8,9 +8,9 @@ import com.gylang.netty.sdk.config.NettyConfiguration;
  */
 public interface AfterConfigInitialize {
     /**
-     * 初始化方法
+     * 初始化方法 加载配置类后调用
      *
      * @param configuration 初始化配置
      */
-    void init(NettyConfiguration configuration);
+    void init(GimGlobalConfiguration configuration);
 }

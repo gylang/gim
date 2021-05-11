@@ -3,7 +3,7 @@ package com.gylang.spring.netty.custom.handler;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.spring.netty.annotation.NettyBody;
 import com.gylang.spring.netty.annotation.NettyParam;
 import com.gylang.spring.netty.custom.adapter.MessageConverterAdapter;
@@ -37,7 +37,8 @@ public class RequestParamMethodArgumentResolverHandler implements MethodArgument
     }
 
     @Override
-    public boolean handler(ChannelHandlerContext ctx, IMSession me, MessageWrap message, MethodArgumentValue methodArgumentValue) {
+    @SuppressWarnings("unchecked")
+    public boolean handler(ChannelHandlerContext ctx, GIMSession me, MessageWrap message, MethodArgumentValue methodArgumentValue) {
 
         // 获取key index
         ControllerMethodMeta controllerMethodMeta = methodArgumentValue.getControllerMethodMeta();
@@ -60,7 +61,8 @@ public class RequestParamMethodArgumentResolverHandler implements MethodArgument
                     }
                     if (null != argumentValue) {
                         methodArgumentValue.pushIfNullParameter(methodArgument.getArgumentIndex(), argumentValue);
-                    };
+                    }
+
                 }
             }
         }

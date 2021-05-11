@@ -5,6 +5,8 @@ import cn.hutool.core.util.ReflectUtil;
 import com.gylang.gim.client.gui.GuiStore;
 import javafx.application.Application;
 import javafx.application.Platform;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -14,7 +16,8 @@ import lombok.extern.slf4j.Slf4j;
  * data 2021/4/2
  */
 @Slf4j
-public class GuiUtil {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class GuiUtil {
 
     /**
      * 更新状态

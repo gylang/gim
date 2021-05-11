@@ -7,7 +7,7 @@ import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.entity.UserCache;
 import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.server.handle.manager.ManagerService;
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class UserApplyForTokenManagerImpl implements ManagerService {
     private RedisTemplate<String, Object> redisTemplate;
 
     @Override
-    public MessageWrap doInvoke(IMSession session, MessageWrap messageWrap) {
+    public MessageWrap doInvoke(GIMSession session, MessageWrap messageWrap) {
 
 
         // 生成接入令牌

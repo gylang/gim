@@ -5,8 +5,8 @@ import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.web.util.KeyLock;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
-import com.gylang.netty.sdk.domain.model.IMSession;
-import com.gylang.netty.sdk.handler.NettyController;
+import com.gylang.netty.sdk.domain.model.GIMSession;
+import com.gylang.netty.sdk.handler.GimController;
 import com.gylang.netty.sdk.provider.MessageProvider;
 import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ import javax.annotation.Resource;
  */
 @NettyHandler("login")
 @Component
-public class TouristLoginHandler implements NettyController<String> {
+public class TouristLoginHandler implements GimController<String> {
 
     @Resource
     private MessageProvider messageProvider;
@@ -28,7 +28,7 @@ public class TouristLoginHandler implements NettyController<String> {
     private static final KeyLock<String> keyLock = new KeyLock<>();
 
     @Override
-    public Object process(IMSession me, String requestBody) {
+    public Object process(GIMSession me, String requestBody) {
 
         me.setAccount(requestBody);
         AbstractSessionGroup defaultGroup = getAndCreateGroup(me, groupSessionRepository);
@@ -44,7 +44,7 @@ public class TouristLoginHandler implements NettyController<String> {
         return null;
     }
 
-    private AbstractSessionGroup getAndCreateGroup(IMSession me, IMGroupSessionRepository groupRepository) {
+    private AbstractSessionGroup getAndCreateGroup(GIMSession me, IMGroupSessionRepository groupRepository) {
 
 
         AbstractSessionGroup defaultGroup;

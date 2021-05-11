@@ -15,7 +15,7 @@ spring:
 
 # im
 gylang:
-  netty:
+  gim:
     serverIp: 127.0.0.1
     bossGroup: 4
     workerGroup: 12
@@ -24,7 +24,7 @@ gylang:
     allIdle: 10
     lostConnectRetryNum: 10
     socketServerPort: 46000
-    nonAuthCmd:
+    nonAuthType:
       - 7  #客户端接入
       - 10  # 服务端接入
     socketType:

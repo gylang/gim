@@ -1,6 +1,6 @@
 package com.gylang.grtc.domain;
 
-import com.gylang.netty.sdk.domain.model.IMSession;
+import com.gylang.netty.sdk.domain.model.GIMSession;
 import lombok.Data;
 
 import java.util.Map;
@@ -28,5 +28,5 @@ public class Room {
     /** 是否1对多 -> 主播模式 */
     private boolean one2Many;
     /** 成员 */
-    private Map<String, IMSession> member = new ConcurrentHashMap<>();
+    private Map<String, GIMSession> member = new ConcurrentHashMap<>();
 }
