@@ -1,6 +1,6 @@
 package com.gylang.gim.server.handle.client;
 
-import com.gylang.gim.api.constant.QosConstant;
+import com.gylang.gim.api.constant.qos.QosConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.api.enums.ChatTypeEnum;

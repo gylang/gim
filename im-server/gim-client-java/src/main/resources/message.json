@@ -1,0 +1,18 @@
+{
+  "cmd" : "",
+  "sender" :  "",
+  "type" : 1,
+  "content" :  "怎么说",
+  "contentType" : "",
+  "code" :  "",
+  "msg" : "",
+  "receive" :  "1567845",
+  "receiverType" : "",
+  "clientMsgId" :  "",
+  "msgId" : "",
+  "retryNum" :  "",
+  "qos" : 2,
+  "ack" :  "",
+  "offlineMsgEvent" : true,
+  "timeStamp" :  ""
+}

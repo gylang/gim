@@ -8,7 +8,7 @@ package com.gylang.gim.client.gui.controller;
  */
 
 import cn.hutool.core.util.IdUtil;
-import com.gylang.gim.api.constant.QosConstant;
+import com.gylang.gim.api.constant.qos.QosConstant;
 import com.gylang.gim.api.domain.common.CommonResult;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.request.LoginRequest;

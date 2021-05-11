@@ -22,7 +22,7 @@ import com.gylang.netty.sdk.provider.MessageProvider;
 import com.gylang.netty.sdk.repo.DefaultGroupRepository;
 import com.gylang.netty.sdk.repo.DefaultIMRepository;
 import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
-import com.gylang.netty.sdk.repo.IMSessionRepository;
+import com.gylang.netty.sdk.repo.GIMSessionRepository;
 import com.gylang.spring.netty.custom.adapter.MethodHandlerAdapter;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -100,8 +100,8 @@ public class NettyAutoConfiguration implements InitializingBean {
     }
 
     @Bean
-    @ConditionalOnMissingBean(IMSessionRepository.class)
-    public IMSessionRepository imSessionRepository() {
+    @ConditionalOnMissingBean(GIMSessionRepository.class)
+    public GIMSessionRepository imSessionRepository() {
         return new DefaultIMRepository();
     }
 

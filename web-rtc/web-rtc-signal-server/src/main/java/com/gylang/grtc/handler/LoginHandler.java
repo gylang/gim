@@ -3,18 +3,17 @@ package com.gylang.grtc.handler;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.gylang.gim.api.constant.CommonConstant;
+import com.gylang.gim.api.constant.common.CommonConstant;
 import com.gylang.gim.api.constant.EventTypeConst;
-import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.gim.api.domain.common.ResponseMessage;
+import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.event.EventProvider;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
-import com.gylang.netty.sdk.repo.IMSessionRepository;
+import com.gylang.netty.sdk.repo.GIMSessionRepository;
 import com.gylang.netty.sdk.util.LocalSessionHolderUtil;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -32,16 +31,15 @@ public class LoginHandler implements IMRequestHandler {
     @Resource
     private EventProvider eventProvider;
     @Resource
-    private IMSessionRepository sessionRepository;
+    private GIMSessionRepository sessionRepository;
 
     @Resource
     private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public Object process(GIMSession me, MessageWrap message) {
-        MessageWrap messageWrap = new ResponseMessage();
+        MessageWrap messageWrap = ReplyMessage.success(message);
         messageWrap.setSender(me.getAccount());
-        messageWrap.setCmd(PrivateChatCmd.SOCKET_CONNECTED);
         messageWrap.setType(ChatTypeEnum.NOTIFY_CHAT);
         // 获取用户信息
         if (StrUtil.isNotEmpty(me.getAccount())) {

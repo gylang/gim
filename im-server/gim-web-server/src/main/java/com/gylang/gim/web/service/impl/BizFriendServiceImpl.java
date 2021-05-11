@@ -126,7 +126,6 @@ public class BizFriendServiceImpl implements BizFriendService {
             message.setReceiveId(CollUtil.newArrayList(userApply.getApplyId()));
             MessageWrap messageWrap = MessageWrap.builder()
                     .cmd(PushChatCmd.P2P_PUSH)
-                    .bizType(PushBizType.USER_APPLY)
                     .type(ChatTypeEnum.PUSH_CHAT)
                     .sender(userApply.getApplyId())
                     .content(JSON.toJSONString(message))
@@ -161,7 +160,6 @@ public class BizFriendServiceImpl implements BizFriendService {
                     .cmd(PushChatCmd.P2P_PUSH)
                     .sender(apply.getAnswerId())
                     .receive(apply.getApplyId())
-                    .bizType(PushBizType.USER_APPLY_ANSWER)
                     .offlineMsgEvent(true)
                     .content(JSON.toJSONString(message))
                     .type(ChatTypeEnum.PRIVATE_CHAT)

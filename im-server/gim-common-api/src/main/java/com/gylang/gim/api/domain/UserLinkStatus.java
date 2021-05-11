@@ -16,5 +16,5 @@ public class UserLinkStatus {
     private String channel;
 
     /** 0 已下线 1在线  */
-    private String status;
+    private int status;
 }

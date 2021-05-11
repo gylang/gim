@@ -20,7 +20,7 @@ public class DefaultGroupRepository implements IMGroupSessionRepository {
     Map<String, AbstractSessionGroup> groupMap = new ConcurrentHashMap<>();
 
     @Override
-    public AbstractSessionGroup find(AbstractSessionGroup sessionGroup) {
+    public AbstractSessionGroup findUserId(AbstractSessionGroup sessionGroup) {
         if (null == sessionGroup) {
             return null;
         }
@@ -28,7 +28,7 @@ public class DefaultGroupRepository implements IMGroupSessionRepository {
     }
 
     @Override
-    public List<AbstractSessionGroup> findByIds(Collection<String> strings) {
+    public List<AbstractSessionGroup> findByUserIds(Collection<String> strings) {
         if (null == strings) {
             throw new IllegalArgumentException("keys is not empty");
         }

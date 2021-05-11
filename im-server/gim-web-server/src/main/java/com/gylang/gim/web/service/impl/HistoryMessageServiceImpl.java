@@ -115,7 +115,10 @@ public class HistoryMessageServiceImpl implements HistoryMessageService, ChatTyp
             // 收箱
             hashOperations.add(CacheConstant.CHAT_HISTORY + msg.getReceive(), msgStr, privateChat.getTimeStamp());
             // 发箱
-            hashOperations.add(CacheConstant.CHAT_HISTORY + msg.getSender(),  msgStr, privateChat.getTimeStamp());
+            hashOperations.add(CacheConstant.CHAT_HISTORY + msg.getSender(), msgStr, privateChat.getTimeStamp());
+            if (log.isDebugEnabled()) {
+                log.debug("[消息离线存储] 单聊存储: 存储用户: 发送方={},接收方={},  消息体{}", msg.getSender(), msg.getReceive(), msg);
+            }
             // 发箱
         } else if (GROUP_CHAT == msg.getType()) {
             // 群聊入库
@@ -141,6 +144,9 @@ public class HistoryMessageServiceImpl implements HistoryMessageService, ChatTyp
                 }
                 return null;
             });
+            if (log.isDebugEnabled()) {
+                log.debug("[消息离线存储] 群聊存储: 存储用户: 发送方={},接收方={},  消息体{}", msg.getSender(), groupMessage.getReceiveId(), msg);
+            }
         }
     }
 }

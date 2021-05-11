@@ -2,7 +2,7 @@ package com.gylang.netty.sdk.provider;
 
 import cn.hutool.core.util.StrUtil;
 import com.gylang.gim.api.constant.EventTypeConst;
-import com.gylang.gim.api.constant.QosConstant;
+import com.gylang.gim.api.constant.qos.QosConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.config.GimGlobalConfiguration;
 import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
@@ -10,7 +10,7 @@ import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.event.EventProvider;
 import com.gylang.netty.sdk.handler.qos.IMessageSenderQosHandler;
 import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
-import com.gylang.netty.sdk.repo.IMSessionRepository;
+import com.gylang.netty.sdk.repo.GIMSessionRepository;
 import com.gylang.netty.sdk.util.LocalSessionHolderUtil;
 import com.gylang.netty.sdk.util.MsgIdUtil;
 import io.netty.channel.ChannelFuture;
@@ -29,7 +29,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 public class DefaultMessageProvider implements MessageProvider {
     /** 个人用户会话中心 */
-    private IMSessionRepository sessionRepository;
+    private GIMSessionRepository sessionRepository;
     /** 用户组会话中心 */
     private IMGroupSessionRepository groupSessionRepository;
     /** 线程池 */
@@ -56,7 +56,7 @@ public class DefaultMessageProvider implements MessageProvider {
 
     @Override
     public int sendMsgCallBack(GIMSession me, String target, MessageWrap message, GenericFutureListener<? extends Future<? super Void>> listener) {
-        GIMSession gimSession = sessionRepository.find(target);
+        GIMSession gimSession = sessionRepository.findUserId(target);
         return sendMsgCallBack(me, gimSession, message, listener);
     }
 

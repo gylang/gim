@@ -4,7 +4,7 @@ import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.event.message.MessageEvent;
 import com.gylang.netty.sdk.event.message.MessageEventListener;
-import com.gylang.netty.sdk.repo.IMSessionRepository;
+import com.gylang.netty.sdk.repo.GIMSessionRepository;
 import com.gylang.netty.sdk.util.LocalSessionHolderUtil;
 import org.springframework.stereotype.Component;
 
@@ -20,13 +20,13 @@ import javax.annotation.Resource;
 public class OfflineListener implements MessageEventListener<GIMSession> {
 
     @Resource
-    private IMSessionRepository sessionRepository;
+    private GIMSessionRepository sessionRepository;
 
     @Override
     @MessageEvent(EventTypeConst.OVER_TIME_CLOSE)
     public void onEvent(String key, GIMSession session) {
 
-        sessionRepository.popByKey(key);
+        sessionRepository.updateStatus(key, GIMSession.OFFLINE);
         LocalSessionHolderUtil.remove(key);
 
     }

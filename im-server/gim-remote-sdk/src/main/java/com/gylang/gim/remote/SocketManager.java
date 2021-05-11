@@ -2,9 +2,9 @@ package com.gylang.gim.remote;
 
 import cn.hutool.core.thread.ThreadFactoryBuilder;
 import com.alibaba.fastjson.JSON;
-import com.gylang.gim.api.constant.CommonConstant;
+import com.gylang.gim.api.constant.common.CommonConstant;
 import com.gylang.gim.api.constant.ContentType;
-import com.gylang.gim.api.constant.QosConstant;
+import com.gylang.gim.api.constant.qos.QosConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.api.enums.ChatTypeEnum;

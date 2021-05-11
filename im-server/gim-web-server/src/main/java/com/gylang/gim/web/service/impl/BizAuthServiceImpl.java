@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.gylang.cache.CacheManager;
 import com.gylang.gim.api.constant.CacheConstant;
-import com.gylang.gim.api.constant.biztype.ManagerType;
+import com.gylang.gim.api.constant.cmd.ManagerCmd;
 import com.gylang.gim.api.domain.common.CommonResult;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.entity.UserCache;
@@ -125,7 +125,7 @@ public class BizAuthServiceImpl implements BizAuthService {
         MessageWrap messageWrap = new MessageWrap();
         messageWrap.setQos(1);
         messageWrap.setType(ChatTypeEnum.MANAGER);
-        messageWrap.setCmd(ManagerType.USER_APPLY_FOR_TOKEN_MANAGER);
+        messageWrap.setCmd(ManagerCmd.USER_APPLY_FOR_TOKEN_MANAGER);
         messageWrap.setContent(JSON.toJSONString(userCache));
         socketManager.send(messageWrap);
     }

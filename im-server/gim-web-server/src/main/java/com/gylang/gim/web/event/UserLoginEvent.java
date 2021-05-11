@@ -97,7 +97,6 @@ public class UserLoginEvent implements MessageEventListener<MessageWrap> {
             message.setReceiveId(CollUtil.newArrayList(key));
             MessageWrap messageWrap = MessageWrap.builder()
                     .cmd(PushChatCmd.P2P_PUSH)
-                    .bizType(PushBizType.BATCH_HIS_PUSH)
                     .contentType(ContentType.BATCH)
                     .content(JSON.toJSONString(msgStr))
                     .offlineMsgEvent(false)

@@ -1,46 +1,45 @@
 package com.gylang.gim.server.handle.manager.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.gylang.gim.api.constant.CacheConstant;
 import com.gylang.gim.api.constant.cmd.ManagerCmd;
+import com.gylang.gim.api.constant.mamager.UserManagerConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.entity.UserCache;
 import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.server.handle.manager.ManagerService;
 import com.gylang.netty.sdk.domain.model.GIMSession;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import com.gylang.netty.sdk.repo.GIMSessionRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.concurrent.TimeUnit;
+import javax.annotation.Resource;
 
 /**
  * @author gylang
  * data 2021/5/6
  */
 @Service
-public class UserApplyForTokenManagerImpl implements ManagerService {
+public class UserManagerImpl implements ManagerService {
 
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    @Resource
+    private GIMSessionRepository sessionRepository;
 
     @Override
     public MessageWrap doInvoke(GIMSession session, MessageWrap messageWrap) {
 
-
-        // 生成接入令牌
         UserCache userCache = JSON.parseObject(messageWrap.getContent(), UserCache.class);
 
-        redisTemplate.opsForValue().set(userCache.getToken(), userCache.getId(), userCache.getExpire(), TimeUnit.SECONDS);
-
-        // 保存用户数据
-        redisTemplate.opsForValue().set(CacheConstant.USER + userCache.getId(), JSON.toJSONString(userCache));
+        if (UserManagerConstant.ADD_USER.equals(messageWrap.getCode())) {
+            // 新增用户
+            GIMSession gimSession = new GIMSession();
+            gimSession.setServerIp(userCache.getId());
+            sessionRepository.addSession(gimSession);
+        }
 
         return ReplyMessage.success(messageWrap);
     }
 
     @Override
     public String managerType() {
-        return ManagerCmd.USER_APPLY_FOR_TOKEN_MANAGER;
+        return ManagerCmd.USER_MANAGER;
     }
 }

@@ -23,7 +23,7 @@ package com.gylang.gim.remote.coder;
 
 
 import com.alibaba.fastjson.JSON;
-import com.gylang.gim.api.constant.CommonConstant;
+import com.gylang.gim.api.constant.common.CommonConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 

@@ -2,13 +2,13 @@ package com.gylang.netty.sdk.handler.qos;
 
 import cn.hutool.core.thread.ThreadFactoryBuilder;
 import cn.hutool.core.util.StrUtil;
-import com.gylang.gim.api.constant.QosConstant;
+import com.gylang.gim.api.constant.qos.QosConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.message.sys.AckMessage;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.netty.sdk.config.GimGlobalConfiguration;
 import com.gylang.netty.sdk.domain.model.GIMSession;
-import com.gylang.netty.sdk.repo.IMSessionRepository;
+import com.gylang.netty.sdk.repo.GIMSessionRepository;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,7 +37,7 @@ public class DefaultGIMessageReceiveQosHandler implements IMessageReceiveQosHand
 
     private boolean executing = false;
 
-    private IMSessionRepository sessionRepository;
+    private GIMSessionRepository sessionRepository;
 
 
     @Override
@@ -133,7 +133,7 @@ public class DefaultGIMessageReceiveQosHandler implements IMessageReceiveQosHand
                 receiveMessages.remove(key);
             } else {
                 // 处理客户端主发回应ack 所有发送的是给发送方
-                GIMSession session = sessionRepository.find(value.getSender());
+                GIMSession session = sessionRepository.findUserId(value.getSender());
                 if (null != session) {
                     session.getSession().writeAndFlush(value);
                 }

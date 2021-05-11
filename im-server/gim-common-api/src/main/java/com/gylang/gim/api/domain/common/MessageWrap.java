@@ -23,7 +23,6 @@ public class MessageWrap implements Serializable {
     /** 命令 */
     private String cmd;
 
-    private String bizType;
     /** 发送者 */
     private String sender;
     /** 消息类型 */
@@ -63,7 +62,6 @@ public class MessageWrap implements Serializable {
 
         MessageWrap message = new MessageWrap();
         message.setCmd(cmd);
-        message.setBizType(bizType);
         message.setSender(sender);
         message.setType(type);
         message.setContent(content);

@@ -42,8 +42,10 @@ public class GIMSession implements Serializable {
 
     public static final String HOST = "HOST";
 
-    public static final int STATE_ENABLED = 0;
-    public static final int STATE_DISABLED = 1;
+    /** 不在线 */
+    public static final int OFFLINE = 0;
+    /** 在线 */
+    public static final int ONLINE = 1;
 
     /** ios apns  */
     public static final int APNS_ON = 1;
@@ -124,7 +126,7 @@ public class GIMSession implements Serializable {
     /**
      * 状态
      */
-    private int state;
+    private int status;
     /**
      * 加入的群组
      */
@@ -197,7 +199,7 @@ public class GIMSession implements Serializable {
 
 
     public boolean isConnected() {
-        return (session != null && session.isActive()) || state == STATE_ENABLED;
+        return (session != null && session.isActive()) || status == OFFLINE;
     }
 
     public void closeNow() {

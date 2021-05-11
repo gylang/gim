@@ -2,7 +2,7 @@ package com.gylang.netty.sdk.handler.qos;
 
 import cn.hutool.core.util.StrUtil;
 import com.gylang.gim.api.constant.EventTypeConst;
-import com.gylang.gim.api.constant.QosConstant;
+import com.gylang.gim.api.constant.qos.QosConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.common.QosMessageWrap;
 import com.gylang.gim.api.domain.message.sys.AckMessage;

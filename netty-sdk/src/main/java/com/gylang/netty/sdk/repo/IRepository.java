@@ -18,7 +18,7 @@ public interface IRepository<K, R, T> {
      * @param query 查询条件
      * @return 实体
      */
-    T find(R query);
+    T findUserId(R query);
 
     /**
      * 查找实体
@@ -26,7 +26,7 @@ public interface IRepository<K, R, T> {
      * @param keys 关键字列表
      * @return 实体
      */
-    List<T> findByIds(Collection<K> keys);
+    List<T> findByUserIds(Collection<K> keys);
     /**
      * 查找所有实体
      *

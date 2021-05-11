@@ -22,8 +22,8 @@
 package com.gylang.netty.sdk.coder;
 
 import com.alibaba.fastjson.JSON;
-import com.gylang.gim.api.constant.CommConst;
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
+import com.gylang.gim.api.constant.common.CommonConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import io.netty.buffer.ByteBuf;
@@ -53,7 +53,7 @@ public class AppMessageDecoder extends ByteToMessageDecoder {
         /*
          * 消息体不足8位，发生断包情况
          */
-        if (buffer.readableBytes() < CommConst.DATA_HEADER_LENGTH) {
+        if (buffer.readableBytes() < CommonConstant.DATA_HEADER_LENGTH) {
             return;
         }
 

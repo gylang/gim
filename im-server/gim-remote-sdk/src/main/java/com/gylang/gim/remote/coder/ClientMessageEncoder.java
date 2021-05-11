@@ -22,7 +22,7 @@
 package com.gylang.gim.remote.coder;
 
 import com.alibaba.fastjson.JSON;
-import com.gylang.gim.api.constant.CommConst;
+import com.gylang.gim.api.constant.common.CommonConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
 
 import java.nio.ByteBuffer;
@@ -37,7 +37,7 @@ public class ClientMessageEncoder {
 
         byte[] data = JSON.toJSONBytes(body);
 
-        ByteBuffer ioBuffer = ByteBuffer.allocate(data.length + CommConst.DATA_HEADER_LENGTH);
+        ByteBuffer ioBuffer = ByteBuffer.allocate(data.length + CommonConstant.DATA_HEADER_LENGTH);
 
         ioBuffer.put(createHeader((byte) body.getType(), data.length));
         ioBuffer.put(data);

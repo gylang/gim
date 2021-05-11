@@ -1,4 +1,4 @@
-package com.gylang.gim.api.constant;
+package com.gylang.gim.api.constant.qos;
 
 /**
  * @author gylang

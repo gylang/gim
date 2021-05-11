@@ -1,7 +1,7 @@
 package com.gylang.gim.server.listener;
 
 import com.alibaba.fastjson.JSON;
-import com.gylang.gim.api.constant.CommonConstant;
+import com.gylang.gim.api.constant.common.CommonConstant;
 import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.gim.api.domain.admin.AdminUser;
 import com.gylang.gim.api.domain.common.MessageWrap;

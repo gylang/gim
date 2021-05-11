@@ -16,7 +16,7 @@ import com.gylang.netty.sdk.initializer.CustomInitializer;
 import com.gylang.netty.sdk.intercept.NettyIntercept;
 import com.gylang.netty.sdk.provider.MessageProvider;
 import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
-import com.gylang.netty.sdk.repo.IMSessionRepository;
+import com.gylang.netty.sdk.repo.GIMSessionRepository;
 import com.gylang.netty.sdk.repo.NettyUserInfoFillHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -52,7 +52,7 @@ public class ServerStartConfiguration implements InitializingBean {
     private DataConverter dataConverter;
     /** 单用户会话工厂 */
     @Resource
-    private IMSessionRepository sessionRepository;
+    private GIMSessionRepository sessionRepository;
     /** 用户组会话工厂 */
     @Resource
     private IMGroupSessionRepository groupSessionRepository;
