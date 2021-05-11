@@ -1,0 +1,18 @@
+{
+  "cmd" : "URMR",
+  "sender" :  "",
+  "type" : 13,
+  "content" :  "{\"id\":\"123456789\"}",
+  "contentType" : "",
+  "code" :  "ADD",
+  "msg" : "",
+  "receive" :  "1567845",
+  "receiverType" : "",
+  "clientMsgId" :  "",
+  "msgId" : "",
+  "retryNum" :  "",
+  "qos" : 2,
+  "ack" :  "",
+  "offlineMsgEvent" : true,
+  "timeStamp" :  ""
+}

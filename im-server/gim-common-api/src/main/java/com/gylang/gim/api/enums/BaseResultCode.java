@@ -62,6 +62,7 @@ public enum BaseResultCode implements BaseCode {
     USER_LOGIN_EXPIRE("A0230", "用户登录已过期"),
     USER_VERIFY_CODE_ERROR("A0240", "用户验证码错误"),
     GET_USER_VERIFY_CODE_LIMIT("A0241", "用户验证码尝试次数超限"),
+    USER_OFFLINE("A0242", "用户不在线"),
     /**
      * 权限异常
      */

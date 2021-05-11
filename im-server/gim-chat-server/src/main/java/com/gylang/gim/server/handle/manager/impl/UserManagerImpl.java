@@ -9,6 +9,7 @@ import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.server.handle.manager.ManagerService;
 import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.repo.GIMSessionRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -18,6 +19,7 @@ import javax.annotation.Resource;
  * data 2021/5/6
  */
 @Service
+@Slf4j
 public class UserManagerImpl implements ManagerService {
 
     @Resource
@@ -31,8 +33,9 @@ public class UserManagerImpl implements ManagerService {
         if (UserManagerConstant.ADD_USER.equals(messageWrap.getCode())) {
             // 新增用户
             GIMSession gimSession = new GIMSession();
-            gimSession.setServerIp(userCache.getId());
+            gimSession.setAccount(userCache.getId());
             sessionRepository.addSession(gimSession);
+            log.info("[用户管理] : 新增用户 id = {}", userCache.getId());
         }
 
         return ReplyMessage.success(messageWrap);

@@ -14,6 +14,7 @@ import io.netty.util.concurrent.GenericFutureListener;
  */
 public interface MessageProvider extends AfterConfigInitialize {
 
+
     /**
      * 发送消息
      *
@@ -98,4 +99,7 @@ public interface MessageProvider extends AfterConfigInitialize {
     Integer USER_NOT_FOUND = 2;
     /** 跨服消息 */
     Integer CROSS_SERVER = 3;
+    /** 用户不在线 */
+    Integer USER_OFFLINE = 4;
+
 }

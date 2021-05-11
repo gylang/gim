@@ -45,7 +45,7 @@ public class MessageWrap implements Serializable {
     /** 消息id */
     private String msgId;
     /** 重试次数 */
-    private transient int retryNum;
+    private  int retryNum;
 
     /** 是否使用质量服务, ack */
     private int qos;
@@ -53,7 +53,7 @@ public class MessageWrap implements Serializable {
     private int ack;
 
     /** 离线/失败消息事件发送 */
-    private transient boolean offlineMsgEvent;
+    private boolean offlineMsgEvent = false;
 
     private long timeStamp;
 

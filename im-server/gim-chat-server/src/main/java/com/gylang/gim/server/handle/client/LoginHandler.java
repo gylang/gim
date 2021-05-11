@@ -51,6 +51,7 @@ public class LoginHandler implements IMRequestHandler {
             messageWrap.setContent("连接socket成功");
             messageWrap.setCode(CommonConstant.TRUE_INT_STR);
             me.setAccount(uid);
+            me.setStatus(GIMSession.ONLINE);
             sessionRepository.addSession(me);
             // 发送上线事件
             // bind 上下文

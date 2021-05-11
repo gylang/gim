@@ -44,6 +44,7 @@ public class RemoteLoginHandler implements IMRequestHandler {
         if (user.getPassword().equals(login.getPassword())) {
             // 验证成功
             me.setAccount(login.getUserId());
+            me.setStatus(GIMSession.ONLINE);
             LocalSessionHolderUtil.set(login.getUserId(), me.getSession());
             ReplyMessage success = ReplyMessage.success(message);
             success.setSender(me.getAccount());

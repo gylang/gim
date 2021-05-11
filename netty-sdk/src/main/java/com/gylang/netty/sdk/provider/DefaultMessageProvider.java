@@ -16,6 +16,7 @@ import com.gylang.netty.sdk.util.MsgIdUtil;
 import io.netty.channel.ChannelFuture;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -27,6 +28,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * data 2020/11/12
  * @version v0.0.1
  */
+@Slf4j
 public class DefaultMessageProvider implements MessageProvider {
     /** 个人用户会话中心 */
     private GIMSessionRepository sessionRepository;
@@ -73,17 +75,18 @@ public class DefaultMessageProvider implements MessageProvider {
             target.setSession(LocalSessionHolderUtil.getSession(target.getAccount()));
         }
         // 发送策略 跨服传输 本地不存在当前channel 可以通过其他方式发送，桥接，mq
-        if (null == target.getSession() || !Objects.equals(host, target.getServerIp())) {
+        if (!Objects.equals(host, target.getServerIp())) {
             // 跨服务消息 发送事件
             eventProvider.sendEvent(EventTypeConst.CROSS_SERVER_PUSH, message);
             return CROSS_SERVER;
         }
+
         // 设置 发送者
-        if (StrUtil.isNotEmpty(message.getSender())) {
-            message.setSender(null == message.getSender() ? me.getAccount() : message.getSender());
-            if (StrUtil.isEmpty(message.getReceive())) {
-                message.setReceive(target.getAccount());
-            }
+        if (StrUtil.isEmpty(message.getSender())) {
+            message.setSender(me.getAccount());
+        }
+        if (StrUtil.isEmpty(message.getReceive())) {
+            message.setReceive(target.getAccount());
         }
 
         // 判断是否需要自动设置消息id
@@ -94,7 +97,12 @@ public class DefaultMessageProvider implements MessageProvider {
         if (message.isOfflineMsgEvent()) {
             eventProvider.sendEvent(EventTypeConst.PERSISTENCE_MSG_EVENT, message);
         }
+        if (null == target.getSession()) {
+            // 用户不在线
+            return MessageProvider.USER_OFFLINE;
+        }
         ChannelFuture cf = target.getSession().writeAndFlush(message);
+        log.info("[发送消息] : 发送给: {}, 消息id = {}", target.getAccount(), message.getMsgId());
         if (QosConstant.ONE_AWAY != message.getQos()) {
             // 应用层确保消息可达
             iMessageSenderQosHandler.addReceived(message);

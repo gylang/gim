@@ -41,6 +41,8 @@ public class PrivateChatHandler implements IMRequestHandler {
             int res = messageProvider.sendMsg(me, message.getReceive(), message.copyBasic());
             if (!MessageProvider.USER_NOT_FOUND.equals(res)) {
                 return ResponseMessage.copy(message);
+            } else if (MessageProvider.USER_OFFLINE.equals(res)) {
+                return ReplyMessage.reply(message, BaseResultCode.USER_OFFLINE);
             } else {
                 return ReplyMessage.reply(message, BaseResultCode.VISIT_INTERCEPT.getCode(), "用户不存在");
             }
