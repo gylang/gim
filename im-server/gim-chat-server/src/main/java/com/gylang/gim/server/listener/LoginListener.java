@@ -38,7 +38,6 @@ public class LoginListener implements MessageEventListener<String>, Initializing
     @MessageEvent(EventTypeConst.USER_ONLINE)
     public void onEvent(String key, String loginUserId) {
 
-        // todo redis 状态更新
 
         // 用户上线通知
         for (Map.Entry<String, AdminUser> adminUserEntry : adminUser) {
@@ -56,7 +55,7 @@ public class LoginListener implements MessageEventListener<String>, Initializing
             if (log.isDebugEnabled()) {
                 log.debug("接收到用户[{}]上线事件, 给服务[{}]发送通知", key, user.getName());
             }
-            messageProvider.sendMsg(session, loginUserId, messageWrap);
+            messageProvider.sendMsg(session, sender, messageWrap);
 
         }
 

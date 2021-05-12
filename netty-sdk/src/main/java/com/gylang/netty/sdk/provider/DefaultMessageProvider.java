@@ -103,6 +103,9 @@ public class DefaultMessageProvider implements MessageProvider {
         }
         ChannelFuture cf = target.getSession().writeAndFlush(message);
         log.info("[发送消息] : 发送给: {}, 消息id = {}", target.getAccount(), message.getMsgId());
+        if (log.isDebugEnabled()) {
+            log.debug("[发送消息] : 消息内容 ： {}", message);
+        }
         if (QosConstant.ONE_AWAY != message.getQos()) {
             // 应用层确保消息可达
             iMessageSenderQosHandler.addReceived(message);

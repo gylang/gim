@@ -1,7 +1,6 @@
 package com.gylang.netty.sdk.handler.qos;
 
 import cn.hutool.core.util.StrUtil;
-import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.gim.api.constant.qos.QosConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.common.QosMessageWrap;
@@ -169,11 +168,8 @@ public class DefaultGIMessageSendQosHandler implements IMessageSenderQosHandler 
                     }
                     session.writeAndFlush(qosMessageWrap.getMessageWrap());
                 } else {
-                    // 用户离线
-                    if (qosMessageWrap.isOfflineMsgEvent()) {
-                        eventProvider.sendEvent(EventTypeConst.PERSISTENCE_MSG_EVENT, qosMessageWrap);
-                        iterator.remove();
-                    }
+                    // qos发送到最大次数
+                    iterator.remove();
                 }
             }
 

@@ -133,7 +133,11 @@ public class SocketManager {
         // 开始读取来自服务端的消息，先读取3个字节的消息头
         gimCallBack.call("1");
         while (socketChannel.read(headerBuffer) > 0) {
-            handleSocketReadEvent();
+            try {
+                handleSocketReadEvent();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

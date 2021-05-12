@@ -1,7 +1,6 @@
 package com.gylang.gim.server.handle.client;
 
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.gim.api.domain.common.ResponseMessage;
 import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.api.enums.ChatTypeEnum;
@@ -39,8 +38,8 @@ public class PrivateChatHandler implements IMRequestHandler {
         if (access) {
 
             int res = messageProvider.sendMsg(me, message.getReceive(), message.copyBasic());
-            if (!MessageProvider.USER_NOT_FOUND.equals(res)) {
-                return ResponseMessage.copy(message);
+            if (MessageProvider.SENDING.equals(res)) {
+                return ReplyMessage.reply(message, BaseResultCode.OK);
             } else if (MessageProvider.USER_OFFLINE.equals(res)) {
                 return ReplyMessage.reply(message, BaseResultCode.USER_OFFLINE);
             } else {

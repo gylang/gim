@@ -61,7 +61,7 @@ public class PersistenceEventListener implements MessageEventListener<MessageWra
             GIMSession session = new GIMSession();
             session.setAccount(CommonConstant.SYSTEM_SENDER);
             if (log.isDebugEnabled()) {
-                log.debug("接收到用户[{}]上线事件, 给服务[{}]发送通知", key, user.getName());
+                log.debug("接收到离线消息[{}], 给服务[{}]发送通知", key, user.getName());
             }
             messageProvider.sendMsg(session, sender, messageWrap);
 
