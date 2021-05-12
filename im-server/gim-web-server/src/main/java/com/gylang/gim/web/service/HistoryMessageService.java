@@ -70,4 +70,10 @@ public interface HistoryMessageService {
      * @param msg
      */
     void store(MessageWrap msg);
+
+    /**
+     * 推送离线消息
+     * @param key
+     */
+    void pushHistory(String key);
 }

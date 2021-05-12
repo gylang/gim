@@ -1,13 +1,12 @@
 package com.gylang.gim.server.listener;
 
 import com.alibaba.fastjson.JSON;
-import com.gylang.gim.api.constant.common.CommonConstant;
 import com.gylang.gim.api.constant.EventTypeConst;
+import com.gylang.gim.api.constant.common.CommonConstant;
 import com.gylang.gim.api.domain.admin.AdminUser;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.server.config.AdminConfig;
-import com.gylang.gim.server.service.HistoryMessageService;
 import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.event.message.MessageEvent;
 import com.gylang.netty.sdk.event.message.MessageEventListener;
@@ -17,7 +16,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -40,9 +38,6 @@ public class PersistenceEventListener implements MessageEventListener<MessageWra
     private Set<Map.Entry<String, AdminUser>> adminUser;
 
 
-    @Resource
-    private HistoryMessageService historyMessageService;
-
     @Override
     @MessageEvent(EventTypeConst.PERSISTENCE_MSG_EVENT)
     public void onEvent(String key, MessageWrap message) {
@@ -54,16 +49,18 @@ public class PersistenceEventListener implements MessageEventListener<MessageWra
             messageWrap.setQos(2);
             messageWrap.setCmd(EventTypeConst.PERSISTENCE_MSG_EVENT);
             messageWrap.setType(ChatTypeEnum.NOTIFY_CHAT);
-            messageWrap.setContent(JSON.toJSONString(message));
-            String sender = user.getUserId();
-            messageWrap.setReceive(sender);
+            MessageWrap history = message.copyBasic();
+            history.setOfflineMsgEvent(false);
+            messageWrap.setContent(JSON.toJSONString(history));
+            String receive = user.getUserId();
+            messageWrap.setReceive(receive);
             messageWrap.setSender(CommonConstant.SYSTEM_SENDER);
             GIMSession session = new GIMSession();
             session.setAccount(CommonConstant.SYSTEM_SENDER);
             if (log.isDebugEnabled()) {
                 log.debug("接收到离线消息[{}], 给服务[{}]发送通知", key, user.getName());
             }
-            messageProvider.sendMsg(session, sender, messageWrap);
+            messageProvider.sendMsg(session, receive, messageWrap);
 
         }
 

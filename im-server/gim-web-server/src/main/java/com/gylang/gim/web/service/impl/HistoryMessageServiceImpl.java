@@ -1,13 +1,17 @@
 package com.gylang.gim.web.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.gylang.cache.CacheManager;
 import com.gylang.gim.api.constant.CacheConstant;
+import com.gylang.gim.api.constant.ContentType;
+import com.gylang.gim.api.constant.cmd.PushChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.common.PageResponse;
 import com.gylang.gim.api.domain.push.PushMessage;
 import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.remote.SocketManager;
 import com.gylang.gim.util.MsgIdUtil;
 import com.gylang.gim.web.common.mybatis.Page;
 import com.gylang.gim.web.entity.HistoryGroupChat;
@@ -24,6 +28,10 @@ import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author gylang
@@ -47,16 +55,32 @@ public class HistoryMessageServiceImpl implements HistoryMessageService, ChatTyp
 
     @Value("${gylang.netty.serverIndex:0}")
     private Integer serverIndex;
+
+    @Value("${gim.privateChat.history.oncePushMsgNum:50}")
+    private Long priOncePushMsgNum;
+    @Value("${gim.groupChat.history.oncePushMsgNum:50}")
+    private Long groupOncePushMsgNum;
+
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+
+    @Autowired
+    private SocketManager socketManager;
 
     @Override
     public void updatePrivateLastMsgId(String uid, String msgId) {
 
         // 用户量大 可以使用hash 先分组 再记录
-        cacheManager.setMapField(CacheConstant.LAST_MSG_ID + uid, "-1", msgId);
+        String cacheKey = getCacheKey(uid);
+        // todo 当前没有判断 msgId 走向, 变大变小 对消息的回滚影响
+        cacheManager.setMapField(cacheKey, uid, msgId);
 
 
+    }
+
+    private String getCacheKey(String uid) {
+        long target = slot & Long.parseLong(uid);
+        return CacheConstant.LAST_MSG_ID + target;
     }
 
     @Override
@@ -149,4 +173,62 @@ public class HistoryMessageServiceImpl implements HistoryMessageService, ChatTyp
             }
         }
     }
+
+    @Override
+    public void pushHistory(String key) {
+
+        // 缓存写扩散 消息推送开始
+        String cacheKey = getCacheKey(key);
+        String priMsgId = redisTemplate.<String, String>opsForHash()
+                .get(cacheKey, key);
+        // 推送单聊信箱消息
+        if (null != priMsgId) {
+            Long priLastTimeStamp = MsgIdUtil.timestamp(Long.parseLong(priMsgId)) - 1;
+            batchPush(CacheConstant.CHAT_HISTORY + key, priLastTimeStamp, priOncePushMsgNum);
+        } else {
+            log.error("[离线消息推送] 用户id = {},  lastMsgId为空", key);
+        }
+
+    }
+
+    private void batchPush(String key, Long score, Long count) {
+
+
+        while (true) {
+            int offset = 0;
+
+            Set<ZSetOperations.TypedTuple<String>> typedTuples = redisTemplate.opsForZSet()
+                    .rangeByScoreWithScores(key, score, Long.MAX_VALUE, offset, count);
+            // 没有消息
+            if (CollUtil.isEmpty(typedTuples)) {
+                log.info("[离线消息推送] :用户id = {}, 推送总长度 = {}", key, offset);
+                return;
+            }
+            List<String> msgStr = typedTuples.stream()
+                    .map(ZSetOperations.TypedTuple::getValue)
+                    .collect(Collectors.toList());
+
+            PushMessage message = new PushMessage();
+            message.setContent(JSON.toJSONString(msgStr));
+            message.setReceiveId(CollUtil.newArrayList(key));
+            MessageWrap messageWrap = MessageWrap.builder()
+                    .cmd(PushChatCmd.P2P_PUSH)
+                    .contentType(ContentType.BATCH)
+                    .content(JSON.toJSONString(msgStr))
+                    .offlineMsgEvent(false)
+                    .qos(1)
+                    .build();
+            // 偏移
+            offset += msgStr.size();
+            socketManager.send(messageWrap);
+            if (msgStr.size() < count) {
+                log.info("[离线消息推送] :用户id = {}, 推送总长度 = {}", key, offset);
+                return;
+            }
+
+        }
+
+
+    }
+
 }

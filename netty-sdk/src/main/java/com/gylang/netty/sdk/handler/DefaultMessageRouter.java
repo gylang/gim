@@ -1,6 +1,7 @@
 package com.gylang.netty.sdk.handler;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.gylang.gim.api.constant.ContentType;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.annotation.AdapterType;
@@ -38,9 +39,14 @@ public class DefaultMessageRouter implements IMessageRouter {
         if (ContentType.BATCH.equals(message.getContentType())) {
             // 批量消息
             String batchMessageStr = message.getContent();
-            List<MessageWrap> batchMessage = JSON.parseArray(batchMessageStr, MessageWrap.class);
-            for (MessageWrap messageWrap : batchMessage) {
-                process(ctx, me, messageWrap);
+            List<String> batchMessage = JSON.parseObject(batchMessageStr, new TypeReference<List<String>>() {
+            });
+            for (String messageWrapStr : batchMessage) {
+                try {
+                    process(ctx, me, JSON.parseObject(messageWrapStr, MessageWrap.class));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
             return null;
         }

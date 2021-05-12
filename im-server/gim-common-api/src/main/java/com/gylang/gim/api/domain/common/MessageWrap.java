@@ -62,6 +62,8 @@ public class MessageWrap implements Serializable {
 
         MessageWrap message = new MessageWrap();
         message.setCmd(cmd);
+        message.setMsgId(msgId);
+        message.setClientMsgId(clientMsgId);
         message.setSender(sender);
         message.setType(type);
         message.setContent(content);
