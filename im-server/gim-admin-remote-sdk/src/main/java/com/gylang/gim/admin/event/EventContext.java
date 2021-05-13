@@ -19,7 +19,7 @@ import java.util.Map;
 public class EventContext implements AfterConfigInitialize {
 
     /** 事件监听列表 */
-    private final Map<String, List<MessageEventListener<?>>> eventListenerMap;
+    private final Map<String, List<AdminMessageEventListener<?>>> eventListenerMap;
 
 
     public EventContext() {
@@ -31,12 +31,12 @@ public class EventContext implements AfterConfigInitialize {
      *
      * @param receive 监听器
      */
-    public void register(MessageEventListener<?> receive) {
+    public void register(AdminMessageEventListener<?> receive) {
 
         // 解析类型
         for (String eventType : receive.bind()) {
 
-            List<MessageEventListener<?>> messageEventListenerList = eventListenerMap.computeIfAbsent(eventType, k -> new ArrayList<>());
+            List<AdminMessageEventListener<?>> messageEventListenerList = eventListenerMap.computeIfAbsent(eventType, k -> new ArrayList<>());
             messageEventListenerList.add(receive);
         }
 
@@ -51,11 +51,11 @@ public class EventContext implements AfterConfigInitialize {
      */
     public void sendMsg(String key, Object msg) {
 
-        List<MessageEventListener<?>> messageNotifies = eventListenerMap.get(key);
+        List<AdminMessageEventListener<?>> messageNotifies = eventListenerMap.get(key);
         if (null != messageNotifies) {
-            for (MessageEventListener<?> messageEventListener : messageNotifies) {
+            for (AdminMessageEventListener<?> messageEventListener : messageNotifies) {
 
-                ((MessageEventListener<Object>) messageEventListener).onEvent(key, msg);
+                ((AdminMessageEventListener<Object>) messageEventListener).onEvent(key, msg);
             }
         }
     }
@@ -64,7 +64,7 @@ public class EventContext implements AfterConfigInitialize {
     @Override
     public void init(NettyConfiguration configuration) {
         if (CollUtil.isNotEmpty(configuration.getMessageEventListener())) {
-            for (MessageEventListener<?> messageEventListener : configuration.getMessageEventListener()) {
+            for (AdminMessageEventListener<?> messageEventListener : configuration.getMessageEventListener()) {
                 register(messageEventListener);
             }
 

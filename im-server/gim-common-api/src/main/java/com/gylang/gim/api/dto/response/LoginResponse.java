@@ -11,16 +11,19 @@ public class LoginResponse {
 
     /** token 令牌 */
     private String token;
-
+    /** 用户id */
+    private String uid;
     /** 用户名 */
     private String username;
 
     /** 昵称 */
     private String nickname;
 
-    private String socketIp;
+    private String imIp;
 
-    private Integer socketPort;
+    private Integer imPort;
 
-    private String socketToken;
+    private String imToken;
+
+    private Long imExpire = 60 * 60 * 18L;
 }

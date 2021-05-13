@@ -10,6 +10,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>im-server</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>gim-data-center</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

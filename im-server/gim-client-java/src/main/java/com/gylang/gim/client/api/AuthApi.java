@@ -3,7 +3,7 @@ package com.gylang.gim.client.api;
 import com.gylang.gim.api.domain.common.CommonResult;
 import com.gylang.gim.api.domain.request.LoginRequest;
 import com.gylang.gim.api.domain.request.RegistryRequest;
-import com.gylang.gim.api.domain.response.LoginResponse;
+import com.gylang.gim.api.dto.response.LoginResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;

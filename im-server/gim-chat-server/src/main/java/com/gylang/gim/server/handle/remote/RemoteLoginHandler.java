@@ -28,7 +28,7 @@ public class RemoteLoginHandler implements IMRequestHandler {
 
     @Resource
     private AdminConfig adminConfig;
-    @Autowired
+    @Resource
     private GIMSessionRepository sessionRepository;
 
     @Override

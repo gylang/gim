@@ -32,7 +32,7 @@
         <module>gylang-cache-manager</module>
         <module>gylang-cross-server-im-starter</module>
         <module>im-server/gim-chat-server</module>
-        <module>im-server/gim-web-server</module>
+        <module>im-server/gim-api-server</module>
         <module>im-server/gim-common-api</module>
         <module>im-server/gim-remote-sdk</module>
         <module>im-server/gim-admin-remote-sdk</module>

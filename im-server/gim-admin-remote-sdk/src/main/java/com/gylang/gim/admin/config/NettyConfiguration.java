@@ -2,7 +2,7 @@ package com.gylang.gim.admin.config;
 
 import com.gylang.gim.admin.event.EventContext;
 import com.gylang.gim.admin.event.EventProvider;
-import com.gylang.gim.admin.event.MessageEventListener;
+import com.gylang.gim.admin.event.AdminMessageEventListener;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import lombok.Data;
 
@@ -25,7 +25,7 @@ public class NettyConfiguration {
     /** 事件上下文 */
     private EventContext eventContext;
     /** 事件监听列表 */
-    private List<MessageEventListener<MessageWrap>> messageEventListener;
+    private List<AdminMessageEventListener<MessageWrap>> messageEventListener;
     /** 线程池 */
     private ThreadPoolExecutor poolExecutor;
 

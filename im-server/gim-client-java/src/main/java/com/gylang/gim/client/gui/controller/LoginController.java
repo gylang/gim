@@ -13,7 +13,7 @@ import com.gylang.gim.api.domain.common.CommonResult;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.request.LoginRequest;
 import com.gylang.gim.api.domain.request.RegistryRequest;
-import com.gylang.gim.api.domain.response.LoginResponse;
+import com.gylang.gim.api.dto.response.LoginResponse;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.gim.client.api.AuthApi;
 import com.gylang.gim.client.call.ICallback;
@@ -81,7 +81,7 @@ public class LoginController extends CustomApplication {
             @Override
             public void success(Call<CommonResult<LoginResponse>> call, Response<CommonResult<LoginResponse>> response) {
                 CommonResult<LoginResponse> body = response.body();
-                LoginResponse data = body.getData();
+                com.gylang.gim.api.dto.response.LoginResponse data = body.getData();
                 log.info("[登录成功] : " + data.getUsername());
                 log.info("[登录成功] : " + data.getToken());
                 UserStore instance = UserStore.getInstance();
@@ -97,10 +97,10 @@ public class LoginController extends CustomApplication {
                         .type(ChatTypeEnum.CLIENT_AUTH)
                         .clientMsgId(IdUtil.getSnowflake(1, 1).nextIdStr())
                         .qos(QosConstant.ACCURACY_ONE_ARRIVE)
-                        .content(data.getSocketToken())
+                        .content(data.getImToken())
                         .build();
 
-                socketManager.connect(data.getSocketIp(), data.getSocketPort(), messageWrap, str -> {
+                socketManager.connect(data.getImIp(), data.getImPort(), messageWrap, str -> {
                     if ("1".equals(str)) {
                         log.info("连接成功！");
                     } else {

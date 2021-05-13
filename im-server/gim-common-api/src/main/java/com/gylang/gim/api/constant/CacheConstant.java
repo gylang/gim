@@ -8,6 +8,9 @@ public enum CacheConstant {
     ;
     /** 授权用户前缀 */
     public static final String AUTH_TOKEN_PREFIX = "USER_TOKEN:";
+
+    /** socket 授权 */
+    public static final String IM_AUTH_TOKEN_PREFIX = "IM_USER_TOKEN:";
     /** 用户信息 */
     public static final String USER = "USER:";
     /** 授权过期时间 */

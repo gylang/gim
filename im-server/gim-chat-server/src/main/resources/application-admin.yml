@@ -1,8 +1,14 @@
 gim:
+  #  web 服务
   admin-user:
     webAdmin:
+      userId: -2
       password: 123456
       name: web推送
-      userId: -2
+    #      数据中心
+    datacenter:
+      password: 123456
+      name: 数据中心
+      userId: -3
       loginEvent: true
       persistence: true
