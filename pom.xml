@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.gylang</groupId>
-    <artifactId>netty-sdk-parent</artifactId>
+    <artifactId>gim-parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
@@ -24,19 +24,21 @@
 
     </properties>
     <modules>
-        <module>netty-sdk</module>
-        <module>netty-sdk-spring-starter</module>
-        <module>test-noframework-im-server</module>
-        <module>test-spring-im-server</module>
-        <module>im-server</module>
-        <module>gylang-cache-manager</module>
-        <module>gylang-cross-server-im-starter</module>
-        <module>im-server/gim-chat-server</module>
-        <module>im-server/gim-api-server</module>
-        <module>im-server/gim-common-api</module>
-        <module>im-server/gim-remote-sdk</module>
-        <module>im-server/gim-admin-remote-sdk</module>
-        <module>web-rtc</module>
+        <module>sdk/netty-sdk</module>
+        <module>sdk/netty-sdk-spring-starter</module>
+        <module>sdk/gim-common-api</module>
+        <module>sdk/gim-remote-sdk</module>
+        <module>sdk/gim-admin-remote-sdk</module>
+        <module>demo/test-noframework-im-server</module>
+        <module>demo/test-spring-im-server</module>
+        <module>gim</module>
+        <module>plugin/gylang-cache-manager</module>
+        <module>plugin/gylang-cross-server-im-starter</module>
+        <module>gim/gim-chat-server</module>
+        <module>gim/gim-api-server</module>
+        <module>gim/gim-client-java</module>
+        <module>gim/gim-data-center</module>
+        <module>/develop/web-rtc</module>
 
 
     </modules>
