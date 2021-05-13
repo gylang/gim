@@ -48,7 +48,7 @@ public class LoginHandler implements IMRequestHandler {
         String uid = redisTemplate.opsForValue().get(message.getContent());
         if (null != uid) {
             // 用户已登录, 可以访问服务
-            messageWrap.setContent("连接socket成功");
+            messageWrap.setMsg("连接socket成功");
             messageWrap.setCode(CommonConstant.TRUE_INT_STR);
             me.setAccount(uid);
             me.setStatus(GIMSession.ONLINE);
@@ -58,9 +58,9 @@ public class LoginHandler implements IMRequestHandler {
             LocalSessionHolderUtil.set(uid, me.getSession());
             eventProvider.sendEvent(EventTypeConst.USER_ONLINE, uid);
         } else {
-            // token无效
-            messageWrap.setContent("用户访问无权连接socket服务");
-            messageWrap.setCode(CommonConstant.FALSE_INT_STR);
+            // token无效0
+            messageWrap.setCode(BaseResultCode.USER_AUTH_BE_REJECTED.getCode());
+            messageWrap.setMsg(BaseResultCode.USER_AUTH_BE_REJECTED.getMsg());
         }
         // 响应客户端
         return messageWrap;
