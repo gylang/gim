@@ -42,6 +42,11 @@ public class SocketManager {
     private String token;
     private MessageWrap loginMsg;
     private AtomicInteger login = new AtomicInteger(0);
+
+    private String lastMsgId;
+
+    private int updateMsgIdInterval = 3;
+    private int updateMsgIdTimes = 0;
     /**
      * 定时任务扫码间隔
      */
@@ -160,8 +165,14 @@ public class SocketManager {
             if (0 == login.get()) {
                 login.set(2);
                 login();
+                return;
             }
             send(CommonConstant.HEART);
+            if (updateMsgIdInterval <= updateMsgIdTimes++)  {
+                MessageWrap updateLastId = CommonConstant.UPDATE_LAST_ID;
+                updateLastId.setContent(lastMsgId);
+                updateMsgIdTimes = 0;
+            }
         } else {
             reconnect = reconnect % reconnectNum;
             if (0 == reconnect) {
@@ -331,7 +342,7 @@ public class SocketManager {
                 // qo校验过滤包
                 return;
             }
-
+            lastMsgId = message.getMsgId();
 
             // 发送消息到监听队列
             List<GimCallBack<MessageWrap>> gimCallBackList = callListener.get(getListenKey(message.getType(), message.getCmd()));

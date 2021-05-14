@@ -45,6 +45,10 @@ public enum CommonConstant {
     static {
         HEART.setType(ChatTypeEnum.HEART);
     }
+    public static final MessageWrap UPDATE_LAST_ID = new MessageWrap();
+    static {
+        UPDATE_LAST_ID.setType(ChatTypeEnum.PRIVATE_CHAT_LAST_MSG_ID);
+    }
     /** 系统发送 */
     public static final String SYSTEM_SENDER = "0";
     /** 授权用户前缀 */

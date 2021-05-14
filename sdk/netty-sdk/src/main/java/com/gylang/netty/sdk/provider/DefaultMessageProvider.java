@@ -40,6 +40,7 @@ public class DefaultMessageProvider implements MessageProvider {
     private IMessageSenderQosHandler iMessageSenderQosHandler;
     /** 事件发送器 */
     private EventProvider eventProvider;
+    private CrossMessageHandler crossMessageHandler;
     /** host */
     private String host = null;
 
@@ -77,8 +78,7 @@ public class DefaultMessageProvider implements MessageProvider {
         // 发送策略 跨服传输 本地不存在当前channel 可以通过其他方式发送，桥接，mq
         if (!Objects.equals(host, target.getServerIp())) {
             // 跨服务消息 发送事件
-            eventProvider.sendEvent(EventTypeConst.CROSS_SERVER_PUSH, message);
-            return CROSS_SERVER;
+            crossMessageHandler.sendMsg(host, me, message);
         }
 
         // 设置 发送者
@@ -168,6 +168,7 @@ public class DefaultMessageProvider implements MessageProvider {
         this.executor = configuration.getPoolExecutor();
         this.iMessageSenderQosHandler = configuration.getIMessageSenderQosHandler();
         this.eventProvider = configuration.getEventProvider();
+        this.crossMessageHandler = configuration.getCrossServerObserver();
         this.host = configuration.getProperties("serverId");
     }
 }

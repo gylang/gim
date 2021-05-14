@@ -39,6 +39,7 @@
         <module>gim/gim-client-java</module>
         <module>gim/gim-data-center</module>
         <module>/develop/web-rtc</module>
+        <module>sdk/netty-sdk-api</module>
 
 
     </modules>

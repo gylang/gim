@@ -11,7 +11,6 @@ import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.api.enums.ChatTypeEnum;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.model.GIMSession;
-import com.gylang.netty.sdk.event.EventProvider;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import com.gylang.netty.sdk.repo.GIMSessionRepository;
 import com.gylang.netty.sdk.util.LocalSessionHolderUtil;
