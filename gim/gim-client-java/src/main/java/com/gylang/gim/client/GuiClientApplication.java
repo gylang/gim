@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
+import java.util.logging.LogManager;
 
 /**
  * @author gylang
@@ -40,8 +41,8 @@ public class GuiClientApplication {
             e.printStackTrace();
         }
         BeanUtil.copyProperties(properties, ClientConfig.getInstance());
+        // 环境变量
         SocketClientApplication.run();
-
         LoginController.launch(LoginController.class, args);
     }
 }

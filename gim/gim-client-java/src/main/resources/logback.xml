@@ -12,7 +12,7 @@
     </appender>
     <!-- 按照每天生成日志文件 -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log.path}/${app.name}/sys.log</file>
+        <file>/log/gim-client/sys.log</file>
         <!--拒绝ERROR日志-->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
@@ -25,7 +25,7 @@
             <onMismatch>DENY</onMismatch>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${log.path}/${app.name}/sys-%d{yyyy-MM-dd}-%i.log</FileNamePattern>
+            <FileNamePattern>/log/gim-client/sys-%d{yyyy-MM-dd}-%i.log</FileNamePattern>
             <MaxHistory>90</MaxHistory>
             <TimeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <MaxFileSize>10MB</MaxFileSize>
@@ -38,14 +38,14 @@
         </encoder>
     </appender>
     <appender name="FILE-ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log.path}/${app.name}/sys-err.log</file>
+        <file>/log/gim-client/sys-err.log</file>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${log.path}/${app.name}/sys-err-%d{yyyy-MM-dd}-%i.log</FileNamePattern>
+            <FileNamePattern>/log/gim-client/sys-err-%d{yyyy-MM-dd}-%i.log</FileNamePattern>
             <MaxHistory>90</MaxHistory>
             <TimeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <MaxFileSize>10MB</MaxFileSize>
