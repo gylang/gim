@@ -5,9 +5,10 @@ import cn.hutool.core.collection.CollUtil;
 import com.gylang.netty.sdk.common.ObjectWrap;
 import com.gylang.netty.sdk.constant.GimDefaultConfigEnum;
 import com.gylang.netty.sdk.conveter.DataConverter;
+import com.gylang.netty.sdk.domain.CrossServerObserver;
 import com.gylang.netty.sdk.event.EventContext;
 import com.gylang.netty.sdk.event.EventProvider;
-import com.gylang.netty.sdk.provider.CrossMessageHandler;
+import com.gylang.netty.sdk.provider.CrossMessageProvider;
 import com.gylang.netty.sdk.event.message.MessageEventListener;
 import com.gylang.netty.sdk.handler.BizRequestAdapter;
 import com.gylang.netty.sdk.handler.IMessageRouter;
@@ -80,7 +81,9 @@ public class GimGlobalConfiguration {
     /** 消息id生成器 */
     private MsgIdUtil msgIdUtil = MsgIdUtil.getMsgId();
     /** 集群跨服通信观察对象 */
-    private CrossMessageHandler crossServerObserver;
+    private CrossMessageProvider crossMessageProvider;
+
+    private CrossServerObserver crossServerObserver;
     /**
      * 配置信息
      */

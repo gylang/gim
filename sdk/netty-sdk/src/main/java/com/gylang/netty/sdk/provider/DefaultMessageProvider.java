@@ -40,7 +40,7 @@ public class DefaultMessageProvider implements MessageProvider {
     private IMessageSenderQosHandler iMessageSenderQosHandler;
     /** 事件发送器 */
     private EventProvider eventProvider;
-    private CrossMessageHandler crossMessageHandler;
+    private CrossMessageProvider crossMessageHandler;
     /** host */
     private String host = null;
 
@@ -168,7 +168,7 @@ public class DefaultMessageProvider implements MessageProvider {
         this.executor = configuration.getPoolExecutor();
         this.iMessageSenderQosHandler = configuration.getIMessageSenderQosHandler();
         this.eventProvider = configuration.getEventProvider();
-        this.crossMessageHandler = configuration.getCrossServerObserver();
+        this.crossMessageHandler = configuration.getCrossMessageProvider();
         this.host = configuration.getProperties("serverId");
     }
 }
