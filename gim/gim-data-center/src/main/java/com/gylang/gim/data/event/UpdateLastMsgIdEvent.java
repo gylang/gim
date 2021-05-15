@@ -3,7 +3,7 @@ package com.gylang.gim.data.event;
 import cn.hutool.core.collection.CollUtil;
 import com.gylang.gim.admin.event.AdminMessageEventListener;
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -22,6 +22,6 @@ public class UpdateLastMsgIdEvent implements AdminMessageEventListener<MessageWr
 
     @Override
     public List<String> bind() {
-        return CollUtil.newArrayList(ChatTypeEnum.PRIVATE_CHAT_LAST_MSG_ID + "-" + null);
+        return CollUtil.newArrayList(ChatType.PRIVATE_CHAT_LAST_MSG_ID + "-" + null);
     }
 }

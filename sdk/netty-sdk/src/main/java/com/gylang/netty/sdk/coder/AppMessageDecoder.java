@@ -25,7 +25,7 @@ import com.alibaba.fastjson.JSON;
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.constant.common.CommonConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -43,7 +43,7 @@ public class AppMessageDecoder extends ByteToMessageDecoder {
     private static final MessageWrap messageWrap = new MessageWrap();
 
     static {
-        messageWrap.setType(ChatTypeEnum.HEART);
+        messageWrap.setType(ChatType.HEART);
         messageWrap.setCmd(SystemChatCmd.HEART);
     }
 
@@ -84,7 +84,7 @@ public class AppMessageDecoder extends ByteToMessageDecoder {
 
     public Object mappingMessageObject(byte[] data, byte type) {
 
-        if (ChatTypeEnum.HEART == type) {
+        if (ChatType.HEART == type) {
 
             return messageWrap;
         }

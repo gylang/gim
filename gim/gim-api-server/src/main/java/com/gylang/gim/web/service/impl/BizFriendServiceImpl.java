@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gylang.gim.api.constant.AnswerType;
 import com.gylang.gim.api.constant.CacheConstant;
-import com.gylang.gim.api.constant.biztype.PushBizType;
 import com.gylang.gim.api.constant.cmd.PushChatCmd;
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.CommonResult;
@@ -13,7 +12,7 @@ import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.push.PushMessage;
 import com.gylang.gim.api.dto.ImUserFriendDTO;
 import com.gylang.gim.api.dto.UserFriendVO;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 import com.gylang.gim.remote.SocketManager;
 import com.gylang.gim.web.common.util.Asserts;
 import com.gylang.gim.web.entity.ImUserFriend;
@@ -126,7 +125,7 @@ public class BizFriendServiceImpl implements BizFriendService {
             message.setReceiveId(CollUtil.newArrayList(userApply.getApplyId()));
             MessageWrap messageWrap = MessageWrap.builder()
                     .cmd(PushChatCmd.P2P_PUSH)
-                    .type(ChatTypeEnum.PUSH_CHAT)
+                    .type(ChatType.PUSH_CHAT)
                     .sender(userApply.getApplyId())
                     .content(JSON.toJSONString(message))
                     .offlineMsgEvent(false)
@@ -162,7 +161,7 @@ public class BizFriendServiceImpl implements BizFriendService {
                     .receive(apply.getApplyId())
                     .offlineMsgEvent(true)
                     .content(JSON.toJSONString(message))
-                    .type(ChatTypeEnum.PRIVATE_CHAT)
+                    .type(ChatType.PRIVATE_CHAT)
                     .build();
             socketManager.send(applyMsg);
 
@@ -181,7 +180,7 @@ public class BizFriendServiceImpl implements BizFriendService {
                     .sender(apply.getAnswerId())
                     .receive(apply.getApplyId())
                     .content(apply.getAnswerId() + ": 拒绝添加好友!")
-                    .type(ChatTypeEnum.NOTIFY_CHAT)
+                    .type(ChatType.NOTIFY_CHAT)
                     .cmd(SystemChatCmd.NOTIFY)
                     .build();
             socketManager.send(rejectMsg);

@@ -5,14 +5,13 @@ import com.gylang.gim.api.domain.admin.AdminUser;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.api.enums.BaseResultCode;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 import com.gylang.gim.server.config.AdminConfig;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
 import com.gylang.netty.sdk.repo.GIMSessionRepository;
 import com.gylang.netty.sdk.util.LocalSessionHolderUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -23,7 +22,7 @@ import java.util.Map;
  * data 2021/4/7
  */
 @Component
-@NettyHandler(ChatTypeEnum.REMOTE_LOGIN)
+@NettyHandler(ChatType.REMOTE_LOGIN)
 public class RemoteLoginHandler implements IMRequestHandler {
 
     @Resource

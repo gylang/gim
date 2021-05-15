@@ -3,7 +3,7 @@ package com.gylang.gim.api.domain.message.reply;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.common.ResponseMessage;
 import com.gylang.gim.api.enums.BaseResultCode;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 
 /**
  * @author gylang
@@ -12,7 +12,7 @@ import com.gylang.gim.api.enums.ChatTypeEnum;
 public class ReplyMessage extends ResponseMessage {
 
     private ReplyMessage() {
-        setType(ChatTypeEnum.REPLY_CHAT);
+        setType(ChatType.REPLY_CHAT);
     }
 
     public static ReplyMessage success(MessageWrap msg) {
@@ -25,7 +25,7 @@ public class ReplyMessage extends ResponseMessage {
 
     public static ReplyMessage reply(MessageWrap messageWrap, String code, String msg) {
         ReplyMessage message = new ReplyMessage();
-        message.setType(ChatTypeEnum.REPLY_CHAT);
+        message.setType(ChatType.REPLY_CHAT);
         message.setClientMsgId(messageWrap.getClientMsgId());
         message.setMsgId(messageWrap.getMsgId());
         message.setCmd(messageWrap.getCmd());

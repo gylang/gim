@@ -3,7 +3,7 @@ package com.gylang.gim.server.handle.manager;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.api.enums.BaseResultCode;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * @author gylang
  * data 2021/5/6
  */
-@NettyHandler(ChatTypeEnum.MANAGER)
+@NettyHandler(ChatType.MANAGER)
 @Component
 public class ManagerHandlerImpl implements IMRequestHandler, InitializingBean {
 

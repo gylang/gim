@@ -3,7 +3,7 @@ package com.gylang.netty.sdk.handler.qos;
 import com.gylang.gim.api.constant.qos.QosConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.message.sys.AckMessage;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 import com.gylang.netty.sdk.common.InvokeFinished;
 import com.gylang.netty.sdk.common.ObjectWrap;
 import com.gylang.netty.sdk.config.GimGlobalConfiguration;
@@ -36,7 +36,7 @@ public class QosAdapterHandler implements BizRequestAdapter {
 
 
         // qos = 1/2 主发逻辑基本一直 统一处理
-        if (ChatTypeEnum.QOS_SERVER_SEND_ACK == message.getType()) {
+        if (ChatType.QOS_SERVER_SEND_ACK == message.getType()) {
             // qos 发送方
             senderQosHandler.handle(message, me);
             return InvokeFinished.getInstance();
@@ -46,7 +46,7 @@ public class QosAdapterHandler implements BizRequestAdapter {
         if (QosConstant.INSURE_ONE_ARRIVE == message.getQos()) {
             AckMessage ackMessage = new AckMessage(message);
             ackMessage.setAck(QosConstant.RECEIVE_ACK1);
-            ackMessage.setType(ChatTypeEnum.QOS_CLIENT_SEND_ACK);
+            ackMessage.setType(ChatType.QOS_CLIENT_SEND_ACK);
             me.getSession().writeAndFlush(ackMessage);
             if (log.isDebugEnabled()) {
                 log.debug("[qos1 - receiver] : 接收到客户端消息 , 响应客户端ack1");

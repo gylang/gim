@@ -5,7 +5,7 @@ import com.gylang.gim.api.domain.common.CommonResult;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.dto.PtUserDTO;
 import com.gylang.gim.api.dto.request.UserApplyRequest;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 import com.gylang.gim.client.GuiClientApplication;
 import com.gylang.gim.client.api.FriendApi;
 import com.gylang.gim.client.call.ICallback;
@@ -95,7 +95,7 @@ public class UserSearchItemC extends BaseCellC<PtUserDTO> implements Initializab
          messageNotify = messageWrap -> {
          };
         SocketHolder.getInstance()
-                .bind(ChatTypeEnum.NOTIFY_CHAT, NotifyChatCmd.MESSAGE_NOTIFY, messageNotify);
+                .bind(ChatType.NOTIFY_CHAT, NotifyChatCmd.MESSAGE_NOTIFY, messageNotify);
     }
 
 }

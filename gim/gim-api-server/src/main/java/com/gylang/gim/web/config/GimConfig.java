@@ -11,7 +11,7 @@ import com.gylang.gim.api.constant.common.CommonConstant;
 import com.gylang.gim.api.constant.qos.QosConstant;
 import com.gylang.gim.api.domain.admin.AdminUser;
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 import com.gylang.gim.remote.SocketHolder;
 import com.gylang.gim.remote.SocketManager;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +50,7 @@ public class GimConfig {
         adminUser.setUsername(username);
         adminUser.setPassword(password);
         MessageWrap messageWrap = MessageWrap.builder()
-                .type(ChatTypeEnum.REMOTE_LOGIN)
+                .type(ChatType.REMOTE_LOGIN)
                 .clientMsgId(IdWorker.getIdStr())
                 .qos(QosConstant.ACCURACY_ONE_ARRIVE)
                 .content(JSON.toJSONString(adminUser))

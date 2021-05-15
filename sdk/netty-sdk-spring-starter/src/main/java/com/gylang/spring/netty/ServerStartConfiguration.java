@@ -15,7 +15,7 @@ import com.gylang.netty.sdk.handler.qos.IMessageSenderQosHandler;
 import com.gylang.netty.sdk.initializer.CustomInitializer;
 import com.gylang.netty.sdk.intercept.NettyIntercept;
 import com.gylang.netty.sdk.provider.MessageProvider;
-import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
+import com.gylang.netty.sdk.repo.GIMGroupSessionRepository;
 import com.gylang.netty.sdk.repo.GIMSessionRepository;
 import com.gylang.netty.sdk.repo.NettyUserInfoFillHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +55,7 @@ public class ServerStartConfiguration implements InitializingBean {
     private GIMSessionRepository sessionRepository;
     /** 用户组会话工厂 */
     @Resource
-    private IMGroupSessionRepository groupSessionRepository;
+    private GIMGroupSessionRepository groupSessionRepository;
     /** 消息发送provider */
     @Resource
     private MessageProvider messageProvider;

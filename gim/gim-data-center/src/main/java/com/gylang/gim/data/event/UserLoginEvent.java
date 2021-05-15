@@ -3,7 +3,7 @@ package com.gylang.gim.data.event;
 import com.gylang.gim.admin.event.AdminMessageEventListener;
 import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 import com.gylang.gim.remote.SocketManager;
 import com.gylang.gim.data.service.HistoryMessageService;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +48,6 @@ public class UserLoginEvent implements AdminMessageEventListener<MessageWrap> {
 
     @Override
     public List<String> bind() {
-        return Collections.singletonList(ChatTypeEnum.NOTIFY_CHAT + "-" + EventTypeConst.USER_ONLINE);
+        return Collections.singletonList(ChatType.NOTIFY_CHAT + "-" + EventTypeConst.USER_ONLINE);
     }
 }

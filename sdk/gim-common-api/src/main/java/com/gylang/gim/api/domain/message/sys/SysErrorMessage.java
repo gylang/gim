@@ -3,7 +3,7 @@ package com.gylang.gim.api.domain.message.sys;
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
 import com.gylang.gim.api.domain.common.ResponseMessage;
 import com.gylang.gim.api.enums.BaseCode;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 
 /**
  * @author gylang
@@ -16,7 +16,7 @@ public class SysErrorMessage extends ResponseMessage {
         SysErrorMessage messageWrap = new SysErrorMessage();
         messageWrap.setCmd(SystemChatCmd.ERROR_MSG);
         messageWrap.setCode(code);
-        messageWrap.setType(ChatTypeEnum.SYSTEM_MESSAGE);
+        messageWrap.setType(ChatType.SYSTEM_MESSAGE);
         messageWrap.setContent(msg);
         return messageWrap;
     }

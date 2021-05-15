@@ -2,7 +2,7 @@ package com.gylang.gim.api.domain.message.sys;
 
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.common.ResponseMessage;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 
 /**
  * @author gylang
@@ -12,10 +12,10 @@ public class AckMessage extends ResponseMessage {
 
 
     public AckMessage() {
-        setType(ChatTypeEnum.QOS_CLIENT_SEND_ACK);
+        setType(ChatType.QOS_CLIENT_SEND_ACK);
     }
     public AckMessage(String cmd) {
-        setType(ChatTypeEnum.SYSTEM_MESSAGE);
+        setType(ChatType.SYSTEM_MESSAGE);
         setCmd(cmd);
     }
 

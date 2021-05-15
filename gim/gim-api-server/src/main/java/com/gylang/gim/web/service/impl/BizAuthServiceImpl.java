@@ -14,7 +14,7 @@ import com.gylang.gim.api.domain.entity.UserCache;
 import com.gylang.gim.api.dto.request.LoginRequest;
 import com.gylang.gim.api.dto.request.RegistryRequest;
 import com.gylang.gim.api.dto.response.LoginResponse;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 import com.gylang.gim.remote.SocketManager;
 import com.gylang.gim.web.common.constant.CommonConstant;
 import com.gylang.gim.web.common.util.Asserts;
@@ -126,7 +126,7 @@ public class BizAuthServiceImpl implements BizAuthService {
 
         MessageWrap messageWrap = new MessageWrap();
         messageWrap.setQos(1);
-        messageWrap.setType(ChatTypeEnum.MANAGER);
+        messageWrap.setType(ChatType.MANAGER);
         messageWrap.setCmd(ManagerCmd.USER_APPLY_FOR_TOKEN_MANAGER);
         messageWrap.setContent(JSON.toJSONString(loginResponse));
         socketManager.send(messageWrap);

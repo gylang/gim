@@ -4,7 +4,7 @@ import com.gylang.gim.api.constant.common.CommonConstant;
 import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.gim.api.domain.admin.AdminUser;
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 import com.gylang.gim.server.config.AdminConfig;
 import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.event.message.MessageEvent;
@@ -45,7 +45,7 @@ public class LoginListener implements MessageEventListener<String>, Initializing
             MessageWrap messageWrap = new MessageWrap();
             messageWrap.setQos(2);
             messageWrap.setCmd(EventTypeConst.USER_ONLINE);
-            messageWrap.setType(ChatTypeEnum.NOTIFY_CHAT);
+            messageWrap.setType(ChatType.NOTIFY_CHAT);
             messageWrap.setContent(loginUserId);
             String sender = user.getUserId();
             messageWrap.setReceive(sender);

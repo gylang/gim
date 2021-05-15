@@ -8,7 +8,7 @@ import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.api.enums.BaseResultCode;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
@@ -23,7 +23,7 @@ import javax.annotation.Resource;
  * @author gylang
  * data 2020/11/17
  */
-@NettyHandler(ChatTypeEnum.PRIVATE_CHAT)
+@NettyHandler(ChatType.PRIVATE_CHAT)
 @Component
 public class LoginHandler implements IMRequestHandler {
 
@@ -39,7 +39,7 @@ public class LoginHandler implements IMRequestHandler {
     public Object process(GIMSession me, MessageWrap message) {
         MessageWrap messageWrap = ReplyMessage.success(message);
         messageWrap.setSender(me.getAccount());
-        messageWrap.setType(ChatTypeEnum.NOTIFY_CHAT);
+        messageWrap.setType(ChatType.NOTIFY_CHAT);
         // 获取用户信息
         if (StrUtil.isNotEmpty(me.getAccount())) {
             messageWrap.setContent("连接socket成功");

@@ -7,7 +7,7 @@ import com.gylang.gim.api.constant.ContentType;
 import com.gylang.gim.api.constant.qos.QosConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.enums.BaseResultCode;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 import com.gylang.gim.remote.call.GimCallBack;
 import com.gylang.gim.remote.coder.ClientMessageDecoder;
 import com.gylang.gim.remote.coder.ClientMessageEncoder;
@@ -128,7 +128,7 @@ public class SocketManager {
         // 登录系统
         login.set(2);
         login();
-        bind(ChatTypeEnum.REPLY_CHAT, loginMsg.getCmd(), onLoginSuccess);
+        bind(ChatType.REPLY_CHAT, loginMsg.getCmd(), onLoginSuccess);
         // 心跳监测
         scheduledExecutorService.scheduleAtFixedRate(this::sendHeart,
                 checkInterval,
@@ -217,7 +217,7 @@ public class SocketManager {
      */
     public void send(final MessageWrap body) {
 
-        if (ChatTypeEnum.HEART != body.getType() && log.isDebugEnabled()) {
+        if (ChatType.HEART != body.getType() && log.isDebugEnabled()) {
             log.debug("发送消息 : {}", body);
         }
         if (!isConnected()) {

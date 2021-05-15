@@ -1,7 +1,7 @@
 package com.gylang.netty.sdk.handler.netty;
 
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.handler.IMessageRouter;
 import io.netty.channel.ChannelHandlerContext;
@@ -28,7 +28,7 @@ public class JsonDispatchHandler extends SimpleChannelInboundHandler<MessageWrap
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, MessageWrap msg) {
         GIMSession session = new GIMSession(ctx.channel());
-        if (null == msg || ChatTypeEnum.HEART == msg.getType()) {
+        if (null == msg || ChatType.HEART == msg.getType()) {
 
             return;
         }

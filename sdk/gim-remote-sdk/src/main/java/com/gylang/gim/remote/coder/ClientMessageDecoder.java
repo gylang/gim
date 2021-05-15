@@ -25,7 +25,7 @@ package com.gylang.gim.remote.coder;
 import com.alibaba.fastjson.JSON;
 import com.gylang.gim.api.constant.common.CommonConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -75,7 +75,7 @@ public class ClientMessageDecoder {
         /*
          消息读取完成后，通过type来解析成对应的消息体
          */
-        if (ChatTypeEnum.HEART == type) {
+        if (ChatType.HEART == type) {
             return CommonConstant.HEART;
         }
 

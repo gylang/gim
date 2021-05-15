@@ -5,11 +5,11 @@ import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.gim.api.constant.qos.QosConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.config.GimGlobalConfiguration;
-import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
+import com.gylang.netty.sdk.domain.model.BaseSessionGroup;
 import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.event.EventProvider;
 import com.gylang.netty.sdk.handler.qos.IMessageSenderQosHandler;
-import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
+import com.gylang.netty.sdk.repo.GIMGroupSessionRepository;
 import com.gylang.netty.sdk.repo.GIMSessionRepository;
 import com.gylang.netty.sdk.util.LocalSessionHolderUtil;
 import com.gylang.netty.sdk.util.MsgIdUtil;
@@ -19,6 +19,7 @@ import io.netty.util.concurrent.GenericFutureListener;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
@@ -33,7 +34,7 @@ public class DefaultMessageProvider implements MessageProvider {
     /** 个人用户会话中心 */
     private GIMSessionRepository sessionRepository;
     /** 用户组会话中心 */
-    private IMGroupSessionRepository groupSessionRepository;
+    private GIMGroupSessionRepository groupSessionRepository;
     /** 线程池 */
     private ThreadPoolExecutor executor;
     /** qos */
@@ -129,7 +130,7 @@ public class DefaultMessageProvider implements MessageProvider {
     @Override
     public int sendGroup(GIMSession me, String target, MessageWrap message) {
 
-        AbstractSessionGroup sessionGroup = groupSessionRepository.findByKey(target);
+        BaseSessionGroup sessionGroup = groupSessionRepository.findGroupInfo(target);
         return sendGroup(me, sessionGroup, message);
     }
 
@@ -140,13 +141,14 @@ public class DefaultMessageProvider implements MessageProvider {
 
 
     @Override
-    public int sendGroup(GIMSession me, AbstractSessionGroup target, MessageWrap message) {
+    public int sendGroup(GIMSession me, BaseSessionGroup target, MessageWrap message) {
         if (null == target) {
             return USER_NOT_FOUND;
         }
         message.setSender(me.getAccount());
         message.setReceive(target.getGroupId());
-        for (GIMSession session : target.getMemberList()) {
+        Set<String> allMemberIds = groupSessionRepository.getAllMemberIds(target.getGroupId());
+        for (GIMSession session : sessionRepository.findByUserIds(allMemberIds)) {
             if (null != session.getSession()
                     && !me.getNid().equals(session.getNid())
                     && session.getSession().isActive()) {
@@ -157,7 +159,7 @@ public class DefaultMessageProvider implements MessageProvider {
     }
 
     @Override
-    public void sendAsyncGroup(GIMSession me, AbstractSessionGroup target, MessageWrap message) {
+    public void sendAsyncGroup(GIMSession me, BaseSessionGroup target, MessageWrap message) {
         executor.execute(() -> sendGroup(me, target, message));
     }
 

@@ -16,8 +16,8 @@ public interface GIMSessionRepository {
 
     /**
      * 获取用户会话信息
-     * @param s
-     * @return
+     * @param userId 用户id
+     * @return 用户
      */
     GIMSession findUserId(String userId);
 

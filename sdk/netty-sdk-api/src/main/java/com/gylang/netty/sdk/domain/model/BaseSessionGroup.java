@@ -1,7 +1,6 @@
 package com.gylang.netty.sdk.domain.model;
 
 import cn.hutool.core.util.IdUtil;
-import io.netty.util.concurrent.EventExecutor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 @Setter
 @Getter
 @Slf4j
-public class AbstractSessionGroup {
+public class BaseSessionGroup {
 
     /**
      * 组名
@@ -35,6 +34,7 @@ public class AbstractSessionGroup {
      */
     private String key;
 
+    /** 群组id */
     private String groupId;
     /**
      * 房间密码
@@ -44,13 +44,10 @@ public class AbstractSessionGroup {
     /**
      * 队列
      */
-    private BlockingQueue<GIMSession> memberList;
-    /**
-     * 线程执行器
-     */
-    private EventExecutor executor;
 
-    public AbstractSessionGroup(String name, String creator, String password, Integer capacity) {
+    private BlockingQueue<GIMSession> memberList;
+
+    public BaseSessionGroup(String name, String creator, String password, Integer capacity) {
         this.name = name;
         this.creator = creator;
         this.password = password;
@@ -58,7 +55,7 @@ public class AbstractSessionGroup {
         memberList = new ArrayBlockingQueue<>(capacity);
     }
 
-    public AbstractSessionGroup(String name, String creator, Integer capacity) {
+    public BaseSessionGroup(String name, String creator, Integer capacity) {
         this(name, creator, null, capacity);
     }
 

@@ -1,10 +1,13 @@
 package com.gylang.netty.sdk.repo;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.gylang.netty.sdk.annotation.IMGroupRepository;
-import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
+import com.gylang.netty.sdk.domain.model.BaseSessionGroup;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.stream.Collectors;
 
 
 /**
@@ -15,60 +18,105 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version v0.0.1
  */
 @IMGroupRepository
-public class DefaultGroupRepository implements IMGroupSessionRepository {
+public class DefaultGroupRepository implements GIMGroupSessionRepository {
 
-    Map<String, AbstractSessionGroup> groupMap = new ConcurrentHashMap<>();
+    Map<String, BaseSessionGroup> groupMap = new ConcurrentHashMap<>();
+
+    Map<String, Set<String>> membersMap = new ConcurrentHashMap<>();
 
     @Override
-    public AbstractSessionGroup findUserId(AbstractSessionGroup sessionGroup) {
-        if (null == sessionGroup) {
-            return null;
-        }
-        return groupMap.get(sessionGroup.getKey());
+    public void add(BaseSessionGroup group) {
+        groupMap.put(group.getGroupId(), group);
     }
 
     @Override
-    public List<AbstractSessionGroup> findByUserIds(Collection<String> strings) {
-        if (null == strings) {
+    public BaseSessionGroup findGroupInfo(String groupId) {
+        if (null == groupId) {
+            return null;
+        }
+        return groupMap.get(groupId);
+    }
+
+    @Override
+    public List<BaseSessionGroup> findGroups(Collection<String> groupIds) {
+        if (null == groupIds) {
             throw new IllegalArgumentException("keys is not empty");
         }
-        List<AbstractSessionGroup> list = new ArrayList<>();
-        for (String string : strings) {
-            AbstractSessionGroup abstractSessionGroup = groupMap.get(string);
-            if (null != abstractSessionGroup) {
-                list.add(abstractSessionGroup);
+        List<BaseSessionGroup> list = new ArrayList<>();
+        for (String groupId : groupIds) {
+            BaseSessionGroup baseSessionGroup = groupMap.get(groupId);
+            if (null != baseSessionGroup) {
+                list.add(baseSessionGroup);
             }
         }
         return list;
     }
 
     @Override
-    public Collection<AbstractSessionGroup> findAll() {
-        return groupMap.values();
+    public Boolean checkIsMember(String groupId, String memberId) {
+        Set<String> memberMap = membersMap.get(groupId);
+
+        return null != memberMap && memberMap.contains(memberId);
     }
 
     @Override
-    public Set<String> findAllKey() {
-        return groupMap.keySet();
+    public Set<String> getAllMemberIds(String groupId) {
+        Set<String> members = membersMap.get(groupId);
+        return ObjectUtil.defaultIfNull(members, new HashSet<>());
     }
 
     @Override
-    public AbstractSessionGroup findByKey(String s) {
-        return groupMap.get(s);
+    public Set<String> getMemberIds(String groupId, Collection<String> memberIds) {
+        Set<String> members = membersMap.get(groupId);
+        return memberIds.stream().filter(members::contains).collect(Collectors.toSet());
     }
 
     @Override
-    public AbstractSessionGroup popByKey(String s) {
-        return groupMap.remove(s);
+    public boolean addMember(String groupId, String memberId) {
+        if (groupMap.containsKey(groupId)) {
+            Set<String> members = membersMap
+                    .computeIfAbsent(groupId, k -> new ConcurrentSkipListSet<>());
+            members.add(memberId);
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public AbstractSessionGroup pop(AbstractSessionGroup sessionGroup) {
-        return groupMap.remove(sessionGroup.getKey());
+    public boolean addMember(String groupId, Collection<String> memberIds) {
+        if (groupMap.containsKey(groupId)) {
+            Set<String> members = membersMap
+                    .computeIfAbsent(groupId, k -> new ConcurrentSkipListSet<>());
+            members.addAll(memberIds);
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public AbstractSessionGroup add(String s, AbstractSessionGroup group) {
-        return groupMap.put(s, group);
+    public void removeMember(String groupId, String memberId) {
+        if (groupMap.containsKey(groupId)) {
+            Set<String> members = membersMap.get(groupId);
+            if (null != members) {
+                members.remove(memberId);
+            }
+        }
+    }
+
+    @Override
+    public void removeMember(String groupId, Collection<String> memberIds) {
+        if (groupMap.containsKey(groupId)) {
+            Set<String> members = membersMap.get(groupId);
+            if (null != members) {
+                members.removeAll(memberIds);
+            }
+        }
+    }
+
+    @Override
+    public void del(BaseSessionGroup group) {
+        String groupId = group.getGroupId();
+        groupMap.remove(groupId);
+        membersMap.remove(groupId);
     }
 }

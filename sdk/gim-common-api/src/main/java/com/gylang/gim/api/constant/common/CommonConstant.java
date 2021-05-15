@@ -1,7 +1,7 @@
 package com.gylang.gim.api.constant.common;
 
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 
 /**
  * @author gylang
@@ -43,11 +43,11 @@ public enum CommonConstant {
 
     public static final MessageWrap HEART = new MessageWrap();
     static {
-        HEART.setType(ChatTypeEnum.HEART);
+        HEART.setType(ChatType.HEART);
     }
     public static final MessageWrap UPDATE_LAST_ID = new MessageWrap();
     static {
-        UPDATE_LAST_ID.setType(ChatTypeEnum.PRIVATE_CHAT_LAST_MSG_ID);
+        UPDATE_LAST_ID.setType(ChatType.PRIVATE_CHAT_LAST_MSG_ID);
     }
     /** 系统发送 */
     public static final String SYSTEM_SENDER = "0";

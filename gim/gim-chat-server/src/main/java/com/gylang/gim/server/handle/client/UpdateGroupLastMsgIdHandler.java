@@ -3,7 +3,7 @@ package com.gylang.gim.server.handle.client;
 import com.gylang.gim.api.constant.qos.QosConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.message.reply.ReplyMessage;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 import com.gylang.gim.server.service.HistoryMessageService;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.model.GIMSession;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
  * data 2021/3/18
  */
 @Component
-@NettyHandler(ChatTypeEnum.GROUP_CHAT_LAST_MSG_ID)
+@NettyHandler(ChatType.GROUP_CHAT_LAST_MSG_ID)
 public class UpdateGroupLastMsgIdHandler implements IMRequestHandler {
 
     @Autowired

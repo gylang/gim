@@ -15,4 +15,12 @@ public interface SendAccessService {
      * @return true 可以发送
      */
     Boolean privateAccessCheck(String senderId, String receiveId);
+
+    /**
+     * 群校验可访问性检测
+     * @param senderId 发送者id
+     * @param receiveId 接收者id
+     * @return true 可以发送
+     */
+    Boolean groupAccessCheck(String senderId, String receiveId);
 }

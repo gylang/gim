@@ -2,13 +2,14 @@ package com.gylang.gim.web.process.controller;
 
 
 import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.gim.api.enums.ChatType;
 import com.gylang.gim.web.util.KeyLock;
 import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
+import com.gylang.netty.sdk.domain.model.BaseSessionGroup;
 import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.handler.GimController;
 import com.gylang.netty.sdk.provider.MessageProvider;
-import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
+import com.gylang.netty.sdk.repo.GIMGroupSessionRepository;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -17,21 +18,21 @@ import javax.annotation.Resource;
  * @author gylang
  * data 2020/11/17
  */
-@NettyHandler("login")
+@NettyHandler(ChatType.CLIENT_AUTH)
 @Component
 public class TouristLoginHandler implements GimController<String> {
 
     @Resource
     private MessageProvider messageProvider;
     @Resource
-    private IMGroupSessionRepository groupSessionRepository;
+    private GIMGroupSessionRepository groupSessionRepository;
     private static final KeyLock<String> keyLock = new KeyLock<>();
 
     @Override
     public Object process(GIMSession me, String requestBody) {
 
         me.setAccount(requestBody);
-        AbstractSessionGroup defaultGroup = getAndCreateGroup(me, groupSessionRepository);
+        BaseSessionGroup defaultGroup = getAndCreateGroup(me, groupSessionRepository);
         boolean join = defaultGroup.join(me);
         if (join) {
             MessageWrap messageWrap = new MessageWrap();
@@ -44,11 +45,11 @@ public class TouristLoginHandler implements GimController<String> {
         return null;
     }
 
-    private AbstractSessionGroup getAndCreateGroup(GIMSession me, IMGroupSessionRepository groupRepository) {
+    private BaseSessionGroup getAndCreateGroup(GIMSession me, GIMGroupSessionRepository groupRepository) {
 
 
-        AbstractSessionGroup defaultGroup;
-        defaultGroup = groupRepository.findByKey("111");
+        BaseSessionGroup defaultGroup;
+        defaultGroup = groupRepository.findGroupInfo("111");
         if (null != defaultGroup) {
             return defaultGroup;
         }
@@ -56,10 +57,10 @@ public class TouristLoginHandler implements GimController<String> {
         try {
             keyLock.lock(key);
             // 前面的线程可以能已经创建完聊天组, 所以需要再次判断
-            defaultGroup = groupRepository.findByKey("111");
+            defaultGroup = groupRepository.findGroupInfo("111");
             if (null == defaultGroup) {
-                defaultGroup = new AbstractSessionGroup("default", me.getAccount(), 1000);
-                groupRepository.add("1111", defaultGroup);
+                defaultGroup = new BaseSessionGroup("default", me.getAccount(), 1000);
+                groupRepository.add(defaultGroup);
             }
         } finally {
             keyLock.unlock(key);

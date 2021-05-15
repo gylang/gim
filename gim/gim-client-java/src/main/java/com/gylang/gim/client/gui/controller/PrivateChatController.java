@@ -6,7 +6,7 @@ import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
 import com.gylang.gim.api.domain.chat.ChatMsg;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.dto.ImUserFriendDTO;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 import com.gylang.gim.client.enums.MockKey;
 import com.gylang.gim.client.gui.component.ChatListItemC;
 import com.gylang.gim.client.gui.core.CustomApplication;
@@ -73,7 +73,7 @@ public class PrivateChatController extends CustomApplication {
         // 获取消息体
         String text = inputText.getText();
         MessageWrap messageWrap = MessageWrap.builder()
-                .type(ChatTypeEnum.PRIVATE_CHAT)
+                .type(ChatType.PRIVATE_CHAT)
                 .cmd(PrivateChatCmd.SIMPLE_PRIVATE_CHAT)
                 .clientMsgId(IdUtil.objectId())
                 .qos(2)

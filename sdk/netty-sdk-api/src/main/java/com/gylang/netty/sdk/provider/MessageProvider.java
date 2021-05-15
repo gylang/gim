@@ -2,7 +2,7 @@ package com.gylang.netty.sdk.provider;
 
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.common.AfterConfigInitialize;
-import com.gylang.netty.sdk.domain.model.AbstractSessionGroup;
+import com.gylang.netty.sdk.domain.model.BaseSessionGroup;
 import com.gylang.netty.sdk.domain.model.GIMSession;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
@@ -83,7 +83,7 @@ public interface MessageProvider extends AfterConfigInitialize {
      * @param target  发送目标
      * @param message 发送消息
      */
-    int sendGroup(GIMSession me, AbstractSessionGroup target, MessageWrap message);
+    int sendGroup(GIMSession me, BaseSessionGroup target, MessageWrap message);
 
     /**
      * 群发消息 异步
@@ -92,7 +92,7 @@ public interface MessageProvider extends AfterConfigInitialize {
      * @param target  发送目标
      * @param message 发送消息
      */
-    void sendAsyncGroup(GIMSession me, AbstractSessionGroup target, MessageWrap message);
+    void sendAsyncGroup(GIMSession me, BaseSessionGroup target, MessageWrap message);
     /** 发送中 */
     Integer SENDING = 1;
     /** 用户未发现 */

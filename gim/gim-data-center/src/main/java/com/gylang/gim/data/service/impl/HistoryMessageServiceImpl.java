@@ -10,7 +10,7 @@ import com.gylang.gim.api.constant.cmd.PushChatCmd;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.common.PageResponse;
 import com.gylang.gim.api.domain.push.PushMessage;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 import com.gylang.gim.remote.SocketManager;
 import com.gylang.gim.util.MsgIdUtil;
 import com.gylang.gim.data.common.mybatis.Page;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class HistoryMessageServiceImpl implements HistoryMessageService, ChatTypeEnum {
+public class HistoryMessageServiceImpl implements HistoryMessageService, ChatType {
 
     @Autowired
     private CacheManager cacheManager;

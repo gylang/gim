@@ -130,7 +130,7 @@ public class GIMSession implements Serializable {
     /**
      * 加入的群组
      */
-    private List<AbstractSessionGroup> groupList = new ArrayList<>();
+    private List<BaseSessionGroup> groupList = new ArrayList<>();
 
     public GIMSession(Channel session) {
         this.session = session;

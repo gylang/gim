@@ -21,7 +21,7 @@ import com.gylang.netty.sdk.provider.DefaultMessageProvider;
 import com.gylang.netty.sdk.provider.MessageProvider;
 import com.gylang.netty.sdk.repo.DefaultGroupRepository;
 import com.gylang.netty.sdk.repo.DefaultIMRepository;
-import com.gylang.netty.sdk.repo.IMGroupSessionRepository;
+import com.gylang.netty.sdk.repo.GIMGroupSessionRepository;
 import com.gylang.netty.sdk.repo.GIMSessionRepository;
 import com.gylang.spring.netty.custom.adapter.MethodHandlerAdapter;
 import io.netty.util.concurrent.DefaultThreadFactory;
@@ -106,8 +106,8 @@ public class NettyAutoConfiguration implements InitializingBean {
     }
 
     @Bean
-    @ConditionalOnMissingBean(IMGroupSessionRepository.class)
-    public IMGroupSessionRepository imGroupSessionRepository() {
+    @ConditionalOnMissingBean(GIMGroupSessionRepository.class)
+    public GIMGroupSessionRepository imGroupSessionRepository() {
 
         return new DefaultGroupRepository();
     }

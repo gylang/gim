@@ -5,7 +5,7 @@ import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.gim.api.constant.common.CommonConstant;
 import com.gylang.gim.api.domain.admin.AdminUser;
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 import com.gylang.gim.server.config.AdminConfig;
 import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.event.message.MessageEvent;
@@ -48,7 +48,7 @@ public class PersistenceEventListener implements MessageEventListener<MessageWra
             MessageWrap messageWrap = new MessageWrap();
             messageWrap.setQos(2);
             messageWrap.setCmd(EventTypeConst.PERSISTENCE_MSG_EVENT);
-            messageWrap.setType(ChatTypeEnum.NOTIFY_CHAT);
+            messageWrap.setType(ChatType.NOTIFY_CHAT);
             MessageWrap history = message.copyBasic();
             history.setOfflineMsgEvent(false);
             messageWrap.setContent(JSON.toJSONString(history));

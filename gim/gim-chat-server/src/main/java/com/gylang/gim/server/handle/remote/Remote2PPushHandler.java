@@ -5,7 +5,7 @@ import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.api.domain.push.PushMessage;
 import com.gylang.gim.api.enums.BaseResultCode;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 import com.gylang.netty.sdk.annotation.NettyHandler;
 import com.gylang.netty.sdk.domain.model.GIMSession;
 import com.gylang.netty.sdk.handler.IMRequestHandler;
@@ -22,7 +22,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * data 2021/4/6
  */
 @Component
-@NettyHandler(ChatTypeEnum.P2P_PUSH)
+@NettyHandler(ChatType.P2P_PUSH)
 public class Remote2PPushHandler implements IMRequestHandler {
 
 

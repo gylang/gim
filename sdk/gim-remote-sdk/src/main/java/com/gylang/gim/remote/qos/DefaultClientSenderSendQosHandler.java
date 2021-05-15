@@ -6,7 +6,7 @@ import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.common.QosMessageWrap;
 import com.gylang.gim.api.domain.message.sys.AckMessage;
 import com.gylang.gim.api.enums.BaseResultCode;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 import com.gylang.gim.remote.SocketHolder;
 import lombok.extern.slf4j.Slf4j;
 
@@ -65,7 +65,7 @@ public class DefaultClientSenderSendQosHandler implements ClientSenderQosHandler
             }
             // qos2 需要响应客户点 响应ack2 让客户端删除重发ack1列表
             if (null != qosMessageWrap && QosConstant.ACCURACY_ONE_ARRIVE == message.getQos()) {
-                AckMessage ackMessage = new AckMessage(ChatTypeEnum.QOS_CLIENT_SEND_ACK, qosMessageWrap.getMessageWrap());
+                AckMessage ackMessage = new AckMessage(ChatType.QOS_CLIENT_SEND_ACK, qosMessageWrap.getMessageWrap());
                 ackMessage.setAck(QosConstant.SEND_ACK2);
                 SocketHolder.getInstance().writeAndFlush(ackMessage);
                 if (log.isDebugEnabled()) {
@@ -144,7 +144,7 @@ public class DefaultClientSenderSendQosHandler implements ClientSenderQosHandler
                     MessageWrap messageWrap = qosMessageWrap.getMessageWrap().copyBasic();
                     messageWrap.setClientMsgId(qosMessageWrap.getClientMsgId());
                     messageWrap.setMsg(qosMessageWrap.getMsgId());
-                    messageWrap.setType(ChatTypeEnum.SYSTEM_MESSAGE);
+                    messageWrap.setType(ChatType.SYSTEM_MESSAGE);
                     messageWrap.setCmd(SystemChatCmd.ERROR_MSG);
                     messageWrap.setCode(BaseResultCode.WEBSOCKET_CONNECTION_ERROR.getCode());
                     messageWrap.setMsg("消息发送失败");

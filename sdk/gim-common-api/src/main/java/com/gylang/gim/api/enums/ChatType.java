@@ -6,7 +6,7 @@ package com.gylang.gim.api.enums;
  * @author gylang
  * data 2021/3/26
  */
-public interface ChatTypeEnum {
+public interface ChatType {
 
     int QOS_SERVER_SEND_ACK = -4;
 

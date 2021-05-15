@@ -2,7 +2,7 @@ package com.gylang.gim.client.gui.component;
 
 import com.gylang.gim.api.constant.cmd.PrivateChatCmd;
 import com.gylang.gim.api.domain.chat.ChatMsg;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 import com.gylang.gim.client.GuiClientApplication;
 import com.gylang.gim.client.gui.util.GuiUtil;
 import com.gylang.gim.client.util.store.UserStore;
@@ -76,7 +76,7 @@ public class ChatListItemC extends ListCell<ChatMsg> implements Callback<Class<?
 
         //
         SocketHolder.getInstance()
-                .bind(ChatTypeEnum.PRIVATE_CHAT, PrivateChatCmd.SIMPLE_PRIVATE_CHAT, msg -> {
+                .bind(ChatType.PRIVATE_CHAT, PrivateChatCmd.SIMPLE_PRIVATE_CHAT, msg -> {
 
                     UserStore userStore = UserStore.getInstance();
                     if (userStore.getUid().equals(msg.getSender())

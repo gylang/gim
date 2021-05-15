@@ -4,7 +4,7 @@ import cn.hutool.core.thread.ThreadFactoryBuilder;
 import com.gylang.gim.api.constant.qos.QosConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.message.sys.AckMessage;
-import com.gylang.gim.api.enums.ChatTypeEnum;
+import com.gylang.gim.api.enums.ChatType;
 import com.gylang.gim.remote.SocketHolder;
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,7 +39,7 @@ public class DefaultIClientReceiveQos2Handler implements ClientReceiveQos2Handle
         boolean add = addReceived(message.getMsgId(), message);
         MessageWrap messageWrap = new AckMessage(message);
         messageWrap.setAck(QosConstant.RECEIVE_ACK1);
-        messageWrap.setType(ChatTypeEnum.QOS_SERVER_SEND_ACK);
+        messageWrap.setType(ChatType.QOS_SERVER_SEND_ACK);
         SocketHolder.getInstance().writeAndFlush(messageWrap);
         if (log.isDebugEnabled()) {
             log.debug("[qos2 - receiver] : 接收到服务端消息 , 响应服务端ack1");
