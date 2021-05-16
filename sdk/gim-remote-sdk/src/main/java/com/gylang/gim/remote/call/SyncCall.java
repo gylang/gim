@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class SyncCall<T> implements GimCallBack<T> {
 
-    private GimCallBack<T> work;
+    private final GimCallBack<T> work;
 
     private final CountDownLatch countDownLatch = new CountDownLatch(1);
 
@@ -24,8 +24,9 @@ public class SyncCall<T> implements GimCallBack<T> {
     }
 
     public void await() throws InterruptedException {
-
+        System.out.println("阻塞等待");
         countDownLatch.await();
+        System.out.println("等待完成");
 
     }
 

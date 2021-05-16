@@ -1,6 +1,7 @@
 package com.gylang.gim.remote;
 
 import cn.hutool.core.thread.ThreadFactoryBuilder;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.gylang.gim.api.constant.common.CommonConstant;
 import com.gylang.gim.api.constant.ContentType;
@@ -218,13 +219,18 @@ public class SocketManager {
      */
     public void send(final MessageWrap body) {
 
-        if (ChatType.HEART != body.getType() && log.isDebugEnabled()) {
-            log.debug("发送消息 : {}", body);
-        }
+
         if (!isConnected()) {
             return;
         }
-        MsgIdUtil.increase(body);
+        if (StrUtil.isEmpty(body.getClientMsgId())) {
+
+            MsgIdUtil.increase(body);
+        }
+        if (ChatType.HEART != body.getType() && log.isDebugEnabled()) {
+            log.debug("发送消息 : {}", body);
+
+        }
         workerExecutor.execute(() -> {
             if (QosConstant.ONE_AWAY != body.getQos()) {
                 clientQosAdapterHandler.getSenderQosHandler().addReceived(body);
@@ -260,9 +266,12 @@ public class SocketManager {
      * @param gimCallBack 回调信息
      */
     public void sendAndCallBack(final MessageWrap body, GimCallBack<MessageWrap> gimCallBack) {
+        if (StrUtil.isEmpty(body.getClientMsgId())) {
 
-        send(body);
+            MsgIdUtil.increase(body);
+        }
         sendCallBack.put(body.getClientMsgId(), gimCallBack);
+        send(body);
     }
 
     /**
@@ -272,10 +281,13 @@ public class SocketManager {
      * @param gimCallBack 回调信息
      */
     public void sendAndWaitCallBack(final MessageWrap body, GimCallBack<MessageWrap> gimCallBack) {
+        if (StrUtil.isEmpty(body.getClientMsgId())) {
 
-        send(body);
+            MsgIdUtil.increase(body);
+        }
         SyncCall<MessageWrap> wrapSyncCall = new SyncCall<>(gimCallBack);
-        sendCallBack.put(body.getClientMsgId(), gimCallBack);
+        sendCallBack.put(body.getClientMsgId(), wrapSyncCall);
+        send(body);
         try {
             wrapSyncCall.await();
         } catch (InterruptedException e) {
@@ -283,6 +295,7 @@ public class SocketManager {
             Thread.currentThread().interrupt();
         }
     }
+
     /**
      * 同步发送消息
      *
@@ -290,10 +303,13 @@ public class SocketManager {
      * @param gimCallBack 回调信息
      */
     public void sendAndWaitCallBack(final MessageWrap body, GimCallBack<MessageWrap> gimCallBack, long milliseconds) {
+        if (StrUtil.isEmpty(body.getClientMsgId())) {
 
-        send(body);
+            MsgIdUtil.increase(body);
+        }
         SyncCall<MessageWrap> wrapSyncCall = new SyncCall<>(gimCallBack);
-        sendCallBack.put(body.getClientMsgId(), gimCallBack);
+        sendCallBack.put(body.getClientMsgId(), wrapSyncCall);
+        send(body);
         try {
             wrapSyncCall.await(milliseconds);
         } catch (InterruptedException e) {

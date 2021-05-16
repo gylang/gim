@@ -8,6 +8,7 @@ import com.gylang.gim.web.entity.PtUser;
 import com.gylang.gim.web.service.PtUserService;
 import com.gylang.gim.web.service.UserWbListService;
 import com.gylang.gim.web.service.im.ImUserWhiteBlackManager;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
  * @author gylang
  * data 2021/5/16
  */
+@Service
 public class UserWbListServiceImpl implements UserWbListService {
 
     @Resource

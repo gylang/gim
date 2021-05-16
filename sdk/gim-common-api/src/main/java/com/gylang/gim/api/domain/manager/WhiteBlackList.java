@@ -12,7 +12,7 @@ import java.util.List;
 public class WhiteBlackList {
 
     /** 用户id */
-    private String uid;
+    private String id;
     /** 黑白名单配置 */
     private String type;
     /** 新增白名单用户 */

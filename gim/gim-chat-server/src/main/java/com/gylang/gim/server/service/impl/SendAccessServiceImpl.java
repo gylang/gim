@@ -49,17 +49,17 @@ public class SendAccessServiceImpl implements SendAccessService {
     public WhiteBlackList queryPrivateInfo(WhiteBlackList whiteBlackList) {
 
         WhiteBlackList reslut = new WhiteBlackList();
-        String key = CacheConstant.IM_USER_CONFIG + whiteBlackList.getUid();
+        String key = CacheConstant.IM_USER_CONFIG + whiteBlackList.getId();
         String type = redisTemplate.opsForValue().get(key);
         reslut.setType(type);
 
         // 白名单
-        key = CacheConstant.WHITE_LIST_CHECK + whiteBlackList.getUid();
+        key = CacheConstant.WHITE_LIST_CHECK + whiteBlackList.getId();
         Set<String> white = redisTemplate.opsForSet().members(key);
         reslut.setAddBlack(CollUtil.newArrayList(white));
 
         // 黑名单
-        key = CacheConstant.BLACK_LIST_CHECK + whiteBlackList.getUid();
+        key = CacheConstant.BLACK_LIST_CHECK + whiteBlackList.getId();
         Set<String> black = redisTemplate.opsForSet().members(key);
         reslut.setAddBlack(CollUtil.newArrayList(black));
 
@@ -70,28 +70,28 @@ public class SendAccessServiceImpl implements SendAccessService {
     public void updatePrivate(WhiteBlackList whiteBlackList) {
         if (StrUtil.isNotEmpty(whiteBlackList.getType())) {
             // 黑白名单策略变更
-            String key = CacheConstant.IM_USER_CONFIG + whiteBlackList.getUid();
+            String key = CacheConstant.IM_USER_CONFIG + whiteBlackList.getId();
             redisTemplate.opsForValue().set(key, whiteBlackList.getType());
         }
 
         if (CollUtil.isNotEmpty(whiteBlackList.getAddWhite())) {
             // 新增白名单用户
-            String key = CacheConstant.WHITE_LIST_CHECK + whiteBlackList.getUid();
+            String key = CacheConstant.WHITE_LIST_CHECK + whiteBlackList.getId();
             redisTemplate.opsForSet().add(key, whiteBlackList.getAddWhite().toArray(new String[0]));
         }
         if (CollUtil.isNotEmpty(whiteBlackList.getAddBlack())) {
             // 新增黑名单用户
-            String key = CacheConstant.BLACK_LIST_CHECK + whiteBlackList.getUid();
+            String key = CacheConstant.BLACK_LIST_CHECK + whiteBlackList.getId();
             redisTemplate.opsForSet().add(key, whiteBlackList.getAddBlack().toArray(new String[0]));
         }
         if (CollUtil.isNotEmpty(whiteBlackList.getRemoveWhite())) {
             // 删除白名单用户
-            String key = CacheConstant.WHITE_LIST_CHECK + whiteBlackList.getUid();
+            String key = CacheConstant.WHITE_LIST_CHECK + whiteBlackList.getId();
             redisTemplate.opsForSet().remove(key, whiteBlackList.getRemoveWhite().toArray());
         }
         if (CollUtil.isNotEmpty(whiteBlackList.getRemoveBlack())) {
             // 删除黑名单用户
-            String key = CacheConstant.BLACK_LIST_CHECK + whiteBlackList.getUid();
+            String key = CacheConstant.BLACK_LIST_CHECK + whiteBlackList.getId();
             redisTemplate.opsForSet().remove(key, whiteBlackList.getRemoveBlack().toArray());
         }
     }
@@ -99,17 +99,17 @@ public class SendAccessServiceImpl implements SendAccessService {
     @Override
     public WhiteBlackList queryGroupInfo(WhiteBlackList whiteBlackList) {
         WhiteBlackList reslut = new WhiteBlackList();
-        String key = CacheConstant.GROUP_CHAT_CONFIG + whiteBlackList.getUid();
+        String key = CacheConstant.GROUP_CHAT_CONFIG + whiteBlackList.getId();
         String type = redisTemplate.opsForValue().get(key);
         reslut.setType(type);
 
         // 白名单
-        key = CacheConstant.GROUP_CAN_SEND_MSG_CHECK + whiteBlackList.getUid();
+        key = CacheConstant.GROUP_CAN_SEND_MSG_CHECK + whiteBlackList.getId();
         Set<String> white = redisTemplate.opsForSet().members(key);
         reslut.setAddBlack(CollUtil.newArrayList(white));
 
         // 黑名单
-        key = CacheConstant.GROUP_DISABLE_SEND_MSG_CHECK + whiteBlackList.getUid();
+        key = CacheConstant.GROUP_DISABLE_SEND_MSG_CHECK + whiteBlackList.getId();
         Set<String> black = redisTemplate.opsForSet().members(key);
         reslut.setAddBlack(CollUtil.newArrayList(black));
 
@@ -120,28 +120,28 @@ public class SendAccessServiceImpl implements SendAccessService {
     public void updateGroup(WhiteBlackList whiteBlackList) {
         if (StrUtil.isNotEmpty(whiteBlackList.getType())) {
             // 黑白名单策略变更
-            String key = CacheConstant.GROUP_CHAT_CONFIG + whiteBlackList.getUid();
+            String key = CacheConstant.GROUP_CHAT_CONFIG + whiteBlackList.getId();
             redisTemplate.opsForValue().set(key, whiteBlackList.getType());
         }
 
         if (CollUtil.isNotEmpty(whiteBlackList.getAddWhite())) {
             // 新增白名单用户
-            String key = CacheConstant.GROUP_CAN_SEND_MSG_CHECK + whiteBlackList.getUid();
+            String key = CacheConstant.GROUP_CAN_SEND_MSG_CHECK + whiteBlackList.getId();
             redisTemplate.opsForSet().add(key, whiteBlackList.getAddWhite().toArray(new String[0]));
         }
         if (CollUtil.isNotEmpty(whiteBlackList.getAddBlack())) {
             // 新增黑名单用户
-            String key = CacheConstant.GROUP_DISABLE_SEND_MSG_CHECK + whiteBlackList.getUid();
+            String key = CacheConstant.GROUP_DISABLE_SEND_MSG_CHECK + whiteBlackList.getId();
             redisTemplate.opsForSet().add(key, whiteBlackList.getAddBlack().toArray(new String[0]));
         }
         if (CollUtil.isNotEmpty(whiteBlackList.getRemoveWhite())) {
             // 删除白名单用户
-            String key = CacheConstant.GROUP_CAN_SEND_MSG_CHECK + whiteBlackList.getUid();
+            String key = CacheConstant.GROUP_CAN_SEND_MSG_CHECK + whiteBlackList.getId();
             redisTemplate.opsForSet().remove(key, whiteBlackList.getRemoveWhite().toArray());
         }
         if (CollUtil.isNotEmpty(whiteBlackList.getRemoveBlack())) {
             // 删除黑名单用户
-            String key = CacheConstant.GROUP_DISABLE_SEND_MSG_CHECK + whiteBlackList.getUid();
+            String key = CacheConstant.GROUP_DISABLE_SEND_MSG_CHECK + whiteBlackList.getId();
             redisTemplate.opsForSet().remove(key, whiteBlackList.getRemoveBlack().toArray());
         }
 

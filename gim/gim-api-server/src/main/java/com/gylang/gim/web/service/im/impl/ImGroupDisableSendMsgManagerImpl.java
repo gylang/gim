@@ -45,7 +45,7 @@ public class ImGroupDisableSendMsgManagerImpl implements ImGroupDisableSendMsgMa
                 .build();
         // 同步等待结果
         AtomicReference<WhiteBlackList> result = new AtomicReference<>();
-        socketManager.sendAndWaitCallBack(msg, wb -> result.set(JSON.parseObject(wb.getContent(), WhiteBlackList.class)));
+        socketManager.sendAndWaitCallBack(msg, wb -> result.set(JSON.parseObject(wb.getContent(), WhiteBlackList.class)), 5000);
         return result.get();
     }
 }
