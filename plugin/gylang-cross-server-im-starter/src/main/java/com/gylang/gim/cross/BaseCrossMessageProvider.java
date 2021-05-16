@@ -1,8 +1,8 @@
 package com.gylang.gim.cross;
 
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.netty.sdk.domain.model.GIMSession;
-import com.gylang.netty.sdk.provider.CrossMessageProvider;
+import com.gylang.netty.sdk.api.domain.model.GIMSession;
+import com.gylang.netty.sdk.api.provider.CrossMessageProvider;
 
 /**
  * @author gylang

@@ -1,10 +1,10 @@
 package com.gylang.netty.sdk.handler.netty;
 
 import com.gylang.gim.api.constant.EventTypeConst;
-import com.gylang.netty.sdk.config.GimGlobalConfiguration;
-import com.gylang.netty.sdk.constant.GimDefaultConfigEnum;
-import com.gylang.netty.sdk.domain.model.GIMSession;
-import com.gylang.netty.sdk.event.EventProvider;
+import com.gylang.netty.sdk.api.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.api.constant.GimDefaultConfigEnum;
+import com.gylang.netty.sdk.api.domain.model.GIMSession;
+import com.gylang.netty.sdk.api.event.EventProvider;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;

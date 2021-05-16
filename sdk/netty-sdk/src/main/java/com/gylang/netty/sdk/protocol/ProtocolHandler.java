@@ -1,6 +1,6 @@
 package com.gylang.netty.sdk.protocol;
 
-import com.gylang.netty.sdk.common.AfterConfigInitialize;
+import com.gylang.netty.sdk.api.common.AfterConfigInitialize;
 
 /**
  * @author gylang

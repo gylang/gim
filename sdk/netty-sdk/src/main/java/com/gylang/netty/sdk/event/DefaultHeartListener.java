@@ -1,8 +1,8 @@
 package com.gylang.netty.sdk.event;
 
-import com.gylang.netty.sdk.event.message.IdleEvent;
-import com.gylang.netty.sdk.event.message.MessageEvent;
-import com.gylang.netty.sdk.event.message.MessageEventListener;
+import com.gylang.netty.sdk.api.event.message.IdleEvent;
+import com.gylang.netty.sdk.api.event.message.MessageEvent;
+import com.gylang.netty.sdk.api.event.message.MessageEventListener;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.List;

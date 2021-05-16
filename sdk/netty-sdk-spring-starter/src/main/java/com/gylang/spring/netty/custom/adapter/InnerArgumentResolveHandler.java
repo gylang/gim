@@ -3,7 +3,7 @@ package com.gylang.spring.netty.custom.adapter;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ClassUtil;
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.netty.sdk.domain.model.GIMSession;
+import com.gylang.netty.sdk.api.domain.model.GIMSession;
 import com.gylang.spring.netty.custom.handler.MethodArgumentResolverHandler;
 import com.gylang.spring.netty.custom.method.ControllerMethodMeta;
 import com.gylang.spring.netty.custom.method.MethodArgument;

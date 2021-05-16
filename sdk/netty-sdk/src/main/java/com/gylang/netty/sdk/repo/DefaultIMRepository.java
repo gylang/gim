@@ -1,7 +1,8 @@
 package com.gylang.netty.sdk.repo;
 
-import com.gylang.netty.sdk.annotation.IMRepository;
-import com.gylang.netty.sdk.domain.model.GIMSession;
+import com.gylang.netty.sdk.api.annotation.IMRepository;
+import com.gylang.netty.sdk.api.domain.model.GIMSession;
+import com.gylang.netty.sdk.api.repo.GIMSessionRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;

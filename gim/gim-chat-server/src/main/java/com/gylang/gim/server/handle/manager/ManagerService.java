@@ -1,7 +1,7 @@
 package com.gylang.gim.server.handle.manager;
 
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.netty.sdk.domain.model.GIMSession;
+import com.gylang.netty.sdk.api.domain.model.GIMSession;
 
 /**
  * @author gylang

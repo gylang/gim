@@ -4,12 +4,12 @@ package com.gylang.gim.web.process.controller;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.enums.ChatType;
 import com.gylang.gim.web.util.KeyLock;
-import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.domain.model.BaseSessionGroup;
-import com.gylang.netty.sdk.domain.model.GIMSession;
-import com.gylang.netty.sdk.handler.GimController;
-import com.gylang.netty.sdk.provider.MessageProvider;
-import com.gylang.netty.sdk.repo.GIMGroupSessionRepository;
+import com.gylang.netty.sdk.api.annotation.NettyHandler;
+import com.gylang.netty.sdk.api.domain.model.BaseSessionGroup;
+import com.gylang.netty.sdk.api.domain.model.GIMSession;
+import com.gylang.netty.sdk.api.handler.GimController;
+import com.gylang.netty.sdk.api.provider.MessageProvider;
+import com.gylang.netty.sdk.api.repo.GIMGroupSessionRepository;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;

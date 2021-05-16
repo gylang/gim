@@ -4,11 +4,13 @@ import com.gylang.gim.api.constant.qos.QosConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.message.sys.AckMessage;
 import com.gylang.gim.api.enums.ChatType;
-import com.gylang.netty.sdk.common.InvokeFinished;
-import com.gylang.netty.sdk.common.ObjectWrap;
-import com.gylang.netty.sdk.config.GimGlobalConfiguration;
-import com.gylang.netty.sdk.domain.model.GIMSession;
-import com.gylang.netty.sdk.handler.BizRequestAdapter;
+import com.gylang.netty.sdk.api.common.InvokeFinished;
+import com.gylang.netty.sdk.api.common.ObjectWrap;
+import com.gylang.netty.sdk.api.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.api.domain.model.GIMSession;
+import com.gylang.netty.sdk.api.handler.BizRequestAdapter;
+import com.gylang.netty.sdk.api.handler.qos.IMessageReceiveQosHandler;
+import com.gylang.netty.sdk.api.handler.qos.IMessageSenderQosHandler;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 

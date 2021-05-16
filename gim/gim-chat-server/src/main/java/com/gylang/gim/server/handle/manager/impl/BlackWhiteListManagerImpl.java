@@ -9,7 +9,7 @@ import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.manager.WhiteBlackList;
 import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.server.handle.manager.ManagerService;
-import com.gylang.netty.sdk.domain.model.GIMSession;
+import com.gylang.netty.sdk.api.domain.model.GIMSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;

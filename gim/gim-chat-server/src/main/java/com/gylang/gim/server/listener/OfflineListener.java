@@ -1,11 +1,11 @@
 package com.gylang.gim.server.listener;
 
 import com.gylang.gim.api.constant.EventTypeConst;
-import com.gylang.netty.sdk.domain.model.GIMSession;
-import com.gylang.netty.sdk.event.message.MessageEvent;
-import com.gylang.netty.sdk.event.message.MessageEventListener;
-import com.gylang.netty.sdk.repo.GIMSessionRepository;
-import com.gylang.netty.sdk.util.LocalSessionHolderUtil;
+import com.gylang.netty.sdk.api.domain.model.GIMSession;
+import com.gylang.netty.sdk.api.event.message.MessageEvent;
+import com.gylang.netty.sdk.api.event.message.MessageEventListener;
+import com.gylang.netty.sdk.api.repo.GIMSessionRepository;
+import com.gylang.netty.sdk.api.util.LocalSessionHolderUtil;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;

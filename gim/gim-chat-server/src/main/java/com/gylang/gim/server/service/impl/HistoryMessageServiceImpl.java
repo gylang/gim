@@ -3,7 +3,7 @@ package com.gylang.gim.server.service.impl;
 import com.gylang.gim.api.constant.CacheConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.server.service.HistoryMessageService;
-import com.gylang.netty.sdk.util.MsgIdUtil;
+import com.gylang.netty.sdk.api.util.MsgIdUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;

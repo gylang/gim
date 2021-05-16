@@ -2,8 +2,8 @@ package com.gylang.netty.sdk.handler.netty;
 
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.enums.ChatType;
-import com.gylang.netty.sdk.domain.model.GIMSession;
-import com.gylang.netty.sdk.handler.IMessageRouter;
+import com.gylang.netty.sdk.api.domain.model.GIMSession;
+import com.gylang.netty.sdk.api.handler.IMessageRouter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;

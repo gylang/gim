@@ -6,9 +6,10 @@ import com.gylang.gim.api.constant.qos.QosConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.message.sys.AckMessage;
 import com.gylang.gim.api.enums.ChatType;
-import com.gylang.netty.sdk.config.GimGlobalConfiguration;
-import com.gylang.netty.sdk.domain.model.GIMSession;
-import com.gylang.netty.sdk.repo.GIMSessionRepository;
+import com.gylang.netty.sdk.api.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.api.domain.model.GIMSession;
+import com.gylang.netty.sdk.api.handler.qos.IMessageReceiveQosHandler;
+import com.gylang.netty.sdk.api.repo.GIMSessionRepository;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 

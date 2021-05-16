@@ -1,11 +1,11 @@
 package com.gylang.chat;
 
 import cn.hutool.core.collection.CollUtil;
-import com.gylang.netty.sdk.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.api.config.GimGlobalConfiguration;
 import com.gylang.netty.sdk.conveter.JsonConverter;
 import com.gylang.netty.sdk.event.DefaultEventProvider;
-import com.gylang.netty.sdk.event.EventContext;
-import com.gylang.netty.sdk.handler.BizRequestAdapter;
+import com.gylang.netty.sdk.api.event.EventContext;
+import com.gylang.netty.sdk.api.handler.BizRequestAdapter;
 import com.gylang.netty.sdk.handler.DefaultMessageRouter;
 import com.gylang.netty.sdk.handler.adapter.DefaultGimControllerAdapter;
 import com.gylang.netty.sdk.handler.adapter.DefaultRequestHandlerAdapter;

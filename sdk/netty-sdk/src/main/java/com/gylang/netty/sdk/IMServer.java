@@ -1,8 +1,8 @@
 package com.gylang.netty.sdk;
 
-import com.gylang.netty.sdk.config.GimGlobalConfiguration;
-import com.gylang.netty.sdk.constant.GimDefaultConfigEnum;
-import com.gylang.netty.sdk.initializer.CustomInitializer;
+import com.gylang.netty.sdk.api.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.api.constant.GimDefaultConfigEnum;
+import com.gylang.netty.sdk.api.initializer.CustomInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;

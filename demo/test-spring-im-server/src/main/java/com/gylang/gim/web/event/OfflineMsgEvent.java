@@ -1,7 +1,7 @@
 package com.gylang.gim.web.event;
 
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.netty.sdk.event.message.MessageEventListener;
+import com.gylang.netty.sdk.api.event.message.MessageEventListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

@@ -1,8 +1,9 @@
 package com.gylang.netty.sdk.repo;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.gylang.netty.sdk.annotation.IMGroupRepository;
-import com.gylang.netty.sdk.domain.model.BaseSessionGroup;
+import com.gylang.netty.sdk.api.annotation.IMGroupRepository;
+import com.gylang.netty.sdk.api.domain.model.BaseSessionGroup;
+import com.gylang.netty.sdk.api.repo.GIMGroupSessionRepository;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

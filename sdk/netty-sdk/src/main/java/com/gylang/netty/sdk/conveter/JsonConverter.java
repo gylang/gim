@@ -4,6 +4,7 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ClassUtil;
 import com.alibaba.fastjson.JSON;
 import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.netty.sdk.api.conveter.DataConverter;
 
 /**
  * todo json 数据转换

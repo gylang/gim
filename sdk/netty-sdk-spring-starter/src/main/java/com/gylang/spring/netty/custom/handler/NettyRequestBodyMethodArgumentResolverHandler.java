@@ -4,7 +4,7 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ClassUtil;
 import com.alibaba.fastjson.JSON;
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.netty.sdk.domain.model.GIMSession;
+import com.gylang.netty.sdk.api.domain.model.GIMSession;
 import com.gylang.spring.netty.annotation.NettyBody;
 import com.gylang.spring.netty.custom.method.ControllerMethodMeta;
 import com.gylang.spring.netty.custom.method.MethodArgument;

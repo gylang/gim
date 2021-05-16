@@ -1,6 +1,6 @@
 package com.gylang.netty.sdk.protocol;
 
-import com.gylang.netty.sdk.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.api.config.GimGlobalConfiguration;
 
 /**
  * @author gylang

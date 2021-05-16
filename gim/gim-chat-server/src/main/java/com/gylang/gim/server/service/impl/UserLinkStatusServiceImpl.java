@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.gylang.gim.api.constant.CacheConstant;
 import com.gylang.gim.api.domain.UserLinkStatus;
 import com.gylang.gim.server.service.UserLinkStatusService;
-import com.gylang.netty.sdk.domain.model.GIMSession;
+import com.gylang.netty.sdk.api.domain.model.GIMSession;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 

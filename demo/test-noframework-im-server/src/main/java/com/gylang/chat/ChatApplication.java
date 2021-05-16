@@ -2,9 +2,9 @@ package com.gylang.chat;
 
 import cn.hutool.core.collection.CollUtil;
 import com.gylang.netty.sdk.IMServer;
-import com.gylang.netty.sdk.config.GimGlobalConfiguration;
-import com.gylang.netty.sdk.config.DefaultGimConfigurationInitializerHelper;
-import com.gylang.netty.sdk.util.ObjectWrapUtil;
+import com.gylang.netty.sdk.api.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.api.config.DefaultGimConfigurationInitializerHelper;
+import com.gylang.netty.sdk.api.util.ObjectWrapUtil;
 
 /**
  * @author gylang

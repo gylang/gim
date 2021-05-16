@@ -1,8 +1,8 @@
 package com.gylang.gim.server.repo;
 
 import com.gylang.gim.api.constant.CacheConstant;
-import com.gylang.netty.sdk.domain.model.BaseSessionGroup;
-import com.gylang.netty.sdk.repo.GIMGroupSessionRepository;
+import com.gylang.netty.sdk.api.domain.model.BaseSessionGroup;
+import com.gylang.netty.sdk.api.repo.GIMGroupSessionRepository;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 

@@ -1,8 +1,8 @@
 package com.gylang.spring.netty.custom.register;
 
-import com.gylang.netty.sdk.common.MethodWrap;
-import com.gylang.netty.sdk.common.ObjectWrap;
-import com.gylang.netty.sdk.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.api.common.MethodWrap;
+import com.gylang.netty.sdk.api.common.ObjectWrap;
+import com.gylang.netty.sdk.api.config.GimGlobalConfiguration;
 import com.gylang.spring.netty.annotation.SpringNettyController;
 import com.gylang.spring.netty.custom.reslove.MethodArgumentResolver;
 import lombok.extern.slf4j.Slf4j;

@@ -1,10 +1,10 @@
 package com.gylang.spring.netty.custom.register;
 
 import cn.hutool.core.collection.CollUtil;
-import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.common.ObjectWrap;
-import com.gylang.netty.sdk.config.GimGlobalConfiguration;
-import com.gylang.netty.sdk.handler.GimController;
+import com.gylang.netty.sdk.api.annotation.NettyHandler;
+import com.gylang.netty.sdk.api.common.ObjectWrap;
+import com.gylang.netty.sdk.api.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.api.handler.GimController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;

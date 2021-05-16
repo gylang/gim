@@ -1,10 +1,11 @@
 package com.gylang.netty.sdk.initializer;
 
+import com.gylang.netty.sdk.api.initializer.CustomInitializer;
 import com.gylang.netty.sdk.coder.WebJsonMessageDecoder;
 import com.gylang.netty.sdk.coder.WebJsonMessageEncoder;
-import com.gylang.netty.sdk.config.GimGlobalConfiguration;
-import com.gylang.netty.sdk.constant.GimDefaultConfigEnum;
-import com.gylang.netty.sdk.handler.IMessageRouter;
+import com.gylang.netty.sdk.api.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.api.constant.GimDefaultConfigEnum;
+import com.gylang.netty.sdk.api.handler.IMessageRouter;
 import com.gylang.netty.sdk.handler.netty.HeartCheckHandler;
 import com.gylang.netty.sdk.handler.netty.JsonDispatchHandler;
 import io.netty.channel.ChannelPipeline;

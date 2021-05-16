@@ -1,6 +1,6 @@
 package com.gylang.grtc.domain;
 
-import com.gylang.netty.sdk.domain.model.GIMSession;
+import com.gylang.netty.sdk.api.domain.model.GIMSession;
 import lombok.Data;
 
 import java.util.Map;

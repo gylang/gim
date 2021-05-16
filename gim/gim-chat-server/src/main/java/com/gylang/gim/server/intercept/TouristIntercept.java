@@ -2,10 +2,10 @@ package com.gylang.gim.server.intercept;
 
 import cn.hutool.core.util.StrUtil;
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.netty.sdk.common.AfterConfigInitialize;
-import com.gylang.netty.sdk.config.GimGlobalConfiguration;
-import com.gylang.netty.sdk.domain.model.GIMSession;
-import com.gylang.netty.sdk.intercept.NettyIntercept;
+import com.gylang.netty.sdk.api.common.AfterConfigInitialize;
+import com.gylang.netty.sdk.api.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.api.domain.model.GIMSession;
+import com.gylang.netty.sdk.api.intercept.NettyIntercept;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;

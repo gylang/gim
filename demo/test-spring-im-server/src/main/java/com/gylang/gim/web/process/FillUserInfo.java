@@ -1,9 +1,9 @@
 package com.gylang.gim.web.process;
 
 import cn.hutool.core.util.StrUtil;
-import com.gylang.netty.sdk.domain.model.GIMSession;
-import com.gylang.netty.sdk.repo.GIMSessionRepository;
-import com.gylang.netty.sdk.repo.NettyUserInfoFillHandler;
+import com.gylang.netty.sdk.api.domain.model.GIMSession;
+import com.gylang.netty.sdk.api.repo.GIMSessionRepository;
+import com.gylang.netty.sdk.api.repo.NettyUserInfoFillHandler;
 import io.netty.channel.Channel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.ApplicationContext;

@@ -4,9 +4,9 @@ import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.api.enums.ChatType;
-import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.domain.model.GIMSession;
-import com.gylang.netty.sdk.handler.IMRequestHandler;
+import com.gylang.netty.sdk.api.annotation.NettyHandler;
+import com.gylang.netty.sdk.api.domain.model.GIMSession;
+import com.gylang.netty.sdk.api.handler.IMRequestHandler;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 

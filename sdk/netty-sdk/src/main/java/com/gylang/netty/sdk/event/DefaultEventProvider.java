@@ -1,6 +1,8 @@
 package com.gylang.netty.sdk.event;
 
-import com.gylang.netty.sdk.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.api.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.api.event.EventContext;
+import com.gylang.netty.sdk.api.event.EventProvider;
 import lombok.Data;
 
 import java.util.concurrent.ThreadPoolExecutor;

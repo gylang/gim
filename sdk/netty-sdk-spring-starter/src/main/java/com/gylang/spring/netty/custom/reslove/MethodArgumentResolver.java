@@ -1,9 +1,9 @@
 package com.gylang.spring.netty.custom.reslove;
 
 import cn.hutool.core.collection.CollUtil;
-import com.gylang.netty.sdk.annotation.NettyMapping;
-import com.gylang.netty.sdk.common.MethodWrap;
-import com.gylang.netty.sdk.common.ParameterWrap;
+import com.gylang.netty.sdk.api.annotation.NettyMapping;
+import com.gylang.netty.sdk.api.common.MethodWrap;
+import com.gylang.netty.sdk.api.common.ParameterWrap;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;

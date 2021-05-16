@@ -6,11 +6,11 @@ import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.api.domain.push.PushMessage;
 import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.api.enums.ChatType;
-import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.domain.model.GIMSession;
-import com.gylang.netty.sdk.handler.IMRequestHandler;
-import com.gylang.netty.sdk.provider.MessageProvider;
-import com.gylang.netty.sdk.util.MsgIdUtil;
+import com.gylang.netty.sdk.api.annotation.NettyHandler;
+import com.gylang.netty.sdk.api.domain.model.GIMSession;
+import com.gylang.netty.sdk.api.handler.IMRequestHandler;
+import com.gylang.netty.sdk.api.provider.MessageProvider;
+import com.gylang.netty.sdk.api.util.MsgIdUtil;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;

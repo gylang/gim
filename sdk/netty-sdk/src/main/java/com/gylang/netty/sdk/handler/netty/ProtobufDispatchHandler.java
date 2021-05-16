@@ -1,10 +1,10 @@
-//package com.gylang.netty.sdk.handler.netty;
+//package com.gylang.netty.sdk.api.handler.netty;
 //
-//import com.gylang.netty.sdk.config.NettyConfiguration;
+//import com.gylang.netty.sdk.api.config.NettyConfiguration;
 //import com.gylang.gim.api.domain.MessageWrap;
-//import com.gylang.netty.sdk.domain.model.IMSession;
-//import com.gylang.netty.sdk.domain.proto.MessageWrapProto;
-//import com.gylang.netty.sdk.handler.DispatchAdapterHandler;
+//import com.gylang.netty.sdk.api.domain.model.IMSession;
+//import com.gylang.netty.sdk.api.domain.proto.MessageWrapProto;
+//import com.gylang.netty.sdk.api.handler.DispatchAdapterHandler;
 //import io.netty.channel.ChannelHandlerContext;
 //import io.netty.channel.SimpleChannelInboundHandler;
 //import lombok.extern.slf4j.Slf4j;

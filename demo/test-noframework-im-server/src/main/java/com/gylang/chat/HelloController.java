@@ -1,8 +1,8 @@
 package com.gylang.chat;
 
-import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.domain.model.GIMSession;
-import com.gylang.netty.sdk.handler.GimController;
+import com.gylang.netty.sdk.api.annotation.NettyHandler;
+import com.gylang.netty.sdk.api.domain.model.GIMSession;
+import com.gylang.netty.sdk.api.handler.GimController;
 import lombok.extern.slf4j.Slf4j;
 
 /**

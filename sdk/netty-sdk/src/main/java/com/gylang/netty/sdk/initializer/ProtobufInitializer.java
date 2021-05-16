@@ -1,12 +1,12 @@
-//package com.gylang.netty.sdk.initializer;
+//package com.gylang.netty.sdk.api.initializer;
 //
-//import com.gylang.netty.sdk.config.NettyConfiguration;
-//import com.gylang.netty.sdk.constant.NettyConfigEnum;
-//import com.gylang.netty.sdk.domain.proto.MessageWrapProto;
-//import com.gylang.netty.sdk.event.EventProvider;
-//import com.gylang.netty.sdk.handler.DispatchAdapterHandler;
-//import com.gylang.netty.sdk.handler.netty.HeartCheckHandler;
-//import com.gylang.netty.sdk.handler.netty.ProtobufDispatchHandler;
+//import com.gylang.netty.sdk.api.config.NettyConfiguration;
+//import com.gylang.netty.sdk.api.constant.NettyConfigEnum;
+//import com.gylang.netty.sdk.api.domain.proto.MessageWrapProto;
+//import com.gylang.netty.sdk.api.event.EventProvider;
+//import com.gylang.netty.sdk.api.handler.DispatchAdapterHandler;
+//import com.gylang.netty.sdk.api.handler.netty.HeartCheckHandler;
+//import com.gylang.netty.sdk.api.handler.netty.ProtobufDispatchHandler;
 //import io.netty.channel.ChannelHandlerContext;
 //import io.netty.channel.ChannelPipeline;
 //import io.netty.channel.socket.SocketChannel;

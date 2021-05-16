@@ -3,11 +3,11 @@ package com.gylang.gim.server.intercept;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.common.ResponseMessage;
 import com.gylang.gim.api.enums.ChatType;
-import com.gylang.netty.sdk.common.AfterConfigInitialize;
-import com.gylang.netty.sdk.config.GimGlobalConfiguration;
-import com.gylang.netty.sdk.domain.model.GIMSession;
-import com.gylang.netty.sdk.intercept.NettyIntercept;
-import com.gylang.netty.sdk.provider.MessageProvider;
+import com.gylang.netty.sdk.api.common.AfterConfigInitialize;
+import com.gylang.netty.sdk.api.config.GimGlobalConfiguration;
+import com.gylang.netty.sdk.api.domain.model.GIMSession;
+import com.gylang.netty.sdk.api.intercept.NettyIntercept;
+import com.gylang.netty.sdk.api.provider.MessageProvider;
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.stereotype.Component;
 

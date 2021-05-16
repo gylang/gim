@@ -1,8 +1,8 @@
 package com.gylang.spring.netty.custom.adapter;
 
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.netty.sdk.common.InvokeFinished;
-import com.gylang.netty.sdk.domain.model.GIMSession;
+import com.gylang.netty.sdk.api.common.InvokeFinished;
+import com.gylang.netty.sdk.api.domain.model.GIMSession;
 import com.gylang.spring.netty.custom.handler.MethodArgumentResolverHandler;
 import com.gylang.spring.netty.custom.method.MethodArgumentValue;
 import io.netty.channel.ChannelHandlerContext;

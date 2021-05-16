@@ -1,7 +1,7 @@
 package com.gylang.chat;
 
-import com.gylang.netty.sdk.event.message.MessageEvent;
-import com.gylang.netty.sdk.event.message.MessageEventListener;
+import com.gylang.netty.sdk.api.event.message.MessageEvent;
+import com.gylang.netty.sdk.api.event.message.MessageEventListener;
 import lombok.extern.slf4j.Slf4j;
 
 /**

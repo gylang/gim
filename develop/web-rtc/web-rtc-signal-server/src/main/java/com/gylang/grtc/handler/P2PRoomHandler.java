@@ -2,10 +2,10 @@ package com.gylang.grtc.handler;
 
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.grtc.constant.SignalCmd;
-import com.gylang.netty.sdk.annotation.NettyHandler;
-import com.gylang.netty.sdk.domain.model.GIMSession;
-import com.gylang.netty.sdk.handler.IMRequestHandler;
-import com.gylang.netty.sdk.provider.MessageProvider;
+import com.gylang.netty.sdk.api.annotation.NettyHandler;
+import com.gylang.netty.sdk.api.domain.model.GIMSession;
+import com.gylang.netty.sdk.api.handler.IMRequestHandler;
+import com.gylang.netty.sdk.api.provider.MessageProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
