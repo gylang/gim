@@ -4,6 +4,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 同步器
+ *
  * @author gylang
  * data 2021/5/16
  */
@@ -24,9 +26,7 @@ public class SyncCall<T> implements GimCallBack<T> {
     }
 
     public void await() throws InterruptedException {
-        System.out.println("阻塞等待");
         countDownLatch.await();
-        System.out.println("等待完成");
 
     }
 
