@@ -22,7 +22,7 @@ public class Role extends InnerBaseDO {
     /**
      * 用户id
      */    @TableField("uid") 
-    private Long uid;
+    private String uid;
                
     /**
      * 角色类型

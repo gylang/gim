@@ -5,6 +5,7 @@ import com.gylang.gim.api.dto.ImUserFriendDTO;
 import com.gylang.gim.api.dto.UserFriendVO;
 import com.gylang.gim.web.common.mybatis.UserHelper;
 import com.gylang.gim.web.entity.UserApply;
+import com.gylang.gim.web.service.ImGroupService;
 import com.gylang.gim.web.service.biz.BizFriendService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

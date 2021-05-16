@@ -24,7 +24,7 @@ public class PtUserInfo extends InnerBaseDO {
      * 用户id
      */
     @TableField("uid")
-    private Long uid;
+    private String uid;
 
     /**
      * 用户名称

@@ -22,12 +22,12 @@ public class ImUserGroup extends InnerBaseDO {
     /**
      * 用户id
      */    @TableField("uid") 
-    private Long uid;
+    private String uid;
                
     /**
      * 好友分组id
      */    @TableField("group_id") 
-    private Long groupId;
+    private String groupId;
                
     /**
      * 好友备注, 默认为添加好友时的名称

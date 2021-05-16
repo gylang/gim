@@ -36,7 +36,7 @@ public class ImUserFriend extends InnerBaseDO {
      * 好友分组id
      */
     @TableField("group_id")
-    private Long groupId;
+    private String groupId;
 
     /**
      * 好友备注, 默认为添加好友时的名称

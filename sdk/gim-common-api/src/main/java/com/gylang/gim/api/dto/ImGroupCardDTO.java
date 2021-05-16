@@ -31,7 +31,7 @@ public class ImGroupCardDTO extends BaseDTO {
      * 群主
      */    
     
-    private Long groupMaster;
+    private String groupMaster;
 
     
     /**
@@ -73,14 +73,14 @@ public class ImGroupCardDTO extends BaseDTO {
      * 创建人
      */    
     
-    private Long createBy;
+    private String createBy;
 
     
     /**
      * 修改人
      */    
     
-    private Long modifyBy;
+    private String modifyBy;
 
     
     /**

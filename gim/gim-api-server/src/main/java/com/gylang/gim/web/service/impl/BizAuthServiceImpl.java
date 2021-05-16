@@ -24,6 +24,7 @@ import com.gylang.gim.web.entity.PtUserInfo;
 import com.gylang.gim.web.service.PtUserInfoService;
 import com.gylang.gim.web.service.PtUserService;
 import com.gylang.gim.web.service.biz.BizAuthService;
+import com.gylang.gim.web.service.im.ImUserManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,6 +47,8 @@ public class BizAuthServiceImpl implements BizAuthService {
     private CacheManager cacheManager;
     @Resource
     private SocketManager socketManager;
+    @Resource
+    private ImUserManager imUserManager;
 
     @Override
     public CommonResult<LoginResponse> login(@RequestBody LoginRequest request) {
@@ -83,7 +86,7 @@ public class BizAuthServiceImpl implements BizAuthService {
 
         cacheManager.set(token, userCache, 6 * 60 * 60L);
         userCache.setToken(token);
-        pushNotify2ImServer(loginResponse);
+        imUserManager.imUserAuth(loginResponse);
         return CommonResult.ok(loginResponse);
     }
 
@@ -118,17 +121,11 @@ public class BizAuthServiceImpl implements BizAuthService {
         ptUserInfo.setId(null);
         save = save && userInfoService.save(ptUserInfo);
         Asserts.isTrue(save, "注册失败");
+        // 推送用户注册 im服务生成socket用户信息
+        UserCache userCache = MappingUtil.map(request, new UserCache());
+        imUserManager.addUser(userCache);
         return CommonResult.ok();
     }
 
-    @Override
-    public void pushNotify2ImServer(LoginResponse loginResponse) {
 
-        MessageWrap messageWrap = new MessageWrap();
-        messageWrap.setQos(1);
-        messageWrap.setType(ChatType.MANAGER);
-        messageWrap.setCmd(ManagerCmd.USER_APPLY_FOR_TOKEN_MANAGER);
-        messageWrap.setContent(JSON.toJSONString(loginResponse));
-        socketManager.send(messageWrap);
-    }
 }

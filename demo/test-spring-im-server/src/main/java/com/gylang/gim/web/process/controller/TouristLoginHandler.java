@@ -33,14 +33,14 @@ public class TouristLoginHandler implements GimController<String> {
 
         me.setAccount(requestBody);
         BaseSessionGroup defaultGroup = getAndCreateGroup(me, groupSessionRepository);
-        boolean join = defaultGroup.join(me);
+        boolean join = groupSessionRepository.addMember(defaultGroup.getGroupId(), requestBody);
         if (join) {
             MessageWrap messageWrap = new MessageWrap();
             messageWrap.setSender(me.getAccount());
             messageWrap.setContent(requestBody + "加入群聊组");
             messageProvider.sendGroup(me, "1111", messageWrap);
 
-        return messageWrap;
+            return messageWrap;
         }
         return null;
     }
@@ -59,7 +59,8 @@ public class TouristLoginHandler implements GimController<String> {
             // 前面的线程可以能已经创建完聊天组, 所以需要再次判断
             defaultGroup = groupRepository.findGroupInfo("111");
             if (null == defaultGroup) {
-                defaultGroup = new BaseSessionGroup("default", me.getAccount(), 1000);
+                // "default", me.getAccount(), 1000
+                defaultGroup = new BaseSessionGroup();
                 groupRepository.add(defaultGroup);
             }
         } finally {

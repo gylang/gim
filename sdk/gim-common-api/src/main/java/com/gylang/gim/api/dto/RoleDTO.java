@@ -24,7 +24,7 @@ public class RoleDTO extends BaseDTO {
      * 用户id
      */    
     
-    private Long uid;
+    private String uid;
 
     
     /**
@@ -52,14 +52,14 @@ public class RoleDTO extends BaseDTO {
      * 创建人
      */    
     
-    private Long createBy;
+    private String createBy;
 
     
     /**
      * 修改人
      */    
     
-    private Long modifyBy;
+    private String modifyBy;
 
     
     /**

@@ -18,19 +18,19 @@ public class UserFriendVO extends BaseDTO {
      * 用户id
      */
 
-    private Long uid;
+    private String uid;
 
     /**
      * 好友id
      */
 
-    private Long friendId;
+    private String friendId;
 
     /**
      * 好友分组id
      */
 
-    private Long groupId;
+    private String groupId;
 
     /**
      * 好友备注, 默认为添加好友时的名称

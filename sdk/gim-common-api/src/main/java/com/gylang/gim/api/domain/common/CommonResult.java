@@ -45,4 +45,11 @@ public class CommonResult<T> {
         result.setMsg(msg);
         return result;
     }
+
+    public static CommonResult<Boolean> auto(Boolean code) {
+        if (Boolean.TRUE.equals(code)) {
+            return ok(code);
+        }
+        return fail(BaseResultCode.PARAMS_ERROR);
+    }
 }

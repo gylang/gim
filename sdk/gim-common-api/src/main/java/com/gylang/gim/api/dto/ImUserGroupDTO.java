@@ -23,14 +23,14 @@ public class ImUserGroupDTO extends BaseDTO {
      * 用户id
      */
 
-    private Long uid;
+    private String uid;
 
 
     /**
      * 好友分组id
      */
 
-    private Long groupId;
+    private String groupId;
 
 
     /**
@@ -65,14 +65,14 @@ public class ImUserGroupDTO extends BaseDTO {
      * 创建人
      */
 
-    private Long createBy;
+    private String createBy;
 
 
     /**
      * 修改人
      */
 
-    private Long modifyBy;
+    private String modifyBy;
 
 
     /**

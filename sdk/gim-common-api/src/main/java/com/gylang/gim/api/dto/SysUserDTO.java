@@ -73,14 +73,14 @@ public class SysUserDTO extends BaseDTO {
      * 创建人
      */    
     
-    private Long createBy;
+    private String createBy;
 
     
     /**
      * 修改人
      */    
     
-    private Long modifyBy;
+    private String modifyBy;
 
     
     /**

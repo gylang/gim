@@ -1,5 +1,6 @@
 package com.gylang.gim.server.handle.manager.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.gylang.gim.api.constant.CacheConstant;
@@ -35,22 +36,22 @@ public class GroupDisableSendMsgManagerImpl implements ManagerService {
             redisTemplate.opsForValue().set(key, whiteBlackList.getType());
         }
 
-        if (BlackWhiteListConstant.WHITE_ADD.equals(messageWrap.getCode())) {
+        if (CollUtil.isNotEmpty(whiteBlackList.getAddWhite())) {
             // 新增白名单用户
             String key = CacheConstant.GROUP_CAN_SEND_MSG_CHECK + whiteBlackList.getUid();
             redisTemplate.opsForSet().add(key, whiteBlackList.getAddWhite().toArray(new String[0]));
         }
-        if (BlackWhiteListConstant.BLACK_ADD.equals(messageWrap.getCode())) {
+        if (CollUtil.isNotEmpty(whiteBlackList.getAddBlack())) {
             // 新增黑名单用户
             String key = CacheConstant.GROUP_DISABLE_SEND_MSG_CHECK + whiteBlackList.getUid();
             redisTemplate.opsForSet().add(key, whiteBlackList.getAddBlack().toArray(new String[0]));
         }
-        if (BlackWhiteListConstant.WHITE_REMOVE.equals(messageWrap.getCode())) {
+        if (CollUtil.isNotEmpty(whiteBlackList.getRemoveWhite())) {
             // 删除白名单用户
             String key = CacheConstant.GROUP_CAN_SEND_MSG_CHECK + whiteBlackList.getUid();
             redisTemplate.opsForSet().remove(key, whiteBlackList.getRemoveWhite().toArray());
         }
-        if (BlackWhiteListConstant.BLACK_REMOVE.equals(messageWrap.getCode())) {
+        if (CollUtil.isNotEmpty(whiteBlackList.getRemoveBlack())) {
             // 删除黑名单用户
             String key = CacheConstant.GROUP_DISABLE_SEND_MSG_CHECK + whiteBlackList.getUid();
             redisTemplate.opsForSet().remove(key, whiteBlackList.getRemoveBlack().toArray());

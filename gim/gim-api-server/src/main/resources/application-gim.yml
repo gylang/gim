@@ -3,3 +3,4 @@ gim:
   ip: 127.0.01
   username: webAdmin
   password: 123456
+  mode: standard

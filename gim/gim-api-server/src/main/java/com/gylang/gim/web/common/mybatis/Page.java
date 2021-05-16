@@ -2,11 +2,13 @@ package com.gylang.gim.web.common.mybatis;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.api.R;
 import com.gylang.gim.api.domain.common.PageResponse;
 import com.gylang.gim.web.common.util.MappingUtil;
 import lombok.Data;
 
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * @author gylang
@@ -101,5 +103,22 @@ public class Page<T> implements IPage<T> {
         pageResponse.setTotal(this.getTotal());
         pageResponse.setPages(this.getPages());
         return pageResponse;
+    }
+
+    public <R> Page<R> converterQuery(Function<T, R> func) {
+        Page<R> page = new Page<>();
+        page.setCurrent(this.getCurrent());
+        if (null != this.getParam()) {
+            page.setParam(func.apply(this.getParam()));
+        }
+        page.setSize(this.getSize());
+        page.setTotal(this.getTotal());
+        page.setPages(this.getPages());
+        page.setOrderList(this.getOrderList());
+        return page;
+    }
+
+    public <R> Page<R> converterQuery(Class<R> clazz) {
+        return converterQuery(p -> MappingUtil.map(p, clazz));
     }
 }

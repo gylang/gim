@@ -30,10 +30,5 @@ public interface BizAuthService {
      */
     CommonResult<Boolean> registry(RegistryRequest request);
 
-    /**
-     * 通知im服务
-     *
-     * @param userCache
-     */
-    void pushNotify2ImServer(LoginResponse userCache);
+
 }

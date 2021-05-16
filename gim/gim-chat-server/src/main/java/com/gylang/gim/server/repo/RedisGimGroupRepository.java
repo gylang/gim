@@ -26,6 +26,7 @@ public class RedisGimGroupRepository implements GIMGroupSessionRepository {
     @Override
     public void add(BaseSessionGroup group) {
         redisTemplate.opsForValue().set(CacheConstant.GROUP_INFO + group.getGroupId(), group);
+        addMember(group.getGroupId(), group.getMaster());
     }
 
     @Override

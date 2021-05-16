@@ -23,7 +23,7 @@ public class UserConfig extends InnerBaseDO {
     /**
      * 用户id
      */    @TableField("uid") 
-    private Long uid;
+    private String uid;
                
     /**
      * 是否接收允许陌生人信息

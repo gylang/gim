@@ -6,6 +6,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.gylang.gim.api.constant.cmd.ManagerCmd;
 import com.gylang.gim.api.constant.mamager.GroupConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.gim.api.domain.entity.GroupInfo;
 import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.server.handle.manager.ManagerService;
@@ -34,47 +35,49 @@ public class GroupManagerImpl implements ManagerService {
         String code = messageWrap.getCode();
         if (GroupConstant.CREATE.equals(code)) {
             // 新增群组
-            BaseSessionGroup group = JSON.parseObject(content, BaseSessionGroup.class);
-            group.setMemberList(null);
-            groupSessionRepository.add(group);
-
+            GroupInfo group = JSON.parseObject(content, GroupInfo.class);
+            BaseSessionGroup sessionGroup = toGroup(group);
+            groupSessionRepository.add(sessionGroup);
         } else if (GroupConstant.DEL.equals(code)) {
             // 删除群组
-            BaseSessionGroup group = JSON.parseObject(content, BaseSessionGroup.class);
-            group.setMemberList(null);
-            groupSessionRepository.add(group);
-        } else if (GroupConstant.DEL.equals(code)) {
-            // 删除群组
-            BaseSessionGroup group = JSON.parseObject(content, BaseSessionGroup.class);
-            group.setMemberList(null);
-            groupSessionRepository.del(group);
+            GroupInfo group = JSON.parseObject(content, GroupInfo.class);
+            BaseSessionGroup sessionGroup = toGroup(group);
+            groupSessionRepository.del(sessionGroup);
         } else if (GroupConstant.UPDATE.equals(code)) {
             // 修改群组信息
-            BaseSessionGroup group = JSON.parseObject(content, BaseSessionGroup.class);
+            GroupInfo group = JSON.parseObject(content, GroupInfo.class);
             if (null == groupSessionRepository.findGroupInfo(group.getGroupId())) {
                 ReplyMessage.reply(messageWrap, BaseResultCode.INVALID_INPUT.getCode(), "群组不存在");
             }
-            group.setMemberList(null);
-            groupSessionRepository.add(group);
+            BaseSessionGroup sessionGroup = toGroup(group);
+            groupSessionRepository.add(sessionGroup);
         } else if (GroupConstant.ADD_MEMBER.equals(code)) {
             // 群组新增用户
-            JSONObject body = JSON.parseObject(content);
-            String groupId = body.getString("groupId");
-            List<String> ids = body.getObject("ids", new TypeReference<List<String>>() {
-            });
+            GroupInfo body = JSON.parseObject(content, GroupInfo.class);
+            String groupId = body.getGroupId();
+            List<String> ids = body.getIds();
             groupSessionRepository.addMember(groupId, ids);
 
         } else if (GroupConstant.REMOVE_MEMBER.equals(code)) {
             // 群组删除成员
-            JSONObject body = JSON.parseObject(content);
-            String groupId = body.getString("groupId");
-            List<String> ids = body.getObject("ids", new TypeReference<List<String>>() {
-            });
+            GroupInfo body = JSON.parseObject(content, GroupInfo.class);
+            String groupId = body.getGroupId();
+            List<String> ids = body.getIds();
             groupSessionRepository.removeMember(groupId, ids);
         }
 
 
         return null;
+    }
+
+    private BaseSessionGroup toGroup(GroupInfo group) {
+        BaseSessionGroup sessionGroup = new BaseSessionGroup();
+        sessionGroup.setGroupId(group.getGroupId());
+        sessionGroup.setCreator(group.getCreator());
+        sessionGroup.setKey(group.getKey());
+        sessionGroup.setPassword(group.getPassword());
+        sessionGroup.setMaster(group.getMaster());
+        return sessionGroup;
     }
 
     @Override

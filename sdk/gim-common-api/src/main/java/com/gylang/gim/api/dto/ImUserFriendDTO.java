@@ -37,7 +37,7 @@ public class ImUserFriendDTO extends BaseDTO {
      * 好友分组id
      */
 
-    private Long groupId;
+    private String groupId;
 
 
     /**
@@ -75,14 +75,14 @@ public class ImUserFriendDTO extends BaseDTO {
      * 创建人
      */
 
-    private Long createBy;
+    private String createBy;
 
 
     /**
      * 修改人
      */
 
-    private Long modifyBy;
+    private String modifyBy;
 
 
     /**
