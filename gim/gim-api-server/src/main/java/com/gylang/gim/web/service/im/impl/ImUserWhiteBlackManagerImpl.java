@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author gylang
@@ -34,4 +35,19 @@ public class ImUserWhiteBlackManagerImpl implements ImUserWhiteBlackManager {
                 .content(JSON.toJSONString(whiteBlackList))
                 .build());
     }
+
+    @Override
+    public WhiteBlackList query(WhiteBlackList whiteBlackList) {
+        MessageWrap msg = MessageWrap.builder()
+                .type(ChatType.MANAGER)
+                .cmd(ManagerCmd.BLACK_WHITE_LIST_MANAGER)
+                .qos(QosConstant.INSURE_ONE_ARRIVE)
+                .content(JSON.toJSONString(whiteBlackList))
+                .build();
+        // 同步等待结果
+        AtomicReference<WhiteBlackList> result = new AtomicReference<>();
+        socketManager.sendAndWaitCallBack(msg, wb -> result.set(JSON.parseObject(wb.getContent(), WhiteBlackList.class)));
+        return result.get();
+    }
+
 }

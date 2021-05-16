@@ -9,6 +9,7 @@ import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.enums.BaseResultCode;
 import com.gylang.gim.api.enums.ChatType;
 import com.gylang.gim.remote.call.GimCallBack;
+import com.gylang.gim.remote.call.SyncCall;
 import com.gylang.gim.remote.coder.ClientMessageDecoder;
 import com.gylang.gim.remote.coder.ClientMessageEncoder;
 import com.gylang.gim.remote.qos.ClientQosAdapterHandler;
@@ -168,7 +169,7 @@ public class SocketManager {
                 return;
             }
             send(CommonConstant.HEART);
-            if (updateMsgIdInterval <= updateMsgIdTimes++)  {
+            if (updateMsgIdInterval <= updateMsgIdTimes++) {
                 MessageWrap updateLastId = CommonConstant.UPDATE_LAST_ID;
                 updateLastId.setContent(lastMsgId);
                 updateMsgIdTimes = 0;
@@ -264,6 +265,43 @@ public class SocketManager {
         sendCallBack.put(body.getClientMsgId(), gimCallBack);
     }
 
+    /**
+     * 同步发送消息
+     *
+     * @param body        消息体
+     * @param gimCallBack 回调信息
+     */
+    public void sendAndWaitCallBack(final MessageWrap body, GimCallBack<MessageWrap> gimCallBack) {
+
+        send(body);
+        SyncCall<MessageWrap> wrapSyncCall = new SyncCall<>(gimCallBack);
+        sendCallBack.put(body.getClientMsgId(), gimCallBack);
+        try {
+            wrapSyncCall.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        }
+    }
+    /**
+     * 同步发送消息
+     *
+     * @param body        消息体
+     * @param gimCallBack 回调信息
+     */
+    public void sendAndWaitCallBack(final MessageWrap body, GimCallBack<MessageWrap> gimCallBack, long milliseconds) {
+
+        send(body);
+        SyncCall<MessageWrap> wrapSyncCall = new SyncCall<>(gimCallBack);
+        sendCallBack.put(body.getClientMsgId(), gimCallBack);
+        try {
+            wrapSyncCall.await(milliseconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        }
+    }
+
 
     public void login() {
 
@@ -347,7 +385,7 @@ public class SocketManager {
             // 发送消息到监听队列
             List<GimCallBack<MessageWrap>> gimCallBackList = callListener.get(getListenKey(message.getType(), message.getCmd()));
             listenerExecutor.execute(() -> {
-               // 全局监听
+                // 全局监听
                 for (GimCallBack<MessageWrap> messageWrapGimCallBack : globalCallListener) {
                     messageWrapGimCallBack.call(message);
                 }

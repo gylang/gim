@@ -1,19 +1,18 @@
 package com.gylang.gim.server.handle.manager.impl;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
-import com.gylang.gim.api.constant.CacheConstant;
 import com.gylang.gim.api.constant.cmd.ManagerCmd;
-import com.gylang.gim.api.constant.mamager.BlackWhiteListConstant;
+import com.gylang.gim.api.constant.mamager.GroupConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.manager.WhiteBlackList;
 import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.server.handle.manager.ManagerService;
+import com.gylang.gim.server.service.SendAccessService;
 import com.gylang.netty.sdk.api.domain.model.GIMSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * @author gylang
@@ -22,42 +21,26 @@ import org.springframework.stereotype.Service;
 @Service
 public class BlackWhiteListManagerImpl implements ManagerService {
 
-    @Autowired
+    @Resource
     private RedisTemplate<String, String> redisTemplate;
+    @Resource
+    private SendAccessService sendAccessService;
 
     @Override
     public MessageWrap doInvoke(GIMSession session, MessageWrap messageWrap) {
 
         WhiteBlackList whiteBlackList = JSON.parseObject(messageWrap.getContent(), WhiteBlackList.class);
 
-        if (StrUtil.isNotEmpty(whiteBlackList.getType())) {
-            // 黑白名单策略变更
-            String key = CacheConstant.IM_USER_CONFIG + whiteBlackList.getUid();
-            redisTemplate.opsForValue().set(key, whiteBlackList.getType());
+        ReplyMessage success = ReplyMessage.success(messageWrap);
+        if (GroupConstant.QUERY.equals(messageWrap.getCode())) {
+            WhiteBlackList result = sendAccessService.queryPrivateInfo(whiteBlackList);
+            success.setContent(JSON.toJSONString(result));
+            return success;
         }
 
-        if (CollUtil.isNotEmpty(whiteBlackList.getAddWhite())) {
-            // 新增白名单用户
-            String key = CacheConstant.WHITE_LIST_CHECK + whiteBlackList.getUid();
-            redisTemplate.opsForSet().add(key, whiteBlackList.getAddWhite().toArray(new String[0]));
-        }
-        if (CollUtil.isNotEmpty(whiteBlackList.getAddBlack())) {
-            // 新增黑名单用户
-            String key = CacheConstant.BLACK_LIST_CHECK + whiteBlackList.getUid();
-            redisTemplate.opsForSet().add(key, whiteBlackList.getAddBlack().toArray(new String[0]));
-        }
-        if (CollUtil.isNotEmpty(whiteBlackList.getRemoveWhite())) {
-            // 删除白名单用户
-            String key = CacheConstant.WHITE_LIST_CHECK + whiteBlackList.getUid();
-            redisTemplate.opsForSet().remove(key, whiteBlackList.getRemoveWhite().toArray());
-        }
-        if (CollUtil.isNotEmpty(whiteBlackList.getRemoveBlack())) {
-            // 删除黑名单用户
-            String key = CacheConstant.BLACK_LIST_CHECK + whiteBlackList.getUid();
-            redisTemplate.opsForSet().remove(key, whiteBlackList.getRemoveBlack().toArray());
-        }
+        sendAccessService.updatePrivate(whiteBlackList);
 
-        return ReplyMessage.success(messageWrap);
+        return success;
     }
 
     @Override

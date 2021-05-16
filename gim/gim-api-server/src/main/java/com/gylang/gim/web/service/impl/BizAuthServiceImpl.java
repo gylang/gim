@@ -117,7 +117,7 @@ public class BizAuthServiceImpl implements BizAuthService {
         ptUser.setSalt(saltDecode);
         boolean save = ptUserService.save(ptUser);
         PtUserInfo ptUserInfo = MappingUtil.map(ptUser, PtUserInfo.class);
-        ptUserInfo.setUid(ptUser.getId());
+        ptUserInfo.setUid(ptUser.getId().toString());
         ptUserInfo.setId(null);
         save = save && userInfoService.save(ptUserInfo);
         Asserts.isTrue(save, "注册失败");

@@ -16,4 +16,11 @@ public interface ImGroupDisableSendMsgManager {
      * @param whiteBlackList 黑白名单
      */
     void save(WhiteBlackList whiteBlackList);
+
+    /**
+     * 查询黑白名单
+     * @param whiteBlackList 黑白名单
+     * @return 黑白名单
+     */
+    WhiteBlackList query(WhiteBlackList whiteBlackList);
 }
