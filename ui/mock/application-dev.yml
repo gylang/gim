@@ -1,0 +1,4 @@
+simulate:
+  path: 'F:/doc/java/java utils/模拟请求/api/'
+server:
+  port: 4600
