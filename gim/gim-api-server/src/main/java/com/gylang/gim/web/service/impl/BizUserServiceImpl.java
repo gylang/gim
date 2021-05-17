@@ -7,6 +7,8 @@ import com.gylang.gim.api.domain.common.CommonResult;
 import com.gylang.gim.api.domain.common.PageResponse;
 import com.gylang.gim.api.dto.PtUserDTO;
 import com.gylang.gim.web.common.mybatis.Page;
+import com.gylang.gim.web.common.util.Asserts;
+import com.gylang.gim.web.common.util.MappingUtil;
 import com.gylang.gim.web.entity.PtUser;
 import com.gylang.gim.web.service.BizUserService;
 import com.gylang.gim.web.service.PtUserService;
@@ -30,11 +32,22 @@ public class BizUserServiceImpl implements BizUserService {
         PtUser param = ObjectUtil.defaultIfNull(user.getParam(), new PtUser());
 
         Page<PtUser> userPageDTO = ptUserService.page(user, new QueryWrapper<PtUser>()
-                .or().likeRight(StrUtil.isNotEmpty(param.getUsername()), "username", param.getUsername())
-                .or().likeRight(StrUtil.isNotEmpty(param.getNickname()), "nickname", param.getNickname())
-                .or().likeRight(ObjectUtil.isNotNull(param.getId()), "id", param.getId())
+                .or().likeRight(StrUtil.isNotEmpty(param.getUsername()), "username" , param.getUsername())
+                .or().likeRight(StrUtil.isNotEmpty(param.getNickname()), "nickname" , param.getNickname())
+                .or().likeRight(ObjectUtil.isNotNull(param.getId()), "id" , param.getId())
 
         );
         return CommonResult.ok(userPageDTO.toDTO(PtUserDTO.class));
+    }
+
+    @Override
+    public Boolean del(PtUserDTO user) {
+        Asserts.notNull(user.getId(), "用户不能为空");
+        return ptUserService.removeById(user.getId());
+    }
+
+    @Override
+    public Boolean save(PtUserDTO user) {
+        return ptUserService.save(MappingUtil.map(user, new PtUser()));
     }
 }

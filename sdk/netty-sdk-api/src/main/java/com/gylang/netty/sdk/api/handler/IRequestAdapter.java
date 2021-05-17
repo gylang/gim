@@ -23,12 +23,10 @@ package com.gylang.netty.sdk.api.handler;
 
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.api.common.AfterConfigInitialize;
-import com.gylang.netty.sdk.api.common.ObjectWrap;
 import com.gylang.netty.sdk.api.domain.model.GIMSession;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.Comparator;
-import java.util.List;
 
 /**
  * netty请求适配器, 规约用于系统内部适配实现, 非业务功能
@@ -49,12 +47,6 @@ public interface IRequestAdapter extends AfterConfigInitialize, Comparator<IRequ
      */
     Object process(ChannelHandlerContext ctx, GIMSession me, MessageWrap message);
 
-    /**
-     * 适配注册方法
-     *
-     * @param processList 注册参数列表
-     */
-    void register(List<ObjectWrap> processList);
 
 
     /**

@@ -42,20 +42,20 @@ public class Remote2PPushHandler implements IMRequestHandler {
         Collection<String> receiveIdList = push.getReceiveId();
         String msgId = MsgIdUtil.increase(message);
         if (receiveIdList.size() < BIZ_THREAD_CAP) {
-            push(me, message, push, receiveIdList, msgId);
+            push(me, push, receiveIdList, msgId);
         } else {
-            executor.execute(() -> push(me, message, push, receiveIdList, msgId));
+            executor.execute(() -> push(me, push, receiveIdList, msgId));
         }
 
         return ReplyMessage.reply(message, BaseResultCode.NOT_ACCESS_PRIVATE_RESOURCE);
     }
 
-    private void push(GIMSession me, MessageWrap message, PushMessage push, Collection<String> receiveIdList, String msgId) {
+    private void push(GIMSession me, PushMessage push, Collection<String> receiveIdList, String msgId) {
         for (String id : receiveIdList) {
-            MessageWrap messageWrap = message.copyBasic();
+            MessageWrap messageWrap = push.copyBasic();
             messageWrap.setMsgId(msgId);
             messageWrap.setContent(push.getContent());
-            message.setReceive(id);
+            messageWrap.setReceive(id);
             messageProvider.sendMsg(me, id, messageWrap);
         }
     }

@@ -1,6 +1,6 @@
 package com.gylang.gim.web.service;
 
-import com.gylang.gim.api.domain.manager.WhiteBlackList;
+import com.gylang.gim.api.domain.manager.BlackWhiteList;
 import com.gylang.gim.api.dto.response.WBListUserInfoDTO;
 
 /**
@@ -15,15 +15,15 @@ public interface GroupDisableSendService {
      * @param groupInfo 群id
      * @return 禁言黑白名单
      */
-    WhiteBlackList whiteBlackList(WhiteBlackList groupInfo);
+    BlackWhiteList whiteBlackList(BlackWhiteList groupInfo);
 
     /**
      * 更新禁言黑白名单信息
      *
-     * @param whiteBlackList 黑白名单
+     * @param blackWhiteList 黑白名单
      * @return 禁言黑白名单
      */
-    Boolean update(WhiteBlackList whiteBlackList);
+    Boolean update(BlackWhiteList blackWhiteList);
 
     /**
      * 查询禁言黑白名单信息用户信息
@@ -31,5 +31,5 @@ public interface GroupDisableSendService {
      * @param group 群id
      * @return 禁言黑白名单用户
      */
-    WBListUserInfoDTO membersInfo(WhiteBlackList group);
+    WBListUserInfoDTO membersInfo(BlackWhiteList group);
 }

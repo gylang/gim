@@ -90,10 +90,7 @@ public class QosAdapterHandler implements BizRequestAdapter {
         return null;
     }
 
-    @Override
-    public void register(List<ObjectWrap> processList) {
 
-    }
 
     @Override
     public Integer order() {

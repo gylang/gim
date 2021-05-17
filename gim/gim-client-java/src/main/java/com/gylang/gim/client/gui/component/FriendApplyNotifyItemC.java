@@ -136,7 +136,7 @@ public class FriendApplyNotifyItemC extends BaseCellC<UserApplyDTO> implements I
 
          };
         SocketHolder.getInstance()
-                .bind(ChatType.NOTIFY_CHAT, NotifyChatCmd.MESSAGE_NOTIFY, messageNotify);
+                .typeAndCmdBind(ChatType.NOTIFY_CHAT, NotifyChatCmd.MESSAGE_NOTIFY, messageNotify);
     }
 
 }

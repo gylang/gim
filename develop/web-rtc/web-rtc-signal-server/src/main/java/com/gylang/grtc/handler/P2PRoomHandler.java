@@ -1,7 +1,7 @@
 package com.gylang.grtc.handler;
 
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.grtc.constant.SignalCmd;
+import com.gylang.gim.api.enums.ChatType;
 import com.gylang.netty.sdk.api.annotation.NettyHandler;
 import com.gylang.netty.sdk.api.domain.model.GIMSession;
 import com.gylang.netty.sdk.api.handler.IMRequestHandler;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
  * data 2021/4/23
  */
 @Component
-@NettyHandler(SignalCmd.P2P_ROOM_SIGNAL_EXCHANGE)
+@NettyHandler(ChatType.PRIVATE_CHAT)
 public class P2PRoomHandler implements IMRequestHandler {
 
     @Autowired

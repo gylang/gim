@@ -9,7 +9,7 @@ import java.util.List;
  * data 2021/5/15
  */
 @Data
-public class WhiteBlackList {
+public class BlackWhiteList {
 
     /** 用户id */
     private String id;

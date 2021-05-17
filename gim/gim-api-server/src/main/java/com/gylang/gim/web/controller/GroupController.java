@@ -17,6 +17,8 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
+ * 群组关联
+ *
  * @author gylang
  * data 2021/5/16
  */
@@ -30,24 +32,47 @@ public class GroupController {
     @Resource
     private UserHelper userHelper;
 
+    /**
+     * 我的群组
+     *
+     * @return
+     */
     @RequestMapping("/myList")
     public CommonResult<List<ImGroupCardDTO>> myList() {
 
         return CommonResult.ok(groupService.myList(userHelper.getUid()));
     }
 
+    /**
+     * 分页查询群组
+     *
+     * @param query
+     * @return
+     */
     @RequestMapping("/page")
     public CommonResult<PageResponse<ImGroupCardDTO>> pageList(@RequestBody Page<ImGroupCardDTO> query) {
 
         return CommonResult.ok(groupService.pageList(query));
     }
 
+    /**
+     * 加入群组
+     *
+     * @param friend
+     * @return
+     */
     @RequestMapping("/join")
     public CommonResult<Boolean> join(@RequestBody ImUserGroupDTO friend) {
 
         return CommonResult.auto(groupService.join(friend));
     }
 
+    /**
+     * 退出群组
+     *
+     * @param friend
+     * @return
+     */
     @RequestMapping("/exit")
     public CommonResult<Boolean> exit(@RequestBody ImUserGroupDTO friend) {
         String uid = userHelper.getUid();
@@ -55,6 +80,12 @@ public class GroupController {
         return CommonResult.auto(groupService.exit(friend));
     }
 
+    /**
+     * 创建群组
+     *
+     * @param group
+     * @return
+     */
     @RequestMapping("/create")
     public CommonResult<Boolean> create(@RequestBody ImGroupCardDTO group) {
         String uid = userHelper.getUid();
@@ -62,6 +93,12 @@ public class GroupController {
         return CommonResult.auto(groupService.create(group));
     }
 
+    /**
+     * 删除群组
+     *
+     * @param group
+     * @return
+     */
     @RequestMapping("/del")
     public CommonResult<Boolean> del(@RequestBody ImGroupCardDTO group) {
         String uid = userHelper.getUid();
@@ -69,17 +106,34 @@ public class GroupController {
         return CommonResult.auto(groupService.del(group));
     }
 
+    /**
+     * 增加群成员
+     *
+     * @param group
+     * @return
+     */
     @RequestMapping("/addMembers")
     public CommonResult<Boolean> addMembers(@RequestBody GroupInfo group) {
         return CommonResult.auto(groupService.addMembers(group));
     }
 
-
+    /**
+     * 移除群成员
+     *
+     * @param group
+     * @return
+     */
     @RequestMapping("/removeMembers")
     public CommonResult<Boolean> removeMembers(@RequestBody GroupInfo group) {
         return CommonResult.auto(groupService.removeMembers(group));
     }
 
+    /**
+     * 群成员信息
+     *
+     * @param group
+     * @return
+     */
     @RequestMapping("/membersInfo")
     public CommonResult<PageResponse<UserGroupInfoDTO>> groupDetail(@RequestBody Page<ImUserGroupDTO> group) {
         PageResponse<UserGroupInfoDTO> membersInfo = groupService.membersInfo(group);

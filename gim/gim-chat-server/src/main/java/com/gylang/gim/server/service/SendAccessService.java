@@ -1,6 +1,6 @@
 package com.gylang.gim.server.service;
 
-import com.gylang.gim.api.domain.manager.WhiteBlackList;
+import com.gylang.gim.api.domain.manager.BlackWhiteList;
 
 /**
  * 消息发送可进入检查
@@ -31,26 +31,26 @@ public interface SendAccessService {
     /**
      * 查询用户黑白名单信息
      *
-     * @param whiteBlackList
+     * @param blackWhiteList
      * @return
      */
-    WhiteBlackList queryPrivateInfo(WhiteBlackList whiteBlackList);
+    BlackWhiteList queryPrivateInfo(BlackWhiteList blackWhiteList);
 
     /**
      * 更用户组黑白名单
      *
-     * @param whiteBlackList
+     * @param blackWhiteList
      */
-    void updatePrivate(WhiteBlackList whiteBlackList);
+    void updatePrivate(BlackWhiteList blackWhiteList);
 
     /**
      * 查询群禁言黑白名单信息
      *
-     * @param whiteBlackList
+     * @param blackWhiteList
      * @return
      */
-    WhiteBlackList queryGroupInfo(WhiteBlackList whiteBlackList);
+    BlackWhiteList queryGroupInfo(BlackWhiteList blackWhiteList);
 
 
-    void updateGroup(WhiteBlackList whiteBlackList);
+    void updateGroup(BlackWhiteList blackWhiteList);
 }

@@ -1,6 +1,7 @@
 package com.gylang.gim.web.process.handler;
 
 import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.gim.api.enums.ChatType;
 import com.gylang.netty.sdk.api.annotation.NettyHandler;
 import com.gylang.netty.sdk.api.domain.model.GIMSession;
 import com.gylang.netty.sdk.api.handler.IMRequestHandler;
@@ -14,7 +15,7 @@ import javax.annotation.Resource;
  * @author gylang
  * data 2020/11/17
  */
-@NettyHandler("chat")
+@NettyHandler(ChatType.PRIVATE_CHAT)
 @Component
 @Slf4j
 public class ChatHandler implements IMRequestHandler {

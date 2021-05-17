@@ -80,9 +80,9 @@ public class GimGlobalConfiguration {
     private GimProperties gimProperties;
     /** 消息id生成器 */
     private MsgIdUtil msgIdUtil = MsgIdUtil.getMsgId();
-    /** 集群跨服通信观察对象 */
+    /** 集群跨服通信提供者 */
     private CrossMessageProvider crossMessageProvider;
-
+    /** 集群跨服通信观察对象, 存储当前集群服务信息*/
     private CrossServerObserver crossServerObserver;
     /**
      * 配置信息

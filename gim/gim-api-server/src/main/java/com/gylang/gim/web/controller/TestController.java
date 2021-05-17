@@ -19,6 +19,11 @@ public class TestController {
     @Autowired
     private SocketManager socketManager;
 
+    /**
+     * 测试发送信息
+     * @param messageWrap
+     * @return
+     */
     @RequestMapping("sendAllMsg")
     public CommonResult<Boolean> sendAllMsg(@RequestBody MessageWrap messageWrap) {
         socketManager.send(messageWrap);

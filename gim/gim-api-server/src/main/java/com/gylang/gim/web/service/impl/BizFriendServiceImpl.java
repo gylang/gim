@@ -5,10 +5,12 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gylang.gim.api.constant.AnswerType;
 import com.gylang.gim.api.constant.CacheConstant;
-import com.gylang.gim.api.constant.cmd.PushChatCmd;
+import com.gylang.gim.api.constant.cmd.NotifyChatCmd;
 import com.gylang.gim.api.constant.cmd.SystemChatCmd;
+import com.gylang.gim.api.constant.common.CommonConstant;
 import com.gylang.gim.api.domain.common.CommonResult;
 import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.gim.api.domain.manager.BlackWhiteList;
 import com.gylang.gim.api.domain.push.PushMessage;
 import com.gylang.gim.api.dto.ImUserFriendDTO;
 import com.gylang.gim.api.dto.UserFriendVO;
@@ -20,11 +22,12 @@ import com.gylang.gim.web.entity.UserApply;
 import com.gylang.gim.web.service.ImUserFriendService;
 import com.gylang.gim.web.service.UserApplyService;
 import com.gylang.gim.web.service.biz.BizFriendService;
+import com.gylang.gim.web.service.im.ImUserBlackWhiteManager;
+import com.gylang.gim.web.service.im.ImUserPushManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -41,11 +44,13 @@ public class BizFriendServiceImpl implements BizFriendService {
     @Resource
     private ImUserFriendService userFriendService;
     @Resource
-    private RedisTemplate<String, String> redisTemplate;
+    private ImUserPushManager imUserPushManager;
     @Resource
     private UserApplyService userApplyService;
     @Resource
     private SocketManager socketManager;
+    @Resource
+    private ImUserBlackWhiteManager whiteBlackManager;
 
     @Override
     @Cacheable(value = CacheConstant.USER_FRIEND_LIST_PREFIX, key = "#p0")
@@ -64,6 +69,7 @@ public class BizFriendServiceImpl implements BizFriendService {
         ImUserFriend imUserFriend2 = new ImUserFriend();
         imUserFriend2.setUid(friend.getFriendId());
         imUserFriend2.setFriendId(friend.getUid());
+        changeBlackWhiteList(friend);
         userFriendService.saveBatch(CollUtil.newArrayList(imUserFriend1, imUserFriend2));
         BizFriendService proxy = getProxy();
         // 可以直接通过 操作hash 新增field
@@ -71,9 +77,17 @@ public class BizFriendServiceImpl implements BizFriendService {
         proxy.updateCacheList(friend.getUid());
 
         // 更新好友白名单记录
-        redisTemplate.opsForSet().add(CacheConstant.WHITE_LIST_CHECK + friend.getUid(), friend.getFriendId());
-        redisTemplate.opsForSet().add(CacheConstant.WHITE_LIST_CHECK + friend.getFriendId(), friend.getUid());
         return CommonResult.ok();
+    }
+
+    private void changeBlackWhiteList(ImUserFriendDTO friend) {
+        BlackWhiteList blackWhiteList = new BlackWhiteList();
+        blackWhiteList.setId(friend.getFriendId());
+        blackWhiteList.setAddBlack(CollUtil.newArrayList(friend.getUid()));
+        whiteBlackManager.save(blackWhiteList);
+        blackWhiteList.setId(friend.getUid());
+        blackWhiteList.setAddWhite(CollUtil.newArrayList(friend.getFriendId()));
+        whiteBlackManager.save(blackWhiteList);
     }
 
     @Override
@@ -100,9 +114,7 @@ public class BizFriendServiceImpl implements BizFriendService {
                 .or(w -> w.eq(ImUserFriend::getUid, friend.getUid()).eq(ImUserFriend::getFriendId, friend.getFriendId()))
                 .or(w -> w.eq(ImUserFriend::getFriendId, friend.getUid()).eq(ImUserFriend::getUid, friend.getFriendId()))
                 .remove();
-        // 更新白名单
-        redisTemplate.opsForSet().remove(CacheConstant.WHITE_LIST_CHECK + friend.getUid(), friend.getFriendId());
-        redisTemplate.opsForSet().remove(CacheConstant.WHITE_LIST_CHECK + friend.getFriendId(), friend.getUid());
+
         getProxy().updateCacheList(friend.getFriendId());
         return CommonResult.ok();
     }
@@ -118,22 +130,17 @@ public class BizFriendServiceImpl implements BizFriendService {
             userApply.setAnswerType(AnswerType.NOT_PROCESS);
             // 添加申请, 并通知好友
             userApplyService.save(userApply);
-            //
+
+            // 通知消息
             PushMessage message = new PushMessage();
             message.setContent(JSON.toJSONString(userApply));
-
-            message.setReceiveId(CollUtil.newArrayList(userApply.getApplyId()));
-            MessageWrap messageWrap = MessageWrap.builder()
-                    .cmd(PushChatCmd.P2P_PUSH)
-                    .type(ChatType.PUSH_CHAT)
-                    .sender(userApply.getApplyId())
-                    .content(JSON.toJSONString(message))
-                    .offlineMsgEvent(false)
-                    .qos(1)
-                    .build();
-            // 发送消息
-            socketManager.send(messageWrap);
-            // 通知消息
+            message.setSender(userApply.getApplyId());
+            message.setType(ChatType.NOTIFY_CHAT);
+            message.setCmd(NotifyChatCmd.USER_APPLY_FRIEND);
+            message.setContent("用户申请添加好友");
+            message.setQos(1);
+            message.setReceive(userApply.getAnswerId());
+            imUserPushManager.push(1, message);
         }
         return CommonResult.ok();
     }
@@ -148,42 +155,38 @@ public class BizFriendServiceImpl implements BizFriendService {
         if (AnswerType.AGREEMENT == userApply.getAnswerType()) {
             // 同意添加好友
             apply.setAnswerType(userApply.getAnswerType());
+            userApplyService.save(apply);
 
-            // 给申请者发送hello
+            // 新增好友关系
+            ImUserFriendDTO friend = new ImUserFriendDTO();
+            friend.setUid(userApply.getApplyId());
+            friend.setFriendId(userApply.getAnswerId());
+            addFriend(friend);
+
+            // 给申请者 应答者 发送hello
             PushMessage message = new PushMessage();
             message.setSender(userApply.getApplyId());
             message.setContent("你好，我们已经是好友拉~");
+            message.setReceiveId(CollUtil.newArrayList(userApply.getAnswerId()));
+            message.setType(ChatType.PRIVATE_CHAT);
+            message.setQos(2);
+            imUserPushManager.push(1, message);
+            message.setSender(userApply.getAnswerId());
             message.setReceiveId(CollUtil.newArrayList(userApply.getApplyId()));
-            MessageWrap applyMsg = MessageWrap.builder()
-                    .qos(1)
-                    .cmd(PushChatCmd.P2P_PUSH)
-                    .sender(apply.getAnswerId())
-                    .receive(apply.getApplyId())
-                    .offlineMsgEvent(true)
-                    .content(JSON.toJSONString(message))
-                    .type(ChatType.PRIVATE_CHAT)
-                    .build();
-            socketManager.send(applyMsg);
+            imUserPushManager.push(1, message);
 
-            // 给被申请方发送消息
-            MessageWrap answerMsg = applyMsg.copyBasic();
-            answerMsg.setSender(apply.getApplyId());
-            answerMsg.setReceive(apply.getAnswerId());
-            socketManager.send(applyMsg);
-            // 更新好友白名单记录
-            redisTemplate.opsForSet().add(CacheConstant.WHITE_LIST_CHECK + userApply.getApplyId(), userApply.getAnswerId());
-            redisTemplate.opsForSet().add(CacheConstant.WHITE_LIST_CHECK + userApply.getAnswerId(), userApply.getApplyId());
         } else {
-            // 拒绝
-            MessageWrap rejectMsg = MessageWrap.builder()
-                    .qos(1)
-                    .sender(apply.getAnswerId())
-                    .receive(apply.getApplyId())
-                    .content(apply.getAnswerId() + ": 拒绝添加好友!")
-                    .type(ChatType.NOTIFY_CHAT)
-                    .cmd(SystemChatCmd.NOTIFY)
-                    .build();
-            socketManager.send(rejectMsg);
+
+            // 给申请者 发送拒绝通知
+            PushMessage message = new PushMessage();
+            message.setSender(userApply.getApplyId());
+            message.setContent("拒绝添加好友");
+            message.setReceiveId(CollUtil.newArrayList(userApply.getAnswerId()));
+            message.setType(ChatType.NOTIFY_CHAT);
+            message.setCmd(NotifyChatCmd.USER_APPLY_FRIEND_ANSWER);
+            message.setCode(CommonConstant.FALSE_INT_STR);
+            message.setQos(2);
+            imUserPushManager.push(1, message);
         }
 
         return CommonResult.ok();

@@ -6,9 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.gylang.gim.api.domain.common.PageResponse;
 import com.gylang.gim.api.domain.entity.GroupInfo;
 import com.gylang.gim.api.dto.ImGroupCardDTO;
-import com.gylang.gim.api.dto.ImUserFriendDTO;
 import com.gylang.gim.api.dto.ImUserGroupDTO;
-import com.gylang.gim.api.dto.PtUserDTO;
 import com.gylang.gim.api.dto.response.UserGroupInfoDTO;
 import com.gylang.gim.web.common.mybatis.BaseDO;
 import com.gylang.gim.web.common.mybatis.InnerBaseDO;
@@ -90,7 +88,7 @@ public class ImGroupServiceImpl implements ImGroupService {
         groupInfo.setIds(CollUtil.newArrayList(group.getUid()));
         // 通知Im服务
         imGroupManager.addMembers(groupInfo);
-        return save;
+        return true;
     }
 
     @Override

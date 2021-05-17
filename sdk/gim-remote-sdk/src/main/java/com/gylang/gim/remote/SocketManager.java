@@ -25,6 +25,7 @@ import java.nio.channels.SocketChannel;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * socket管理
@@ -60,16 +61,24 @@ public class SocketManager {
      * 扫码最低时间间隔
      */
     private int messagesValidTime = 2 * 1000;
-    private Map<String, List<GimCallBack<MessageWrap>>> callListener = new HashMap<>();
 
+    private final ByteBuffer headerBuffer = ByteBuffer.allocate(3);
+    private ByteBuffer readBuffer = ByteBuffer.allocate(readBufferSize);
+    /** 地址 */
+    private InetSocketAddress socketAddress;
+
+    // --------------------------------------       回调       --------------------------------------------------------
+    /** 消息类型 和 业务类型 回调 */
+    private Map<String, List<GimCallBack<MessageWrap>>> typeAndCmdCallListener = new HashMap<>();
+    /** 全局回调 */
     private List<GimCallBack<MessageWrap>> globalCallListener = new LinkedList<>();
+
+    private Map<Integer, List<GimCallBack<MessageWrap>>> typeCallListener = new HashMap<>();
 
     /** 消息回调 */
     private Map<String, GimCallBack<MessageWrap>> sendCallBack = new ConcurrentHashMap<>();
 
-    private final ByteBuffer headerBuffer = ByteBuffer.allocate(3);
-    private ByteBuffer readBuffer = ByteBuffer.allocate(readBufferSize);
-
+    // --------------------------------------------  线程相关     -------------------------------------------------------
     /** 工作线程 处理消息的发送 */
     private final ExecutorService workerExecutor =
             new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MINUTES,
@@ -83,6 +92,7 @@ public class SocketManager {
             new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MINUTES,
                     new LinkedBlockingQueue<>(), new ThreadFactoryBuilder().setNamePrefix("listener").build());
 
+    // -------------------------------------------  socket通信相关  -----------------------------------------------------------
     /** 定时任务心跳 */
     private final ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(1, new ThreadPoolExecutor.AbortPolicy());
 
@@ -90,8 +100,9 @@ public class SocketManager {
     private final ClientMessageDecoder messageDecoder = new ClientMessageDecoder();
     /** 消息编码 */
     private final ClientMessageEncoder messageEncoder = new ClientMessageEncoder();
+    /** qos */
     private ClientQosAdapterHandler clientQosAdapterHandler = new ClientQosAdapterHandler();
-    private InetSocketAddress socketAddress;
+
 
     /**
      * 连接socket
@@ -129,8 +140,8 @@ public class SocketManager {
         openConnect();
         // 登录系统
         login.set(2);
-        login();
-        bind(ChatType.REPLY_CHAT, loginMsg.getCmd(), onLoginSuccess);
+        sendLogin();
+        typeAndCmdBind(ChatType.REPLY_CHAT, loginMsg.getCmd(), onLoginSuccess);
         // 心跳监测
         scheduledExecutorService.scheduleAtFixedRate(this::sendHeart,
                 checkInterval,
@@ -166,7 +177,7 @@ public class SocketManager {
             log.info("[发送心跳] : 连接正常");
             if (0 == login.get()) {
                 login.set(2);
-                login();
+                sendLogin();
                 return;
             }
             send(CommonConstant.HEART);
@@ -318,8 +329,35 @@ public class SocketManager {
         }
     }
 
+    /**
+     * 同步发送消息
+     *
+     * @param body 消息体
+     * @return 同步等待结果通知
+     */
+    public MessageWrap sendAndWaitGetMessage(final MessageWrap body, long milliseconds) {
+        if (StrUtil.isEmpty(body.getClientMsgId())) {
 
-    public void login() {
+            MsgIdUtil.increase(body);
+        }
+        AtomicReference<MessageWrap> callBackMsg = new AtomicReference<>();
+        SyncCall<MessageWrap> wrapSyncCall = new SyncCall<>(callBackMsg::set);
+        sendCallBack.put(body.getClientMsgId(), wrapSyncCall);
+        send(body);
+        try {
+            wrapSyncCall.await(milliseconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        }
+        return callBackMsg.get();
+    }
+
+
+    /**
+     * 发送登录
+     */
+    public void sendLogin() {
 
         if (null != loginMsg) {
 
@@ -374,6 +412,11 @@ public class SocketManager {
 
     }
 
+    /**
+     * 广播消息
+     *
+     * @param msg 消息体
+     */
     public void sendBroadcast(final Object msg) {
 
         if (null == msg) {
@@ -399,19 +442,14 @@ public class SocketManager {
             lastMsgId = message.getMsgId();
 
             // 发送消息到监听队列
-            List<GimCallBack<MessageWrap>> gimCallBackList = callListener.get(getListenKey(message.getType(), message.getCmd()));
-            listenerExecutor.execute(() -> {
-                // 全局监听
-                for (GimCallBack<MessageWrap> messageWrapGimCallBack : globalCallListener) {
-                    messageWrapGimCallBack.call(message);
-                }
-                // 业务监听
-                if (null != gimCallBackList) {
-                    for (GimCallBack<MessageWrap> gimCallBack : gimCallBackList) {
-                        gimCallBack.call(message);
-                    }
-                }
-            });
+            doCallBack(message);
+
+
+        }
+    }
+
+    private void doCallBack(MessageWrap message) {
+        listenerExecutor.execute(() -> {
 
             // 判断是否有直接回调消息
             if (null != message.getClientMsgId()) {
@@ -421,44 +459,118 @@ public class SocketManager {
                     sendCallBack.remove(message.getClientMsgId());
                 }
             }
-        }
+
+            // 全局监听
+            for (GimCallBack<MessageWrap> messageWrapGimCallBack : globalCallListener) {
+                messageWrapGimCallBack.call(message);
+            }
+            // 消息类型监听
+            List<GimCallBack<MessageWrap>> typeListenerList = typeCallListener.get(message.getType());
+            if (null != typeListenerList) {
+                for (GimCallBack<MessageWrap> gimCallBack : typeListenerList) {
+                    gimCallBack.call(message);
+                }
+            }
+            // 消息类型和业务类型监听
+            List<GimCallBack<MessageWrap>> typeAndCmdListenerList = typeAndCmdCallListener.get(getListenKey(message.getType(), message.getCmd()));
+            if (null != typeAndCmdListenerList) {
+                for (GimCallBack<MessageWrap> gimCallBack : typeAndCmdListenerList) {
+                    gimCallBack.call(message);
+                }
+            }
+
+        });
     }
 
-    public synchronized void bind(int type, String key, GimCallBack<MessageWrap> gimCallBack) {
+    /**
+     * 绑定监听
+     *
+     * @param type        消息类型
+     * @param key         cmd
+     * @param gimCallBack 回调
+     */
+    public synchronized void typeAndCmdBind(int type, String key, GimCallBack<MessageWrap> gimCallBack) {
 
         String lk = getListenKey(type, key);
-        List<GimCallBack<MessageWrap>> gimCallBackList = callListener.computeIfAbsent(lk, k -> new ArrayList<>());
+        List<GimCallBack<MessageWrap>> gimCallBackList = typeAndCmdCallListener.computeIfAbsent(lk, k -> new ArrayList<>());
         gimCallBackList.add(gimCallBack);
 
     }
 
-    public synchronized void globalBind(GimCallBack<MessageWrap> gimCallBack) {
-
-        globalCallListener.add(gimCallBack);
-
-    }
-
-    public synchronized void unGlobalBind(GimCallBack<MessageWrap> gimCallBack) {
-
-        globalCallListener.remove(gimCallBack);
-
-    }
-
-    public synchronized void unBind(int type, String key, GimCallBack<?> gimCallBack) {
+    /**
+     * 绑定监听
+     *
+     * @param type        消息类型
+     * @param key         cmd
+     * @param gimCallBack 回调
+     */
+    public synchronized void unTypeAndCmdBindBind(int type, String key, GimCallBack<?> gimCallBack) {
 
         String lk = getListenKey(type, key);
-        List<GimCallBack<MessageWrap>> gimCallBackList = callListener.get(lk);
+        List<GimCallBack<MessageWrap>> gimCallBackList = typeAndCmdCallListener.get(lk);
         if (null != gimCallBackList) {
             gimCallBackList.remove(gimCallBack);
         }
 
     }
 
+    /**
+     * 全局业务消息监听
+     *
+     * @param gimCallBack
+     */
+    public synchronized void typeBind(int type, GimCallBack<MessageWrap> gimCallBack) {
+
+        List<GimCallBack<MessageWrap>> gimCallBackList = typeCallListener.computeIfAbsent(type, k -> new ArrayList<>());
+        gimCallBackList.add(gimCallBack);
+
+    }
+
+
+    /**
+     * 解除全局消息绑定
+     *
+     * @param gimCallBack
+     */
+    public synchronized void unTypeBind(int type, GimCallBack<MessageWrap> gimCallBack) {
+        List<GimCallBack<MessageWrap>> gimCallBackList = typeCallListener.get(type);
+        if (null != gimCallBackList) {
+            gimCallBackList.remove(gimCallBack);
+        }
+
+    }
+
+    /**
+     * 全局业务消息监听
+     *
+     * @param gimCallBack
+     */
+    public synchronized void globalBind(GimCallBack<MessageWrap> gimCallBack) {
+
+        globalCallListener.add(gimCallBack);
+
+    }
+
+
+    /**
+     * 解除全局消息绑定
+     *
+     * @param gimCallBack
+     */
+    public synchronized void unGlobalBind(GimCallBack<MessageWrap> gimCallBack) {
+
+        globalCallListener.remove(gimCallBack);
+
+    }
+
+
     private static String getListenKey(int type, String key) {
         return type + "-" + key;
     }
 
-
+    /**
+     * 登录回调
+     */
     private GimCallBack<MessageWrap> onLoginSuccess = messageWrap -> {
         if (BaseResultCode.OK.getCode().equals(messageWrap.getCode())) {
             login.set(1);

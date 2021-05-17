@@ -5,7 +5,6 @@ import com.alibaba.fastjson.TypeReference;
 import com.gylang.gim.api.constant.ContentType;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.netty.sdk.api.annotation.AdapterType;
-import com.gylang.netty.sdk.api.common.ObjectWrap;
 import com.gylang.netty.sdk.api.config.GimGlobalConfiguration;
 import com.gylang.netty.sdk.api.domain.model.GIMSession;
 import com.gylang.netty.sdk.api.handler.BizRequestAdapter;
@@ -53,18 +52,23 @@ public class DefaultMessageRouter implements IMessageRouter {
             }
             return null;
         }
+
+        // 填充用户信息
         if (null != nettyUserInfoFillHandler) {
             nettyUserInfoFillHandler.fill(me);
         }
         Object object = null;
-        if (log.isDebugEnabled()) {
-            log.debug("[接收到消息] : {}", message);
-        }
-        boolean interecpt = NettyIntercept.before(nettyInterceptList, ctx, me, message);
-        if (interecpt) {
+        boolean intercept = NettyIntercept.before(nettyInterceptList, ctx, me, message);
+        if (intercept) {
             // 消息被拦截
             return null;
         }
+
+        if (log.isDebugEnabled()) {
+            log.debug("[接收到消息] : {}", message);
+        }
+
+        // 消息适配器
         for (IRequestAdapter adapter : requestAdapterList) {
             object = adapter.process(ctx, me, message);
             if (null != object) {
@@ -75,11 +79,7 @@ public class DefaultMessageRouter implements IMessageRouter {
     }
 
 
-    @Override
-    public void register(List<ObjectWrap> processList) {
 
-        throw new RuntimeException("不支持当前方式注册");
-    }
 
     @Override
     public Integer order() {

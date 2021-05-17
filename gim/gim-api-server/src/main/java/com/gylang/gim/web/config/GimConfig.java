@@ -75,7 +75,7 @@ public class GimConfig {
 
                 for (String key : eventListener.bind()) {
                     String[] s = key.split("-");
-                    socketManager.bind(Integer.parseInt(s[0]), s[1], messageWrap -> eventListener.onEvent(key, messageWrap));
+                    socketManager.typeAndCmdBind(Integer.parseInt(s[0]), s[1], messageWrap -> eventListener.onEvent(key, messageWrap));
                 }
             }
         }

@@ -51,7 +51,6 @@ public class MethodHandlerAdapter implements BizRequestAdapter {
     }
 
 
-    @Override
     public void register(List<ObjectWrap> processList) {
 
         this.methodHandlerMap = CollUtil.newHashMap();

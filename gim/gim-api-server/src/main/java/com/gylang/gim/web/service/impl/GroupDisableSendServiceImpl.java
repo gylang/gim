@@ -1,6 +1,6 @@
 package com.gylang.gim.web.service.impl;
 
-import com.gylang.gim.api.domain.manager.WhiteBlackList;
+import com.gylang.gim.api.domain.manager.BlackWhiteList;
 import com.gylang.gim.api.dto.PtUserDTO;
 import com.gylang.gim.api.dto.response.WBListUserInfoDTO;
 import com.gylang.gim.web.common.util.MappingUtil;
@@ -26,26 +26,26 @@ public class GroupDisableSendServiceImpl implements GroupDisableSendService {
     private PtUserService userService;
 
     @Override
-    public WhiteBlackList whiteBlackList(WhiteBlackList whiteBlackList) {
-        return disableSendMsgManager.query(whiteBlackList);
+    public BlackWhiteList whiteBlackList(BlackWhiteList blackWhiteList) {
+        return disableSendMsgManager.query(blackWhiteList);
     }
 
     @Override
-    public Boolean update(WhiteBlackList whiteBlackList) {
-        disableSendMsgManager.save(whiteBlackList);
+    public Boolean update(BlackWhiteList blackWhiteList) {
+        disableSendMsgManager.save(blackWhiteList);
         return true;
     }
 
     @Override
-    public WBListUserInfoDTO membersInfo(WhiteBlackList group) {
-        WhiteBlackList whiteBlackList = whiteBlackList(group);
-        if (null != whiteBlackList) {
-            WBListUserInfoDTO wbListUserInfoDTO = MappingUtil.map(whiteBlackList, new WBListUserInfoDTO());
-            List<String> addBlack = whiteBlackList.getAddBlack();
+    public WBListUserInfoDTO membersInfo(BlackWhiteList group) {
+        BlackWhiteList blackWhiteList = whiteBlackList(group);
+        if (null != blackWhiteList) {
+            WBListUserInfoDTO wbListUserInfoDTO = MappingUtil.map(blackWhiteList, new WBListUserInfoDTO());
+            List<String> addBlack = blackWhiteList.getAddBlack();
             List<PtUser> blackList = userService.listByIds(addBlack);
             wbListUserInfoDTO.setBlack(MappingUtil.mapAsList(blackList, PtUserDTO.class));
 
-            List<String> addWhite = whiteBlackList.getAddWhite();
+            List<String> addWhite = blackWhiteList.getAddWhite();
             List<PtUser> whiteList = userService.listByIds(addWhite);
             wbListUserInfoDTO.setWhite(MappingUtil.mapAsList(whiteList, PtUserDTO.class));
             return wbListUserInfoDTO;

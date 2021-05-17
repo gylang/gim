@@ -40,7 +40,6 @@ public class DefaultRequestHandlerAdapter implements BizRequestAdapter {
         return InvokeFinished.finish(result);
     }
 
-    @Override
     public void register(List<ObjectWrap> requestHandlerList) {
         if (null == requestHandlerList) {
             handlerMap = CollUtil.newHashMap();

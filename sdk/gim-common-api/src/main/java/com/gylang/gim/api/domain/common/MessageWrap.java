@@ -20,7 +20,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class MessageWrap implements Serializable {
 
-    /** 命令 */
+    /** 业务命令 */
     private String cmd;
 
     /** 发送者 */
@@ -47,14 +47,21 @@ public class MessageWrap implements Serializable {
     /** 重试次数 */
     private  int retryNum;
 
-    /** 是否使用质量服务, ack */
+    /**
+     * 使用质量服务
+     *
+     * @see com.gylang.gim.api.constant.qos.QosConstant
+     */
     private int qos;
-
+    /**
+     * qos ack使用
+     */
     private int ack;
 
     /** 离线/失败消息事件发送 */
     private boolean offlineMsgEvent = false;
 
+    /** 时间戳 */
     private long timeStamp;
 
 

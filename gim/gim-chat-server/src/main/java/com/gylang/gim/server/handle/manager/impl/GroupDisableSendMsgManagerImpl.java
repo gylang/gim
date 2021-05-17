@@ -1,13 +1,10 @@
 package com.gylang.gim.server.handle.manager.impl;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
-import com.gylang.gim.api.constant.CacheConstant;
 import com.gylang.gim.api.constant.cmd.ManagerCmd;
 import com.gylang.gim.api.constant.mamager.GroupConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.gim.api.domain.manager.WhiteBlackList;
+import com.gylang.gim.api.domain.manager.BlackWhiteList;
 import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.server.handle.manager.ManagerService;
 import com.gylang.gim.server.service.SendAccessService;
@@ -30,16 +27,16 @@ public class GroupDisableSendMsgManagerImpl implements ManagerService {
     @Override
     public MessageWrap doInvoke(GIMSession session, MessageWrap messageWrap) {
 
-        WhiteBlackList whiteBlackList = JSON.parseObject(messageWrap.getContent(), WhiteBlackList.class);
+        BlackWhiteList blackWhiteList = JSON.parseObject(messageWrap.getContent(), BlackWhiteList.class);
 
 
         ReplyMessage success = ReplyMessage.success(messageWrap);
         if (GroupConstant.QUERY.equals(messageWrap.getCode())) {
-            WhiteBlackList result = sendAccessService.queryGroupInfo(whiteBlackList);
+            BlackWhiteList result = sendAccessService.queryGroupInfo(blackWhiteList);
             success.setContent(JSON.toJSONString(result));
             return success;
         }
-        sendAccessService.updateGroup(whiteBlackList);
+        sendAccessService.updateGroup(blackWhiteList);
 
         return success;
     }

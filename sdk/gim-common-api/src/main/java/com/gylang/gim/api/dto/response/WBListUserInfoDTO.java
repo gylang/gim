@@ -1,8 +1,6 @@
 package com.gylang.gim.api.dto.response;
 
-import com.gylang.gim.api.domain.manager.WhiteBlackList;
 import com.gylang.gim.api.dto.PtUserDTO;
-import com.gylang.gim.api.dto.PtUserInfoDTO;
 import lombok.Data;
 
 import java.util.List;

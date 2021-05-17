@@ -7,7 +7,6 @@ import com.gylang.gim.api.dto.request.LoginRequest;
 import com.gylang.gim.api.dto.request.RegistryRequest;
 import com.gylang.gim.api.dto.response.LoginResponse;
 import com.gylang.gim.web.service.biz.BizAuthService;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -24,24 +23,41 @@ public class LoginController {
     @Resource
     private CacheManager cacheManager;
 
+    /**
+     * 登录
+     *
+     * @param request
+     * @return
+     */
     @RequestMapping("login")
     public CommonResult<LoginResponse> login(@RequestBody LoginRequest request) {
 
         return bizAuthService.login(request);
     }
 
+    /**
+     * 注册
+     *
+     * @param request
+     * @return
+     */
     @RequestMapping("registry")
-    @Transactional
     public CommonResult<Boolean> registry(@RequestBody RegistryRequest request) {
 
         return bizAuthService.registry(request);
     }
 
 
+    /**
+     * 获取用户信息
+     *
+     * @param token
+     * @return
+     */
     @GetMapping("userInfo")
     public CommonResult<UserCache> getUserInfo(@RequestHeader("token") String token) {
         // 判断是否存在 状态是否正常
-        return CommonResult.fail(cacheManager.get(token));
+        return CommonResult.ok(cacheManager.get(token));
     }
 
 }

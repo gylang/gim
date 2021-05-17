@@ -5,10 +5,10 @@ import com.gylang.gim.api.constant.GimPropertyConstant;
 import com.gylang.gim.api.constant.cmd.ManagerCmd;
 import com.gylang.gim.api.constant.qos.QosConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.gim.api.domain.manager.WhiteBlackList;
+import com.gylang.gim.api.domain.manager.BlackWhiteList;
 import com.gylang.gim.api.enums.ChatType;
 import com.gylang.gim.remote.SocketManager;
-import com.gylang.gim.web.service.im.ImUserWhiteBlackManager;
+import com.gylang.gim.web.service.im.ImUserBlackWhiteManager;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
@@ -21,32 +21,32 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @Service
 @ConditionalOnProperty(name = GimPropertyConstant.RUN_MODEL_KEY, havingValue = GimPropertyConstant.RUN_MODEL.STANDARD)
-public class ImUserWhiteBlackManagerImpl implements ImUserWhiteBlackManager {
+public class ImUserWhiteBlackManagerImpl implements ImUserBlackWhiteManager {
 
     @Resource
     private SocketManager socketManager;
 
     @Override
-    public void save(WhiteBlackList whiteBlackList) {
+    public void save(BlackWhiteList blackWhiteList) {
         socketManager.send(MessageWrap.builder()
                 .type(ChatType.MANAGER)
                 .cmd(ManagerCmd.BLACK_WHITE_LIST_MANAGER)
                 .qos(QosConstant.INSURE_ONE_ARRIVE)
-                .content(JSON.toJSONString(whiteBlackList))
+                .content(JSON.toJSONString(blackWhiteList))
                 .build());
     }
 
     @Override
-    public WhiteBlackList query(WhiteBlackList whiteBlackList) {
+    public BlackWhiteList query(BlackWhiteList blackWhiteList) {
         MessageWrap msg = MessageWrap.builder()
                 .type(ChatType.MANAGER)
                 .cmd(ManagerCmd.BLACK_WHITE_LIST_MANAGER)
                 .qos(QosConstant.INSURE_ONE_ARRIVE)
-                .content(JSON.toJSONString(whiteBlackList))
+                .content(JSON.toJSONString(blackWhiteList))
                 .build();
         // 同步等待结果
-        AtomicReference<WhiteBlackList> result = new AtomicReference<>();
-        socketManager.sendAndWaitCallBack(msg, wb -> result.set(JSON.parseObject(wb.getContent(), WhiteBlackList.class)), 5000);
+        AtomicReference<BlackWhiteList> result = new AtomicReference<>();
+        socketManager.sendAndWaitCallBack(msg, wb -> result.set(JSON.parseObject(wb.getContent(), BlackWhiteList.class)), 5000);
         return result.get();
     }
 

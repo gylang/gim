@@ -23,10 +23,44 @@ public class UserController {
     @Resource
     private BizUserService bizUserService;
 
+    /**
+     * 用户搜索
+     *
+     * @param user
+     * @return
+     */
     @RequestMapping("search")
     public CommonResult<PageResponse<PtUserDTO>> search(@RequestBody Page<PtUser> user) {
 
         return bizUserService.search(user);
 
     }
+
+    /**
+     * 新增用户
+     *
+     * @param user
+     * @return
+     */
+    @RequestMapping("save")
+    public CommonResult<Boolean> add(@RequestBody PtUserDTO user) {
+
+        return CommonResult.auto(bizUserService.save(user));
+
+    }
+
+    /**
+     * 新增用户
+     *
+     * @param user
+     * @return
+     */
+    @RequestMapping("del")
+    public CommonResult<Boolean> del(@RequestBody PtUserDTO user) {
+
+        return CommonResult.auto(bizUserService.del(user));
+
+    }
+
+
 }

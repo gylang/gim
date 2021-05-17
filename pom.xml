@@ -32,8 +32,8 @@
         <module>demo/test-noframework-im-server</module>
         <module>demo/test-spring-im-server</module>
         <module>gim</module>
-        <module>plugin/gylang-cache-manager</module>
-        <module>plugin/gylang-cross-server-im-starter</module>
+        <module>extends/gylang-cache-manager</module>
+        <module>extends/gylang-cross-server-im-starter</module>
         <module>gim/gim-chat-server</module>
         <module>gim/gim-api-server</module>
         <module>gim/gim-client-java</module>

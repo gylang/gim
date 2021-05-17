@@ -51,7 +51,6 @@ public class DefaultGimControllerAdapter implements BizRequestAdapter {
         return null;
     }
 
-    @Override
     public void register(List<ObjectWrap> nettyControllerList) {
         // 判断注册列表是否为空
         if (null == nettyControllerList) {

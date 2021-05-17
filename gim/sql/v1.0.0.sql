@@ -164,6 +164,11 @@ create table pt_user
 )
     charset=utf8mb4;
 
+INSERT INTO pt_user (id, username, password, email, tel, nickname, salt, create_time, update_time, create_by, modify_by, status, is_delete, tenant_id) VALUES (100000001, '100000001', 'bce57c155fba8da5726050c258c26d9d', null, null, 'admin', '65b0f9cebf796e5fea123d5f9cb767fc', '2021-04-02 09:29:41', '2021-04-02 09:29:41', null, null, 1, 0, null);
+INSERT INTO pt_user (id, username, password, email, tel, nickname, salt, create_time, update_time, create_by, modify_by, status, is_delete, tenant_id) VALUES (1377795336267481090, 'admin', 'bce57c155fba8da5726050c258c26d9d', null, null, 'admin', '65b0f9cebf796e5fea123d5f9cb767fc', '2021-04-02 09:29:41', '2021-04-02 09:29:41', null, null, 1, 0, null);
+
+
+
 create table pt_user_info
 (
     id bigint not null comment '主键id'
@@ -183,6 +188,9 @@ create table pt_user_info
         unique (uid)
 )
     comment '用户信息表';
+
+INSERT INTO `gylang-im`.pt_user_info (id, uid, name, avatar, intro, create_time, update_time, create_by, modify_by, status, is_delete, tenant_id) VALUES (1377795337932619778, 1377795336267481090, '', null, null, '2021-04-02 09:29:41', '2021-04-02 09:29:41', null, null, 1, 0, null);
+INSERT INTO `gylang-im`.pt_user_info (id, uid, name, avatar, intro, create_time, update_time, create_by, modify_by, status, is_delete, tenant_id) VALUES (1377795337932619779, 100000001, '', null, null, '2021-04-02 09:29:41', '2021-04-02 09:29:41', null, null, 1, 0, null);
 
 create table role
 (

@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.gylang.gim.api.constant.cmd.ManagerCmd;
 import com.gylang.gim.api.constant.mamager.GroupConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.gim.api.domain.manager.WhiteBlackList;
+import com.gylang.gim.api.domain.manager.BlackWhiteList;
 import com.gylang.gim.api.domain.message.reply.ReplyMessage;
 import com.gylang.gim.server.handle.manager.ManagerService;
 import com.gylang.gim.server.service.SendAccessService;
@@ -29,16 +29,16 @@ public class BlackWhiteListManagerImpl implements ManagerService {
     @Override
     public MessageWrap doInvoke(GIMSession session, MessageWrap messageWrap) {
 
-        WhiteBlackList whiteBlackList = JSON.parseObject(messageWrap.getContent(), WhiteBlackList.class);
+        BlackWhiteList blackWhiteList = JSON.parseObject(messageWrap.getContent(), BlackWhiteList.class);
 
         ReplyMessage success = ReplyMessage.success(messageWrap);
         if (GroupConstant.QUERY.equals(messageWrap.getCode())) {
-            WhiteBlackList result = sendAccessService.queryPrivateInfo(whiteBlackList);
+            BlackWhiteList result = sendAccessService.queryPrivateInfo(blackWhiteList);
             success.setContent(JSON.toJSONString(result));
             return success;
         }
 
-        sendAccessService.updatePrivate(whiteBlackList);
+        sendAccessService.updatePrivate(blackWhiteList);
 
         return success;
     }

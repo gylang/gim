@@ -6,7 +6,6 @@ import com.gylang.netty.sdk.api.repo.GIMSessionRepository;
 import com.gylang.netty.sdk.api.repo.NettyUserInfoFillHandler;
 import io.netty.channel.Channel;
 import org.springframework.beans.BeanUtils;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -19,8 +18,7 @@ import javax.annotation.Resource;
 public class FillUserInfo implements NettyUserInfoFillHandler {
     @Resource
     private GIMSessionRepository repository;
-    @Resource
-    private ApplicationContext applicationContext;
+
 
 
     @Override

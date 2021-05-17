@@ -1,6 +1,6 @@
 package com.gylang.gim.web.service.im;
 
-import com.gylang.gim.api.domain.manager.WhiteBlackList;
+import com.gylang.gim.api.domain.manager.BlackWhiteList;
 
 /**
  * 群聊禁言管理
@@ -13,14 +13,14 @@ public interface ImGroupDisableSendMsgManager {
     /**
      * 群聊发送消息黑白名单管理
      *
-     * @param whiteBlackList 黑白名单
+     * @param blackWhiteList 黑白名单
      */
-    void save(WhiteBlackList whiteBlackList);
+    void save(BlackWhiteList blackWhiteList);
 
     /**
      * 查询黑白名单
-     * @param whiteBlackList 黑白名单
+     * @param blackWhiteList 黑白名单
      * @return 黑白名单
      */
-    WhiteBlackList query(WhiteBlackList whiteBlackList);
+    BlackWhiteList query(BlackWhiteList blackWhiteList);
 }
