@@ -16,8 +16,6 @@ import javax.annotation.Resource;
 @EnableIM
 public class SingleRoomApplication {
 
-
-
     public static void main(String[] args) {
         SpringApplication.run(SingleRoomApplication.class);
 

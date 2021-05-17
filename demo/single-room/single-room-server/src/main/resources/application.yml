@@ -13,7 +13,7 @@ gylang:
       - 7  #客户端接入
       - 10  # 服务端接入
     socketType:
-      com.gylang.netty.sdk.initializer.AppSocketJsonInitializer: 46001
+      com.gylang.netty.sdk.initializer.AppSocketJsonInitializer: 46000
 
 
 

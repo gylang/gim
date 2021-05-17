@@ -15,9 +15,9 @@ import java.util.Scanner;
  */
 public class RoomClient {
 
-    private static final String IP = "127.0.0.1";
+    private static final String IP = "47.102.211.48";
 
-    private static final Integer PORT = 46001;
+    private static final Integer PORT = 46000;
 
 
     public static void main(String[] args) {
