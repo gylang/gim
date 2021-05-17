@@ -92,6 +92,7 @@ public class HeartCheckHandler extends ChannelInboundHandlerAdapter {
         if (cause instanceof IOException) {
             log.info("server " + ctx.channel().remoteAddress() + "关闭连接");
         }
+        eventProvider.sendEvent(EventTypeConst.COLSE_CONNECT, new GIMSession(ctx.channel()));
         super.exceptionCaught(ctx, cause);
     }
 

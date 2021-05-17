@@ -43,7 +43,7 @@ public class ClientQosAdapterHandler {
             if (log.isDebugEnabled()) {
                 log.debug("[qos1 - receiver] : 接收到服务端消息 , 响应服务端ack1");
             }
-            return null;
+            return message;
 
         }
 

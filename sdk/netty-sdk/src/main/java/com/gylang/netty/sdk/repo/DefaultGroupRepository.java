@@ -56,7 +56,6 @@ public class DefaultGroupRepository implements GIMGroupSessionRepository {
     @Override
     public Boolean checkIsMember(String groupId, String memberId) {
         Set<String> memberMap = membersMap.get(groupId);
-
         return null != memberMap && memberMap.contains(memberId);
     }
 

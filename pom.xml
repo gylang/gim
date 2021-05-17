@@ -40,6 +40,8 @@
         <module>gim/gim-data-center</module>
         <module>/develop/web-rtc</module>
         <module>sdk/netty-sdk-api</module>
+        <module>demo/single-room/single-room-server</module>
+        <module>demo/single-room/single-room-client</module>
 
 
     </modules>

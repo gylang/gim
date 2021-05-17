@@ -37,9 +37,12 @@ public interface EventTypeConst {
     /** 消息发送失败 */
     String SEND_MES_ERROR = "SEND_MES_ERROR";
 
+    String QOS_SEND_MES_ERROR = "QOS_SEND_MES_ERROR";
+
     /** 未找到该用户 */
     String USER_NOT_FOUND = "USER_NOT_FOUND";
 
     String USER_ONLINE = "USER_ONLINE";
 
+    String COLSE_CONNECT = "COLSE_CONNECT";
 }

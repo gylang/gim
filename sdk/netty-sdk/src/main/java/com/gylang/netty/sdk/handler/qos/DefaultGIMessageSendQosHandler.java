@@ -1,6 +1,7 @@
 package com.gylang.netty.sdk.handler.qos;
 
 import cn.hutool.core.util.StrUtil;
+import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.gim.api.constant.qos.QosConstant;
 import com.gylang.gim.api.domain.common.MessageWrap;
 import com.gylang.gim.api.domain.common.QosMessageWrap;
@@ -171,6 +172,9 @@ public class DefaultGIMessageSendQosHandler implements IMessageSenderQosHandler 
                 } else {
                     // qos发送到最大次数
                     iterator.remove();
+                    GIMSession gimSession = new GIMSession();
+                    gimSession.setAccount(qosMessageWrap.getReceive());
+                    eventProvider.sendEvent(EventTypeConst.QOS_SEND_MES_ERROR, gimSession);
                 }
             }
 
