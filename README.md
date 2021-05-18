@@ -12,6 +12,8 @@
 > > test-noframework-im-server (非框架整合)
 > > test-spring-im-server (spring boot 框架整合)
 > > websocket-js (前端js使用)
+> > single-room-client (聊天室demo客户端开箱即用)
+> > single-room-server (聊天室服务端demo客户端开箱即用)
 >
 > develop (待开发)
 >
@@ -599,5 +601,9 @@ public class ChatHandler implements IMRequestHandler {
 #### 使用说明
 
 **学习为主，有啥好想法和不足可联系我，出于爱好开发的一个小框架**
+## 有问题联系
+微信
+![微信](README.assets/e3d22c5d65a98bc9ccf598a00c4abf9.jpg)
 
-各位大佬（爱好者v( •̀ ω •́ )✧）指点方式：QQ：1179346492，交流群：179493777
+QQ
+![QQ](README.assets/1621318401040_temp_qrcode_share_9993.png)

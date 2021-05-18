@@ -1,17 +1,129 @@
-# gylang-middleware
+# GIM
 
 #### 介绍
-中间件
+目标: 只需完成自己的业务逻辑, 就能实现即时通信, 整合spring开发可以让你写web开发一样方便, 让项目简单方便接入通信推送聊天服务。
+
+
+
+#### 目录结构
+
+> demo (使用demo)
+>
+> > test-noframework-im-server (非框架整合)
+> > test-spring-im-server (spring boot 框架整合)
+> > websocket-js (前端js使用)
+>
+> develop (待开发)
+>
+> > web-rtc (音视频)
+>
+> extends (扩展功能)
+>
+> > gylang-cache-manager (缓存使用)
+> > gylang-cross-server-im-starter (集群扩展)
+>
+> gim (聊天项目使用)
+>
+> > gim-api-server (api/web服务)
+> > gim-chat-server (通信服务)
+> > gim-client-java (java客户端)
+> > gim-data-center (im 数据中心)
+>
+> sdk (im sdk)
+>
+> > gim-admin-remote-sdk (服务管理端接入)
+> > gim-common-api (公共接口包)
+> > gim-remote-sdk (java 客户端sdk)
+> > netty-sdk (核心sdk)
+> > netty-sdk-api (sdk 接口包)
+> > netty-sdk-spring-starter (spring 启动器)
+>
+> ui (ui界面 前端。。。)
+>
+> > vue-chat-client
 
 #### 软件架构
 
 ##### 调用逻辑图
 
-![image-20210303172307540](README.assets/image-20210303172307540.png)
+![image-20210303172307540](README.assets/image-2021030317230754.png)
 
 
 
-##### 消息驱动
+##### 消息体结构
+
+```java
+package com.gylang.gim.api.domain.common;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+
+/**
+ * 统一交互信息包装类
+ *
+ * @author gylang
+ * data 2020/11/3
+ * @version v0.0.1
+ */
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class MessageWrap implements Serializable {
+
+    /** 业务命令 */
+    private String cmd;
+
+    /** 发送者 */
+    private String sender;
+    /** 消息类型 区分业务处理器, 用于消息分发 */
+    private int type;
+    /** 消息主体 */
+    private String content;
+    /** 消息体类型  */
+    private String contentType;
+    /** 消息code 服务异常消息响应/或者消息回复 */
+    private String code;
+    /** 消息提示 服务异常消息响应提示 */
+    private String msg;
+    /** 接收者 */
+    private String receive;
+    /** 接收者类型 */
+    private byte receiverType;
+
+    private String clientMsgId;
+
+    /** 消息id */
+    private String msgId;
+    /** 重试次数 */
+    private  int retryNum;
+
+   /**
+     * 使用质量服务
+     *
+     * @see com.gylang.gim.api.constant.qos.QosConstant
+     */
+    private int qos;
+	/** qos ack使用 */
+    private int ack;
+
+    /** 离线/失败消息事件发送 */
+    private boolean offlineMsgEvent = false;
+    
+    /** 时间戳 */
+    private long timeStamp;
+
+
+}
+```
+
+
+
+##### 事件驱动
 
 消息发送监听，用于扩展跨服消息发送，消息离线存储。
 
@@ -49,153 +161,282 @@ public class OfflineMsgEvent implements MessageEventListener<MessageWrap> {
 eventProvider.sendEvent(EventTypeConst.OFFLINE_MSG_EVENT, messageWrap)
 ```
 
+##### 消息路由
 
+> **IMessageRouter**
 
-##### 内置适配器
-
-内置处理器，**通过判断当前返回值是否未null，进行判断是否需要调用下一个处理器**，进行业务分发。
-
-**排序**：每个适配通过order进行判断实现处理器的顺序，如Qos服务的优先级比较高，可以过滤客户端的ACK，实现业务消息的后传，**order默认值：Integer.MAX_VALUE >> 1**
-
-**DefaultRequestHandlerAdapter**
-
-实现 IMRequestHandler类型的消息分发，实现很简单，就是一个kv map
+作用于消息的路由 查找消息的处理实现, 默认为实现通过  消息拦截 和 BizRequestAdapter业务消息适配实现
+通过消息拦截, 可以进行权限校验, 用户是否授权接入判断, 以及结果的拦截, 实现req-res方式的API式请求,
+通过 BizRequestAdapter, 实现不同类型的方式的消息处理实现方式的调用, 有基于, 实现IMRequestHandler接口(主要), GimController(基于content的解析), Method+注解(SpringNettyController, NettyMapping).
 
 ```java
-@Override
-public Object process(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
+/**
+ * netty分发处理适配器 责任链是处理 IMRequestAdapter
+ */
+@AdapterType(order = 1)
+@Slf4j
+public class DefaultMessageRouter implements IMessageRouter {
 
-    IMRequestHandler requestHandler = handlerMap.get(message.getCmd());
-    if (null == requestHandler) {
-        return null;
-    }
-    Object result = requestHandler.process(me, message);
-    return null == result ? NlllSuccess.getInstance() : result;
-}
-
-----
-    
-@NettyHandler("chat")
-public class ChatHandler implements IMRequestHandler {
-
-
-    @Resource
-    private MessageProvider messageProvider;
-    @Resource
-    private FillUserInfo fillUserInfo;
+    private List<BizRequestAdapter> requestAdapterList = new ArrayList<>();
+    private NettyUserInfoFillHandler nettyUserInfoFillHandler;
+    private List<NettyIntercept> nettyInterceptList;
 
     @Override
-    public Object process(IMSession me, MessageWrap message) {
+    public Object process(ChannelHandlerContext ctx, GIMSession me, MessageWrap message) {
 
 
-        MessageWrap messageWrap = new MessageWrap();
-        messageWrap.setSender(me.getAccount());
-        messageWrap.setContent("ACK");
-        messageWrap.setQos(true);
-        messageProvider.sendMsg(me, me, messageWrap);
-        return message;
-    }
-}
-```
-
-**DefaultNettyControllerAdapter**
-
-实现数据的类型转化，提取消息体，将数据转成我们需要的格式
-
-```java
-@Override
-public Object process(ChannelHandlerContext ctx, IMSession me, MessageWrap message) {
-
-    if (null != nettyControllerMap && null != paramTypeMap) {
-
-        NettyController<?> gimController = nettyControllerMap.get(message.getCmd());
-        Class<?> paramType = paramTypeMap.get(message.getCmd());
-        if (null == gimController || null == paramType) {
+        if (ContentType.BATCH.equals(message.getContentType())) {
+            // 批量消息
+            String batchMessageStr = message.getContent();
+            List<String> batchMessage = JSON.parseObject(batchMessageStr, new TypeReference<List<String>>() {
+            });
+            for (String messageWrapStr : batchMessage) {
+                try {
+                    process(ctx, me, JSON.parseObject(messageWrapStr, MessageWrap.class));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+        
+        // 填充用户信息
+        if (null != nettyUserInfoFillHandler) {
+            nettyUserInfoFillHandler.fill(me);
+        }
+        Object object = null;
+        boolean intercept = NettyIntercept.before(nettyInterceptList, ctx, me, message);
+        if (intercept) {
+            // 消息被拦截
             return null;
         }
 
-        Object result = ((NettyController<Object>) gimController)
-                .process(me, dataConverter.converterTo(paramType, message));
-        return null == result ? NlllSuccess.getInstance() : result;
+        if (log.isDebugEnabled()) {
+            log.debug("[接收到消息] : {}", message);
+        }
+        
+        // 消息适配器
+        for (IRequestAdapter adapter : requestAdapterList) {
+            object = adapter.process(ctx, me, message);
+            if (null != object) {
+                break;
+            }
+        }
+        return NettyIntercept.after(nettyInterceptList, ctx, me, message, object);
     }
-    return null;
-}
------------
 
-@NettyHandler("login")
-public class TouristLoginHandler implements NettyController<Long> {
 
-    @Resource
-    private MessageProvider messageProvider;
-    @Resource
-    private IMGroupSessionRepository groupSessionRepository;
-    private static final KeyLock<String> keyLock = new KeyLock<>();
+
 
     @Override
-    public Object process(IMSession me, Long requestBody) {
+    public Integer order() {
+        return null;
+    }
 
-        me.setAccount(requestBody);
-        AbstractSessionGroup defaultGroup = getAndCreateGroup(me, groupSessionRepository);
-        boolean join = defaultGroup.join(me);
-        if (join) {
-            MessageWrap messageWrap = new MessageWrap();
-            messageWrap.setSender(me.getAccount());
-            messageWrap.setContent(requestBody + "加入群聊组");
-            messageProvider.sendGroup(me, "default", messageWrap);
+    @Override
+    public void init(GimGlobalConfiguration gimGlobalConfiguration) {
+        this.nettyUserInfoFillHandler = gimGlobalConfiguration.getNettyUserInfoFillHandler();
+        this.nettyInterceptList = gimGlobalConfiguration.getNettyInterceptList();
+        this.requestAdapterList = gimGlobalConfiguration.getBizRequestAdapterList();
+    }
+}
 
-        return messageWrap;
-        }
+```
+
+
+
+##### 适配器
+
+> **BizRequestAdapter**
+
+**作用**
+
+作用于业务消息适配分发, qos质量管理等。
+
+**order默认值：Integer.MAX_VALUE >> 1**
+
+```java
+/**
+ * netty请求适配器, 规约用于系统内部适配实现, 非业务功能
+ *
+ * @author admin
+ */
+public interface IRequestAdapter extends AfterConfigInitialize, Comparator<IRequestAdapter> {
+
+    int DEFAULT_ORDER = Integer.MAX_VALUE >> 1;
+
+    /**
+     * 处理收到客户端从长链接发送的数据
+     *
+     * @param ctx     上下文
+     * @param me      当前会话
+     * @param message 消息体
+     * @return 适配处理结果
+     */
+    Object process(ChannelHandlerContext ctx, GIMSession me, MessageWrap message);
+
+    /**
+     * 排序权重 小在前 大在后
+     *
+     * @return 排序权重
+     */
+    Integer order();
+
+}
+
+```
+
+
+
+##### 内置适配器介绍
+
+**DefaultRequestHandlerAdapter**
+
+**使用**
+
+> @NettyHandler 标识者当前处理类型, 通过message中的type来区分, ChatType为当前内置的所有消息类型
+
+```java
+package com.gylang.chat;
+
+import com.gylang.gim.api.domain.common.MessageWrap;
+import com.gylang.gim.api.enums.ChatType;
+import com.gylang.netty.sdk.api.annotation.NettyHandler;
+import com.gylang.netty.sdk.api.domain.model.GIMSession;
+import com.gylang.netty.sdk.api.handler.IMRequestHandler;
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * @author gylang
+ * data 2020/11/10
+ * @version v0.0.1
+ */
+@NettyHandler(ChatType.GROUP_CHAT)
+@Slf4j
+public class SimpleChatGroupHandler implements IMRequestHandler {
+
+    @Override
+    public Object process(GIMSession me, MessageWrap message) {
+        log.info("收到消息 : {}", message.getContent());
+        log.info("发送test事件");
+        NettyConfigHolder.getInstance().getEventProvider().sendEvent("test", "hahaha这是一个事件消息");
+        NettyConfigHolder.getInstance().getMessageProvider().sendMsg(me, me, MessageWrap.builder()
+                .cmd("ACK")
+                .content("收到了")
+                .build());
         return null;
     }
 }
 ```
+
+
+
+**QosAdapterHandler**
+
+**作用:** qos质量服务, 使用了0, 1, 2三种方式
+
+> 0 ONE_AWAY 一次发送
+>
+> 1 INSURE_ONE_ARRIVE 确保一次可达, 限定发送次数, 超过就会发送失败
+>
+> 2 ACCURACY_ONE_ARRIVE 确保只有一次可达, 客户端 和 服务端双向来做确保, 客户端/服务端消息去重, 保证只消费一次
+
+
+
+**DefaultNettyControllerAdapter,  MethodHandlerAdapter  待完善,  IMRequestHandler 就能获取消息的完整报文**
 
 ##### 全局配置类
 
 ```java
-/**
- * 根据名称装配，防止和客户端的ChannelInitializer冲突报错
- */
-private CustomInitializer<?> serverChannelInitializer;
-/** 事件监听 用于发送消息 */
-private EventProvider eventProvider;
-/** 事件上下文 map，用于调用messageEventListener.OnEvent */
-private EventContext eventContext;
-/** 数据类型转化 本来想实现protobuf的适配，但是实现protobuf，扩展比较麻烦，所以暂时舍弃 */
-private DataConverter dataConverter;
-/** 单用户会话工厂 用于存储会话 */
-private IMSessionRepository sessionRepository;
-/** 用户组会话工厂 会话组，群组，房间组 */
-private IMGroupSessionRepository groupSessionRepository;
-/** 消息发送provider 消息发送，消息主动推送给客户端 */
-private MessageProvider messageProvider;
-/** 事件监听列表 所有的事件监听器（后面可以使用ObjectWrap，如果对象被代理可能就拿不到注解）*/
-private List<MessageEventListener<?>> messageEventListener;
-/** 业务请求适配器  业务是配置 qos，controller，Handler... */
-private List<BizRequestAdapter<?>> bizRequestAdapterList;
-/** 适配分发器 用于第一层对adapter的链式调用*/
-private DispatchAdapterHandler dispatchAdapterHandler;
-/** 线程池 （开始考虑使用在消息组发时进行异步发送）*/
-private ThreadPoolExecutor poolExecutor;
-/** 填充客户信息 这个可能也应该删除，可以直接通过拦截器实现就好了，
-如果不使用拦截器，可以用这个进行消息填充，甚至通过Adapter也是可以 */
-private NettyUserInfoFillHandler nettyUserInfoFillHandler;
-/** 消息处理拦截器 消息进来、出去进行拦截调用 */
-private List<NettyIntercept> nettyInterceptList;
-/** 上下文可能使用到的对象包装类集合 主要用于适配业务调用的bean注入 */
-private List<ObjectWrap> objectWrapList;
-/** qos 发送 处理实现（可以不耦合到这里） */
-private IMessageReceiveQosHandler iMessageReceiveQosHandler;
-/** qos 接收 处理实现 （可以不耦合到这里） */
-private IMessageSenderQosHandler iMessageSenderQosHandler;
+package com.gylang.netty.sdk.api.config;
 
-/** 配置属性 用于存储配置 */
-private NettyProperties gimProperties;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
+import com.gylang.netty.sdk.api.common.ObjectWrap;
+import com.gylang.netty.sdk.api.constant.GimDefaultConfigEnum;
+import com.gylang.netty.sdk.api.conveter.DataConverter;
+import com.gylang.netty.sdk.api.domain.CrossServerObserver;
+import com.gylang.netty.sdk.api.event.EventContext;
+import com.gylang.netty.sdk.api.event.EventProvider;
+import com.gylang.netty.sdk.api.provider.CrossMessageProvider;
+import com.gylang.netty.sdk.api.event.message.MessageEventListener;
+import com.gylang.netty.sdk.api.handler.BizRequestAdapter;
+import com.gylang.netty.sdk.api.handler.IMessageRouter;
+import com.gylang.netty.sdk.api.handler.qos.IMessageReceiveQosHandler;
+import com.gylang.netty.sdk.api.handler.qos.IMessageSenderQosHandler;
+import com.gylang.netty.sdk.api.initializer.CustomInitializer;
+import com.gylang.netty.sdk.api.intercept.NettyIntercept;
+import com.gylang.netty.sdk.api.provider.MessageProvider;
+import com.gylang.netty.sdk.api.repo.GIMGroupSessionRepository;
+import com.gylang.netty.sdk.api.repo.GIMSessionRepository;
+import com.gylang.netty.sdk.api.repo.NettyUserInfoFillHandler;
+import com.gylang.netty.sdk.api.util.MsgIdUtil;
+import lombok.Data;
+import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ThreadPoolExecutor;
+
 /**
- * 配置信息
+ * netty服务配置, 全局配置类
+ *
+ * @author gylang
+ * data 2020/11/3
+ * @version v0.0.1
  */
-@Getter
-private Map<String, Object> properties;
+@Data
+public class GimGlobalConfiguration {
+
+
+    /**
+     * netty 的ChannelInitializer, 用户初始化netty服务
+     */
+    private List<CustomInitializer<?>> serverChannelInitializer;
+    /** 事件监听 */
+    private EventProvider eventProvider;
+    /** 事件上下文 */
+    private EventContext eventContext;
+    /** 数据类型转化 */
+    private DataConverter dataConverter;
+    /** 单用户会话工厂 */
+    private GIMSessionRepository sessionRepository;
+    /** 用户组会话工厂 */
+    private GIMGroupSessionRepository groupSessionRepository;
+    /** 消息发送provider */
+    private MessageProvider messageProvider;
+    /** 事件监听列表 */
+    private List<MessageEventListener<?>> messageEventListener;
+    /** 业务请求适配器 */
+    private List<BizRequestAdapter> bizRequestAdapterList;
+    /** 消息路由分发器 */
+    private IMessageRouter iMessageRouter;
+    /** 线程池 */
+    private ThreadPoolExecutor poolExecutor;
+    /** 填充客户信息 */
+    private NettyUserInfoFillHandler nettyUserInfoFillHandler;
+    /** 消息处理拦截器 */
+    private List<NettyIntercept> nettyInterceptList;
+    /** 上下文可能使用到的对象包装类集合 主要用于适配业务调用的bean注入 */
+    private List<ObjectWrap> objectWrapList;
+    /** qos 发送处理器 */
+    private IMessageReceiveQosHandler iMessageReceiveQosHandler;
+    /** qos 接收 */
+    private IMessageSenderQosHandler iMessageSenderQosHandler;
+
+    /** 配置属性 */
+    private GimProperties gimProperties;
+    /** 消息id生成器 */
+    private MsgIdUtil msgIdUtil = MsgIdUtil.getMsgId();
+    /** 集群跨服通信提供者 */
+    private CrossMessageProvider crossMessageProvider;
+ /** 集群跨服通信观察对象, 存储当前集群服务信息 */
+    private CrossServerObserver crossServerObserver;
+   
+}
+
 ```
 
 
@@ -222,10 +463,80 @@ public class IMApplication {
 }
 ```
 
+**配置**
+
+
+
+application.yml
+
+```yml
+server:
+  port: 8888
+
+spring:
+  application:
+    name: im-server
+  datasource:
+    url: jdbc:mysql://127.0.0.1:33060/gylang-im?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  redis:
+    password: ${REDIS_PWD:123456}
+  profiles:
+    active: admin
+
+# im
+gylang:
+  gim:
+    serverIp: 127.0.0.1
+    bossGroup: 4
+    workerGroup: 12
+    readerIdle: 10
+    writeIdle: 10
+    allIdle: 10
+    lostConnectRetryNum: 10
+    socketServerPort: 46000
+    nonAuthType: # 不需要授权
+      - 7  #客户端接入
+      - 10  # 服务端接入
+    socketType: # 初始化器 两个服务 websocket 和 serversocket
+      com.gylang.netty.sdk.initializer.WebSocketJsonInitializer: 46000
+      com.gylang.netty.sdk.initializer.AppSocketJsonInitializer: 46001
+
+
+
+
+
+logging:
+  level:
+    root: debug
+```
+
+application-admin.yml (配置web服务 和 数据中心服务) loginEvent: 登录事件监听, persistence:持久化事件监听
+
+```yml
+gim:
+  #  web 服务
+  admin-user:
+    webAdmin:
+      userId: -2
+      password: 123456
+      name: web推送
+    #      数据中心
+    datacenter:
+      password: 123456
+      name: 数据中心
+      userId: -3
+      loginEvent: true
+      persistence: true
+```
+
+
+
 **编写业务处理类**
 
 ```java
-@NettyHandler("chat")
+@NettyHandler(ChatType.PRIVATE_CHAT)
 @Component
 @Slf4j
 public class ChatHandler implements IMRequestHandler {
@@ -250,51 +561,47 @@ public class ChatHandler implements IMRequestHandler {
 
 **客户端发送消息**
 
-![image-20210303180009499](README.assets/image-20210303180009499.png)
+```json
+{
+  "sender" :  "",
+  "type" : 1,
+  "content" :  "你好呀",
+  "contentType" : "",
+  "msg" : "",
+  "receive" :  "100000001",
+  "receiverType" : "",
+  "clientMsgId" :  "",
+  "msgId" : "",
+  "retryNum" :  "",
+  "qos" : 2,
+  "ack" :  "",
+  "offlineMsgEvent" : true,
+  "timeStamp" :  ""
+}
+```
+
+
+
+![image-20210303180009499](README.assets/image-2021030318000949.png)
 
 **vue的测试小demo**在 vue-admin.zip
 
 
 
-##### 非framework
+##### 非framework (待更新)
 
 **配置config**
 
 参考 netty-console-chat
 
-```java
-gimGlobalConfiguration.setServerChannelInitializer(new WebJsonInitializer());
-gimGlobalConfiguration.setEventProvider(new DefaultEventProvider());
-gimGlobalConfiguration.setEventContext(new EventContext());
-gimGlobalConfiguration.setDataConverter(new JsonConverter());
-gimGlobalConfiguration.setSessionRepository(new DefaultIMRepository());
-gimGlobalConfiguration.setGroupSessionRepository(new DefaultGroupRepository());
-gimGlobalConfiguration.setMessageProvider(new DefaultMessageProvider());
-gimGlobalConfiguration.setMessageEventListener(new ArrayList<>());
-List<BizRequestAdapter<?>> bizRequestAdapterList = new ArrayList<>();
-bizRequestAdapterList.add(new DefaultNettyControllerAdapter());
-bizRequestAdapterList.add(new DefaultRequestHandlerAdapter());
-gimGlobalConfiguration.setBizRequestAdapterList(bizRequestAdapterList);
-gimGlobalConfiguration.setDispatchAdapterHandler(new DefaultAdapterDispatch());
-gimGlobalConfiguration.setNettyInterceptList(new ArrayList<>());
-gimGlobalConfiguration.setIMessageReceiveQosHandler(new DefaultIMessageReceiveQosHandler());
-gimGlobalConfiguration.setIMessageSenderQosHandler(new DefaultIMessageSendQosHandler());
 
-// 启动服务
-NettyConfigHolder.init();
-//业务执行参数
-NettyConfiguration gimGlobalConfiguration = NettyConfigHolder.getInstance();
-gimGlobalConfiguration.addObjectWrap(ObjectWrapUtil.resolver(JoinGroupHandler.class, new JoinGroupHandler()));
-gimGlobalConfiguration.addObjectWrap(ObjectWrapUtil.resolver(SimpleChatGroupHandler.class, new SimpleChatGroupHandler()));
-gimGlobalConfiguration.setMessageEventListener(CollUtil.newArrayList(new TestEventListener()));
-new SimpleNettyConfigurationInitializer().initConfig(gimGlobalConfiguration);
-IMServer imServer = new IMServer();
-imServer.setNettyConfig(gimGlobalConfiguration);
-imServer.start();
-```
 
 #### 使用说明
 
 **学习为主，有啥好想法和不足可联系我，出于爱好开发的一个小框架**
+## 有问题联系
+微信
+![微信](README.assets/e3d22c5d65a98bc9ccf598a00c4abf9.jpg)
 
-各位大佬（爱好者v( •̀ ω •́ )✧）指点方式：QQ：1179346492，交流群：179493777
+QQ
+![QQ](README.assets/1621318401040_temp_qrcode_share_9993.png)
