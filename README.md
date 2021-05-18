@@ -592,9 +592,6 @@ public class ChatHandler implements IMRequestHandler {
 
 ##### 非framework (待更新)
 
-**配置config**
-
-参考 netty-console-chat
 
 
 
