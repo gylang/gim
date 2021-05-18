@@ -1,7 +1,7 @@
 package com.gylang.gim.web.event;
 
+import com.gylang.gim.api.constant.EventTypeConst;
 import com.gylang.gim.api.domain.common.MessageWrap;
-import com.gylang.netty.sdk.api.constant.EventTypeConst;
 import com.gylang.netty.sdk.api.event.message.MessageEvent;
 import com.gylang.netty.sdk.api.event.message.MessageEventListener;
 import lombok.extern.slf4j.Slf4j;

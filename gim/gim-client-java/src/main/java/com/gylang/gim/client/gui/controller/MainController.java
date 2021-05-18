@@ -2,7 +2,6 @@ package com.gylang.gim.client.gui.controller;
 
 import com.gylang.gim.client.gui.core.CustomApplication;
 import com.gylang.gim.client.gui.util.GuiUtil;
-import io.datafx.controller.ViewController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,6 @@ import java.util.ResourceBundle;
  * @author gylang
  * data 2021/4/2
  */
-@ViewController("/fxml/main.fxml")
 @Slf4j
 public class MainController extends CustomApplication {
 

@@ -79,42 +79,7 @@
             <version>15.0.1</version>
         </dependency>
 
-        <dependency>
-            <groupId>jfoenix</groupId>
-            <artifactId>jfoenix</artifactId>
-            <version>8.0.10</version>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/libs/jfoenix-8.0.10.jar</systemPath>
-        </dependency>
 
-        <dependency>
-            <groupId>datafx-injection</groupId>
-            <artifactId>datafx-injection</artifactId>
-            <version>${datafx.version}</version>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/libs/datafx-injection-8.0.2-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>datafx-eventsystem</groupId>
-            <artifactId>datafx-eventsystem</artifactId>
-            <version>${datafx.version}</version>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/libs/datafx-eventsystem-8.0.2-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>datafx-core</groupId>
-            <artifactId>datafx-core</artifactId>
-            <version>${datafx.version}</version>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/libs/datafx-core-8.0.2-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>datafx-flow</groupId>
-            <artifactId>datafx-flow</artifactId>
-            <version>${datafx.version}</version>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/libs/datafx-flow-8.0.2-SNAPSHOT.jar</systemPath>
-        </dependency>
     </dependencies>
 
 

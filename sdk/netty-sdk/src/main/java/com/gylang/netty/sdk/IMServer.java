@@ -50,10 +50,8 @@ public class IMServer {
             // 监听服务启动
             websocket.syncUninterruptibly().channel().newSucceededFuture().addListener(f -> {
                 log.info("==================================================");
-                log.info("================{}:启动成功=====================");
-                log.info("==================端口:{}=======================",
-                        customInitializer.getName(),
-                        nettyConfig.getProperties(GimDefaultConfigEnum.WEBSOCKET_PORT));
+                log.info("================{}:启动成功=====================",  customInitializer.getName());
+                log.info("==================端口:{}=======================", customInitializer.getPort());
                 log.info("==================================================");
             });
             // 监听服务关闭

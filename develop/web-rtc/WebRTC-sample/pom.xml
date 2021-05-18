@@ -6,8 +6,7 @@
 	<groupId>groupId</groupId>
 	<artifactId>WebRTC</artifactId>
 	<version>1.0-SNAPSHOT</version>
-
-    <packaging>pom</packaging>
+	<packaging>pom</packaging>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -22,7 +21,7 @@
 		<java.version>1.8</java.version>
 	</properties>
 
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

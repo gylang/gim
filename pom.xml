@@ -21,6 +21,7 @@
         <netty.version>4.1.44.Final</netty.version>
         <slf4j.version>1.7.30</slf4j.version>
         <spring.version>2.2.1.RELEASE</spring.version>
+        <spring-maven.version>2.2.1</spring-maven.version>
 
     </properties>
     <modules>
@@ -40,11 +41,23 @@
         <module>gim/gim-data-center</module>
         <module>/develop/web-rtc</module>
         <module>sdk/netty-sdk-api</module>
-        <module>demo/single-room/single-room-server</module>
-        <module>demo/single-room/single-room-client</module>
-
+        <module>demo/single-room-server</module>
+        <module>demo/single-room-client</module>
 
     </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-parent</artifactId>
+                <version>${spring.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <distributionManagement>
         <repository>
             <id>youlin-releases</id>
@@ -70,5 +83,6 @@
             </snapshots>
         </repository>
     </repositories>
+
 </project>
 

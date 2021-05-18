@@ -1,0 +1,25 @@
+# im
+gylang:
+  gim:
+    serverIp: 127.0.0.1
+    bossGroup: 4
+    workerGroup: 12
+    readerIdle: 10
+    writeIdle: 10
+    allIdle: 10
+    lostConnectRetryNum: 10
+    socketServerPort: 46000
+    nonAuthType:
+      - 7  #客户端接入
+      - 10  # 服务端接入
+    socketType:
+      com.gylang.netty.sdk.initializer.WebSocketJsonInitializer: 9999
+      com.gylang.netty.sdk.initializer.AppSocketJsonInitializer: 9998
+
+
+
+
+
+logging:
+  level:
+    root: debug
